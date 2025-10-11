@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-"Neatbeans, Visual Studio, any code" 
+Repository for Project for ESPE OOP SW 28434
 =======
-"Test Cases Document, Unit Test" 
->>>>>>> 4d67e4daccf71eca2faab0d8758d1185a4e077ff
+Details of the project of Team #4
+
