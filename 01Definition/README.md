@@ -1,12 +1,1 @@
-FINVORY
-Repository for the project:
-    Management system for a small business.
-
-Members:
-- Medina Joseph
-- Otavalo Arelys
-- Pastor Mathews
-- Quina Maryuri
-
-Course name: Object Oriented Programming 
-NRC: 28434
+Document for the definition of your project, link to your youtube video (the final one)
