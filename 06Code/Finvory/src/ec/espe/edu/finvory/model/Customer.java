@@ -1,6 +1,9 @@
-
 package ec.espe.edu.finvory.model;
-
+import com.google.gson.Gson;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author Arelys Otavalo, The POOwer Rangers Of Programming
@@ -13,6 +16,7 @@ public class Customer {
     private String email;
     private int  typeOfCustomer;
     private int typePaymentOpcion;
+    private List<Product> purchasedProducts = new ArrayList<>();
 
     public Customer(String name, Address address, String identification, String phone, String email, int typeOfCustomer, int typePaymentOpcion) {
         this.name = name;
@@ -79,6 +83,25 @@ public class Customer {
     public void setTypePaymentOpcion(int typePaymentOpcion) {
         this.typePaymentOpcion = typePaymentOpcion;
     }
+    
+     public List<Product> getPurchasedProducts() { return purchasedProducts; }
 
- 
+    public void addPurchasedProduct(Product product) { purchasedProducts.add(product); }
+
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
+    public void save() {
+        try {
+            java.io.File folder = new java.io.File("reports");
+            if (!folder.exists()) folder.mkdirs();
+            FileWriter file = new FileWriter("reports/customer_" + identification + ".json");
+            file.write(this.toJson());
+            file.close();
+        } catch (IOException e) {
+            System.out.println("Error saving customer JSON: " + e.getMessage());
+        }
+    }
 }
