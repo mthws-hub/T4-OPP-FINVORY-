@@ -4,23 +4,39 @@ package ec.espe.edu.finvory.model;
  *
  * @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
-public class Product {
-    private float price1;
-    private float price2;
-    private float price3;
-    private String description;
-    private String productCode;
-    private double barCode;
-    private int availabilityProduct;
 
-    public Product(float price1, float price2, float price3, String Description, String productCode, double barCode, int availabilityProduct) {
+public class Product {
+    
+    private float purchasePrice;
+    private float price1;       
+    private float price2;       
+    private float price3;       
+    private String description;
+    private String productCode; 
+    private double barCode;
+    private int availabilityProduct; 
+
+    public Product() {}
+
+    public Product(float purchasePrice, float price1, float price2, float price3, 
+                   String description, String productCode, double barCode, 
+                   int availabilityProduct) {
+        this.purchasePrice = purchasePrice;
         this.price1 = price1;
         this.price2 = price2;
         this.price3 = price3;
-        this.description = Description;
+        this.description = description;
         this.productCode = productCode;
         this.barCode = barCode;
         this.availabilityProduct = availabilityProduct;
+    }
+
+    public float getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(float purchasePrice) {
+        this.purchasePrice = purchasePrice;
     }
 
     public float getPrice1() {
@@ -51,8 +67,8 @@ public class Product {
         return description;
     }
 
-    public void setDescription(String Description) {
-        this.description = Description;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getProductCode() {
