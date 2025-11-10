@@ -3,72 +3,82 @@ package ec.espe.edu.finvory.model;
 
 /**
  *
- * @author User
+ * @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
 public class Customer {
-    private String customerName;
-    private Address customerAddress;
-    private String customerIdentification;
-    private String customerPhone;
-    private String customerEmail;
-    private int  customerType;
+    private String name;
+    private Address address;
+    private String identification;
+    private String phone;
+    private String email;
+    private int  typeOfCustomer;
+    private int typePaymentOpcion;
 
-    public Customer(String customerName, Address customerAddress, String customerIdentification, String customerPhone, String customerEmail, int customerType) {
-        this.customerName = customerName;
-        this.customerAddress = customerAddress;
-        this.customerIdentification = customerIdentification;
-        this.customerPhone = customerPhone;
-        this.customerEmail = customerEmail;
-        this.customerType = customerType;
+    public Customer(String name, Address address, String identification, String phone, String email, int typeOfCustomer, int typePaymentOpcion) {
+        this.name = name;
+        this.address = address;
+        this.identification = identification;
+        this.phone = phone;
+        this.email = email;
+        this.typeOfCustomer = typeOfCustomer;
+        this.typePaymentOpcion = typePaymentOpcion;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getName() {
+        return name;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Address getCustomerAddress() {
-        return customerAddress;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setCustomerAddress(Address customerAddress) {
-        this.customerAddress = customerAddress;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    public String getCustomerIdentification() {
-        return customerIdentification;
+    public String getIdentification() {
+        return identification;
     }
 
-    public void setCustomerIdentification(String customerIdentification) {
-        this.customerIdentification = customerIdentification;
+    public void setIdentification(String identification) {
+        this.identification = identification;
     }
 
-    public String getCustomerPhone() {
-        return customerPhone;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setCustomerPhone(String customerPhone) {
-        this.customerPhone = customerPhone;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getCustomerEmail() {
-        return customerEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public int getCustomerType() {
-        return customerType;
+    public int getTypeOfCustomer() {
+        return typeOfCustomer;
     }
 
-    public void setCustomerType(int customerType) {
-        this.customerType = customerType;
+    public void setTypeOfCustomer(int typeOfCustomer) {
+        this.typeOfCustomer = typeOfCustomer;
     }
-           
-    
+
+    public int getTypePaymentOpcion() {
+        return typePaymentOpcion;
+    }
+
+    public void setTypePaymentOpcion(int typePaymentOpcion) {
+        this.typePaymentOpcion = typePaymentOpcion;
+    }
+
+ 
 }

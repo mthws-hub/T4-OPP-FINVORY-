@@ -1,17 +1,18 @@
 package ec.espe.edu.finvory.model;
+
 /**
  *
  * @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
-public class Inventory {
+public class InventoryOfObsolet {
     private Address inventoryLocation;
     private String inventoryId;
 
-    public Inventory(Address inventoryLocation, String inventoryId) {
+    public InventoryOfObsolet(Address inventoryLocation, String inventoryId) {
         this.inventoryLocation = inventoryLocation;
         this.inventoryId = inventoryId;
     }
-
+    
     public Address getInventoryLocation() {
         return inventoryLocation;
     }
@@ -27,5 +28,6 @@ public class Inventory {
     public void setInventoryId(String inventoryId) {
         this.inventoryId = inventoryId;
     }
+
     
 }

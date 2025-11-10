@@ -2,13 +2,13 @@ package ec.espe.edu.finvory.model;
 
 /**
  *
- * @author User
+ * @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
 public class Product {
     private float price1;
     private float price2;
     private float price3;
-    private String Description;
+    private String description;
     private String productCode;
     private double barCode;
     private int availabilityProduct;
@@ -17,7 +17,7 @@ public class Product {
         this.price1 = price1;
         this.price2 = price2;
         this.price3 = price3;
-        this.Description = Description;
+        this.description = Description;
         this.productCode = productCode;
         this.barCode = barCode;
         this.availabilityProduct = availabilityProduct;
@@ -48,11 +48,11 @@ public class Product {
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String Description) {
-        this.Description = Description;
+        this.description = Description;
     }
 
     public String getProductCode() {

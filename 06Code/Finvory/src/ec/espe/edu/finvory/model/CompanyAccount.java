@@ -2,62 +2,63 @@ package ec.espe.edu.finvory.model;
 
 /**
  *
- * @author Mathews Pastor
+ * @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
 public class CompanyAccount {
-    private String companyName;
-    private Address companyAddress;
-    private String companyRuc;
-    private String companyPhone;
-    private String companyEmail;
+    private String name;
+    private Address address;
+    private String ruc;
+    private String phone;
+    private String email;
 
-    public CompanyAccount(String companyName, Address companyAddress, String companyRuc, String companyPhone, String companyEmail) {
-        this.companyName = companyName;
-        this.companyAddress = companyAddress;
-        this.companyRuc = companyRuc;
-        this.companyPhone = companyPhone;
-        this.companyEmail = companyEmail;
+    public CompanyAccount(String name, Address address, String ruc, String phone, String email) {
+        this.name = name;
+        this.address = address;
+        this.ruc = ruc;
+        this.phone = phone;
+        this.email = email;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public Address getCompanyAddress() {
-        return companyAddress;
-    }
-
-    public void setCompanyAddress(Address companyAddress) {
-        this.companyAddress = companyAddress;
-    }
-
-    public String getCompanyRuc() {
-        return companyRuc;
-    }
-
-    public void setCompanyRuc(String companyRuc) {
-        this.companyRuc = companyRuc;
-    }
-
-    public String getCompanyPhone() {
-        return companyPhone;
-    }
-
-    public void setCompanyPhone(String companyPhone) {
-        this.companyPhone = companyPhone;
-    }
-
-    public String getCompanyEmail() {
-        return companyEmail;
-    }
-
-    public void setCompanyEmail(String companyEmail) {
-        this.companyEmail = companyEmail;
-    }
     
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public String getRuc() {
+        return ruc;
+    }
+
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     
 }

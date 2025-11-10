@@ -1,81 +1,82 @@
 package ec.espe.edu.finvory.model;
+
 /**
  *
- * @author User
+ * @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
 public class PersonalAccount {
-    private String personalFullName;
-    private String personalIdentification;
-    private Address personalAddress;
-    private String personalBirthDate;
-    private String personalRuc;
-    private String personalPassword;
-    private String personalNickName;
+    private String fullName;
+    private String identification;
+    private Address address;
+    private String birthDate;
+    private String ruc;
+    private String password;
+    private String nickName;
 
-    public PersonalAccount(String personalFullName, String personalIdentification, Address personalAddress, String personalBirthDate, String personalRuc, String personalPassword, String personalNickName) {
-        this.personalFullName = personalFullName;
-        this.personalIdentification = personalIdentification;
-        this.personalAddress = personalAddress;
-        this.personalBirthDate = personalBirthDate;
-        this.personalRuc = personalRuc;
-        this.personalPassword = personalPassword;
-        this.personalNickName = personalNickName;
+    public PersonalAccount(String fullName, String identification, Address address, String birthDate, String ruc, String password, String nickName) {
+        this.fullName = fullName;
+        this.identification = identification;
+        this.address = address;
+        this.birthDate = birthDate;
+        this.ruc = ruc;
+        this.password = password;
+        this.nickName = nickName;
+    }
+    
+    public String getFullName() {
+        return fullName;
     }
 
-    public String getPersonalFullName() {
-        return personalFullName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public void setPersonalFullName(String personalFullName) {
-        this.personalFullName = personalFullName;
+    public String getIdentification() {
+        return identification;
     }
 
-    public String getPersonalIdentification() {
-        return personalIdentification;
+    public void setIdentification(String identification) {
+        this.identification = identification;
     }
 
-    public void setPersonalIdentification(String personalIdentification) {
-        this.personalIdentification = personalIdentification;
+    public Address getAddress() {
+        return address;
     }
 
-    public Address getPersonalAddress() {
-        return personalAddress;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    public void setPersonalAddress(Address personalAddress) {
-        this.personalAddress = personalAddress;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public String getPersonalBirthDate() {
-        return personalBirthDate;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public void setPersonalBirthDate(String personalBirthDate) {
-        this.personalBirthDate = personalBirthDate;
+    public String getRuc() {
+        return ruc;
     }
 
-    public String getPersonalRuc() {
-        return personalRuc;
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
     }
 
-    public void setPersonalRuc(String personalRuc) {
-        this.personalRuc = personalRuc;
+    public String getPassword() {
+        return password;
     }
 
-    public String getPersonalPassword() {
-        return personalPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setPersonalPassword(String personalPassword) {
-        this.personalPassword = personalPassword;
+    public String getNickName() {
+        return nickName;
     }
 
-    public String getPersonalNickName() {
-        return personalNickName;
-    }
-
-    public void setPersonalNickName(String personalNickName) {
-        this.personalNickName = personalNickName;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
     
 }

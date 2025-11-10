@@ -1,10 +1,9 @@
 package ec.espe.edu.finvory.model;
-
 /**
  *
- * @author Mathews Pastor
+ * @author @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
-public class ReturnProduct {
+public class ReturnedProduct {
     private String typeProduct;
     private double barCode;
     private String purchaseDate;
@@ -13,7 +12,7 @@ public class ReturnProduct {
     private String reason;
     private boolean defectiveProduct;
 
-    public ReturnProduct(String typeProduct, double barCode, String purchaseDate, String returnDate, float totalRefundPrice, String reason, boolean defectiveProduct) {
+    public ReturnedProduct(String typeProduct, double barCode, String purchaseDate, String returnDate, float totalRefundPrice, String reason, boolean defectiveProduct) {
         this.typeProduct = typeProduct;
         this.barCode = barCode;
         this.purchaseDate = purchaseDate;

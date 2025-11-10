@@ -1,7 +1,7 @@
 package ec.espe.edu.finvory.model;
 /**
  *
- * @author Arelys Otavalo
+ * @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
 public class Address {
     private String country;

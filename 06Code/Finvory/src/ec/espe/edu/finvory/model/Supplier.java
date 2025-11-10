@@ -2,7 +2,7 @@ package ec.espe.edu.finvory.model;
 
 /**
  *
- * @author User
+ * @author @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
 public class Supplier {
     private String fullName;

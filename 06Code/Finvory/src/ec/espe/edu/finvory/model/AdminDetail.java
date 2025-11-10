@@ -2,52 +2,52 @@ package ec.espe.edu.finvory.model;
 
 /**
  *
- * @author Arelys Otavalo
+ * @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
 public class AdminDetail {
-    private String adminFullName;
-    private String adminBirthDate;
-    private String adminNickname;
-    private String adminPassword;
+    private String fullName;
+    private String birthDate;
+    private String nickname;
+    private String password;
 
-    public AdminDetail(String adminFullName, String adminBirthDate, String adminNickname, String adminPassword) {
-        this.adminFullName = adminFullName;
-        this.adminBirthDate = adminBirthDate;
-        this.adminNickname = adminNickname;
-        this.adminPassword = adminPassword;
+    public AdminDetail(String fullName, String birthDate, String nickname, String password) {
+        this.fullName = fullName;
+        this.birthDate = birthDate;
+        this.nickname = nickname;
+        this.password = password;
     }
 
-    public String getAdminFullName() {
-        return adminFullName;
-    }
-
-    public void setAdminFullName(String adminFullName) {
-        this.adminFullName = adminFullName;
-    }
-
-    public String getAdminBirthDate() {
-        return adminBirthDate;
-    }
-
-    public void setAdminBirthDate(String adminBirthDate) {
-        this.adminBirthDate = adminBirthDate;
-    }
-
-    public String getAdminNickname() {
-        return adminNickname;
-    }
-
-    public void setAdminNickname(String adminNickname) {
-        this.adminNickname = adminNickname;
-    }
-
-    public String getAdminPassword() {
-        return adminPassword;
-    }
-
-    public void setAdminPassword(String adminPassword) {
-        this.adminPassword = adminPassword;
-    }
     
-    
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+ 
 }

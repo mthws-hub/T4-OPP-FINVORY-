@@ -1,17 +1,16 @@
 package ec.espe.edu.finvory.model;
-
 /**
  *
- * @author Mathews 
+ * @author @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
-public class SaleProduct {
+public class ProductSold {
     private String customer;
     private  float totalAmount;
     private boolean paymentOption;
     private String typeProduct;
     private String saleDate;
 
-    public SaleProduct(String customer, float totalAmount, boolean paymentOption, String typeProduct, String saleDate) {
+    public ProductSold(String customer, float totalAmount, boolean paymentOption, String typeProduct, String saleDate) {
         this.customer = customer;
         this.totalAmount = totalAmount;
         this.paymentOption = paymentOption;
