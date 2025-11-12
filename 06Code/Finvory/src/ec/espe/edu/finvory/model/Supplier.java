@@ -27,48 +27,47 @@ public class Supplier {
         this.id2 = ""; 
     }
 
-        public String getFullName() { 
-            return fullName; 
-        }
-        
-        public String getId1() { 
-            return id1; 
-        }
-        
-        public String getId2() { 
-            return id2; 
-        }
-        
-        public String getPhone() { 
-            return phone; 
-        }
-        
-        public String getEmail() { 
-            return email; 
-        }
-        
-        public String getDescription() { 
-            return description; 
-        }
-        
-        public void setFullName(String fullName) { 
-            this.fullName = fullName; 
-        }
-        
-        public void setId2(String id2) { 
-            this.id2 = id2; 
-        }
-        
-        public void setPhone(String phone) { 
-            this.phone = phone; 
-        }
-        
-        public void setEmail(String email) { 
-            this.email = email; 
-        }
-        
-        public void setDescription(String description) { 
-            this.description = description; 
-        }
-        
+    public String getFullName() { 
+        return fullName; 
+    }
+    
+    public String getId1() { 
+        return id1; 
+    }
+    
+    public String getId2() { 
+        return id2; 
+    }
+    
+    public String getPhone() { 
+        return phone; 
+    }
+    
+    public String getEmail() { 
+        return email; 
+    }
+    
+    public String getDescription() { 
+        return description; 
+    }
+
+    public void setFullName(String fullName) { 
+        this.fullName = fullName; 
+    }
+    
+    public void setId2(String id2) { 
+        this.id2 = id2; 
+    }
+    
+    public void setPhone(String phone) { 
+        this.phone = phone; 
+    }
+    
+    public void setEmail(String email) { 
+        this.email = email; 
+    }
+    
+    public void setDescription(String description) { 
+        this.description = description; 
+    }
 }

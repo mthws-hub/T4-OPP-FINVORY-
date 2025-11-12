@@ -4,10 +4,9 @@ import java.util.HashMap;
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
-public class InventoryOfObsolete{
+public class InventoryOfObsolete {
     
     private Address address;
-    // Mapa<ProductID, Cantidad>
     private HashMap<String, Integer> productStock;
 
     public InventoryOfObsolete() {
@@ -19,9 +18,10 @@ public class InventoryOfObsolete{
         this.productStock = new HashMap<>();
     }
     
-    public Address getAddress() { return address; }
+    public Address getAddress() { 
+        return address; 
+    }
     
-    // --- Métodos de Stock ---
     public int getStock(String productId) {
         return productStock.getOrDefault(productId, 0);
     }

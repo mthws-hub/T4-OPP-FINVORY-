@@ -13,7 +13,7 @@ public class Customer {
     private String identification;
     private String phone;
     private String email;
-    private String clientType; 
+    private String clientType;
 
     public Customer() {}
 
@@ -28,9 +28,11 @@ public class Customer {
     public String getName() { 
         return name; 
     }
+    
     public String getIdentification() { 
         return identification; 
     }
+    
     public String getPhone() { 
         return phone; 
     }
@@ -46,15 +48,15 @@ public class Customer {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public void setClientType(String clientType) {
         this.clientType = clientType;
     }

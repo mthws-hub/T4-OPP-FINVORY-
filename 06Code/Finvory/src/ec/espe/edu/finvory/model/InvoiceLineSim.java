@@ -11,6 +11,9 @@ public class InvoiceLineSim {
     private float priceApplied;
     private float lineTotal;
 
+    /**
+     * Constructor vacio para GSON.
+     */
     public InvoiceLineSim() {}
 
     public InvoiceLineSim(Product product, int quantity, float priceApplied) {
@@ -21,8 +24,19 @@ public class InvoiceLineSim {
         this.lineTotal = quantity * priceApplied;
     }
 
-    public String getProductId() { return productId; }
-    public float getLineTotal() { return lineTotal; }
-    public String getProductName() { return productName; }
-    public int getQuantity() { return quantity; }
+    public String getProductId() { 
+        return productId; 
+    }
+    
+    public float getLineTotal() { 
+        return lineTotal; 
+    }
+    
+    public String getProductName() { 
+        return productName; 
+    }
+    
+    public int getQuantity() { 
+        return quantity; 
+    }
 }

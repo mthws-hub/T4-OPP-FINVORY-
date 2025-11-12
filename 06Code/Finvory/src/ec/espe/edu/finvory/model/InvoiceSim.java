@@ -10,22 +10,23 @@ import java.util.ArrayList;
  * @author Maryuri Quiña, @ESPE
  */
 public class InvoiceSim {
-    public enum Status {ACTIVE,CANCELLED,REFUNDED}
-    private String id;
-    private Customer customer;
-    private LocalDate date;
-    private String paymentMethod;
-    private List<InvoiceLineSim> lines;
-    private Status status = Status.ACTIVE;
-    private double totalNet;
-    private double totalTax;
-    private double totalGross;
     
+    private String id;
+    private String date; 
+    private Customer customer;
+    private ArrayList<InvoiceLineSim> lines = new ArrayList<>();
+    private float subtotal;
+    private float tax;
+    private float total;
+    private String paymentMethod; 
+    private String paymentDueDate;
+    private String status; 
+
     public InvoiceSim() {
         this.lines = new ArrayList<>(); 
     }
 
-    public InvoiceSim(String id, Customer customer, LocalDate date, String paymentMethod, List<InvoiceLineSim> lines) {
+    public InvoiceSim(String id, Customer customer, String paymentMethod, String paymentDueDate) {
         this.id = id;
         this.customer = customer;
         this.paymentMethod = paymentMethod;
@@ -35,7 +36,7 @@ public class InvoiceSim {
         this.lines = new ArrayList<>();
     }
 
-public void addLine(Product p, int qty, float priceApplied) {
+    public void addLine(Product p, int qty, float priceApplied) {
         lines.add(new InvoiceLineSim(p, qty, priceApplied));
     }
 
@@ -61,8 +62,11 @@ public void addLine(Product p, int qty, float priceApplied) {
     }
     
     public String getStatus() { 
-        return status; }
-    public String getDate() { return date; 
+        return status; 
+    }
+    
+    public String getDate() { 
+        return date; 
     }
     
     public float getTotal() { 
@@ -70,11 +74,11 @@ public void addLine(Product p, int qty, float priceApplied) {
     }
     
     public float getSubtotal() { 
-        return subtotal;
+        return subtotal; 
     }
     
     public float getTax() { 
-        return tax;
+        return tax; 
     }
     
     public Customer getCustomer() { 

@@ -9,13 +9,13 @@ import java.util.ArrayList;
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
 public class Database {
+
     private static final String DATA_FOLDER = "data";
     private static final String UTILS_FOLDER = "utils";
 
     private static final String CLIENTS_FILE = DATA_FOLDER + File.separator + "clients.csv";
     private static final String SUPPLIERS_FILE = DATA_FOLDER + File.separator + "suppliers.csv";
     private static final String DB_FILE = UTILS_FOLDER + File.separator + "finvory_database.json";
-    // --- FIN DEL CAMBIO ---
     
     private static final String DELIMITER = ";";
 
@@ -27,15 +27,15 @@ public class Database {
         data.getSuppliers().addAll(loadSuppliersCsv());
         return data;
     }
-    
+
     public void save(FinvoryData data) {
         saveCustomersCsv(data.getCustomers());
         saveSuppliersCsv(data.getSuppliers());
         saveDatabaseJson(data);
     }
-
+    
     private FinvoryData loadDatabaseJson() {
-        File file = new File(DB_FILE); 
+        File file = new File(DB_FILE);
         if (file.exists()) {
             try (Reader reader = new FileReader(file)) {
                 FinvoryData data = gson.fromJson(reader, FinvoryData.class);
@@ -46,14 +46,14 @@ public class Database {
                 System.err.println("Error al cargar " + DB_FILE + ": " + e.getMessage());
             }
         }
-        FinvoryData newData = new FinvoryData();
-        return newData;
+        return new FinvoryData();
     }
 
     private void saveDatabaseJson(FinvoryData data) {
         try {
             File file = new File(DB_FILE);
-            new File(file.getParent()).mkdirs();
+            new File(file.getParent()).mkdirs(); 
+            
             try (Writer writer = new FileWriter(file)) {
                 gson.toJson(data, writer);
             }
@@ -66,8 +66,9 @@ public class Database {
         try {
             File file = new File(CLIENTS_FILE);
             new File(file.getParent()).mkdirs();
+
             try (PrintWriter pw = new PrintWriter(new FileWriter(file))) {
-                pw.println("Identificacion" + DELIMITER + "NombreCompleto" + DELIMITER + "Celular" + DELIMITER + "Email" + DELIMITER + "TipoCliente");
+                pw.println("Identification" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "ClientType");
                 for (Customer c : customers) {
                     pw.println(
                         c.getIdentification() + DELIMITER + c.getName() + DELIMITER +
@@ -83,9 +84,7 @@ public class Database {
     private ArrayList<Customer> loadCustomersCsv() {
         ArrayList<Customer> customers = new ArrayList<>();
         File file = new File(CLIENTS_FILE);
-        if (!file.exists()) {
-            return customers; 
-        }
+        if (!file.exists()) return customers; 
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             br.readLine(); 
@@ -101,13 +100,14 @@ public class Database {
         }
         return customers;
     }
-    
+
     private void saveSuppliersCsv(ArrayList<Supplier> suppliers) {
         try {
             File file = new File(SUPPLIERS_FILE);
             new File(file.getParent()).mkdirs();
+
             try (PrintWriter pw = new PrintWriter(new FileWriter(file))) {
-                pw.println("ID1" + DELIMITER + "ID2_Opcional" + DELIMITER + "NombreCompleto" + DELIMITER + "Celular" + DELIMITER + "Email" + DELIMITER + "Descripcion");
+                pw.println("ID1" + DELIMITER + "ID2_Opcional" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "Description");
                 for (Supplier s : suppliers) {
                     pw.println(
                         s.getId1() + DELIMITER + s.getId2() + DELIMITER + s.getFullName() + DELIMITER +
@@ -123,9 +123,7 @@ public class Database {
     private ArrayList<Supplier> loadSuppliersCsv() {
         ArrayList<Supplier> suppliers = new ArrayList<>();
         File file = new File(SUPPLIERS_FILE);
-        if (!file.exists()) {
-            return suppliers;
-        }
+        if (!file.exists()) return suppliers;
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             br.readLine(); 
