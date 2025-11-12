@@ -112,11 +112,11 @@ public class FinvoryController {
             }
         }
         
-        Address addr = view.askAddressData("-> Direccion de la Compania:");
+        Address address = view.askAddressData("-> Direccion de la Compania:");
         
         CompanyAccount newCompany = new CompanyAccount(
             companyData.get("companyName"),
-            addr,
+            address,
             ruc,
             companyData.get("phone"),
             companyData.get("email"),
@@ -242,18 +242,18 @@ public class FinvoryController {
             String id = view.askProductId();
             if (id.equalsIgnoreCase("fin")) break;
             
-            Product p = findProduct(id);
-            if (p == null) continue;
+            Product product = findProduct(id);
+            if (product == null) continue;
             
-            Inventory inv = view.chooseInventoryToSellFrom(data.getInventories(), p.getId());
-            if (inv == null) continue;
+            Inventory inventory = view.chooseInventoryToSellFrom(data.getInventories(), product.getId());
+            if (inventory == null) continue;
             
-            int qty = view.askQuantity(inv.getStock(p.getId()));
-            if (qty == 0) continue;
+            int quantity = view.askQuantity(inventory.getStock(product.getId()));
+            if (quantity == 0) continue;
             
-            cart.putIfAbsent(p, new HashMap<>());
-            cart.get(p).put(inv, qty);
-            view.showMessage("Anadido: " + p.getName() + " (x" + qty + ") desde " + inv.getName());
+            cart.putIfAbsent(product, new HashMap<>());
+            cart.get(product).put(inventory, quantity);
+            view.showMessage("Anadido: " + product.getName() + " (x" + quantity + ") desde " + inventory.getName());
         }
         
         if (cart.isEmpty()) {
@@ -272,19 +272,19 @@ public class FinvoryController {
         InvoiceSim invoice = new InvoiceSim(invoiceId, customer, payment, dueDate);
         
         float profit = data.getProfitPercentage();
-        float dStd = data.getDiscountStandard();
-        float dPrm = data.getDiscountPremium();
-        float dVip = data.getDiscountVip();
+        float discountStandard = data.getDiscountStandard();
+        float discountPremium = data.getDiscountPremium();
+        float discountVip = data.getDiscountVip();
         
         for (Map.Entry<Product, HashMap<Inventory, Integer>> entry : cart.entrySet()) {
-            Product p = entry.getKey();
+            Product product = entry.getKey();
             for (Map.Entry<Inventory, Integer> stockEntry : entry.getValue().entrySet()) {
                 Inventory inv = stockEntry.getKey();
                 int qty = stockEntry.getValue();
                 
-                inv.removeStock(p.getId(), qty);
-                float price = p.getPrice(customer.getClientType(), profit, dStd, dPrm, dVip);
-                invoice.addLine(p, qty, price);
+                inv.removeStock(product.getId(), qty);
+                float price = product.getPrice(customer.getClientType(), profit, discountStandard, discountPremium, discountVip);
+                invoice.addLine(product, qty, price);
             }
         }
         
@@ -343,21 +343,21 @@ public class FinvoryController {
     }
 
     private void handleEditProduct() {
-        Product p = findProduct(view.askProductId());
-        if (p == null) return;
+        Product product = findProduct(view.askProductId());
+        if (product == null) return;
 
-        HashMap<String, String> updates = view.askProductUpdateData(p);
+        HashMap<String, String> updates = view.askProductUpdateData(product);
         
         String newName = updates.get("name");
-        if (!newName.isEmpty()) p.setName(newName);
+        if (!newName.isEmpty()) product.setName(newName);
         
         String newDesc = updates.get("description");
-        if (!newDesc.isEmpty()) p.setDescription(newDesc);
+        if (!newDesc.isEmpty()) product.setDescription(newDesc);
         
         String newSupplierId = updates.get("supplierId");
         if (!newSupplierId.isEmpty()) {
             if (findSupplier(newSupplierId) != null) {
-                p.setSupplierId(newSupplierId);
+                product.setSupplierId(newSupplierId);
             } else {
                 view.showError("ID de Proveedor no encontrado. No se actualizo.");
             }
@@ -368,7 +368,7 @@ public class FinvoryController {
             if (!newCost.isEmpty()) {
                 float cost = Float.parseFloat(newCost);
                 if (cost >= 0) {
-                    p.setBaseCostPrice(cost);
+                    product.setBaseCostPrice(cost);
                 } else {
                     view.showError("El costo no puede ser negativo.");
                 }
@@ -380,64 +380,64 @@ public class FinvoryController {
     }
 
     private void handleDeleteProduct() {
-        Product p = findProduct(view.askProductId());
-        if (p == null) return;
+        Product product = findProduct(view.askProductId());
+        if (product == null) return;
         
         for (InvoiceSim inv : data.getInvoices()) {
             for (InvoiceLineSim line : inv.getLines()) {
-                if (line.getProductId().equals(p.getId())) {
-                    view.showError("No se puede eliminar. El producto '" + p.getName() + "' ya esta en una factura (" + inv.getId() + ").");
+                if (line.getProductId().equals(product.getId())) {
+                    view.showError("No se puede eliminar. El producto '" + product.getName() + "' ya esta en una factura (" + inv.getId() + ").");
                     return;
                 }
             }
         }
         
-        if (view.askConfirmation("¿Seguro que desea eliminar '" + p.getName() + "'? (s/n)")) {
-            data.getProducts().remove(p);
+        if (view.askConfirmation("Seguro que desea eliminar ? '" + product.getName() + "'? (s/n)")) {
+            data.getProducts().remove(product);
             for (Inventory inv : data.getInventories()) {
-                inv.removeStock(p.getId(), inv.getStock(p.getId()));
+                inv.removeStock(product.getId(), inv.getStock(product.getId()));
             }
-            data.getObsoleteInventory().removeStock(p.getId(), data.getObsoleteInventory().getStock(p.getId()));
+            data.getObsoleteInventory().removeStock(product.getId(), data.getObsoleteInventory().getStock(product.getId()));
             
             view.showMessage("Producto eliminado.");
         }
     }
 
     private void handleProcessReturn() {
-        Product p = findProduct(view.askProductId());
-        if (p == null) return;
+        Product product = findProduct(view.askProductId());
+        if (product == null) return;
         
         int qty = view.askQuantity(9999);
         if (qty == 0) return;
         
         String reason = view.askReturnReason();
 
-        data.getObsoleteInventory().addStock(p.getId(), qty);
-        data.getReturns().add(new ReturnedProduct(p, qty, reason));
+        data.getObsoleteInventory().addStock(product.getId(), qty);
+        data.getReturns().add(new ReturnedProduct(product, qty, reason));
 
         view.showMessage("Devolucion registrada.");
-        view.showMessage("Stock obsoleto de '" + p.getName() + "': " + data.getObsoleteInventory().getStock(p.getId()));
+        view.showMessage("Stock obsoleto de '" + product.getName() + "': " + data.getObsoleteInventory().getStock(product.getId()));
     }
 
     private void handleManageObsolete() {
-        Product p = findProduct(view.askProductId());
-        if (p == null) return;
+        Product product = findProduct(view.askProductId());
+        if (product == null) return;
         
-        int obsoleteStock = data.getObsoleteInventory().getStock(p.getId());
+        int obsoleteStock = data.getObsoleteInventory().getStock(product.getId());
         if (obsoleteStock == 0) {
             view.showMessage("El producto no tiene stock obsoleto.");
             return;
         }
         
         Address obsoleteLocation = data.getObsoleteInventory().getAddress();
-        Inventory targetInventory = view.askObsoleteAction(p.getName(), obsoleteStock, obsoleteLocation, data.getInventories());
+        Inventory targetInventory = view.askObsoleteAction(product.getName(), obsoleteStock, obsoleteLocation, data.getInventories());
         
         if (targetInventory != null) { 
-            data.getObsoleteInventory().removeStock(p.getId(), obsoleteStock);
-            targetInventory.addStock(p.getId(), obsoleteStock);
+            data.getObsoleteInventory().removeStock(product.getId(), obsoleteStock);
+            targetInventory.addStock(product.getId(), obsoleteStock);
             view.showMessage("Stock reasignado a " + targetInventory.getName());
         } else { 
-            data.getObsoleteInventory().removeStock(p.getId(), obsoleteStock);
+            data.getObsoleteInventory().removeStock(product.getId(), obsoleteStock);
             view.showMessage("Stock obsoleto desechado.");
         }
     }
@@ -476,9 +476,9 @@ public class FinvoryController {
         view.showMessage("Cargando facturas pendientes (Cheques Postfechados)...");
         
         ArrayList<InvoiceSim> pendingInvoices = new ArrayList<>();
-        for (InvoiceSim inv : data.getInvoices()) {
-            if (inv.getStatus().equals("PENDING")) {
-                pendingInvoices.add(inv);
+        for (InvoiceSim invoiceSim : data.getInvoices()) {
+            if (invoiceSim.getStatus().equals("PENDING")) {
+                pendingInvoices.add(invoiceSim);
             }
         }
         
@@ -489,9 +489,9 @@ public class FinvoryController {
             return;
         }
         
-        if (view.askConfirmation("¿Confirma el pago de la factura " + invoiceToPay.getId() + " por $" + invoiceToPay.getTotal() + "? (s/n)")) {
+        if (view.askConfirmation("Confirma el pago de la factura? " + invoiceToPay.getId() + " por $" + invoiceToPay.getTotal() + "? (s/n)")) {
             invoiceToPay.complete();
-            view.showMessage("¡Pago registrado! La factura esta ahora COMPLETED.");
+            view.showMessage("Pago registrado. La factura esta ahora COMPLETED.");
         } else {
             view.showMessage("Accion cancelada.");
         }
@@ -515,43 +515,43 @@ public class FinvoryController {
             customerData.get("email"), customerData.get("clientType")
         );
         this.data.getCustomers().add(newCustomer);
-        view.showMessage("¡Cliente '" + newCustomer.getName() + "' creado con exito!");
+        view.showMessage("Cliente '" + newCustomer.getName() + "' creado con exito!");
         return newCustomer;
     }
     
     private void handleEditCustomer() {
-        Customer c = findCustomer(view.askCustomerId());
-        if (c == null) {
+        Customer customer = findCustomer(view.askCustomerId());
+        if (customer == null) {
             view.showError("Cliente no encontrado.");
             return;
         }
         
-        HashMap<String, String> updates = view.askCustomerUpdateData(c);
+        HashMap<String, String> updates = view.askCustomerUpdateData(customer);
         
-        if (!updates.get("name").isEmpty()) c.setName(updates.get("name"));
-        if (!updates.get("phone").isEmpty()) c.setPhone(updates.get("phone"));
-        if (!updates.get("email").isEmpty()) c.setEmail(updates.get("email"));
-        c.setClientType(updates.get("clientType")); 
+        if (!updates.get("name").isEmpty()) customer.setName(updates.get("name"));
+        if (!updates.get("phone").isEmpty()) customer.setPhone(updates.get("phone"));
+        if (!updates.get("email").isEmpty()) customer.setEmail(updates.get("email"));
+        customer.setClientType(updates.get("clientType")); 
         
         view.showMessage("Cliente actualizado.");
     }
     
     private void handleDeleteCustomer() {
-        Customer c = findCustomer(view.askCustomerId());
-        if (c == null) {
+        Customer customer = findCustomer(view.askCustomerId());
+        if (customer == null) {
             view.showError("Cliente no encontrado.");
             return;
         }
         
         for (InvoiceSim inv : data.getInvoices()) {
-            if (inv.getCustomer().getIdentification().equals(c.getIdentification())) {
-                view.showError("No se puede eliminar. El cliente '" + c.getName() + "' tiene facturas asociadas (" + inv.getId() + ").");
+            if (inv.getCustomer().getIdentification().equals(customer.getIdentification())) {
+                view.showError("No se puede eliminar. El cliente '" + customer.getName() + "' tiene facturas asociadas (" + inv.getId() + ").");
                 return;
             }
         }
         
-        if (view.askConfirmation("¿Seguro que desea eliminar a '" + c.getName() + "'? (s/n)")) {
-            data.getCustomers().remove(c);
+        if (view.askConfirmation("Seguro que desea eliminar a '" + customer.getName() + "'? (s/n)")) {
+            data.getCustomers().remove(customer);
             view.showMessage("Cliente eliminado.");
         }
     }
@@ -596,51 +596,51 @@ public class FinvoryController {
             return null;
         }
         
-        Supplier s = new Supplier(
+        Supplier supplier = new Supplier(
             supplierData.get("name"), id1, supplierData.get("phone"),
             supplierData.get("email"), supplierData.get("description")
         );
-        s.setId2(supplierData.get("id2"));
+        supplier.setId2(supplierData.get("id2"));
         
-        data.getSuppliers().add(s);
-        view.showMessage("¡Proveedor '" + s.getFullName() + "' creado con exito!");
-        return s;
+        data.getSuppliers().add(supplier);
+        view.showMessage("Proveedor '" + supplier.getFullName() + "' creado con exito!");
+        return supplier;
     }
     
     private void handleEditSupplier() {
-        Supplier s = findSupplier(view.askSupplierId());
-        if (s == null) {
+        Supplier supplier = findSupplier(view.askSupplierId());
+        if (supplier == null) {
             view.showError("Proveedor no encontrado.");
             return;
         }
         
-        HashMap<String, String> updates = view.askSupplierUpdateData(s);
+        HashMap<String, String> updates = view.askSupplierUpdateData(supplier);
         
-        if (!updates.get("name").isEmpty()) s.setFullName(updates.get("name"));
-        if (!updates.get("phone").isEmpty()) s.setPhone(updates.get("phone"));
-        if (!updates.get("email").isEmpty()) s.setEmail(updates.get("email"));
-        if (!updates.get("description").isEmpty()) s.setDescription(updates.get("description"));
-        s.setId2(updates.get("id2"));
+        if (!updates.get("name").isEmpty()) supplier.setFullName(updates.get("name"));
+        if (!updates.get("phone").isEmpty()) supplier.setPhone(updates.get("phone"));
+        if (!updates.get("email").isEmpty()) supplier.setEmail(updates.get("email"));
+        if (!updates.get("description").isEmpty()) supplier.setDescription(updates.get("description"));
+        supplier.setId2(updates.get("id2"));
         
         view.showMessage("Proveedor actualizado.");
     }
     
     private void handleDeleteSupplier() {
-        Supplier s = findSupplier(view.askSupplierId());
-        if (s == null) {
+        Supplier supplier = findSupplier(view.askSupplierId());
+        if (supplier == null) {
             view.showError("Proveedor no encontrado.");
             return;
         }
         
         for (Product p : data.getProducts()) {
-            if (p.getSupplierId() != null && p.getSupplierId().equals(s.getId1())) {
-                view.showError("No se puede eliminar. El proveedor '" + s.getFullName() + "' esta asignado al producto '" + p.getName() + "'.");
+            if (p.getSupplierId() != null && p.getSupplierId().equals(supplier.getId1())) {
+                view.showError("No se puede eliminar. El proveedor '" + supplier.getFullName() + "' esta asignado al producto '" + p.getName() + "'.");
                 return;
             }
         }
         
-        if (view.askConfirmation("¿Seguro que desea eliminar a '" + s.getFullName() + "'? (s/n)")) {
-            data.getSuppliers().remove(s);
+        if (view.askConfirmation("Seguro que desea eliminar a '" + supplier.getFullName() + "'? (s/n)")) {
+            data.getSuppliers().remove(supplier);
             view.showMessage("Proveedor eliminado.");
         }
     }
@@ -680,8 +680,8 @@ public class FinvoryController {
                 return;
             }
         }
-        Address addr = view.askAddressData("-> Direccion del Nuevo Inventario:");
-        Inventory newInv = new Inventory(name, addr);
+        Address address = view.askAddressData("-> Direccion del Nuevo Inventario:");
+        Inventory newInv = new Inventory(name, address);
         data.getInventories().add(newInv);
         view.showMessage("Inventario '" + name + "' creado con exito.");
     }
@@ -734,7 +734,7 @@ public class FinvoryController {
             data.getProducts().add(newProduct);
             targetInventory.setStock(id, stock);
             
-            view.showMessage("¡Producto '" + newProduct.getName() + "' creado con exito!");
+            view.showMessage("Producto '" + newProduct.getName() + "' creado con exito!");
             
         } catch (NumberFormatException e) {
             view.showError("Error en el formato del precio o stock.");
@@ -750,7 +750,7 @@ public class FinvoryController {
         data.setDiscountPremium(percentages.get("discountPremium"));
         data.setDiscountVip(percentages.get("discountVip"));
         
-        view.showMessage("¡Algoritmo de precios actualizado exitosamente!");
+        view.showMessage("Algoritmo de precios actualizado exitosamente");
     }
     
     private void handleReportsMenu() {
@@ -832,16 +832,16 @@ public class FinvoryController {
     
     private Product findProduct(String id) {
         if (id == null || id.isEmpty()) return null;
-        for (Product p : data.getProducts()) {
-            if (id.equals(p.getId())) return p;
+        for (Product product : data.getProducts()) {
+            if (id.equals(product.getId())) return product;
         }
         return null;
     }
     
     private Product findProductByBarcode(String barcode) {
         if (barcode == null || barcode.isEmpty()) return null;
-        for (Product p : data.getProducts()) {
-            if (p.getBarcode() != null && p.getBarcode().equals(barcode)) return p;
+        for (Product product : data.getProducts()) {
+            if (product.getBarcode() != null && product.getBarcode().equals(barcode)) return product;
         }
         return null;
     }
@@ -849,10 +849,10 @@ public class FinvoryController {
     private Customer findCustomer(String query) {
         if (query == null || query.isEmpty()) return null;
         query = query.toLowerCase();
-        for (Customer c : data.getCustomers()) {
-            if (query.equals(c.getIdentification()) || 
-                (c.getName() != null && c.getName().toLowerCase().contains(query))) {
-                return c;
+        for (Customer customer : data.getCustomers()) {
+            if (query.equals(customer.getIdentification()) || 
+                (customer.getName() != null && customer.getName().toLowerCase().contains(query))) {
+                return customer;
             }
         }
         return null;
@@ -860,24 +860,24 @@ public class FinvoryController {
     
     private Supplier findSupplier(String id1) {
         if (id1 == null || id1.isEmpty()) return null;
-        for (Supplier s : data.getSuppliers()) {
-            if (id1.equals(s.getId1())) return s;
+        for (Supplier supplier : data.getSuppliers()) {
+            if (id1.equals(supplier.getId1())) return supplier;
         }
         return null;
     }
     
     private CompanyAccount findCompanyByUsername(String username) {
         if (username == null || username.isEmpty()) return null;
-        for (CompanyAccount c : data.getCompanyAccounts()) {
-            if (username.equals(c.getUsername())) return c;
+        for (CompanyAccount companyAccount : data.getCompanyAccounts()) {
+            if (username.equals(companyAccount.getUsername())) return companyAccount;
         }
         return null;
     }
     
     private PersonalAccount findPersonalByUsername(String username) {
         if (username == null || username.isEmpty()) return null;
-        for (PersonalAccount p : data.getPersonalAccounts()) {
-            if (username.equals(p.getUsername())) return p;
+        for (PersonalAccount personalAccount : data.getPersonalAccounts()) {
+            if (username.equals(personalAccount.getUsername())) return personalAccount;
         }
         return null;
     }
