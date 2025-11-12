@@ -126,7 +126,7 @@ public class FinvoryController {
         
         data.getCompanyAccounts().add(newCompany);
         db.save(data);
-        view.showMessage("¡Cuenta de Compania registrada con exito!");
+        view.showMessage("Cuenta de Compania registrada con exito");
         view.showMessage("Ahora puede iniciar sesion.");
     }
 
