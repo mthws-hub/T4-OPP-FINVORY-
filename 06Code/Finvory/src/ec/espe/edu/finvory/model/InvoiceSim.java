@@ -36,8 +36,8 @@ public class InvoiceSim {
         this.lines = new ArrayList<>();
     }
 
-    public void addLine(Product p, int qty, float priceApplied) {
-        lines.add(new InvoiceLineSim(p, qty, priceApplied));
+    public void addLine(Product product, int quantity, float priceApplied) {
+        lines.add(new InvoiceLineSim(product, quantity, priceApplied));
     }
 
     public void calculateTotals(float taxRate) {

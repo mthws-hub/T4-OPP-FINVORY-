@@ -11,9 +11,6 @@ public class InvoiceLineSim {
     private float priceApplied;
     private float lineTotal;
 
-    /**
-     * Constructor vacio para GSON.
-     */
     public InvoiceLineSim() {}
 
     public InvoiceLineSim(Product product, int quantity, float priceApplied) {
