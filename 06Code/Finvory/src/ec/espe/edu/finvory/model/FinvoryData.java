@@ -1,4 +1,5 @@
 package ec.espe.edu.finvory.model;
+import ec.edu.espe.finvory.controller;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
