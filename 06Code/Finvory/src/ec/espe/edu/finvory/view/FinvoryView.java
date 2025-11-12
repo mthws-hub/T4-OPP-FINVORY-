@@ -281,10 +281,10 @@ public class FinvoryView {
 
     public String askReturnReason() {
         System.out.println("-> Motivo de la devolucion:");
-        System.out.println("   1. DEFECTIVE (Defectuoso)");
-        System.out.println("   2. WRONG_PURCHASE (Compra incorrecta)");
+        System.out.println("   1. Defectuoso");
+        System.out.println("   2. Compra incorrecta");
         int opt = getIntInput();
-        return (opt == 1) ? "DEFECTIVE" : "WRONG_PURCHASE";
+        return (opt == 1) ? "DEFECTUOSO" : "COMPRA_INCORRECTA";
     }
 
     public Inventory askObsoleteAction(String productName, int obsoleteStock, Address obsoleteLocation, ArrayList<Inventory> inventories) {

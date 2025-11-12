@@ -14,12 +14,12 @@ public class FinvoryController {
 
     private FinvoryData data; 
     private FinvoryView view; 
-    private Database db;      
+    private Database database;      
 
-    public FinvoryController(FinvoryData data, FinvoryView view, Database db) {
+    public FinvoryController(FinvoryData data, FinvoryView view, Database database) {
         this.data = data;
         this.view = view;
-        this.db = db;
+        this.database = database;
     }
     
     public void run() {
@@ -47,7 +47,7 @@ public class FinvoryController {
             }
         }
         
-        db.save(data);
+        database.save(data);
         view.showMessage("Datos guardados. Saliendo del sistema...");
     }
 
@@ -125,7 +125,7 @@ public class FinvoryController {
         );
         
         data.getCompanyAccounts().add(newCompany);
-        db.save(data);
+        database.save(data);
         view.showMessage("Cuenta de Compania registrada con exito");
         view.showMessage("Ahora puede iniciar sesion.");
     }
@@ -146,7 +146,7 @@ public class FinvoryController {
         );
         
         data.getPersonalAccounts().add(newPersonal);
-        db.save(data);
+        database.save(data);
         view.showMessage("¡Cuenta Personal registrada con exito!");
         view.showMessage("Ahora puede iniciar sesion.");
     }
