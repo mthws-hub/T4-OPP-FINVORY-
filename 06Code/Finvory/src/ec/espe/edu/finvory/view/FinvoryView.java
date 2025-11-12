@@ -79,8 +79,8 @@ public class FinvoryView {
         String format = "| %-25s | %-40s |";
         System.out.println(String.format(format, "Producto", "Descripcion"));
         System.out.println(new String(new char[70]).replace("\0", "-"));
-        for (Product product : products) {
-            System.out.println(String.format(format, product.getName(), product.getDescription()));
+        for (Product p : products) {
+            System.out.println(String.format(format, p.getName(), p.getDescription()));
         }
     }
     
@@ -104,7 +104,7 @@ public class FinvoryView {
     
     public boolean askToCreateNewCustomer(String query) {
         showError("Cliente '" + query + "' no encontrado.");
-        return askConfirmation("Desea registrarlo como nuevo cliente ahora? (s/n)");
+        return askConfirmation("¿Desea registrarlo como nuevo cliente ahora? (s/n)");
     }
     
     public String askProductId() {
@@ -115,10 +115,10 @@ public class FinvoryView {
         System.out.println("-> Seleccione el inventario de origen:");
         ArrayList<Inventory> available = new ArrayList<>();
         
-        for (Inventory inventory : inventories) {
-            if (inventory.getStock(productId) > 0) {
-                available.add(inventory);
-                System.out.println("   " + available.size() + ". " + inventory.getName() + " (Stock: " + inventory.getStock(productId) + ")");
+        for (Inventory inv : inventories) {
+            if (inv.getStock(productId) > 0) {
+                available.add(inv);
+                System.out.println("   " + available.size() + ". " + inv.getName() + " (Stock: " + inv.getStock(productId) + ")");
             }
         }
         
@@ -127,33 +127,33 @@ public class FinvoryView {
             return null;
         }
         
-        int option = -1;
-        while (option < 1 || option > available.size()) {
-            option = getPositiveIntInput("Opcion: ");
+        int opt = -1;
+        while (opt < 1 || opt > available.size()) {
+            opt = getPositiveIntInput("Opcion: ");
         }
-        return available.get(option - 1);
+        return available.get(opt - 1);
     }
     
     public int askQuantity(int maxStock) {
-        int quantity = -1;
-        while (quantity < 0 || quantity > maxStock) {
-            quantity = getPositiveIntInput("-> Cantidad (Max: " + maxStock + "): ");
-            if (quantity > maxStock) {
+        int qty = -1;
+        while (qty < 0 || qty > maxStock) {
+            qty = getPositiveIntInput("-> Cantidad (Max: " + maxStock + "): ");
+            if (qty > maxStock) {
                 showError("Stock insuficiente.");
-                quantity = -1;
+                qty = -1;
             }
         }
-        return quantity;
+        return qty;
     }
     
     public String askPaymentMethod() {
         System.out.println("-> Metodo de pago:");
         System.out.println("   1. CASH (Efectivo)");
         System.out.println("   2. TRANSFER (Transferencia)");
-        System.out.println("   3. CHEQUE ");
+        System.out.println("   3. CHEQUE POSTFECHADO"); 
         System.out.print("Opcion: ");
         int opt = getIntInput();
-        if (opt == 3) return "CHEQUE";
+        if (opt == 3) return "CHEQUE POSTFECHADO";
         if (opt == 2) return "TRANSFER";
         return "CASH";
     }
@@ -174,7 +174,7 @@ public class FinvoryView {
                 int month = Integer.parseInt(parts[1]);
                 int year = Integer.parseInt(parts[2]);
                 if (year < currentYear) {
-                    showError("El anio no puede ser menor al ano actual (" + currentYear + ").");
+                    showError("El ano no puede ser menor al ano actual (" + currentYear + ").");
                     continue;
                 }
                 if (month < 1 || month > 12) {
@@ -244,20 +244,20 @@ public class FinvoryView {
         System.out.println(String.format(format, "ID", "Nombre", "Barcode", "Costo", "P.Std", "P.Prm", "P.Vip", "S(Main)", "S(Obs)"));
         System.out.println(new String(new char[98]).replace("\0", "-"));
         
-        for (Product product : products) {
-            float pStd = product.getPrice("STANDARD", profit, dStd, dPrm, dVip);
-            float pPrm = product.getPrice("PREMIUM", profit, dStd, dPrm, dVip);
-            float pVip = product.getPrice("VIP", profit, dStd, dPrm, dVip);
+        for (Product p : products) {
+            float pStd = p.getPrice("STANDARD", profit, dStd, dPrm, dVip);
+            float pPrm = p.getPrice("PREMIUM", profit, dStd, dPrm, dVip);
+            float pVip = p.getPrice("VIP", profit, dStd, dPrm, dVip);
             
             int totalMainStock = 0;
             for (Inventory inv : inventories) {
-                totalMainStock += inv.getStock(product.getId());
+                totalMainStock += inv.getStock(p.getId());
             }
-            int totalObsStock = obsInv.getStock(product.getId());
+            int totalObsStock = obsInv.getStock(p.getId());
             
             System.out.println(String.format(format,
-                product.getId(), product.getName(), product.getBarcode(),
-                "$" + product.getBaseCostPrice(),
+                p.getId(), p.getName(), p.getBarcode(),
+                "$" + p.getBaseCostPrice(),
                 "$" + String.format("%.2f", pStd),
                 "$" + String.format("%.2f", pPrm),
                 "$" + String.format("%.2f", pVip),
@@ -281,10 +281,10 @@ public class FinvoryView {
 
     public String askReturnReason() {
         System.out.println("-> Motivo de la devolucion:");
-        System.out.println("   1. Defectuoso");
-        System.out.println("   2. Compra incorrecta");
+        System.out.println("   1. DEFECTIVE (Defectuoso)");
+        System.out.println("   2. WRONG_PURCHASE (Compra incorrecta)");
         int opt = getIntInput();
-        return (opt == 1) ? "DEFECTUOSO" : "COMPRA_INCORRECTA";
+        return (opt == 1) ? "DEFECTIVE" : "WRONG_PURCHASE";
     }
 
     public Inventory askObsoleteAction(String productName, int obsoleteStock, Address obsoleteLocation, ArrayList<Inventory> inventories) {
@@ -332,13 +332,13 @@ public class FinvoryView {
         System.out.println(new String(new char[68]).replace("\0", "-"));
         
         int i = 1;
-        for (InvoiceSim invoiceSim : pendingInvoices) {
+        for (InvoiceSim inv : pendingInvoices) {
             System.out.println(String.format(format,
                 i,
-                invoiceSim.getId(),
-                invoiceSim.getCustomer().getName(),
-                "$" + String.format("%.2f", invoiceSim.getTotal()),
-                invoiceSim.getPaymentDueDate()
+                inv.getId(),
+                inv.getCustomer().getName(),
+                "$" + String.format("%.2f", inv.getTotal()),
+                inv.getPaymentDueDate()
             ));
             i++;
         }
@@ -515,7 +515,6 @@ public class FinvoryView {
         return data;
     }
     
-    
     public HashMap<String, String> askNewCompanyAccountData() {
         System.out.println("\n--- REGISTRO DE CUENTA DE COMPANIA ---");
         HashMap<String, String> accountData = new HashMap<>();
@@ -536,7 +535,7 @@ public class FinvoryView {
         accountData.put("password", getValidatedStringInput("-> Contrasena: ", null, "", true));
         return accountData;
     }
-
+    
     public Supplier chooseSupplier(ArrayList<Supplier> suppliers) {
         System.out.println("-> Seleccione el proveedor del producto:");
         if (suppliers.isEmpty()) {
@@ -549,18 +548,18 @@ public class FinvoryView {
         System.out.println("---------------------------------");
         System.out.println("   0. --- CREAR NUEVO PROVEEDOR ---");
         
-        int option = -1;
-        while (option < 0 || option > suppliers.size()) {
-            option = getIntInput();
-            if (option < 0 || option > suppliers.size()) {
+        int opt = -1;
+        while (opt < 0 || opt > suppliers.size()) {
+            opt = getIntInput();
+            if (opt < 0 || opt > suppliers.size()) {
                 showError("Opcion no valida.");
             }
         }
         
-        if (option == 0) {
+        if (opt == 0) {
             return null;
         }
-        return suppliers.get(option - 1);
+        return suppliers.get(opt - 1);
     }
 
     public Inventory chooseInventory(ArrayList<Inventory> inventories) {

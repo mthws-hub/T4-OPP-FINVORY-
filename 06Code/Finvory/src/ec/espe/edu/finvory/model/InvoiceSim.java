@@ -14,12 +14,12 @@ public class InvoiceSim {
     private String id;
     private String date; 
     private Customer customer;
-    private ArrayList<InvoiceLineSim> lines = new ArrayList<>();
+    private ArrayList<InvoiceLineSim> lines;
     private float subtotal;
     private float tax;
     private float total;
     private String paymentMethod; 
-    private String paymentDueDate;
+    private String paymentDueDate; 
     private String status; 
 
     public InvoiceSim() {
@@ -30,14 +30,14 @@ public class InvoiceSim {
         this.id = id;
         this.customer = customer;
         this.paymentMethod = paymentMethod;
-        this.paymentDueDate = paymentDueDate;
+        this.paymentDueDate = paymentDueDate; 
         this.date = LocalDate.now().toString(); 
-        this.status = "PENDING";
+        this.status = "PENDING"; 
         this.lines = new ArrayList<>();
     }
 
-    public void addLine(Product product, int quantity, float priceApplied) {
-        lines.add(new InvoiceLineSim(product, quantity, priceApplied));
+    public void addLine(Product p, int qty, float priceApplied) {
+        lines.add(new InvoiceLineSim(p, qty, priceApplied));
     }
 
     public void calculateTotals(float taxRate) {
