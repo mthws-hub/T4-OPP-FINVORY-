@@ -1,14 +1,13 @@
 package ec.espe.edu.finvory.model;
-import ec.edu.espe.finvory.controller;
-
+/**
+ *
+ * @author Mathews Pastor, POOwer Ranger of Programming
+ */
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-/**
- *
- * @author Mathews Pastor, The POOwer Rangers Of Programming
- */
 public class FinvoryData {
+    
     private CompanyAccount companyInfo; 
     private AdminDetail adminInfo;
     private ArrayList<Customer> customers;
@@ -20,7 +19,7 @@ public class FinvoryData {
     
     private ArrayList<InvoiceSim> invoices;
     private ArrayList<ReturnedProduct> returns;
-
+    
     private float taxRate;
     private float profitPercentage;
     private float discountStandard;
@@ -36,7 +35,7 @@ public class FinvoryData {
         invoices = new ArrayList<>();
         returns = new ArrayList<>();
         
-        Address obsAddr = new Address("Default", "Default", "Bodega Obsoletos");
+        Address obsAddr = new Address("Ecuador", "Quito", "Bodega Obsoletos");
         obsoleteInventory = new InventoryOfObsolete(obsAddr);
         
         taxRate = 0.15f;
@@ -69,7 +68,7 @@ public class FinvoryData {
     public ArrayList<Product> getProducts() { return products; }
     public ArrayList<Supplier> getSuppliers() { return suppliers; }
     public ArrayList<Inventory> getInventories() { return inventories; }
-    public ArrayList<PersonalAccount> getPersonalAccounts() { return personalAccounts; } // <-- NUEVO GETTER
+    public ArrayList<PersonalAccount> getPersonalAccounts() { return personalAccounts; }
     public InventoryOfObsolete getObsoleteInventory() { return obsoleteInventory; }
     public ArrayList<InvoiceSim> getInvoices() { return invoices; }
     public ArrayList<ReturnedProduct> getReturns() { return returns; }
@@ -87,5 +86,4 @@ public class FinvoryData {
     public void setDiscountPremium(float discountPremium) { this.discountPremium = discountPremium; }
     public float getDiscountVip() { return discountVip; }
     public void setDiscountVip(float discountVip) { this.discountVip = discountVip; }
-}
 }

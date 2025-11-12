@@ -1,8 +1,8 @@
-package ec.espe.edu.finvory.controller;
+package ec.edu.espe.finvory.controller;
 
 import ec.espe.edu.finvory.model.*;
 import ec.espe.edu.finvory.view.FinvoryView;
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.HashMap;
 import java.util.Map;
 /**

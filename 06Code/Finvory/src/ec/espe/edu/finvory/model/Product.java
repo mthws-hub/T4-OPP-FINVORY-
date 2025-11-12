@@ -1,10 +1,8 @@
 package ec.espe.edu.finvory.model;
-
 /**
  *
- * @author Arelys Otavalo, The POOwer Rangers Of Programming
+ * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
-
 public class Product {
     
     private String id;
@@ -25,44 +23,27 @@ public class Product {
         this.supplierId = supplierId;
     }
     
-        public String getId() { 
-            return id; 
-        }
+    public float getPrice(String clientType, float profit, float dStandard, float dPremium, float dVip) {
+        float priceWithProfit = this.baseCostPrice * (1 + profit);
         
-        public String getName() { 
-            return name; 
+        if ("VIP".equals(clientType)) {
+            return priceWithProfit * (1 - dVip);
         }
-        
-        public String getDescription() { 
-            return description; 
+        if ("PREMIUM".equals(clientType)) {
+            return priceWithProfit * (1 - dPremium);
         }
-        
-        public String getBarcode() { 
-            return barcode; 
-        }
-        
-        public float getBaseCostPrice() { 
-            return baseCostPrice; 
-        }
-        
-        public String getSupplierId() { 
-            return supplierId;        
-        }
+        return priceWithProfit * (1 - dStandard);
+    }
+
+    public String getId() { return id; }
+    public String getName() { return name; }
+    public String getDescription() { return description; }
+    public String getBarcode() { return barcode; }
+    public float getBaseCostPrice() { return baseCostPrice; }
+    public String getSupplierId() { return supplierId; }
     
-        public void setName(String name) { 
-            this.name = name; 
-        }
-        
-        public void setDescription(String description) { 
-            this.description = description; 
-        }
-        
-        public void setBaseCostPrice(float baseCostPrice) { 
-            this.baseCostPrice = baseCostPrice; 
-        }
-        
-        public void setSupplierId(String supplierId) { 
-            this.supplierId = supplierId; 
-        }
+    public void setName(String name) { this.name = name; }
+    public void setDescription(String description) { this.description = description; }
+    public void setBaseCostPrice(float baseCostPrice) { this.baseCostPrice = baseCostPrice; }
+    public void setSupplierId(String supplierId) { this.supplierId = supplierId; }
 }
-    

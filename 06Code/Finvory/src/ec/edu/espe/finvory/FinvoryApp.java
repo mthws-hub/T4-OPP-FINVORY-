@@ -7,7 +7,7 @@ import ec.espe.edu.finvory.view.FinvoryView;
 
 /**
  *
- * @author Joseph B. Medina
+ * @author Joseph B. Medina, POOwer Ranger of Programming
  */
 public class FinvoryApp {
 
