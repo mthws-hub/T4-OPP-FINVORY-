@@ -86,10 +86,10 @@ public class Database {
         File file = new File(CLIENTS_FILE);
         if (!file.exists()) return customers; 
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            br.readLine(); 
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            bufferedReader.readLine(); 
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 String[] parts = line.split(DELIMITER);
                 if (parts.length == 5) {
                     customers.add(new Customer(parts[1], parts[0], parts[2], parts[3], parts[4]));
