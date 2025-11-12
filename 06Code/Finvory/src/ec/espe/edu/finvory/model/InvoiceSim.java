@@ -1,7 +1,10 @@
 package ec.espe.edu.finvory.model;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
+import java.util.ArrayList;
 /**
  *
  * @author Maryuri Quiña, @ESPE
@@ -17,58 +20,72 @@ public class InvoiceSim {
     private double totalNet;
     private double totalTax;
     private double totalGross;
+    
+    public InvoiceSim() {
+        this.lines = new ArrayList<>(); 
+    }
 
     public InvoiceSim(String id, Customer customer, LocalDate date, String paymentMethod, List<InvoiceLineSim> lines) {
         this.id = id;
         this.customer = customer;
-        this.date = date;
         this.paymentMethod = paymentMethod;
-        this.lines = lines;
+        this.paymentDueDate = paymentDueDate;
+        this.date = LocalDate.now().toString(); 
+        this.status = "PENDING";
+        this.lines = new ArrayList<>();
     }
 
-    public String getId() {
-        return id;
+public void addLine(Product p, int qty, float priceApplied) {
+        lines.add(new InvoiceLineSim(p, qty, priceApplied));
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public void calculateTotals(float taxRate) {
+        this.subtotal = 0;
+        for (InvoiceLineSim line : lines) { 
+            this.subtotal += line.getLineTotal();
+        }
+        this.tax = this.subtotal * taxRate;
+        this.total = this.subtotal + this.tax;
+    }
+    
+    public void complete() { 
+        this.status = "COMPLETED"; 
+    }
+    
+    public void cancel() { 
+        this.status = "CANCELED"; 
     }
 
-    public LocalDate getDate() {
-        return date;
+    public String getId() { 
+        return id; 
     }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
+    
+    public String getStatus() { 
+        return status; }
+    public String getDate() { return date; 
     }
-
-    public List<InvoiceLineSim> getLines() {
-        return lines;
+    
+    public float getTotal() { 
+        return total; 
     }
-
-    public Status getStatus() {
-        return status;
+    
+    public float getSubtotal() { 
+        return subtotal;
     }
-
-    public void setStatus(Status status) {
-        this.status = status;
+    
+    public float getTax() { 
+        return tax;
     }
-
-    public double getTotalNet() {
-        return totalNet;
+    
+    public Customer getCustomer() { 
+        return customer; 
     }
-
-    public double getTotalTax() {
-        return totalTax;
+    
+    public ArrayList<InvoiceLineSim> getLines() { 
+        return lines; 
     }
-
-    public double getTotalGross() {
-        return totalGross;
-    }
-
-    public void calculateTotals(Map<String, Double> taxes) {
-        totalNet = lines.stream().mapToDouble(InvoiceLineSim::getLineTotal).sum();
-        totalTax = taxes.values().stream().mapToDouble(rate -> totalNet * rate).sum();
-        totalGross = totalNet + totalTax;
+    
+    public String getPaymentDueDate() { 
+        return paymentDueDate; 
     }
 }

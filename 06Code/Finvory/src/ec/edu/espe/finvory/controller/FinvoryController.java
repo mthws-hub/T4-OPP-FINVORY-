@@ -109,12 +109,12 @@ public class FinvoryController {
         while (running) {
             int opt = view.showMainMenu();
             switch (opt) {
-                case 1 -> view.showError("Funcionalidad AUN NO IMPLEMENTADA.");
+                case 1 -> handleNewSale();
                 case 2 -> handleInventoryMenu();
                 case 3 -> handleCustomerMenu();
                 case 4 -> handleSupplierMenu();
                 case 5 -> handleAdminMenu();
-                case 6 -> view.showError("Funcionalidad AÚN NO IMPLEMENTADA.");
+                case 6 -> view.showError("Funcionalidad AUN NO IMPLEMENTADA.");
                 case 7 -> view.showQuoteEmailPlaceholder();
                 case 0 -> running = false;
                 default -> view.showError("Opcion no valida.");
@@ -142,6 +142,91 @@ public class FinvoryController {
     
     private void handleViewCompanyPhones() {
         view.showCompanyPhones(data.getCompanyAccounts());
+    }
+
+    private void handleNewSale() {
+        String query = view.askCustomerQuery();
+        Customer customer = findCustomer(query);
+        
+        if (customer == null) {
+            if (view.askToCreateNewCustomer(query)) {
+                customer = handleCreateCustomer(); 
+                if (customer == null) {
+                    view.showError("No se pudo crear el cliente. Venta cancelada.");
+                    return;
+                }
+            } else {
+                view.showMessage("Venta cancelada.");
+                return;
+            }
+        }
+        
+        view.showMessage("Cliente encontrado: " + customer.getName());
+        
+        HashMap<Product, HashMap<Inventory, Integer>> cart = new HashMap<>();
+        
+        while (true) {
+            String id = view.askProductId();
+            if (id.equalsIgnoreCase("fin")) break;
+            
+            Product p = findProduct(id);
+            if (p == null) continue;
+            
+            Inventory inv = view.chooseInventoryToSellFrom(data.getInventories(), p.getId());
+            if (inv == null) continue;
+            
+            int qty = view.askQuantity(inv.getStock(p.getId()));
+            if (qty == 0) continue;
+            
+            cart.putIfAbsent(p, new HashMap<>());
+            cart.get(p).put(inv, qty);
+            view.showMessage("Anadido: " + p.getName() + " (x" + qty + ") desde " + inv.getName());
+        }
+        
+        if (cart.isEmpty()) {
+            view.showMessage("Venta cancelada.");
+            return;
+        }
+
+        String payment = view.askPaymentMethod();
+        String dueDate = ""; 
+
+        if (payment.equals("CHEQUE POSTFECHADO")) {
+            dueDate = view.askPaymentDueDate(); 
+        }
+        
+        String invoiceId = "F-" + (data.getInvoices().size() + 1);
+        InvoiceSim invoice = new InvoiceSim(invoiceId, customer, payment, dueDate);
+        
+        float profit = 0.0f; // (Logica de precios aun no implementada)
+        float dStd = 0.0f;
+        float dPrm = 0.0f;
+        float dVip = 0.0f;
+        
+        for (Map.Entry<Product, HashMap<Inventory, Integer>> entry : cart.entrySet()) {
+            Product p = entry.getKey();
+            for (Map.Entry<Inventory, Integer> stockEntry : entry.getValue().entrySet()) {
+                Inventory inv = stockEntry.getKey();
+                int qty = stockEntry.getValue();
+                
+                inv.removeStock(p.getId(), qty);
+                
+                // Usa el precio de costo, ya que el algoritmo de precios es de otro commit
+                float price = p.getBaseCostPrice(); 
+                invoice.addLine(p, qty, price);
+            }
+        }
+        
+        invoice.calculateTotals(0.15f); // (Tasa de impuesto aun no implementada)
+        
+        if (!payment.equals("CHEQUE POSTFECHADO")) {
+            invoice.complete(); 
+        } else {
+            view.showMessage("Venta registrada como PENDIENTE DE PAGO (Cheque Postfechado).");
+        }
+        
+        data.getInvoices().add(invoice);
+        view.showSaleSummary(invoice);
     }
 
     private void handleInventoryMenu() {
@@ -209,10 +294,35 @@ public class FinvoryController {
                 case 2 -> handleViewCustomers();
                 case 3 -> handleEditCustomer();
                 case 4 -> handleDeleteCustomer();
-                case 5 -> view.showError("Funcionalidad AUN NO IMPLEMENTADA.");
+                case 5 -> handleRegisterPayment();
                 case 0 -> running = false;
                 default -> view.showError("Opcion no valida.");
             }
+        }
+    }
+    
+    private void handleRegisterPayment() {
+        view.showMessage("Cargando facturas pendientes (Cheques Postfechados)...");
+        
+        ArrayList<InvoiceSim> pendingInvoices = new ArrayList<>();
+        for (InvoiceSim inv : data.getInvoices()) {
+            if (inv.getStatus().equals("PENDING")) {
+                pendingInvoices.add(inv);
+            }
+        }
+        
+        InvoiceSim invoiceToPay = view.choosePendingInvoice(pendingInvoices);
+        
+        if (invoiceToPay == null) {
+            view.showMessage("Accion cancelada.");
+            return;
+        }
+        
+        if (view.askConfirmation("¿Confirma el pago de la factura " + invoiceToPay.getId() + " por $" + invoiceToPay.getTotal() + "? (s/n)")) {
+            invoiceToPay.complete();
+            view.showMessage("¡Pago registrado! La factura esta ahora COMPLETED.");
+        } else {
+            view.showMessage("Accion cancelada.");
         }
     }
     
@@ -395,6 +505,13 @@ public class FinvoryController {
         return null;
     }
     
+    private Product findProductByBarcode(String barcode) {
+        for (Product p : data.getProducts()) {
+            if (p.getBarcode() != null && p.getBarcode().equals(barcode)) return p;
+        }
+        return null;
+    }
+
     private Customer findCustomer(String query) {
         for (Customer c : data.getCustomers()) {
             if (c.getIdentification().equals(query) || c.getName().toLowerCase().contains(query.toLowerCase())) {

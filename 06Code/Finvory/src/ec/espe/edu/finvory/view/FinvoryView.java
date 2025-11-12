@@ -3,11 +3,9 @@ package ec.espe.edu.finvory.view;
 import ec.espe.edu.finvory.model.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.DateTimeException;
-import java.util.regex.Pattern;
 /**
  *
  * @author Arelys Otavalo, The POOwer Rangers of Programming
@@ -16,7 +14,7 @@ import java.util.regex.Pattern;
 public class FinvoryView {
 
     private Scanner scanner = new Scanner(System.in);
-    
+
     public int showStartMenu() {
         System.out.println("\n--- BIENVENIDO A FINVORY ---");
         System.out.println("1. Iniciar Sesion");
@@ -93,6 +91,129 @@ public class FinvoryView {
         }
     }
 
+    public String askCustomerQuery() {
+        return getMandatoryStringInput("-> Busque al cliente (Nombre o ID): ");
+    }
+    
+    public boolean askToCreateNewCustomer(String query) {
+        showError("Cliente '" + query + "' no encontrado.");
+        return askConfirmation("¿Desea registrarlo como nuevo cliente ahora? (s/n)");
+    }
+    
+    public String askProductId() {
+        return getMandatoryStringInput("-> Ingrese ID del producto (o 'fin' para terminar): ");
+    }
+    
+    public Inventory chooseInventoryToSellFrom(ArrayList<Inventory> inventories, String productId) {
+        System.out.println("-> Seleccione el inventario de origen:");
+        ArrayList<Inventory> available = new ArrayList<>();
+        
+        for (Inventory inv : inventories) {
+            if (inv.getStock(productId) > 0) {
+                available.add(inv);
+                System.out.println("   " + available.size() + ". " + inv.getName() + " (Stock: " + inv.getStock(productId) + ")");
+            }
+        }
+        
+        if (available.isEmpty()) {
+            showError("No hay stock de este producto en ningun inventario.");
+            return null;
+        }
+        
+        int opt = -1;
+        while (opt < 1 || opt > available.size()) {
+            opt = getIntInput();
+        }
+        return available.get(opt - 1);
+    }
+    
+    public int askQuantity(int maxStock) {
+        int qty = -1;
+        while (qty < 0 || qty > maxStock) {
+            qty = getIntInput("-> Cantidad (Max: " + maxStock + "): ");
+            if (qty > maxStock) {
+                showError("Stock insuficiente.");
+                qty = -1;
+            }
+            if (qty < 0) {
+                showError("La cantidad no puede ser negativa.");
+            }
+        }
+        return qty;
+    }
+    
+    public String askPaymentMethod() {
+        System.out.println("-> Metodo de pago:");
+        System.out.println("   1. CASH (Efectivo)");
+        System.out.println("   2. TRANSFER (Transferencia)");
+        System.out.println("   3. CHEQUE POSTFECHADO");
+        System.out.print("Opcion: ");
+        int opt = getIntInput();
+        if (opt == 3) return "CHEQUE POSTFECHADO";
+        if (opt == 2) return "TRANSFER";
+        return "CASH";
+    }
+
+    public String askPaymentDueDate() {
+        LocalDate today = LocalDate.now();
+        int currentYear = today.getYear();
+
+        while (true) {
+            String dateStr = getMandatoryStringInput("-> Ingrese la Fecha de Cobro (dd/mm/aaaa): ");
+            String[] parts = dateStr.split("/");
+            if (parts.length != 3) {
+                showError("Formato incorrecto. Use dd/mm/aaaa.");
+                continue;
+            }
+            try {
+                int day = Integer.parseInt(parts[0]);
+                int month = Integer.parseInt(parts[1]);
+                int year = Integer.parseInt(parts[2]);
+                if (year < currentYear) {
+                    showError("El ano no puede ser menor al ano actual (" + currentYear + ").");
+                    continue;
+                }
+                LocalDate chosenDate;
+                try {
+                    chosenDate = LocalDate.of(year, month, day); 
+                } catch (DateTimeException e) {
+                    showError("Dia invalido para el mes y ano seleccionados.");
+                    continue;
+                }
+                if (chosenDate.isBefore(today)) {
+                    showError("La fecha de cobro no puede ser un dia que ya paso.");
+                    continue;
+                }
+                return dateStr;
+            } catch (NumberFormatException e) {
+                showError("La fecha debe contener solo numeros (dd/mm/aaaa).");
+            }
+        }
+    }
+
+    public void showSaleSummary(InvoiceSim invoice) {
+        System.out.println("\n--- RESUMEN DE VENTA (Factura: " + invoice.getId() + ") ---");
+        System.out.println("Cliente: " + invoice.getCustomer().getName());
+        String format = "| %-25s | %-8s | %-10s |";
+        System.out.println(String.format(format, "Producto", "Cantidad", "Total Linea"));
+        System.out.println(new String(new char[51]).replace("\0", "-"));
+        for (InvoiceLineSim line : invoice.getLines()) {
+            System.out.println(String.format(format,
+                line.getProductName(),
+                line.getQuantity(),
+                "$" + String.format("%.2f", line.getLineTotal())
+            ));
+        }
+        System.out.println(new String(new char[51]).replace("\0", "-"));
+        System.out.println("Subtotal: $" + String.format("%.2f", invoice.getSubtotal()));
+        System.out.println("Impuesto: $" + String.format("%.2f", invoice.getTax()));
+        System.out.println("TOTAL VENTA: $" + String.format("%.2f", invoice.getTotal()));
+        System.out.println("Estado: " + invoice.getStatus());
+        if (invoice.getStatus().equals("PENDING")) {
+            System.out.println("Fecha de Cobro: " + invoice.getPaymentDueDate());
+        }
+    }
+
     public int showInventoryMenu() {
         System.out.println("\n--- GESTION DE INVENTARIO Y PRODUCTOS ---");
         System.out.println("1. Ver Lista de Productos");
@@ -146,6 +267,39 @@ public class FinvoryView {
         System.out.println("0. Volver al Menu Principal");
         System.out.print("Seleccione una opcion: ");
         return getIntInput();
+    }
+    
+    public InvoiceSim choosePendingInvoice(ArrayList<InvoiceSim> pendingInvoices) {
+        System.out.println("\n--- FACTURAS PENDIENTES DE PAGO ---");
+        if (pendingInvoices.isEmpty()) {
+            showMessage("No hay facturas pendientes.");
+            return null;
+        }
+        
+        String format = "| %-3s | %-10s | %-25s | %-10s | %-12s |";
+        System.out.println(String.format(format, "N°", "Factura ID", "Cliente", "Total", "Fecha Cobro"));
+        System.out.println(new String(new char[68]).replace("\0", "-"));
+        
+        int i = 1;
+        for (InvoiceSim inv : pendingInvoices) {
+            System.out.println(String.format(format,
+                i,
+                inv.getId(),
+                inv.getCustomer().getName(),
+                "$" + String.format("%.2f", inv.getTotal()),
+                inv.getPaymentDueDate()
+            ));
+            i++;
+        }
+        System.out.println("0. Cancelar");
+        
+        int opt = -1;
+        while (opt < 0 || opt > pendingInvoices.size()) {
+            opt = getIntInput();
+        }
+        
+        if (opt == 0) return null;
+        return pendingInvoices.get(opt - 1);
     }
     
     public String askCustomerId() {
@@ -332,7 +486,7 @@ public class FinvoryView {
         }
         return inventories.get(opt - 1);
     }
-    
+
     public HashMap<String, String> askNewCompanyAccountData() {
         System.out.println("\n--- REGISTRO DE CUENTA DE COMPANIA ---");
         HashMap<String, String> accountData = new HashMap<>();
@@ -383,6 +537,16 @@ public class FinvoryView {
     }
     
     private int getIntInput() {
+        try {
+            return Integer.parseInt(getMandatoryStringInput(""));
+        } catch (NumberFormatException e) {
+            showError("Debe ingresar un numero entero.");
+            return -1;
+        }
+    }
+    
+    private int getIntInput(String prompt) {
+        System.out.print(prompt);
         try {
             return Integer.parseInt(getMandatoryStringInput(""));
         } catch (NumberFormatException e) {

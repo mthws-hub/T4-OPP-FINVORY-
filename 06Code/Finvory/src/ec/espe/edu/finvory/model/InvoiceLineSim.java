@@ -7,17 +7,19 @@ public class InvoiceLineSim {
     private String productId;
     private String productName;
     private int quantity;
-    private double unitPrice;
+    private float priceApplied;
+    private float lineTotal;
 
     public InvoiceLineSim(String productId, String productName, int quantity, double unitPrice) {
         this.productId = productId;
         this.productName = productName;
         this.quantity = quantity;
-        this.unitPrice = unitPrice;
+        this.priceApplied = priceApplied;
+        this.lineTotal = quantity * priceApplied;
     }
 
     public double getLineTotal() {
-        return quantity * unitPrice;
+        return lineTotal;
     }
 
     public String getProductId() {
@@ -44,11 +46,4 @@ public class InvoiceLineSim {
         this.quantity = quantity;
     }
 
-    public double getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
 }
