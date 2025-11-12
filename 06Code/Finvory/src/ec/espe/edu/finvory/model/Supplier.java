@@ -10,86 +10,65 @@ import java.util.List;
  */
 public class Supplier {
     private String fullName;
-    private String identification1;
-    private String identification2;
-    private String phoneNumber;
+    private String id1;
+    private String id2;
+    private String phone;
     private String email;
     private String description;
-    private List<Product> suppliedProducts = new ArrayList<>();
 
-    public Supplier(String fullName, String identification1, String identification2, String phoneNumber, String email, String description) {
+    public Supplier() {}
+
+    public Supplier(String fullName, String id1, String phone, String email, String description) {
         this.fullName = fullName;
-        this.identification1 = identification1;
-        this.identification2 = identification2;
-        this.phoneNumber = phoneNumber;
+        this.id1 = id1;
+        this.phone = phone;
         this.email = email;
         this.description = description;
+        this.id2 = ""; 
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getIdentification1() {
-        return identification1;
-    }
-
-    public void setIdentification1(String identification1) {
-        this.identification1 = identification1;
-    }
-
-    public String getIdentification2() {
-        return identification2;
-    }
-
-    public void setIdentification2(String identification2) {
-        this.identification2 = identification2;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public void addSuppliedProduct(Product product) { suppliedProducts.add(product); }
-
-    public String toJson() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
-
-    public void save() {
-        try {
-            java.io.File folder = new java.io.File("reports");
-            if (!folder.exists()) folder.mkdirs();
-            FileWriter file = new FileWriter("reports/supplier_" + identification1 + ".json");
-            file.write(this.toJson());
-            file.close();
-        } catch (IOException e) {
-            System.out.println("Error saving supplier JSON: " + e.getMessage());
+        public String getFullName() { 
+            return fullName; 
         }
-    }
-    
+        
+        public String getId1() { 
+            return id1; 
+        }
+        
+        public String getId2() { 
+            return id2; 
+        }
+        
+        public String getPhone() { 
+            return phone; 
+        }
+        
+        public String getEmail() { 
+            return email; 
+        }
+        
+        public String getDescription() { 
+            return description; 
+        }
+        
+        public void setFullName(String fullName) { 
+            this.fullName = fullName; 
+        }
+        
+        public void setId2(String id2) { 
+            this.id2 = id2; 
+        }
+        
+        public void setPhone(String phone) { 
+            this.phone = phone; 
+        }
+        
+        public void setEmail(String email) { 
+            this.email = email; 
+        }
+        
+        public void setDescription(String description) { 
+            this.description = description; 
+        }
+        
 }
