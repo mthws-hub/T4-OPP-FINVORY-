@@ -1,3 +1,10 @@
-/06Code/Finvory/nbproject/private/
-/06Code/chickenInJsonInJava/nbproject/private/
-/06Code/Finvory/build/
+# Archivos compilados y paquetes de NetBeans
+/build/
+/dist/
+
+# Configuracion privada del usuario de NetBeans
+/nbproject/private/
+
+# Archivos de datos generados por la aplicacion
+/data/
+/utils/
