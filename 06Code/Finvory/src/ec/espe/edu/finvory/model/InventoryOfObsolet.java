@@ -1,5 +1,5 @@
 package ec.espe.edu.finvory.model;
-
+import java.util.HashMap;
 /**
  *
  * @author Arelys Otavalo, The POOwer Rangers Of Programming
