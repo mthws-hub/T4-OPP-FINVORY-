@@ -15,8 +15,8 @@ public class FinvoryApp {
         
         System.out.println("--- INICIANDO SISTEMA FINVORY ---");
         
-        Database db = new Database();
-        FinvoryData data = db.load();
+        Database database = new Database();
+        FinvoryData data = database.load();
         FinvoryView view = new FinvoryView();
 
         if (data.getCompanyAccounts().isEmpty() && data.getPersonalAccounts().isEmpty()) {
@@ -24,7 +24,7 @@ public class FinvoryApp {
             view.showMessage("Datos cargados correctamente.");
         }
         
-        FinvoryController controller = new FinvoryController(data, view, db);
+        FinvoryController controller = new FinvoryController(data, view, database);
         
         controller.run(); 
     }

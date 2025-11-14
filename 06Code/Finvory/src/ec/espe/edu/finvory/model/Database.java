@@ -15,7 +15,7 @@ public class Database {
 
     private static final String CLIENTS_FILE = DATA_FOLDER + File.separator + "clients.csv";
     private static final String SUPPLIERS_FILE = DATA_FOLDER + File.separator + "suppliers.csv";
-    private static final String DB_FILE = UTILS_FOLDER + File.separator + "finvory_database.json";
+    private static final String database_FILE = UTILS_FOLDER + File.separator + "finvory_database.json";
     
     private static final String DELIMITER = ";";
 
@@ -35,7 +35,7 @@ public class Database {
     }
     
     private FinvoryData loadDatabaseJson() {
-        File file = new File(DB_FILE);
+        File file = new File(database_FILE);
         if (file.exists()) {
             try (Reader reader = new FileReader(file)) {
                 FinvoryData data = gson.fromJson(reader, FinvoryData.class);
@@ -43,7 +43,7 @@ public class Database {
                     return data; 
                 }
             } catch (IOException e) {
-                System.err.println("Error al cargar " + DB_FILE + ": " + e.getMessage());
+                System.err.println("Error al cargar " + database_FILE + ": " + e.getMessage());
             }
         }
         return new FinvoryData();
@@ -51,14 +51,14 @@ public class Database {
 
     private void saveDatabaseJson(FinvoryData data) {
         try {
-            File file = new File(DB_FILE);
+            File file = new File(database_FILE);
             new File(file.getParent()).mkdirs(); 
             
             try (Writer writer = new FileWriter(file)) {
                 gson.toJson(data, writer);
             }
         } catch (IOException e) {
-            System.err.println("Error al guardar " + DB_FILE + ": " + e.getMessage());
+            System.err.println("Error al guardar " + database_FILE + ": " + e.getMessage());
         }
     }
 
@@ -86,10 +86,10 @@ public class Database {
         File file = new File(CLIENTS_FILE);
         if (!file.exists()) return customers; 
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            br.readLine(); 
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            bufferedReader.readLine(); 
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 String[] parts = line.split(DELIMITER);
                 if (parts.length == 5) {
                     customers.add(new Customer(parts[1], parts[0], parts[2], parts[3], parts[4]));
