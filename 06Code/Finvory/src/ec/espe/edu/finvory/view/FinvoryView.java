@@ -115,10 +115,10 @@ public class FinvoryView {
         System.out.println("-> Seleccione el inventario de origen:");
         ArrayList<Inventory> available = new ArrayList<>();
         
-        for (Inventory inv : inventories) {
-            if (inv.getStock(productId) > 0) {
-                available.add(inv);
-                System.out.println("   " + available.size() + ". " + inv.getName() + " (Stock: " + inv.getStock(productId) + ")");
+        for (Inventory inventory : inventories) {
+            if (inventory.getStock(productId) > 0) {
+                available.add(inventory);
+                System.out.println("   " + available.size() + ". " + inventory.getName() + " (Stock: " + inventory.getStock(productId) + ")");
             }
         }
         
@@ -127,34 +127,36 @@ public class FinvoryView {
             return null;
         }
         
-        int opt = -1;
-        while (opt < 1 || opt > available.size()) {
-            opt = getPositiveIntInput("Opcion: ");
+        int option = -1;
+        while (option < 1 || option > available.size()) {
+            option = getPositiveIntInput("Opcion: ");
         }
-        return available.get(opt - 1);
+        return available.get(option - 1);
     }
     
     public int askQuantity(int maxStock) {
-        int qty = -1;
-        while (qty < 0 || qty > maxStock) {
-            qty = getPositiveIntInput("-> Cantidad (Max: " + maxStock + "): ");
-            if (qty > maxStock) {
+        int quantity = -1;
+        while (quantity < 0 || quantity > maxStock) {
+            quantity = getPositiveIntInput("-> Cantidad (Max: " + maxStock + "): ");
+            if (quantity > maxStock) {
                 showError("Stock insuficiente.");
-                qty = -1;
+                quantity = -1;
             }
         }
-        return qty;
+        return quantity;
     }
     
     public String askPaymentMethod() {
         System.out.println("-> Metodo de pago:");
         System.out.println("   1. CASH (Efectivo)");
         System.out.println("   2. TRANSFER (Transferencia)");
-        System.out.println("   3. CHEQUE POSTFECHADO"); 
+        System.out.println("   3. CHEQUE"); 
         System.out.print("Opcion: ");
-        int opt = getIntInput();
-        if (opt == 3) return "CHEQUE POSTFECHADO";
-        if (opt == 2) return "TRANSFER";
+        int option = getIntInput();
+        if (option == 1) return "CASH";
+        if (option == 2) return "TRANSFER";
+        if (option == 3) return "CHEQUE";
+        System.err.println("ERROR: Opcion de pago no valida. Por defecto se selecciono CASH.");
         return "CASH";
     }
 
@@ -163,8 +165,8 @@ public class FinvoryView {
         int currentYear = today.getYear();
 
         while (true) {
-            String dateStr = getMandatoryStringInput("-> Ingrese la Fecha de Cobro (dd/mm/aaaa): ");
-            String[] parts = dateStr.split("/");
+            String paymentDateString = getMandatoryStringInput("-> Ingrese la Fecha de Cobro (dd/mm/aaaa): ");
+            String[] parts = paymentDateString.split("/");
             if (parts.length != 3) {
                 showError("Formato incorrecto. Use dd/mm/aaaa.");
                 continue;
@@ -174,7 +176,7 @@ public class FinvoryView {
                 int month = Integer.parseInt(parts[1]);
                 int year = Integer.parseInt(parts[2]);
                 if (year < currentYear) {
-                    showError("El ano no puede ser menor al ano actual (" + currentYear + ").");
+                    showError("El anio no puede ser menor al anio actual (" + currentYear + ").");
                     continue;
                 }
                 if (month < 1 || month > 12) {
@@ -184,7 +186,7 @@ public class FinvoryView {
                 LocalDate chosenDate;
                 try {
                     chosenDate = LocalDate.of(year, month, day); 
-                } catch (DateTimeException e) {
+                } catch (DateTimeException error) {
                     showError("Dia invalido para el mes y ano seleccionados.");
                     continue;
                 }
@@ -192,8 +194,8 @@ public class FinvoryView {
                     showError("La fecha de cobro no puede ser un dia que ya paso.");
                     continue;
                 }
-                return dateStr;
-            } catch (NumberFormatException e) {
+                return paymentDateString;
+            } catch (NumberFormatException error) {
                 showError("La fecha debe contener solo numeros (dd/mm/aaaa).");
             }
         }
@@ -234,7 +236,7 @@ public class FinvoryView {
         return getIntInput();
     }
 
-    public void showProductList(ArrayList<Product> products, ArrayList<Inventory> inventories, InventoryOfObsolete obsInv, float profit, float dStd, float dPrm, float dVip) {
+    public void showProductList(ArrayList<Product> products, ArrayList<Inventory> inventories, InventoryOfObsolete obsoleteInventory, float profit, float discountStandard, float discountPremium, float discountVip) {
         System.out.println("\n--- LISTA DE PRODUCTOS REGISTRADOS ---");
         if (products.isEmpty()) {
             System.out.println("No hay productos registrados.");
@@ -244,37 +246,37 @@ public class FinvoryView {
         System.out.println(String.format(format, "ID", "Nombre", "Barcode", "Costo", "P.Std", "P.Prm", "P.Vip", "S(Main)", "S(Obs)"));
         System.out.println(new String(new char[98]).replace("\0", "-"));
         
-        for (Product p : products) {
-            float pStd = p.getPrice("STANDARD", profit, dStd, dPrm, dVip);
-            float pPrm = p.getPrice("PREMIUM", profit, dStd, dPrm, dVip);
-            float pVip = p.getPrice("VIP", profit, dStd, dPrm, dVip);
+        for (Product product : products) {
+            float productStandard = product.getPrice("STANDARD", profit, discountStandard, discountPremium, discountVip);
+            float productPremium = product.getPrice("PREMIUM", profit, discountStandard, discountPremium, discountVip);
+            float productVip = product.getPrice("VIP", profit, discountStandard, discountPremium, discountVip);
             
             int totalMainStock = 0;
-            for (Inventory inv : inventories) {
-                totalMainStock += inv.getStock(p.getId());
+            for (Inventory inventory : inventories) {
+                totalMainStock += inventory.getStock(product.getId());
             }
-            int totalObsStock = obsInv.getStock(p.getId());
+            int totalObsoleteStock = obsoleteInventory.getStock(product.getId());
             
             System.out.println(String.format(format,
-                p.getId(), p.getName(), p.getBarcode(),
-                "$" + p.getBaseCostPrice(),
-                "$" + String.format("%.2f", pStd),
-                "$" + String.format("%.2f", pPrm),
-                "$" + String.format("%.2f", pVip),
-                totalMainStock, totalObsStock
+                product.getId(), product.getName(), product.getBarcode(),
+                "$" + product.getBaseCostPrice(),
+                "$" + String.format("%.2f", productStandard),
+                "$" + String.format("%.2f", productPremium),
+                "$" + String.format("%.2f", productVip),
+                totalMainStock, totalObsoleteStock
             ));
         }
     }
     
-    public HashMap<String, String> askProductUpdateData(Product p) {
-        System.out.println("\n--- EDITANDO PRODUCTO: " + p.getName() + " ---");
+    public HashMap<String, String> askProductUpdateData(Product product) {
+        System.out.println("\n--- EDITANDO PRODUCTO: " + product.getName() + " ---");
         System.out.println("Deje el campo vacio para no cambiar el valor.");
         HashMap<String, String> data = new HashMap<>();
         
-        data.put("name", getValidatedStringInput("Nombre (" + p.getName() + "): ", null, "", false));
-        data.put("description", getValidatedStringInput("Descripcion (" + p.getDescription() + "): ", null, "", false));
-        data.put("costPrice", getValidatedStringInput("Costo (" + p.getBaseCostPrice() + "): ", REGEX_NUMERIC, "Debe ser un numero.", false));
-        data.put("supplierId", getValidatedStringInput("ID Proveedor (" + p.getSupplierId() + "): ", REGEX_ID, "Debe ser un RUC (13 digitos).", false));
+        data.put("name", getValidatedStringInput("Nombre (" + product.getName() + "): ", null, "", false));
+        data.put("description", getValidatedStringInput("Descripcion (" + product.getDescription() + "): ", null, "", false));
+        data.put("costPrice", getValidatedStringInput("Costo (" + product.getBaseCostPrice() + "): ", REGEX_NUMERIC, "Debe ser un numero.", false));
+        data.put("supplierId", getValidatedStringInput("ID Proveedor (" + product.getSupplierId() + "): ", REGEX_ID, "Debe ser un RUC (13 digitos).", false));
         
         return data;
     }
@@ -283,8 +285,8 @@ public class FinvoryView {
         System.out.println("-> Motivo de la devolucion:");
         System.out.println("   1. DEFECTIVE (Defectuoso)");
         System.out.println("   2. WRONG_PURCHASE (Compra incorrecta)");
-        int opt = getIntInput();
-        return (opt == 1) ? "DEFECTIVE" : "WRONG_PURCHASE";
+        int option = getIntInput();
+        return (option == 1) ? "DEFECTIVE" : "WRONG_PURCHASE";
     }
 
     public Inventory askObsoleteAction(String productName, int obsoleteStock, Address obsoleteLocation, ArrayList<Inventory> inventories) {
@@ -294,16 +296,16 @@ public class FinvoryView {
         System.out.println("   1. Desechar todo el stock obsoleto");
         
         int i = 2;
-        for (Inventory inv : inventories) {
-            System.out.println("   " + i + ". Reasignar a " + inv.getName());
+        for (Inventory inventory : inventories) {
+            System.out.println("   " + i + ". Reasignar a " + inventory.getName());
             i++;
         }
         System.out.println("   0. Cancelar");
         
-        int opt = getIntInput();
-        if (opt == 1) return null; 
-        if (opt > 1 && opt <= inventories.size() + 1) {
-            return inventories.get(opt - 2);
+        int option = getIntInput();
+        if (option == 1) return null; 
+        if (option > 1 && option <= inventories.size() + 1) {
+            return inventories.get(option - 2);
         }
         return null;
     }
@@ -332,28 +334,28 @@ public class FinvoryView {
         System.out.println(new String(new char[68]).replace("\0", "-"));
         
         int i = 1;
-        for (InvoiceSim inv : pendingInvoices) {
+        for (InvoiceSim invoice : pendingInvoices) {
             System.out.println(String.format(format,
                 i,
-                inv.getId(),
-                inv.getCustomer().getName(),
-                "$" + String.format("%.2f", inv.getTotal()),
-                inv.getPaymentDueDate()
+                invoice.getId(),
+                invoice.getCustomer().getName(),
+                "$" + String.format("%.2f", invoice.getTotal()),
+                invoice.getPaymentDueDate()
             ));
             i++;
         }
         System.out.println("0. Cancelar");
         
-        int opt = -1;
-        while (opt < 0 || opt > pendingInvoices.size()) {
-            opt = getIntInput();
-            if (opt < 0 || opt > pendingInvoices.size()) {
+        int option = -1;
+        while (option < 0 || option > pendingInvoices.size()) {
+            option = getIntInput();
+            if (option < 0 || option > pendingInvoices.size()) {
                 showError("Opcion no valida.");
             }
         }
         
-        if (opt == 0) return null;
-        return pendingInvoices.get(opt - 1);
+        if (option == 0) return null;
+        return pendingInvoices.get(option - 1);
     }
     
     public String askCustomerId() {
@@ -367,8 +369,8 @@ public class FinvoryView {
         String format = "| %-13s | %-25s | %-25s | %-10s |";
         System.out.println(String.format(format, "ID (RUC/CI)", "Nombre", "Email", "Tipo"));
         System.out.println(new String(new char[80]).replace("\0", "-"));
-        for (Customer c : customers) {
-            System.out.println(String.format(format, c.getIdentification(), c.getName(), c.getEmail(), c.getClientType()));
+        for (Customer customer : customers) {
+            System.out.println(String.format(format, customer.getIdentification(), customer.getName(), customer.getEmail(), customer.getClientType()));
         }
     }
 
@@ -383,15 +385,15 @@ public class FinvoryView {
         return data;
     }
     
-    public HashMap<String, String> askCustomerUpdateData(Customer c) {
-        System.out.println("\n--- EDITANDO CLIENTE: " + c.getName() + " ---");
+    public HashMap<String, String> askCustomerUpdateData(Customer customer) {
+        System.out.println("\n--- EDITANDO CLIENTE: " + customer.getName() + " ---");
         System.out.println("Deje el campo vacio para no cambiar el valor.");
         HashMap<String, String> data = new HashMap<>();
         
-        data.put("name", getValidatedStringInput("Nombre (" + c.getName() + "): ", null, "", false));
-        data.put("phone", getValidatedStringInput("Telefono (" + c.getPhone() + "): ", REGEX_PHONE, "Formato invalido. Solo numeros y/o '+'.", false));
-        data.put("email", getValidatedStringInput("Email (" + c.getEmail() + "): ", REGEX_EMAIL, "Email invalido. Use formato usuario@dominio.com.", false));
-        data.put("clientType", askClientType(c.getClientType()));
+        data.put("name", getValidatedStringInput("Nombre (" + customer.getName() + "): ", null, "", false));
+        data.put("phone", getValidatedStringInput("Telefono (" + customer.getPhone() + "): ", REGEX_PHONE, "Formato invalido. Solo numeros y/o '+'.", false));
+        data.put("email", getValidatedStringInput("Email (" + customer.getEmail() + "): ", REGEX_EMAIL, "Email invalido. Use formato usuario@dominio.com.", false));
+        data.put("clientType", askClientType(customer.getClientType()));
         
         return data;
     }
@@ -407,11 +409,16 @@ public class FinvoryView {
         if (input.isEmpty()) return currentType;
         
         try {
-            int opt = Integer.parseInt(input);
-            if (opt == 3) return "VIP";
-            if (opt == 2) return "PREMIUM";
-            return "STANDARD";
-        } catch (NumberFormatException e) {
+            int option = Integer.parseInt(input);
+            if (option == 1) return "STANDARD";
+            if (option == 2) return "PREMIUM";
+            if (option == 3) return "VIP";
+            
+            showError("Opcion no valida. Se mantendra el tipo actual: " + currentType);
+            return currentType;
+            
+        }catch (NumberFormatException error){
+            showError("Entrada invalida. Debe ingresar un numero o Enter.");
             return currentType;
         }
     }
@@ -438,8 +445,8 @@ public class FinvoryView {
         String format = "| %-13s | %-25s | %-15s | %-25s |";
         System.out.println(String.format(format, "ID 1 (RUC)", "Nombre Completo", "Telefono", "Email"));
         System.out.println(new String(new char[84]).replace("\0", "-"));
-        for (Supplier s : suppliers) {
-            System.out.println(String.format(format, s.getId1(), s.getFullName(), s.getPhone(), s.getEmail()));
+        for (Supplier supplier : suppliers) {
+            System.out.println(String.format(format, supplier.getId1(), supplier.getFullName(), supplier.getPhone(), supplier.getEmail()));
         }
     }
     
@@ -455,16 +462,16 @@ public class FinvoryView {
         return data;
     }
     
-    public HashMap<String, String> askSupplierUpdateData(Supplier s) {
-        System.out.println("\n--- EDITANDO PROVEEDOR: " + s.getFullName() + " ---");
+    public HashMap<String, String> askSupplierUpdateData(Supplier supplier) {
+        System.out.println("\n--- EDITANDO PROVEEDOR: " + supplier.getFullName() + " ---");
         System.out.println("Deje el campo vacio para no cambiar el valor.");
         HashMap<String, String> data = new HashMap<>();
         
-        data.put("name", getValidatedStringInput("Nombre (" + s.getFullName() + "): ", null, "", false));
-        data.put("phone", getValidatedStringInput("Telefono (" + s.getPhone() + "): ", REGEX_PHONE, "Formato invalido.", false));
-        data.put("email", getValidatedStringInput("Email (" + s.getEmail() + "): ", REGEX_EMAIL, "Email invalido.", false));
-        data.put("description", getValidatedStringInput("Descripcion (" + s.getDescription() + "): ", null, "", false));
-        data.put("id2", getValidatedStringInput("ID 2 (" + s.getId2() + "): ", null, "", false));
+        data.put("name", getValidatedStringInput("Nombre (" + supplier.getFullName() + "): ", null, "", false));
+        data.put("phone", getValidatedStringInput("Telefono (" + supplier.getPhone() + "): ", REGEX_PHONE, "Formato invalido.", false));
+        data.put("email", getValidatedStringInput("Email (" + supplier.getEmail() + "): ", REGEX_EMAIL, "Email invalido.", false));
+        data.put("description", getValidatedStringInput("Descripcion (" + supplier.getDescription() + "): ", null, "", false));
+        data.put("id2", getValidatedStringInput("ID 2 (" + supplier.getId2() + "): ", null, "", false));
         
         return data;
     }
@@ -494,13 +501,13 @@ public class FinvoryView {
         String city = getMandatoryStringInput("   Ciudad (Obligatorio): ");
         String street = getMandatoryStringInput("   Calle (Obligatorio): ");
         
-        Address addr = new Address(country, city, street);
+        Address address = new Address(country, city, street);
         
-        addr.setZipCode(getValidatedStringInput("   Codigo Postal (Opcional): ", null, "", false));
-        addr.setStreetNumber(getValidatedStringInput("   Numero de Calle (Opcional): ", null, "", false));
-        addr.setRegion(getValidatedStringInput("   Region (Opcional): ", null, "", false));
+        address.setZipCode(getValidatedStringInput("   Codigo Postal (Opcional): ", null, "", false));
+        address.setStreetNumber(getValidatedStringInput("   Numero de Calle (Opcional): ", null, "", false));
+        address.setRegion(getValidatedStringInput("   Region (Opcional): ", null, "", false));
         
-        return addr;
+        return address;
     }
     
     public HashMap<String, String> askNewProductData() {
@@ -548,18 +555,18 @@ public class FinvoryView {
         System.out.println("---------------------------------");
         System.out.println("   0. --- CREAR NUEVO PROVEEDOR ---");
         
-        int opt = -1;
-        while (opt < 0 || opt > suppliers.size()) {
-            opt = getIntInput();
-            if (opt < 0 || opt > suppliers.size()) {
+        int option = -1;
+        while (option < 0 || option > suppliers.size()) {
+            option = getIntInput();
+            if (option < 0 || option > suppliers.size()) {
                 showError("Opcion no valida.");
             }
         }
         
-        if (opt == 0) {
+        if (option == 0) {
             return null;
         }
-        return suppliers.get(opt - 1);
+        return suppliers.get(option - 1);
     }
 
     public Inventory chooseInventory(ArrayList<Inventory> inventories) {
@@ -571,14 +578,14 @@ public class FinvoryView {
             System.out.println("   " + (i + 1) + ". " + inventories.get(i).getName());
         }
         
-        int opt = -1;
-        while (opt < 1 || opt > inventories.size()) {
-            opt = getPositiveIntInput("Opcion: ");
-            if (opt < 1 || opt > inventories.size()) {
+        int option = -1;
+        while (option < 1 || option > inventories.size()) {
+            option = getPositiveIntInput("Opcion: ");
+            if (option < 1 || option > inventories.size()) {
                 showError("Opcion no valida.");
             }
         }
-        return inventories.get(opt - 1);
+        return inventories.get(option - 1);
     }
     
     public HashMap<String, Float> askPriceAlgorithmData(FinvoryData data) {
@@ -635,12 +642,12 @@ public class FinvoryView {
         showError("Funcionalidad de envio de correo AUN NO IMPLEMENTADA.");
     }
     
-    public void showMessage(String msg) { 
-        System.out.println("INFO: " + msg); 
+    public void showMessage(String message) { 
+        System.out.println("INFO: " + message); 
     }
     
-    public void showError(String err) { 
-        System.err.println("ERROR: " + err); 
+    public void showError(String error) { 
+        System.err.println("ERROR: " + error); 
     }
     
     public boolean askConfirmation(String prompt) {

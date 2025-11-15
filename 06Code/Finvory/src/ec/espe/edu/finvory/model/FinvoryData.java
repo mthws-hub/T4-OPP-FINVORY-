@@ -37,8 +37,8 @@ public class FinvoryData {
         invoices = new ArrayList<>();
         returns = new ArrayList<>();
         
-        Address obsAddr = new Address("Ecuador", "Quito", "Bodega Obsoletos");
-        obsoleteInventory = new InventoryOfObsolete(obsAddr);
+        Address obsoleteInventoryAddress = new Address("Ecuador", "Quito", "Bodega Obsoletos");
+        obsoleteInventory = new InventoryOfObsolete(obsoleteInventoryAddress);
         
         taxRate = 0.15f;
         profitPercentage = 0.0f;

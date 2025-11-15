@@ -25,8 +25,8 @@ public class FinvoryController {
     public void run() {
         boolean running = true;
         while (running) {
-            int opt = view.showStartMenu();
-            switch (opt) {
+            int optionion = view.showStartMenu();
+            switch (optionion) {
                 case 1:
                     String userRole = handleLogin();
                     if (userRole.equals("COMPANY")) {
@@ -78,8 +78,8 @@ public class FinvoryController {
     private void handleRegistrationMenu() {
         boolean running = true;
         while (running) {
-            int opt = view.showRegistrationMenu();
-            switch(opt) {
+            int option = view.showRegistrationMenu();
+            switch(option) {
                 case 1:
                     handleRegisterCompany();
                     break;
@@ -155,8 +155,8 @@ public class FinvoryController {
     private void startMainMenu() {
         boolean running = true;
         while (running) {
-            int opt = view.showMainMenu();
-            switch (opt) {
+            int option = view.showMainMenu();
+            switch (option) {
                 case 1:
                     handleNewSale();
                     break;
@@ -191,8 +191,8 @@ public class FinvoryController {
     private void startPersonalAccountMenu() {
         boolean running = true;
         while (running) {
-            int opt = view.showPersonalAccountMenu();
-            switch (opt) {
+            int option = view.showPersonalAccountMenu();
+            switch (option) {
                 case 1:
                     handleViewLimitedProducts();
                     break;
@@ -303,8 +303,8 @@ public class FinvoryController {
     private void handleInventoryMenu() {
         boolean running = true;
         while (running) {
-            int opt = view.showInventoryMenu();
-            switch (opt) {
+            int option = view.showInventoryMenu();
+            switch (option) {
                 case 1:
                     handleViewProducts();
                     break;
@@ -374,7 +374,7 @@ public class FinvoryController {
                 }
             }
             view.showMessage("Producto actualizado.");
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException error) {
             view.showError("El costo no es un numero valido. No se actualizo el costo.");
         }
     }
@@ -445,8 +445,8 @@ public class FinvoryController {
     private void handleCustomerMenu() {
         boolean running = true;
         while (running) {
-            int opt = view.showCustomerMenu();
-            switch (opt) {
+            int option = view.showCustomerMenu();
+            switch (option) {
                 case 1:
                     handleCreateCustomer();
                     break;
@@ -559,8 +559,8 @@ public class FinvoryController {
     private void handleSupplierMenu() {
         boolean running = true;
         while (running) {
-            int opt = view.showSupplierMenu();
-            switch (opt) {
+            int option = view.showSupplierMenu();
+            switch (option) {
                 case 1:
                     handleCreateSupplier();
                     break;
@@ -648,8 +648,8 @@ public class FinvoryController {
     private void handleAdminMenu() {
         boolean running = true;
         while (running) {
-            int opt = view.showAdminMenu(); 
-            switch (opt) {
+            int option = view.showAdminMenu(); 
+            switch (option) {
                 case 1:
                     handleSetTaxRate();
                     break;
@@ -756,8 +756,8 @@ public class FinvoryController {
     private void handleReportsMenu() {
         boolean running = true;
         while (running) {
-            int opt = view.showReportsMenu();
-            switch (opt) {
+            int option = view.showReportsMenu();
+            switch (option) {
                 case 1:
                     handleReports(); 
                     break;
