@@ -242,8 +242,11 @@ public class FinvoryController {
             String id = view.askProductId();
             if (id.equalsIgnoreCase("fin")) break;
             
-            Product product = findProduct(id);
-            if (product == null) continue;
+            Product product = findProductByIdOrBarcode(id);
+            if (product == null) {
+                view.showError("Producto no encontrado, intente con otro ID o Barcode//revise si hay productos");
+                continue;
+            }
             
             Inventory inventory = view.chooseInventoryToSellFrom(data.getInventories(), product.getId());
             if (inventory == null) continue;
@@ -297,6 +300,7 @@ public class FinvoryController {
         }
         
         data.getInvoices().add(invoice);
+        database.save(data);
         view.showSaleSummary(invoice);
     }
 
@@ -343,8 +347,11 @@ public class FinvoryController {
     }
 
     private void handleEditProduct() {
-        Product product = findProduct(view.askProductId());
-        if (product == null) return;
+        Product product = findProductByIdOrBarcode(view.askProductId());
+        if (product == null) {
+            view.showError("Producto no encontrado (ID o Codigo de Barras no existe).");
+            return;
+        }
 
         HashMap<String, String> updates = view.askProductUpdateData(product);
         
@@ -374,14 +381,18 @@ public class FinvoryController {
                 }
             }
             view.showMessage("Producto actualizado.");
+            database.save(data);
         } catch (NumberFormatException e) {
             view.showError("El costo no es un numero valido. No se actualizo el costo.");
         }
     }
 
     private void handleDeleteProduct() {
-        Product product = findProduct(view.askProductId());
-        if (product == null) return;
+        Product product = findProductByIdOrBarcode(view.askProductId());
+        if (product == null) {
+            view.showError("Producto no encontrado (ID o Codigo de Barras no existe).");
+            return;
+        }
         
         for (InvoiceSim inv : data.getInvoices()) {
             for (InvoiceLineSim line : inv.getLines()) {
@@ -400,12 +411,16 @@ public class FinvoryController {
             data.getObsoleteInventory().removeStock(product.getId(), data.getObsoleteInventory().getStock(product.getId()));
             
             view.showMessage("Producto eliminado.");
+            database.save(data);
         }
     }
 
     private void handleProcessReturn() {
-        Product product = findProduct(view.askProductId());
-        if (product == null) return;
+        Product product = findProductByIdOrBarcode(view.askProductId());
+        if (product == null) {
+            view.showError("Producto no encontrado (ID o Codigo de Barras no existe).");
+            return;
+        }
         
         int qty = view.askQuantity(9999);
         if (qty == 0) return;
@@ -414,14 +429,18 @@ public class FinvoryController {
 
         data.getObsoleteInventory().addStock(product.getId(), qty);
         data.getReturns().add(new ReturnedProduct(product, qty, reason));
+        database.save(data);
 
         view.showMessage("Devolucion registrada.");
         view.showMessage("Stock obsoleto de '" + product.getName() + "': " + data.getObsoleteInventory().getStock(product.getId()));
     }
 
     private void handleManageObsolete() {
-        Product product = findProduct(view.askProductId());
-        if (product == null) return;
+        Product product = findProductByIdOrBarcode(view.askProductId());
+        if (product == null) {
+            view.showError("Producto no encontrado (ID o Codigo de Barras no existe).");
+            return;
+        }
         
         int obsoleteStock = data.getObsoleteInventory().getStock(product.getId());
         if (obsoleteStock == 0) {
@@ -436,9 +455,11 @@ public class FinvoryController {
             data.getObsoleteInventory().removeStock(product.getId(), obsoleteStock);
             targetInventory.addStock(product.getId(), obsoleteStock);
             view.showMessage("Stock reasignado a " + targetInventory.getName());
+            database.save(data);
         } else { 
             data.getObsoleteInventory().removeStock(product.getId(), obsoleteStock);
             view.showMessage("Stock obsoleto desechado.");
+            database.save(data);
         }
     }
 
@@ -491,7 +512,8 @@ public class FinvoryController {
         
         if (view.askConfirmation("Confirma el pago de la factura? " + invoiceToPay.getId() + " por $" + invoiceToPay.getTotal() + "? (s/n)")) {
             invoiceToPay.complete();
-            view.showMessage("Pago registrado. La factura esta ahora COMPLETED.");
+            database.save(data);
+            view.showMessage("Pago registrado. La factura esta ahora COMPLETADA.");
         } else {
             view.showMessage("Accion cancelada.");
         }
@@ -515,6 +537,7 @@ public class FinvoryController {
             customerData.get("email"), customerData.get("clientType")
         );
         this.data.getCustomers().add(newCustomer);
+        database.save(data);
         view.showMessage("Cliente '" + newCustomer.getName() + "' creado con exito!");
         return newCustomer;
     }
@@ -534,6 +557,7 @@ public class FinvoryController {
         customer.setClientType(updates.get("clientType")); 
         
         view.showMessage("Cliente actualizado.");
+        database.save(data);
     }
     
     private void handleDeleteCustomer() {
@@ -553,6 +577,7 @@ public class FinvoryController {
         if (view.askConfirmation("Seguro que desea eliminar a '" + customer.getName() + "'? (s/n)")) {
             data.getCustomers().remove(customer);
             view.showMessage("Cliente eliminado.");
+            database.save(data);
         }
     }
 
@@ -603,6 +628,7 @@ public class FinvoryController {
         supplier.setId2(supplierData.get("id2"));
         
         data.getSuppliers().add(supplier);
+        database.save(data);
         view.showMessage("Proveedor '" + supplier.getFullName() + "' creado con exito!");
         return supplier;
     }
@@ -623,6 +649,7 @@ public class FinvoryController {
         supplier.setId2(updates.get("id2"));
         
         view.showMessage("Proveedor actualizado.");
+        database.save(data);
     }
     
     private void handleDeleteSupplier() {
@@ -642,6 +669,7 @@ public class FinvoryController {
         if (view.askConfirmation("Seguro que desea eliminar a '" + supplier.getFullName() + "'? (s/n)")) {
             data.getSuppliers().remove(supplier);
             view.showMessage("Proveedor eliminado.");
+            database.save(data);
         }
     }
     
@@ -683,16 +711,23 @@ public class FinvoryController {
         Address address = view.askAddressData("-> Direccion del Nuevo Inventario:");
         Inventory newInv = new Inventory(name, address);
         data.getInventories().add(newInv);
+        database.save(data);
         view.showMessage("Inventario '" + name + "' creado con exito.");
     }
     
     private void handleSetTaxRate() {
         float newRate = view.askNewTaxRate(data.getTaxRate());
         data.setTaxRate(newRate);
+        database.save(data);
         view.showMessage("Impuesto actualizado a " + (newRate * 100) + "%");
     }
     
     private void handleCreateProduct() {
+        
+        if(data.getInventories().isEmpty()){
+            view.showError("No hay inventarios creados. Cancele y cree un inventario primero.");
+            return;
+        }
         HashMap<String, String> productData = view.askNewProductData();
         String id = productData.get("id");
         String barcode = productData.get("barcode");
@@ -733,6 +768,7 @@ public class FinvoryController {
             
             data.getProducts().add(newProduct);
             targetInventory.setStock(id, stock);
+            database.save(data);
             
             view.showMessage("Producto '" + newProduct.getName() + "' creado con exito!");
             
@@ -751,6 +787,7 @@ public class FinvoryController {
         data.setDiscountVip(percentages.get("discountVip"));
         
         view.showMessage("Algoritmo de precios actualizado exitosamente");
+        database.save(data);
     }
     
     private void handleReportsMenu() {
@@ -880,5 +917,14 @@ public class FinvoryController {
             if (username.equals(personalAccount.getUsername())) return personalAccount;
         }
         return null;
+    }
+    
+    private Product findProductByIdOrBarcode(String searchParameter) {
+        if (searchParameter == null || searchParameter.isEmpty()) return null;
+        Product product = findProduct(searchParameter);
+        if (product == null){
+            product = findProductByBarcode(searchParameter);
+        }
+        return product;
     }
 }

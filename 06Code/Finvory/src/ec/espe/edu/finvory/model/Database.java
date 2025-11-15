@@ -23,8 +23,6 @@ public class Database {
 
     public FinvoryData load() {
         FinvoryData data = loadDatabaseJson();
-        data.getCustomers().addAll(loadCustomersCsv());
-        data.getSuppliers().addAll(loadSuppliersCsv());
         return data;
     }
 
