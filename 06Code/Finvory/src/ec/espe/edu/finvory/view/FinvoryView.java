@@ -108,7 +108,7 @@ public class FinvoryView {
     }
     
     public String askProductId() {
-        return getMandatoryStringInput("-> Ingrese ID del producto (o 'fin' para terminar): ");
+        return getMandatoryStringInput("-> Ingrese ID del producto o el codigo de barras (o 'fin' para terminar): ");
     }
     
     public Inventory chooseInventoryToSellFrom(ArrayList<Inventory> inventories, String productId) {
