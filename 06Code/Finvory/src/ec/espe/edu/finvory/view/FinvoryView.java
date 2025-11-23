@@ -591,12 +591,28 @@ public class FinvoryView {
     public HashMap<String, Float> askPriceAlgorithmData(FinvoryData data) {
         HashMap<String, Float> percentages = new HashMap<>();
         System.out.println("\n--- CONFIGURAR ALGORITMO DE PRECIOS GLOBAL ---");
-        System.out.println("Ingrese los porcentajes como decimales (ej: 30% = 0.30)");
+        System.out.println("Ingrese los porcentajes como decimales (ej: 30% = 0.30, 200% = 2.0)");
         
-        percentages.put("profit", getPositiveFloatInput("Ganancia (" + data.getProfitPercentage() + "): "));
-        percentages.put("discountStandard", getPositiveFloatInput("Desc. Standard (" + data.getDiscountStandard() + "): "));
-        percentages.put("discountPremium", getPositiveFloatInput("Desc. Premium (" + data.getDiscountPremium() + "): "));
-        percentages.put("discountVip", getPositiveFloatInput("Desc. Vip (" + data.getDiscountVip() + "): "));
+        float profit;
+        float maximumProfit = 2.0f;
+
+        do {
+            profit = getPositiveFloatInput("Ganancia (" + data.getProfitPercentage() + "): ");
+            if (profit > maximumProfit) {
+                showError("Ha excedido la cantidad maxima de ganancia (200%, " + maximumProfit + " max).");
+            }
+        } while (profit > maximumProfit);
+
+        percentages.put("profit", profit);
+
+        float discountStandard = getValidatedDiscount("Desc. Standard", data.getDiscountStandard(), -1.0f, profit);
+        percentages.put("discountStandard", discountStandard);
+
+        float discountPremium = getValidatedDiscount("Desc. Premium", data.getDiscountPremium(), discountStandard, profit);
+        percentages.put("discountPremium", discountPremium);
+
+        float discountVip = getValidatedDiscount("Desc. Vip", data.getDiscountVip(), discountPremium, profit);
+        percentages.put("discountVip", discountVip);
         
         return percentages;
     }
@@ -731,5 +747,27 @@ public class FinvoryView {
             }
         }
         return value;
+    }
+    
+    private float getValidatedDiscount(String label, float currentValue, float minimumLimit, float maximumLimit) {
+        float discount;
+        do {
+            discount = getPositiveFloatInput(label + " (" + currentValue + "): ");
+
+            if (discount >= maximumLimit) {
+                showError("El descuento debe ser MENOR a la ganancia (" + maximumLimit + "). No pueden ser iguales.");
+                continue;
+            }
+
+            if (minimumLimit >= 0 && discount <= minimumLimit) {
+                showError("El descuento debe ser MAYOR al nivel anterior (" + minimumLimit + "). No pueden ser iguales.");
+                continue;
+            }
+
+            break;
+
+        } while (true);
+
+        return discount;
     }
 }
