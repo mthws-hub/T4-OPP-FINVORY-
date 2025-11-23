@@ -219,9 +219,10 @@ public class FinvoryController {
 
     private void handleNewSale() {
         String query = view.askCustomerQuery();
-        Customer customer = findCustomer(query);
+        ArrayList<Customer> matches = findAllMatchingCustomers(query);
+        Customer customer = null;
         
-        if (customer == null) {
+        if (matches.isEmpty()) {
             if (view.askToCreateNewCustomer(query)) {
                 customer = handleCreateCustomer(); 
                 if (customer == null) {
@@ -232,8 +233,15 @@ public class FinvoryController {
                 view.showMessage("Venta cancelada.");
                 return;
             }
+        } else if(matches.size() == 1){
+            customer = matches.get(0);
+        } else {
+            customer = view.ambiguousCustomerSearch(matches);
+            if (customer == null) {
+                view.showMessage("Selección cancelada. Venta cancelada.");
+                return;
+            }
         }
-        
         view.showMessage("Cliente encontrado: " + customer.getName());
         
         HashMap<Product, HashMap<Inventory, Integer>> cart = new HashMap<>();
@@ -833,7 +841,9 @@ public class FinvoryController {
     private Product findProduct(String id) {
         if (id == null || id.isEmpty()) return null;
         for (Product product : data.getProducts()) {
-            if (id.equals(product.getId())) return product;
+            if (id.equalsIgnoreCase(product.getId())) {
+                return product;
+            }
         }
         return null;
     }
@@ -841,17 +851,22 @@ public class FinvoryController {
     private Product findProductByBarcode(String barcode) {
         if (barcode == null || barcode.isEmpty()) return null;
         for (Product product : data.getProducts()) {
-            if (product.getBarcode() != null && product.getBarcode().equals(barcode)) return product;
+            if (product.getBarcode() != null && product.getBarcode().equalsIgnoreCase(barcode)) {
+                return product;
+            }
         }
         return null;
     }
 
     private Customer findCustomer(String query) {
         if (query == null || query.isEmpty()) return null;
-        query = query.toLowerCase();
         for (Customer customer : data.getCustomers()) {
-            if (query.equals(customer.getIdentification()) || 
-                (customer.getName() != null && customer.getName().toLowerCase().contains(query))) {
+            if (query.equalsIgnoreCase(customer.getIdentification())) {
+                return customer;
+            }
+
+            if (customer.getName() != null && 
+                customer.getName().toLowerCase().contains(query.toLowerCase())) {
                 return customer;
             }
         }
@@ -880,5 +895,21 @@ public class FinvoryController {
             if (username.equals(personalAccount.getUsername())) return personalAccount;
         }
         return null;
+    }
+    
+    private ArrayList<Customer> findAllMatchingCustomers(String query) {
+        ArrayList<Customer> matches = new ArrayList<>();
+        if (query == null || query.isEmpty()) return matches;
+        
+        for (Customer customer : data.getCustomers()) {
+            if (query.equalsIgnoreCase(customer.getIdentification())) {
+                matches.add(customer);
+            }
+            if (customer.getName() != null && 
+                customer.getName().toLowerCase().contains(query.toLowerCase())) {
+                matches.add(customer);
+            }
+        }
+        return matches;
     }
 }

@@ -112,19 +112,27 @@ public class FinvoryView {
     }
     
     public Inventory chooseInventoryToSellFrom(ArrayList<Inventory> inventories, String productId) {
-        System.out.println("-> Seleccione el inventario de origen:");
         ArrayList<Inventory> available = new ArrayList<>();
         
         for (Inventory inventory : inventories) {
             if (inventory.getStock(productId) > 0) {
                 available.add(inventory);
-                System.out.println("   " + available.size() + ". " + inventory.getName() + " (Stock: " + inventory.getStock(productId) + ")");
             }
         }
         
         if (available.isEmpty()) {
             showError("No hay stock de este producto en ningun inventario.");
             return null;
+        }
+        
+        if (available.size() == 1) {
+            return available.get(0);
+        }
+        
+        System.out.println("-> Seleccione el inventario de origen:");
+        for (int i = 0; i < available.size(); i++) {
+            Inventory inv = available.get(i);
+            System.out.println("   " + (i + 1) + ". " + inv.getName() + " (Stock: " + inv.getStock(productId) + ")");
         }
         
         int option = -1;
@@ -204,6 +212,9 @@ public class FinvoryView {
     public void showSaleSummary(InvoiceSim invoice) {
         System.out.println("\n--- RESUMEN DE VENTA (Factura: " + invoice.getId() + ") ---");
         System.out.println("Cliente: " + invoice.getCustomer().getName());
+        System.out.println("RUC/CI:  " + invoice.getCustomer().getIdentification());
+        System.out.println("Telf:    " + invoice.getCustomer().getPhone());
+        System.out.println("Fecha:   " + invoice.getDate());
         String format = "| %-25s | %-8s | %-10s |";
         System.out.println(String.format(format, "Producto", "Cantidad", "Total Linea"));
         System.out.println(new String(new char[51]).replace("\0", "-"));
@@ -242,9 +253,9 @@ public class FinvoryView {
             System.out.println("No hay productos registrados.");
             return;
         }
-        String format = "| %-5s | %-20s | %-15s | %-7s | %-7s | %-7s | %-7s | %-6s | %-6s |";
+        String format = "| %-5s | %-20s | %-15s | %-10s | %-10s | %-10s | %-10s | %-6s | %-6s |";
         System.out.println(String.format(format, "ID", "Nombre", "Barcode", "Costo", "P.Std", "P.Prm", "P.Vip", "S(Main)", "S(Obs)"));
-        System.out.println(new String(new char[98]).replace("\0", "-"));
+        System.out.println(new String(new char[115]).replace("\0", "-"));
         
         for (Product product : products) {
             float productStandard = product.getPrice("STANDARD", profit, discountStandard, discountPremium, discountVip);
@@ -259,7 +270,7 @@ public class FinvoryView {
             
             System.out.println(String.format(format,
                 product.getId(), product.getName(), product.getBarcode(),
-                "$" + product.getBaseCostPrice(),
+                "$" + String.format("%.2f", product.getBaseCostPrice()), 
                 "$" + String.format("%.2f", productStandard),
                 "$" + String.format("%.2f", productPremium),
                 "$" + String.format("%.2f", productVip),
@@ -275,7 +286,8 @@ public class FinvoryView {
         
         data.put("name", getValidatedStringInput("Nombre (" + product.getName() + "): ", null, "", false));
         data.put("description", getValidatedStringInput("Descripcion (" + product.getDescription() + "): ", null, "", false));
-        data.put("costPrice", getValidatedStringInput("Costo (" + product.getBaseCostPrice() + "): ", REGEX_NUMERIC, "Debe ser un numero.", false));
+        String costPropmt = "Costo (" + String.format("%.2f",product.getBaseCostPrice()) + "): ";
+        data.put("costPrice", getValidatedStringInput(costPropmt, REGEX_NUMERIC, "Debe de ser un numero", false));
         data.put("supplierId", getValidatedStringInput("ID Proveedor (" + product.getSupplierId() + "): ", REGEX_ID, "Debe ser un RUC (13 digitos).", false));
         
         return data;
@@ -488,7 +500,21 @@ public class FinvoryView {
     }
     
     public float askNewTaxRate(float currentRate) {
-        return getPositiveFloatInput("-> Tasa de Impuesto Actual (" + currentRate + "): ");
+        float newRate;
+        float MAX_TAX_RATE = 0.3f;
+        do {
+            newRate = getPositiveFloatInput("-> Tasa de Impuesto Actual (" + String.format("%.2f", currentRate) + "): ");
+            if (newRate > MAX_TAX_RATE) {
+                showError("La tasa de impuesto no puede exceder el 30% (" + MAX_TAX_RATE + ").");
+                continue;
+            }
+            float roundedRate = (float)(Math.round(newRate * 100.0) / 100.0);
+            if (newRate != roundedRate) {
+                newRate = roundedRate;
+            }
+            break;
+        } while (true);
+        return newRate;
     }
     
     public String askNewInventoryName() {
@@ -597,7 +623,7 @@ public class FinvoryView {
         float maximumProfit = 2.0f;
 
         do {
-            profit = getPositiveFloatInput("Ganancia (" + data.getProfitPercentage() + "): ");
+            profit = getPositiveFloatInput("Ganancia (" + String.format("%.2f", data.getProfitPercentage()) + "): ");
             if (profit > maximumProfit) {
                 showError("Ha excedido la cantidad maxima de ganancia (200%, " + maximumProfit + " max).");
             }
@@ -605,13 +631,16 @@ public class FinvoryView {
 
         percentages.put("profit", profit);
 
-        float discountStandard = getValidatedDiscount("Desc. Standard", data.getDiscountStandard(), -1.0f, profit);
+        float discountStandard = getValidatedDiscount(
+                "Desc. Standard", data.getDiscountStandard(), -1.0f, profit);
         percentages.put("discountStandard", discountStandard);
 
-        float discountPremium = getValidatedDiscount("Desc. Premium", data.getDiscountPremium(), discountStandard, profit);
+        float discountPremium = getValidatedDiscount(
+                "Desc. Premium", data.getDiscountPremium(), discountStandard, profit);
         percentages.put("discountPremium", discountPremium);
 
-        float discountVip = getValidatedDiscount("Desc. Vip", data.getDiscountVip(), discountPremium, profit);
+        float discountVip = getValidatedDiscount(
+                "Desc. Vip", data.getDiscountVip(), discountPremium, profit);
         percentages.put("discountVip", discountVip);
         
         return percentages;
@@ -647,8 +676,8 @@ public class FinvoryView {
 
     public void showDashboard(float totalDay, float totalProfile) {
         System.out.println("\n=== DASHBOARD DE INGRESOS ===");
-        System.out.println("Ingresos Brutos (Hoy):       $" + totalDay);
-        System.out.println("Ingresos Brutos (Historico): $" + totalProfile);
+        System.out.println("Ingresos Brutos (Hoy):       $" + String.format("%.2f", totalDay));
+        System.out.println("Ingresos Brutos (Historico): $" + String.format("%.2f", totalProfile));
         System.out.println("==============================\n");
     }
     
@@ -752,7 +781,7 @@ public class FinvoryView {
     private float getValidatedDiscount(String label, float currentValue, float minimumLimit, float maximumLimit) {
         float discount;
         do {
-            discount = getPositiveFloatInput(label + " (" + currentValue + "): ");
+            discount = getPositiveFloatInput(label + " (" + String.format("%.2f", currentValue) + "): ");
 
             if (discount >= maximumLimit) {
                 showError("El descuento debe ser MENOR a la ganancia (" + maximumLimit + "). No pueden ser iguales.");
@@ -769,5 +798,26 @@ public class FinvoryView {
         } while (true);
 
         return discount;
+    }
+    
+    public Customer ambiguousCustomerSearch(ArrayList<Customer> matches) {
+        System.out.println("\n--- RESULTADOS ENCONTRADOS ---");
+        System.out.println("Se encontraron " + matches.size() + " coincidencias. Por favor especifique:");
+        
+        String format = "   %d. %-25s | ID: %s";
+        
+        for (int i = 0; i < matches.size(); i++) {
+            Customer c = matches.get(i);
+            System.out.println(String.format(format, (i + 1), c.getName(), c.getIdentification()));
+        }
+        System.out.println("   0. Cancelar Seleccion");
+        
+        int option = -1;
+        while (option < 0 || option > matches.size()) {
+            option = getPositiveIntInput("Seleccione el numero correcto: ");
+        }
+        
+        if (option == 0) return null;
+        return matches.get(option - 1);
     }
 }

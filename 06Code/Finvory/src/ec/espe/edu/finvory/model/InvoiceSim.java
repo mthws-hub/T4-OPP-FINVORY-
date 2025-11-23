@@ -50,7 +50,8 @@ public class InvoiceSim {
     }
     
     public void complete() { 
-        this.status = "COMPLETED"; 
+        this.status = "COMPLETED";
+        this.date = LocalDate.now().toString();
     }
     
     public void cancel() { 

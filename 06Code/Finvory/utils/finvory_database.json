@@ -17,10 +17,83 @@
       "password": "1234"
     }
   ],
-  "customers": [],
-  "products": [],
-  "suppliers": [],
-  "inventories": [],
+  "customers": [
+    {
+      "name": "Maria Rosa Perez",
+      "identification": "0012365478521",
+      "phone": "0987452147",
+      "email": "maria@rosa.com",
+      "clientType": "STANDARD"
+    },
+    {
+      "name": "Maria Lopez",
+      "identification": "0015236478523",
+      "phone": "0998456357",
+      "email": "lmaria@gmail.com",
+      "clientType": "PREMIUM"
+    },
+    {
+      "name": "Jose Rueda",
+      "identification": "1452478965",
+      "phone": "0326598745",
+      "email": "jrueda@outlok.com",
+      "clientType": "VIP"
+    }
+  ],
+  "products": [
+    {
+      "id": "PKR",
+      "name": "Pastillas Freno AVEO",
+      "description": "Pastilas",
+      "barcode": "0123654785",
+      "baseCostPrice": 12.0,
+      "supplierId": "0014523698745"
+    },
+    {
+      "id": "PKS",
+      "name": "Pastillas Sail",
+      "description": "Pastillas de freno",
+      "barcode": "1332562454",
+      "baseCostPrice": 10.0,
+      "supplierId": "0014523698745"
+    },
+    {
+      "id": "PKM",
+      "name": "Pastillas Mitsubishi",
+      "description": "Pastillas de Freno",
+      "barcode": "Pastillas Mitsubishi",
+      "baseCostPrice": 100.0,
+      "supplierId": "0014523698745"
+    }
+  ],
+  "suppliers": [
+    {
+      "fullName": "Jose Rodriguez",
+      "id1": "0014523698745",
+      "id2": "",
+      "phone": "0321487562",
+      "email": "jrodriguez@gmail.com",
+      "description": "Proveedor QuitoSur"
+    }
+  ],
+  "inventories": [
+    {
+      "name": "Bodega Sur",
+      "address": {
+        "country": "Ecuadro",
+        "city": "Quito",
+        "street": "Atocha",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {
+        "PKM": 10,
+        "PKR": 5,
+        "PKS": 8
+      }
+    }
+  ],
   "personalAccounts": [],
   "obsoleteInventory": {
     "address": {
@@ -31,13 +104,133 @@
       "streetNumber": "",
       "region": ""
     },
-    "productStock": {}
+    "productStock": {
+      "PKS": 2
+    }
   },
-  "invoices": [],
-  "returns": [],
-  "taxRate": 0.15,
-  "profitPercentage": 2.0,
-  "discountStandard": 1.5,
-  "discountPremium": 1.6,
-  "discountVip": 1.9
+  "invoices": [
+    {
+      "id": "F-1",
+      "date": "2025-11-23",
+      "customer": {
+        "name": "Maria Rosa Perez",
+        "identification": "0012365478521",
+        "phone": "0987452147",
+        "email": "maria@rosa.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "PKR",
+          "productName": "Pastillas Freno AVEO",
+          "quantity": 1,
+          "priceApplied": -18.0,
+          "lineTotal": -18.0
+        }
+      ],
+      "subtotal": -18.0,
+      "tax": -2.7,
+      "total": -20.7,
+      "paymentMethod": "CASH",
+      "paymentDueDate": "",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "F-2",
+      "date": "2025-11-23",
+      "customer": {
+        "name": "Maria Rosa Perez",
+        "identification": "0012365478521",
+        "phone": "0987452147",
+        "email": "maria@rosa.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "PKR",
+          "productName": "Pastillas Freno AVEO",
+          "quantity": 2,
+          "priceApplied": -18.0,
+          "lineTotal": -36.0
+        }
+      ],
+      "subtotal": -36.0,
+      "tax": -5.4,
+      "total": -41.4,
+      "paymentMethod": "TRANSFER",
+      "paymentDueDate": "",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "F-3",
+      "date": "2025-11-23",
+      "customer": {
+        "name": "Maria Rosa Perez",
+        "identification": "0012365478521",
+        "phone": "0987452147",
+        "email": "maria@rosa.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "PKR",
+          "productName": "Pastillas Freno AVEO",
+          "quantity": 1,
+          "priceApplied": 16.199999,
+          "lineTotal": 16.199999
+        }
+      ],
+      "subtotal": 16.199999,
+      "tax": 2.4299998,
+      "total": 18.63,
+      "paymentMethod": "CASH",
+      "paymentDueDate": "",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "F-4",
+      "date": "2025-11-23",
+      "customer": {
+        "name": "Maria Lopez",
+        "identification": "0015236478523",
+        "phone": "0998456357",
+        "email": "lmaria@gmail.com",
+        "clientType": "PREMIUM"
+      },
+      "lines": [
+        {
+          "productId": "PKR",
+          "productName": "Pastillas Freno AVEO",
+          "quantity": 1,
+          "priceApplied": 14.400001,
+          "lineTotal": 14.400001
+        }
+      ],
+      "subtotal": 14.400001,
+      "tax": 1.728,
+      "total": 16.128,
+      "paymentMethod": "CASH",
+      "paymentDueDate": "",
+      "status": "COMPLETED"
+    }
+  ],
+  "returns": [
+    {
+      "product": {
+        "id": "PKS",
+        "name": "Pastillas Sail",
+        "description": "Pastillas de freno",
+        "barcode": "1332562454",
+        "baseCostPrice": 10.0,
+        "supplierId": "0014523698745"
+      },
+      "quantity": 2,
+      "reason": "WRONG_PURCHASE"
+    }
+  ],
+  "taxRate": 0.13,
+  "profitPercentage": 0.5,
+  "discountStandard": 0.1,
+  "discountPremium": 0.2,
+  "discountVip": 0.3
 }

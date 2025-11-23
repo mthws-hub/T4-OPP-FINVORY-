@@ -48,24 +48,29 @@ public class FinvoryData {
     }
 
     public float getTotalGrossProfile() {
-        float total = 0;
+        float totalIncome = 0;
         for (InvoiceSim invoice : invoices) {
             if ("COMPLETED".equals(invoice.getStatus())) {
-                total += invoice.getTotal();
+                totalIncome += invoice.getSubtotal();
             }
         }
-        return total;
+        float totalReturns = 0;
+        for (ReturnedProduct ret : returns) {
+            float estimatedValue = ret.getProduct().getBaseCostPrice() * (1 + profitPercentage);
+            totalReturns += (estimatedValue * ret.getQuantity());
+        }
+        return round(totalIncome - totalReturns);
     }
 
     public float getTotalGrossDay() {
-        float total = 0;
+        float totalDay = 0;
         String today = LocalDate.now().toString(); 
         for (InvoiceSim invoice : invoices) {
             if ("COMPLETED".equals(invoice.getStatus()) && invoice.getDate().equals(today)) {
-                total += invoice.getTotal();
+                totalDay += invoice.getTotal();
             }
         }
-        return total;
+        return round(totalDay);
     }
 
     public ArrayList<Customer> getCustomers() { 
@@ -158,5 +163,9 @@ public class FinvoryData {
     
     public void setDiscountVip(float discountVip) { 
         this.discountVip = discountVip; 
+    }
+    
+    private float round(float value) {
+        return (float) (Math.round(value * 100.0) / 100.0);
     }
 }
