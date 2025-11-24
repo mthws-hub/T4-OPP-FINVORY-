@@ -1,5 +1,12 @@
 package ec.espe.edu.finvory.model;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap; 
+import java.util.Map;
+import java.util.Locale;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.*; 
@@ -138,5 +145,28 @@ public class Database {
             System.err.println("Error al cargar " + SUPPLIERS_FILE + ": " + e.getMessage());
         }
         return suppliers;
+    }
+    public boolean exportToCsv(String title, HashMap<String, ? extends Object> data) {
+        String fileName = DATA_FOLDER + File.separator + title + ".csv";
+        try {
+            File file = new File(fileName);
+            new File(file.getParent()).mkdirs();
+        
+            try (PrintWriter pw = new PrintWriter(new FileWriter(file))) {
+                pw.println("Key" + DELIMITER + "Value");
+            
+                for (Map.Entry<String, ? extends Object> entry : data.entrySet()) {
+                    String valueString = String.valueOf(entry.getValue());
+                    if (entry.getValue() instanceof Float) {
+                        valueString = String.format(Locale.US, "%.2f", (Float) entry.getValue());
+                    }
+                    pw.println(entry.getKey() + DELIMITER + valueString);
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            System.err.println("Error al exportar " + fileName + ": " + e.getMessage());
+            return false;
+        }
     }
 }

@@ -35,6 +35,10 @@ public class InvoiceSim {
         this.status = "PENDING"; 
         this.lines = new ArrayList<>();
     }
+    
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public void addLine(Product product, int quantity, float priceApplied) {
         lines.add(new InvoiceLineSim(product, quantity, priceApplied));
@@ -51,7 +55,9 @@ public class InvoiceSim {
     
     public void complete() { 
         this.status = "COMPLETED";
-        this.date = LocalDate.now().toString();
+        if (this.date == null || this.date.isEmpty() || this.date.equals(LocalDate.now().toString())) {
+            this.date = LocalDate.now().toString();
+        }
     }
     
     public void cancel() { 

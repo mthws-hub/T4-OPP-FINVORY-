@@ -228,7 +228,7 @@
       "reason": "WRONG_PURCHASE"
     }
   ],
-  "taxRate": 0.13,
+  "taxRate": 0.12,
   "profitPercentage": 0.5,
   "discountStandard": 0.1,
   "discountPremium": 0.2,

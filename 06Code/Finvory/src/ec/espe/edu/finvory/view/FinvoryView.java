@@ -138,14 +138,24 @@ public class FinvoryView {
         int option = -1;
         while (option < 1 || option > available.size()) {
             option = getPositiveIntInput("Opcion: ");
+            
+            if (option < 1 || option > available.size()) {
+            showError("Opcion de inventario no valida.");
+            option = -1;
+            }
         }
         return available.get(option - 1);
     }
     
     public int askQuantity(int maxStock) {
         int quantity = -1;
+        String prompt = (maxStock == Integer.MAX_VALUE) 
+            ? "-> Cantidad a agregar: " 
+            : "-> Cantidad (Max: " + maxStock + "): ";
+        
         while (quantity < 0 || quantity > maxStock) {
-            quantity = getPositiveIntInput("-> Cantidad (Max: " + maxStock + "): ");
+            quantity = getPositiveIntInput(prompt);
+            
             if (quantity > maxStock) {
                 showError("Stock insuficiente.");
                 quantity = -1;
@@ -242,6 +252,7 @@ public class FinvoryView {
         System.out.println("3. Eliminar Producto");
         System.out.println("4. Registrar Devolucion (a Obsoletos)");
         System.out.println("5. Gestionar Stock Obsoleto");
+        System.out.println("6. Agregar Stock a Inventario (Compra/Ajuste)");
         System.out.println("0. Volver al Menu Principal");
         System.out.print("Seleccione una opcion: ");
         return getIntInput();
@@ -315,11 +326,17 @@ public class FinvoryView {
         System.out.println("   0. Cancelar");
         
         int option = getIntInput();
-        if (option == 1) return null; 
+        if (option == 0) {
+            return new Inventory("CANCEL", null);
+        }
+        if (option == 1) {
+            return null;
+        } 
         if (option > 1 && option <= inventories.size() + 1) {
             return inventories.get(option - 2);
         }
-        return null;
+        showError("Opcion no valida. Se cancela la accion.");
+        return new Inventory("CANCEL", null);
     }
 
     public int showCustomerMenu() {
@@ -504,6 +521,10 @@ public class FinvoryView {
         float MAX_TAX_RATE = 0.3f;
         do {
             newRate = getPositiveFloatInput("-> Tasa de Impuesto Actual (" + String.format("%.2f", currentRate) + "): ");
+            if (newRate <= 0.0f) {
+                showError("La tasa de impuesto debe ser mayor que 0.");
+                continue;
+            }
             if (newRate > MAX_TAX_RATE) {
                 showError("La tasa de impuesto no puede exceder el 30% (" + MAX_TAX_RATE + ").");
                 continue;
@@ -652,6 +673,7 @@ public class FinvoryView {
         System.out.println("2. Reporte de Ventas por Producto (Mas vendidos)");
         System.out.println("3. Reporte de Actividad de Clientes (Mas frecuentes)");
         System.out.println("4. Reporte de Demanda de Proveedores (Mas solicitados)");
+        System.out.println("5. Exportar Reportes a CSV");
         System.out.println("0. Volver al Menu Principal");
         System.out.print("Seleccione una opcion: ");
         return getIntInput();
@@ -704,7 +726,7 @@ public class FinvoryView {
         return getValidatedStringInput(prompt, null, "", true);
     }
     
-    private String getOptionalStringInput(String prompt) {
+    public String getOptionalStringInput(String prompt) {
         return getValidatedStringInput(prompt, null, "", false);
     }
     
@@ -767,11 +789,11 @@ public class FinvoryView {
         while (value < 0.0f) {
             System.out.print(prompt);
             try {
-                String line = getValidatedStringInput("", REGEX_NUMERIC, "Debe ingresar un numero decimal valido.", true);
+                String line = getValidatedStringInput("", REGEX_NUMERIC, "Debe ingresar un numero decimal valido .", true);
                 value = Float.parseFloat(line);
                 if (value < 0.0f) showError("El numero no puede ser negativo.");
             } catch (NumberFormatException e) {
-                showError("Debe ingresar un numero decimal valido.");
+                showError("Debe ingresar un numero decimal valido (use PUNTO '.' como separador).");
                 value = -1.0f;
             }
         }
@@ -819,5 +841,73 @@ public class FinvoryView {
         
         if (option == 0) return null;
         return matches.get(option - 1);
+    }
+    
+    public void showFloatReport(String title, HashMap<String, Float> data) {
+        System.out.println("\n--- " + title.toUpperCase() + " ---");
+        if (data.isEmpty()) {
+            System.out.println("No hay datos para mostrar.");
+            return;
+        }
+    
+        String format = "| %-30s | %-10s |";
+        System.out.println(String.format(format, "Item", "Total ($)"));
+        System.out.println(new String(new char[47]).replace("\0", "-"));
+    
+        for (Map.Entry<String, Float> entry : data.entrySet()) {
+            System.out.println(String.format(format, entry.getKey(), "$" + String.format("%.2f", entry.getValue())));
+        }
+        System.out.println("-----------------------------------------------");
+    }
+    public int askReportToExport() {
+        System.out.println("\n--- SELECCIONE REPORTE A EXPORTAR ---");
+        System.out.println("1. Reporte de Demanda (Ventas por Mes)");
+        System.out.println("2. Reporte de Compra de Clientes (Volumen Total)");
+        System.out.println("3. Reporte de Demanda de Proveedores");
+        System.out.println("0. Cancelar");
+        System.out.print("Seleccione una opcion: ");
+        return getIntInput();
+    }
+    public String askTestDate() {
+        LocalDate today = LocalDate.now();
+        int currentYear = today.getYear();
+
+        while (true) {
+            String testDateString = getOptionalStringInput("Desea ingresar una fecha de prueba (YYYY-MM-DD) para la factura? (Deje vacio para la fecha actual): ");
+        
+            if (testDateString.isEmpty()) {
+                return today.toString();
+            }
+
+            String[] parts = testDateString.split("-");
+            if (parts.length != 3) {
+                showError("Formato incorrecto. Use YYYY-MM-DD.");
+                continue;
+            }
+        
+            try {
+                int year = Integer.parseInt(parts[0]);
+                int month = Integer.parseInt(parts[1]);
+                int day = Integer.parseInt(parts[2]);
+            
+                if (year < currentYear) {
+                    showError("El anio de la factura no puede ser menor al anio actual (" + currentYear + ").");
+                    continue;
+                }
+            
+                LocalDate chosenDate;
+                try {
+                    chosenDate = LocalDate.of(year, month, day); 
+                } catch (DateTimeException error) {
+                    showError("Fecha invalida o imposible para el calendario (Dia o Mes fuera de rango).");
+                    continue;
+                }
+            
+                return chosenDate.toString();
+
+            } catch (NumberFormatException error) {
+                showError("La fecha debe contener solo números y guiones (YYYY-MM-DD).");
+            }
+        }
     }
 }

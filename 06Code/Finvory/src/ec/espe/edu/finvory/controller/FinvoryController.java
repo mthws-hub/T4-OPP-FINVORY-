@@ -276,8 +276,11 @@ public class FinvoryController {
             dueDate = view.askPaymentDueDate(); 
         }
         
+        String finalInvoiceDate = view.askTestDate();
         String invoiceId = "F-" + (data.getInvoices().size() + 1);
         InvoiceSim invoice = new InvoiceSim(invoiceId, customer, payment, dueDate);
+        invoice.setDate(finalInvoiceDate);
+       
         
         float profit = data.getProfitPercentage();
         float discountStandard = data.getDiscountStandard();
@@ -301,7 +304,7 @@ public class FinvoryController {
         if (!payment.equals("CHEQUE POSTFECHADO")) {
             invoice.complete(); 
         } else {
-            view.showMessage("Venta registrada como PENDIENTE DE PAGO (Cheque Postfechado).");
+            view.showMessage("Venta registrada como PENDIENTE DE PAGO.");
         }
         
         data.getInvoices().add(invoice);
@@ -327,6 +330,9 @@ public class FinvoryController {
                     break;
                 case 5:
                     handleManageObsolete();
+                    break;
+                case 6:
+                    handleAddStockToInventory(); 
                     break;
                 case 0:
                     running = false;
@@ -413,7 +419,10 @@ public class FinvoryController {
 
     private void handleProcessReturn() {
         Product product = findProduct(view.askProductId());
-        if (product == null) return;
+        if (product == null){
+            view.showError("Producto no encontrado. No se puede registrar la devolucion.");
+            return;
+        }
         
         int qty = view.askQuantity(9999);
         if (qty == 0) return;
@@ -440,6 +449,10 @@ public class FinvoryController {
         Address obsoleteLocation = data.getObsoleteInventory().getAddress();
         Inventory targetInventory = view.askObsoleteAction(product.getName(), obsoleteStock, obsoleteLocation, data.getInventories());
         
+        if (targetInventory != null && targetInventory.getName().equals("CANCEL")) {
+        view.showMessage("Accion cancelada.");
+        return;
+        }
         if (targetInventory != null) { 
             data.getObsoleteInventory().removeStock(product.getId(), obsoleteStock);
             targetInventory.addStock(product.getId(), obsoleteStock);
@@ -778,6 +791,9 @@ public class FinvoryController {
                 case 4:
                     handleSupplierReport();
                     break;
+                case 5:
+                    handleExportReports(); 
+                    break;
                 case 0:
                     running = false;
                     break;
@@ -793,28 +809,31 @@ public class FinvoryController {
     }
     
     private void handleSalesReport() {
-        HashMap<String, Integer> salesByProduct = new HashMap<>();
+        HashMap<String, Integer> salesByMonth = new HashMap<>();
         for (InvoiceSim invoice : data.getInvoices()) {
             if (!invoice.getStatus().equals("COMPLETED")) continue;
             
+            String monthYear = invoice.getDate().substring(0, 7);
+            int totalUnits = 0;
+            
             for (InvoiceLineSim line : invoice.getLines()) {
-                String productName = line.getProductName();
-                int qty = line.getQuantity();
-                salesByProduct.put(productName, salesByProduct.getOrDefault(productName, 0) + qty);
+                totalUnits += line.getQuantity();
             }
+            salesByMonth.put(monthYear, salesByMonth.getOrDefault(monthYear, 0) + totalUnits);
         }
-        view.showReport("Reporte de Ventas por Producto (Unidades)", salesByProduct);
+        view.showReport("Reporte de Demanda (Unidades Vendidas por Mes)", salesByMonth);
     }
     
     private void handleCustomerReport() {
-        HashMap<String, Integer> salesByCustomer = new HashMap<>();
+        HashMap<String, Float> salesByCustomer = new HashMap<>();
         for (InvoiceSim invoice : data.getInvoices()) {
             if (!invoice.getStatus().equals("COMPLETED")) continue;
             
             String customerName = invoice.getCustomer().getName();
-            salesByCustomer.put(customerName, salesByCustomer.getOrDefault(customerName, 0) + 1);
+            float currentTotal = salesByCustomer.getOrDefault(customerName, 0.0f);
+            salesByCustomer.put(customerName, currentTotal + invoice.getTotal());
         }
-        view.showReport("Reporte de Actividad de Clientes (N° Facturas)", salesByCustomer);
+        view.showFloatReport("Reporte de Compra de Clientes (Volumen Total)", salesByCustomer);
     }
     
     private void handleSupplierReport() {
@@ -912,4 +931,110 @@ public class FinvoryController {
         }
         return matches;
     }
+    private HashMap<String, Integer> generateSalesOrDemandReport() {
+        HashMap<String, Integer> salesByMonth = new HashMap<>();
+        for (InvoiceSim invoice : data.getInvoices()) {
+            if (!invoice.getStatus().equals("COMPLETED")) continue;
+        
+            String monthYear = invoice.getDate().substring(0, 7); 
+        
+                int totalUnits = 0;
+        for (InvoiceLineSim line : invoice.getLines()) {
+            totalUnits += line.getQuantity();
+        }
+        salesByMonth.put(monthYear, salesByMonth.getOrDefault(monthYear, 0) + totalUnits);
+        }
+    return salesByMonth;
+    }
+
+    private HashMap<String, Float> generateCustomerReportData() {
+        HashMap<String, Float> salesByCustomer = new HashMap<>();
+        for (InvoiceSim invoice : data.getInvoices()) {
+            if (!invoice.getStatus().equals("COMPLETED")) continue;
+        
+            String customerName = invoice.getCustomer().getName();
+            float currentTotal = salesByCustomer.getOrDefault(customerName, 0.0f);
+            salesByCustomer.put(customerName, currentTotal + invoice.getTotal());
+        }
+        return salesByCustomer;
+    }
+
+    private HashMap<String, Integer> generateSupplierDemandReport() {
+        HashMap<String, Integer> salesBySupplier = new HashMap<>();
+        for (InvoiceSim invoice : data.getInvoices()) {
+            if (!invoice.getStatus().equals("COMPLETED")) continue;
+        
+            for (InvoiceLineSim line : invoice.getLines()) {
+                Product p = findProduct(line.getProductId());
+                if (p == null) continue;
+            
+                Supplier s = findSupplier(p.getSupplierId());
+                if (s == null) continue;
+
+                String supplierName = s.getFullName();
+                int qty = line.getQuantity();
+                salesBySupplier.put(supplierName, salesBySupplier.getOrDefault(supplierName, 0) + qty);
+            }
+        }
+        return salesBySupplier;
+    }
+    
+    private void handleAddStockToInventory() {
+        Product product = findProduct(view.askProductId());
+        if (product == null) {
+            view.showError("Producto no encontrado.");
+            return;
+        }   
+
+        if (data.getInventories().isEmpty()) {
+            view.showError("No hay inventarios creados para agregar stock.");
+            return;
+        }
+
+        Inventory targetInventory = view.chooseInventory(data.getInventories());
+        if (targetInventory == null) {
+            view.showError("Acción cancelada.");
+            return;
+        }
+
+        int quantity = view.askQuantity(Integer.MAX_VALUE); // No hay límite superior al comprar
+        if (quantity > 0) {
+            targetInventory.addStock(product.getId(), quantity);
+            view.showMessage("Se agregaron " + quantity + " unidades de '" + product.getName() + "' a " + targetInventory.getName());
+        } else {
+            view.showMessage("Stock no modificado.");
+        }
+    }
+    
+    private void handleExportReports() {
+        int reportType = view.askReportToExport();
+        HashMap<String, ? extends Object> reportData = new HashMap<>();
+        String title = "";
+        
+        switch (reportType) {
+            case 1:
+                reportData = generateSalesOrDemandReport();
+                title = "DemandReport";
+                break;
+            case 2:
+                reportData = generateCustomerReportData();
+                title = "CustomerPurchaseReport";
+                break;
+            case 3:
+                reportData = generateSupplierDemandReport();
+                title = "SupplierDemandReport";
+                break;
+            default:
+                view.showError("Seleccion de reporte invalida.");
+                return;
+        }
+        boolean success = database.exportToCsv(title, reportData);
+        if (success) {
+            view.showMessage("Reporte '" + title + ".csv' exportado con exito en la carpeta 'data'.");
+        } else {
+            view.showError("Fallo la exportacion del reporte.");
+        }
+    }
+    
+        
 }
