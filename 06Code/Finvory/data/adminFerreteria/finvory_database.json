@@ -1,0 +1,132 @@
+{
+  "companyInfo": {
+    "name": "Ferretería Espinoza",
+    "address": {
+      "country": "Ecuador",
+      "city": "Cuenca",
+      "street": "Calle Larga y Huayna Capac",
+      "zipCode": "010101",
+      "streetNumber": "12-45",
+      "region": "Azuay"
+    },
+    "ruc": "0190005556001",
+    "phone": "072888999",
+    "email": "ventas@ferreteriaespinoza.ec",
+    "username": "adminFerreteria",
+    "password": "123"
+  },
+  "products": [
+    {
+      "id": "FER-001",
+      "name": "Cemento Holcim Fuerte 50kg",
+      "description": "Saco de cemento uso general",
+      "barcode": "786200001001",
+      "baseCostPrice": 6.80,
+      "supplierId": "1790099999001"
+    },
+    {
+      "id": "FER-002",
+      "name": "Varilla Hierro 12mm",
+      "description": "Varilla corrugada x 6m",
+      "barcode": "786200001002",
+      "baseCostPrice": 8.50,
+      "supplierId": "1790088888001"
+    },
+    {
+      "id": "FER-003",
+      "name": "Taladro Percutor Bosch",
+      "description": "Modelo GSB 13 RE Professional",
+      "barcode": "786200001003",
+      "baseCostPrice": 75.00,
+      "supplierId": "1790066666001"
+    },
+    {
+      "id": "FER-004",
+      "name": "Galon Pintura Blanca",
+      "description": "Látex Supremo Interior/Exterior",
+      "barcode": "786200001004",
+      "baseCostPrice": 18.25,
+      "supplierId": "1790077777001"
+    },
+    {
+      "id": "FER-005",
+      "name": "Tubo PVC Desague 110mm",
+      "description": "Tubo sanitario norma INEN x 3m",
+      "barcode": "786200001005",
+      "baseCostPrice": 12.40,
+      "supplierId": "1790055555001"
+    },
+    {
+      "id": "FER-006",
+      "name": "Juego Destornilladores",
+      "description": "Set 6 piezas Stanley",
+      "barcode": "786200001006",
+      "baseCostPrice": 14.50,
+      "supplierId": "1790033333001"
+    },
+    {
+      "id": "FER-007",
+      "name": "Grifo Lavabo Monocomando",
+      "description": "Cromado línea básica FV",
+      "barcode": "786200001007",
+      "baseCostPrice": 32.00,
+      "supplierId": "1790044444001"
+    },
+    {
+      "id": "FER-008",
+      "name": "SikaTop 107",
+      "description": "Impermeabilizante cementoso 25kg",
+      "barcode": "786200001008",
+      "baseCostPrice": 22.00,
+      "supplierId": "1790022222001"
+    }
+  ],
+  "inventories": [
+    {
+      "name": "Local Centro",
+      "address": {
+        "country": "Ecuador",
+        "city": "Cuenca",
+        "street": "Calle Larga"
+      },
+      "productStock": {
+        "FER-001": 50,
+        "FER-003": 10,
+        "FER-004": 20,
+        "FER-006": 15,
+        "FER-007": 8
+      }
+    },
+    {
+      "name": "Bodega Materiales Pesados",
+      "address": {
+        "country": "Ecuador",
+        "city": "Cuenca",
+        "street": "Parque Industrial"
+      },
+      "productStock": {
+        "FER-001": 500,
+        "FER-002": 200,
+        "FER-005": 100,
+        "FER-008": 40
+      }
+    }
+  ],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Cuenca",
+      "street": "Bodega Devoluciones"
+    },
+    "productStock": {
+      "FER-004": 1
+    }
+  },
+  "invoices": [],
+  "returns": [],
+  "taxRate": 0.15,
+  "profitPercentage": 0.30,
+  "discountStandard": 0.0,
+  "discountPremium": 0.08,
+  "discountVip": 0.15
+}

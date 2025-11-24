@@ -1,0 +1,40 @@
+{
+  "companyInfo": {
+    "name": "TecnoMega Cía. Ltda.",
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Av. Amazonas",
+      "zipCode": "170510",
+      "streetNumber": "N22-15",
+      "region": "Pichincha"
+    },
+    "ruc": "1792009991001",
+    "phone": "022556677",
+    "email": "ventas@tecnomega.com",
+    "username": "adminTecno",
+    "password": "123"
+  },
+  "customers": [],
+  "products": [],
+  "suppliers": [],
+  "inventories": [],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Bodega Obsoletos",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "productStock": {}
+  },
+  "invoices": [],
+  "returns": [],
+  "taxRate": 0.15,
+  "profitPercentage": 0.0,
+  "discountStandard": 0.0,
+  "discountPremium": 0.0,
+  "discountVip": 0.0
+}
