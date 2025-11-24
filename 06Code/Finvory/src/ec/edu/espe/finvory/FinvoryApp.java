@@ -2,29 +2,20 @@ package ec.edu.espe.finvory;
 
 import ec.espe.edu.finvory.controller.FinvoryController;
 import ec.espe.edu.finvory.model.Database;
-import ec.espe.edu.finvory.model.FinvoryData;
 import ec.espe.edu.finvory.view.FinvoryView;
-
 /**
  *
- * @author Joseph B. Medina, POOwer Ranger of Programming
+ * @author Joseph Medina, The POOwer Rangers of Programming
  */
+
 public class FinvoryApp {
-
     public static void main(String[] args) {
+        System.out.println("--- FINVORY MULTI-TENANT SYSTEM ---");
         
-        System.out.println("--- INICIANDO SISTEMA FINVORY ---");
-        
-        Database database = new Database();
-        FinvoryData data = database.load();
+        Database db = new Database();
         FinvoryView view = new FinvoryView();
-
-        if (data.getCompanyAccounts().isEmpty() && data.getPersonalAccounts().isEmpty()) {
-        } else {
-            view.showMessage("Datos cargados correctamente.");
-        }
         
-        FinvoryController controller = new FinvoryController(data, view, database);
+        FinvoryController controller = new FinvoryController(view, db);
         
         controller.run(); 
     }

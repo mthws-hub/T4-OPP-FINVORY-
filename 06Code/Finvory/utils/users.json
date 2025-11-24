@@ -1,0 +1,37 @@
+{
+  "companyAccounts": [
+    {
+      "name": "Frico",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Solanda",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0011751774793",
+      "phone": "0963514785",
+      "email": "joseph3elcrac@gmail.com",
+      "username": "Joseph",
+      "password": "1234"
+    },
+    {
+      "name": "KFC",
+      "address": {
+        "country": "China",
+        "city": "Chengdu",
+        "street": "AFKJDA",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0011709892622",
+      "phone": "0987654321",
+      "email": "arelys@gmail.com",
+      "username": "Arelys",
+      "password": "0987"
+    }
+  ],
+  "personalAccounts": []
+}

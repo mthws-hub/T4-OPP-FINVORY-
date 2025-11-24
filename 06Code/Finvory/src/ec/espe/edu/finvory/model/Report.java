@@ -6,6 +6,7 @@ import java.util.ArrayList;
  *
  * @author @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
+
 public class Report {
     private String title;
     private ArrayList<String> dataLines = new ArrayList<>();

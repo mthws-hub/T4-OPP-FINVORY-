@@ -3,6 +3,7 @@ package ec.espe.edu.finvory.model;
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
+
 public class Product {
     
     private String id;

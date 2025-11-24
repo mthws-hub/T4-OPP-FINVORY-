@@ -910,4 +910,24 @@ public class FinvoryView {
             }
         }
     }
+    
+    public CompanyAccount chooseCompany(ArrayList<CompanyAccount> companies) {
+        System.out.println("\n--- SELECCIONE UNA COMPANIA ---");
+        if (companies.isEmpty()) {
+            showError("No hay companias registradas.");
+            return null;
+        }
+        for (int i = 0; i < companies.size(); i++) {
+            System.out.println("   " + (i + 1) + ". " + companies.get(i).getName());
+        }
+        System.out.println("   0. Volver");
+        
+        int opt = -1;
+        while (opt < 0 || opt > companies.size()) {
+            opt = getIntInput();
+        }
+        
+        if (opt == 0) return null;
+        return companies.get(opt - 1);
+    }
 }

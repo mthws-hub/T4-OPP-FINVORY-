@@ -1,21 +1,20 @@
 package ec.espe.edu.finvory.model;
-/**
- *
- * @author Mathews Pastor, POOwer Ranger of Programming
- */
+
 import java.time.LocalDate;
 import java.util.ArrayList;
+/**
+ *
+ * @author Joseph Medina, The POOwer Rangers of Programming
+ */
 
 public class FinvoryData {
     
-    private CompanyAccount companyInfo;
-    private AdminDetail adminInfo;
-    private ArrayList<CompanyAccount> companyAccounts;
+    private CompanyAccount companyInfo; 
+    
     private ArrayList<Customer> customers;
     private ArrayList<Product> products;
     private ArrayList<Supplier> suppliers; 
     private ArrayList<Inventory> inventories; 
-    private ArrayList<PersonalAccount> personalAccounts;
     private InventoryOfObsolete obsoleteInventory; 
     
     private ArrayList<InvoiceSim> invoices;
@@ -28,17 +27,15 @@ public class FinvoryData {
     private float discountVip;
 
     public FinvoryData() {
-        companyAccounts = new ArrayList<>();
         customers = new ArrayList<>();
         suppliers = new ArrayList<>();
         products = new ArrayList<>();
         inventories = new ArrayList<>();
-        personalAccounts = new ArrayList<>();
         invoices = new ArrayList<>();
         returns = new ArrayList<>();
         
-        Address obsoleteInventoryAddress = new Address("Ecuador", "Quito", "Bodega Obsoletos");
-        obsoleteInventory = new InventoryOfObsolete(obsoleteInventoryAddress);
+        Address obsAddr = new Address("Ecuador", "Quito", "Bodega Obsoletos");
+        obsoleteInventory = new InventoryOfObsolete(obsAddr);
         
         taxRate = 0.15f;
         profitPercentage = 0.0f;
@@ -48,124 +45,45 @@ public class FinvoryData {
     }
 
     public float getTotalGrossProfile() {
-        float totalIncome = 0;
+        float total = 0;
         for (InvoiceSim invoice : invoices) {
             if ("COMPLETED".equals(invoice.getStatus())) {
-                totalIncome += invoice.getSubtotal();
+                total += invoice.getTotal();
             }
         }
-        float totalReturns = 0;
-        for (ReturnedProduct ret : returns) {
-            float estimatedValue = ret.getProduct().getBaseCostPrice() * (1 + profitPercentage);
-            totalReturns += (estimatedValue * ret.getQuantity());
-        }
-        return round(totalIncome - totalReturns);
+        return total;
     }
 
     public float getTotalGrossDay() {
-        float totalDay = 0;
+        float total = 0;
         String today = LocalDate.now().toString(); 
         for (InvoiceSim invoice : invoices) {
             if ("COMPLETED".equals(invoice.getStatus()) && invoice.getDate().equals(today)) {
-                totalDay += invoice.getTotal();
+                total += invoice.getTotal();
             }
         }
-        return round(totalDay);
+        return total;
     }
 
-    public ArrayList<Customer> getCustomers() { 
-        return customers; 
-    }
+    public CompanyAccount getCompanyInfo() { return companyInfo; }
+    public void setCompanyInfo(CompanyAccount companyInfo) { this.companyInfo = companyInfo; }
     
-    public ArrayList<Product> getProducts() { 
-        return products; 
-    }
+    public ArrayList<Customer> getCustomers() { return customers; }
+    public ArrayList<Product> getProducts() { return products; }
+    public ArrayList<Supplier> getSuppliers() { return suppliers; }
+    public ArrayList<Inventory> getInventories() { return inventories; }
+    public InventoryOfObsolete getObsoleteInventory() { return obsoleteInventory; }
+    public ArrayList<InvoiceSim> getInvoices() { return invoices; }
+    public ArrayList<ReturnedProduct> getReturns() { return returns; }
     
-    public ArrayList<Supplier> getSuppliers() { 
-        return suppliers; 
-    }
-    
-    public ArrayList<Inventory> getInventories() { 
-        return inventories; 
-    }
-    
-    public ArrayList<PersonalAccount> getPersonalAccounts() { 
-        return personalAccounts; 
-    }
-    
-    public ArrayList<CompanyAccount> getCompanyAccounts() { 
-        return companyAccounts; 
-    }
-    
-    public InventoryOfObsolete getObsoleteInventory() { 
-        return obsoleteInventory; 
-    }
-    
-    public ArrayList<InvoiceSim> getInvoices() { 
-        return invoices; 
-    }
-    
-    public ArrayList<ReturnedProduct> getReturns() { 
-        return returns; 
-    }
-    
-    public float getTaxRate() { 
-        return taxRate; 
-    }
-    
-    public void setTaxRate(float taxRate) { 
-        this.taxRate = taxRate; 
-    }
-    
-    public AdminDetail getAdminInfo() { 
-        return adminInfo; 
-    }
-    
-    public void setAdminInfo(AdminDetail adminInfo) { 
-        this.adminInfo = adminInfo; 
-    }
-    
-    public CompanyAccount getCompanyInfo() { 
-        return companyInfo; 
-    }
-
-    public void setCompanyInfo(CompanyAccount companyInfo) { 
-        this.companyInfo = companyInfo; 
-    }
-    
-    public float getProfitPercentage() { 
-        return profitPercentage; 
-    }
-    
-    public void setProfitPercentage(float profitPercentage) { 
-        this.profitPercentage = profitPercentage; 
-    }
-    
-    public float getDiscountStandard() { 
-        return discountStandard; 
-    }
-    
-    public void setDiscountStandard(float discountStandard) { 
-        this.discountStandard = discountStandard; 
-    }
-    
-    public float getDiscountPremium() { 
-        return discountPremium; 
-    }
-    
-    public void setDiscountPremium(float discountPremium) { 
-        this.discountPremium = discountPremium; 
-    }
-    
-    public float getDiscountVip() { 
-        return discountVip; 
-    }
-    
-    public void setDiscountVip(float discountVip) { 
-        this.discountVip = discountVip; 
-    }
-    
-    private float round(float value) {
-        return (float) (Math.round(value * 100.0) / 100.0);
-    }
+    public float getTaxRate() { return taxRate; }
+    public void setTaxRate(float taxRate) { this.taxRate = taxRate; }
+    public float getProfitPercentage() { return profitPercentage; }
+    public void setProfitPercentage(float p) { this.profitPercentage = p; }
+    public float getDiscountStandard() { return discountStandard; }
+    public void setDiscountStandard(float d) { this.discountStandard = d; }
+    public float getDiscountPremium() { return discountPremium; }
+    public void setDiscountPremium(float d) { this.discountPremium = d; }
+    public float getDiscountVip() { return discountVip; }
+    public void setDiscountVip(float d) { this.discountVip = d; }
 }

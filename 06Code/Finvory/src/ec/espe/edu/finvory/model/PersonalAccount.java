@@ -4,6 +4,7 @@ package ec.espe.edu.finvory.model;
  *
  * @author Arelys Otavalo, The POOwer Rangers of Programming
  */
+
 public class PersonalAccount {
     
     private String fullName;

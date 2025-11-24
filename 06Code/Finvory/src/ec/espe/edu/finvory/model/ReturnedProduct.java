@@ -3,6 +3,7 @@ package ec.espe.edu.finvory.model;
  *
  * @author @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
+
 public class ReturnedProduct {
     private Product product;
     private int quantity;

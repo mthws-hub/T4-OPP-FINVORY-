@@ -1,14 +1,12 @@
 package ec.espe.edu.finvory.model;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.time.LocalDate;
 import java.util.ArrayList;
 /**
  *
- * @author Maryuri Quiña, @ESPE
+ * @author Joseph Medina, The POOwer Rangers of Programming
  */
+
 public class InvoiceSim {
     
     private String id;
@@ -19,7 +17,7 @@ public class InvoiceSim {
     private float tax;
     private float total;
     private String paymentMethod; 
-    private String paymentDueDate; 
+    private String paymentDueDate;
     private String status; 
 
     public InvoiceSim() {
@@ -30,9 +28,9 @@ public class InvoiceSim {
         this.id = id;
         this.customer = customer;
         this.paymentMethod = paymentMethod;
-        this.paymentDueDate = paymentDueDate; 
+        this.paymentDueDate = paymentDueDate;
         this.date = LocalDate.now().toString(); 
-        this.status = "PENDING"; 
+        this.status = "PENDING";
         this.lines = new ArrayList<>();
     }
     
@@ -40,8 +38,8 @@ public class InvoiceSim {
         this.date = date;
     }
 
-    public void addLine(Product product, int quantity, float priceApplied) {
-        lines.add(new InvoiceLineSim(product, quantity, priceApplied));
+    public void addLine(Product product, int qty, float price) {
+        lines.add(new InvoiceLineSim(product, qty, price));
     }
 
     public void calculateTotals(float taxRate) {
@@ -54,14 +52,10 @@ public class InvoiceSim {
     }
     
     public void complete() { 
-        this.status = "COMPLETED";
-        if (this.date == null || this.date.isEmpty() || this.date.equals(LocalDate.now().toString())) {
+        this.status = "COMPLETED"; 
+        if (this.date == null || this.date.isEmpty()) {
             this.date = LocalDate.now().toString();
         }
-    }
-    
-    public void cancel() { 
-        this.status = "CANCELED"; 
     }
 
     public String getId() { 
@@ -91,12 +85,11 @@ public class InvoiceSim {
     public Customer getCustomer() { 
         return customer; 
     }
-    
     public ArrayList<InvoiceLineSim> getLines() { 
         return lines; 
     }
     
-    public String getPaymentDueDate() { 
+    public String getPaymentDueDate() {
         return paymentDueDate; 
     }
 }
