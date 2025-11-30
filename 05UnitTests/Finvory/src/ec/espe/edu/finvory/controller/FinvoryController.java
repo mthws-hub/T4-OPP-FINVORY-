@@ -25,8 +25,8 @@ public class FinvoryController {
     public void run() {
         boolean running = true;
         while (running) {
-            int optionion = view.showStartMenu();
-            switch (optionion) {
+            int option = view.showStartMenu();
+            switch (option) {
                 case 1:
                     String userRole = handleLogin();
                     if (userRole.equals("COMPANY")) {
