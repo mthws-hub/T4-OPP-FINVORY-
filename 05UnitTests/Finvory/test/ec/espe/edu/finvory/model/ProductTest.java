@@ -73,4 +73,30 @@ public class ProductTest {
 
         assertEquals("El cálculo del precio VIP sin IVA debe ser correcto.", expectedPrice, actualPrice, 0.0001f);
     }
+    
+    //Second Test by Maryuri Quiña
+    
+    @Test
+    public void testGetPrice_VipClient_MustFail() {
+        String productId = "P001";
+        float baseCost = 100.00f; 
+        
+        Product productInstance = new Product(productId, "PK100", "Test unitario", "BC001", baseCost, "RUC123");
+        
+        String clientType = "VIP";
+        float profitPercentage = 0.25F;
+        float standardDiscount = 0.05F;
+        float premiumDiscount = 0.10F;
+        float vipDiscount = 0.20F;
+        float incorrectExpectedPrice = 101.00f; 
+        
+        float calculatedPrice = productInstance.getPrice(
+            clientType, profitPercentage, standardDiscount, premiumDiscount, vipDiscount
+        );
+       
+        String failureMessage = "TEST FAILURE: The calculated price (" + calculatedPrice + 
+        ") did not match the intentionally wrong expected value (" + incorrectExpectedPrice + 
+         ").";
+        assertEquals(failureMessage, incorrectExpectedPrice, calculatedPrice, 0.001f);
+    }
 }

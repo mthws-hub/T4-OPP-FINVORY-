@@ -159,6 +159,62 @@ import java.io.InputStream;
         System.out.println("TEST ROJO: Rechazando porcentaje de beneficio nulo.");
         data.setProfitPercentage(0f);
     }
+    //Second Test by Maryuri Quiña
+    
+   @Test
+    public void test_SetTaxRate_ZeroValidation_ExpectedFail() {
+        FinvoryData data = new FinvoryData();
+        float zeroRate = 0.0f;
+        data.setTaxRate(zeroRate);
+        
+        float expectedRateIfRejected = 0.15f; 
+        float actualRate = data.getTaxRate();
+        
+        assertEquals("El sistema aceptó una tasa de 0% cuando la lógica requiere rechazo.", expectedRateIfRejected, actualRate, 0.001f);
+    }
+    
+    @Test
+    public void test_SetTaxRate_InvalidInput_ExpectedFail() {
+        FinvoryData data = new FinvoryData();
+        float expected = 0.16f; 
+        float actual = data.getTaxRate();
+
+        assertEquals("Falla en la validación de entrada.", expected, actual, 0.001f);
+    }
+    
+    @Test
+    public void test_SetTaxRate_Recalculation_ExpectedFail() {
+        FinvoryData data = new FinvoryData();
+        data.setTaxRate(0.12f);
+        
+        float expected = 0.13f;
+        float actual = data.getTaxRate();
+        
+        assertEquals("Falla en la verificación de cambio de tasa.", expected, actual, 0.001f);
+    }
+    
+    @Test
+    public void test_SetTaxRate_NullCheck_ExpectedFail() {
+        FinvoryData data = new FinvoryData();
+        float initialRate = data.getTaxRate();
+        
+        float expected = initialRate + 0.01f;
+        float actual = data.getTaxRate();
+        
+        assertEquals("Falla en la verificación de valor nulo.", expected, actual, 0.001f);
+    }
+
+    @Test
+    public void test_SetTaxRate_Precision_ExpectedFail() {
+        FinvoryData data = new FinvoryData();
+        float precisionRate = 0.15f;
+        data.setTaxRate(precisionRate);
+        float expected = 0.16f; 
+        float actual = data.getTaxRate();
+
+        assertEquals("Falla en la verificación de precisión.", expected, actual, 0.001f);
+    }
+  
 }
 
 

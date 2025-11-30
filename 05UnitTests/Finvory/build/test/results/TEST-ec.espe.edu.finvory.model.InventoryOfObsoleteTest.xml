@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="23" hostname="DESKTOP-T69L9U9" name="ec.espe.edu.finvory.model.FinvoryDataTest" skipped="0" tests="24" time="0.23" timestamp="2025-11-30T03:15:28">
+<testsuite errors="0" failures="9" hostname="DESKTOP-T69L9U9" name="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" skipped="0" tests="10" time="0.119" timestamp="2025-11-30T03:16:16">
   <properties>
     <property name="javac.test.classpath" value="lib/gson-2.10.1.jar:build/classes:C:\Program Files\Apache NetBeans\platform\modules\ext\junit-4.13.2.jar:C:\Users\USUARIO\Downloads\gson-2.10.1.jar:C:\Users\USUARIO\Downloads\hamcrest-core-1.3.jar" />
     <property name="java.specification.version" value="24" />
@@ -15,7 +15,7 @@
     <property name="libs.eclipselink.javadoc" value="C:\Program Files\Apache NetBeans\java\modules\ext\docs\jakarta.persistence-2.2.3-doc.zip" />
     <property name="libs.JWSAntTasks.javadoc" value="" />
     <property name="sun.boot.library.path" value="C:\Program Files\Apache NetBeans\jdk\bin" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner ec.espe.edu.finvory.model.FinvoryDataTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\build\test\results\TEST-ec.espe.edu.finvory.model.FinvoryDataTest.xml crashfile=C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\build\junitvmwatcher10901121555299632398.properties propsfile=C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\build\junit4859426075760022727.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner ec.espe.edu.finvory.model.InventoryOfObsoleteTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\build\test\results\TEST-ec.espe.edu.finvory.model.InventoryOfObsoleteTest.xml crashfile=C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\build\junitvmwatcher6483483213955959788.properties propsfile=C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\build\junit1271998005975297476.properties" />
     <property name="jdk.debug" value="release" />
     <property name="javadoc.use" value="true" />
     <property name="javadoc.notree" value="false" />
@@ -60,7 +60,7 @@
     <property name="jlink.additionalparam" value="" />
     <property name="libs.testng.maven-pom" value="" />
     <property name="org.openide.version" value="deprecated" />
-    <property name="test.includes" value="ec/espe/edu/finvory/model/FinvoryDataTest.java" />
+    <property name="test.includes" value="ec/espe/edu/finvory/model/InventoryOfObsoleteTest.java" />
     <property name="run.classpath" value="lib/gson-2.10.1.jar:build/classes:lib/gson-2.10.1.jar" />
     <property name="libs.jaxb.src" value="" />
     <property name="sun.awt.enableExtraMouseButtons" value="true" />
@@ -205,7 +205,7 @@
     <property name="org.apache.commons.logging.Log" value="org.apache.commons.logging.impl.Jdk14Logger" />
     <property name="ant.file.type.Finvory" value="file" />
     <property name="libs.javaee-api-6.0.classpath" value="C:\Program Files\Apache NetBeans\enterprise\modules\ext\javaee-api-6.0.jar" />
-    <property name="javac.includesfile.binary" value="C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\null870773000" />
+    <property name="javac.includesfile.binary" value="C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\null1850138636" />
     <property name="libs.javaee-api-7.0.classpath" value="C:\Program Files\Apache NetBeans\enterprise\modules\ext\javaee-api-7.0.jar" />
     <property name="sun.cpu.isalist" value="amd64" />
     <property name="libs.restapi.maven-pom" value="" />
@@ -320,7 +320,7 @@
     <property name="empty.dir" value="C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\build\empty" />
     <property name="libs.jakartaee-api-10.0.classpath" value="C:\Program Files\Apache NetBeans\enterprise\modules\ext\jakarta.jakartaee-api-10.0.0.jar" />
     <property name="netbeans.user" value="C:\Users\USUARIO\AppData\Roaming\NetBeans\27" />
-    <property name="javac.includes.binary" value="C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\build\test\classes\ec\espe\edu\finvory\model\FinvoryDataTest.class" />
+    <property name="javac.includes.binary" value="C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\build\test\classes\ec\espe\edu\finvory\model\InventoryOfObsoleteTest.class" />
     <property name="file.separator" value="\" />
     <property name="line.separator" value="&#xd;&#xa;" />
     <property name="javadoc.additionalparam" value="" />
@@ -358,7 +358,7 @@
     <property name="libs.spring-framework500.src" value="" />
     <property name="user.properties.file" value="C:\Users\USUARIO\AppData\Roaming\NetBeans\27\build.properties" />
     <property name="libs.javaee-api-6.0.src" value="" />
-    <property name="javac.includes" value="ec/espe/edu/finvory/model/FinvoryDataTest.java" />
+    <property name="javac.includes" value="ec/espe/edu/finvory/model/InventoryOfObsoleteTest.java" />
     <property name="netbeans.autoupdate.country" value="EC" />
     <property name="java.class.path" value="C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\lib\gson-2.10.1.jar;C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\build\classes;C:\Program Files\Apache NetBeans\platform\modules\ext\junit-4.13.2.jar;C:\Users\USUARIO\Downloads\gson-2.10.1.jar;C:\Users\USUARIO\Downloads\hamcrest-core-1.3.jar;C:\Users\USUARIO\T4-OPP-FINVORY-\05UnitTests\Finvory\build\test\classes;C:\Program Files\Apache NetBeans\extide\ant\lib\ant-launcher.jar;C:\Program Files\Apache NetBeans\extide\ant\lib\ant.jar;C:\Program Files\Apache NetBeans\extide\ant\lib\ant-junit.jar;C:\Program Files\Apache NetBeans\extide\ant\lib\ant-junit4.jar" />
     <property name="libs.javaee-web-api-6.0.maven-pom" value="" />
@@ -416,7 +416,7 @@
     <property name="libs.metro.javadoc" value="C:\Program Files\Apache NetBeans\enterprise\docs\webservices-api-javadoc.jar;C:\Program Files\Apache NetBeans\enterprise\docs\webservices-extra-javadoc.jar;C:\Program Files\Apache NetBeans\enterprise\docs\webservices-extra-api-javadoc.jar;C:\Program Files\Apache NetBeans\enterprise\docs\webservices-rt-javadoc.jar;C:\Program Files\Apache NetBeans\enterprise\docs\webservices-tools-javadoc.jar" />
     <property name="libs.jakartaee-web-api-9.0.src" value="" />
     <property name="libs.jakartaee-web-api-10.0.classpath" value="C:\Program Files\Apache NetBeans\enterprise\modules\ext\jakarta.jakartaee-web-api-10.0.0.jar" />
-    <property name="test.class" value="ec.espe.edu.finvory.model.FinvoryDataTest" />
+    <property name="test.class" value="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" />
     <property name="sun.awt.datatransfer.timeout" value="1000" />
     <property name="libs.javaee-web-api-7.0.src" value="" />
     <property name="libs.jakartaee-api-8.0.src" value="" />
@@ -425,120 +425,61 @@
     <property name="libs.jsp-compiler.classpath" value="C:\Program Files\Apache NetBeans\enterprise\ant\extra\jspcompile.jar" />
     <property name="libs.javaee-endorsed-api-6.0.classpath" value="C:\Program Files\Apache NetBeans\enterprise\modules\ext\javaee6-endorsed\javax.annotation.jar;C:\Program Files\Apache NetBeans\enterprise\modules\ext\javaee6-endorsed\jaxb-api-osgi.jar;C:\Program Files\Apache NetBeans\enterprise\modules\ext\javaee6-endorsed\webservices-api-osgi.jar" />
   </properties>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetProfit_AcceptsValidValue_Success" time="0.012">
-    <failure message="P9: El valor válido debe ser guardado correctamente. expected:&lt;0.15&gt; but was:&lt;0.0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: P9: El valor válido debe ser guardado correctamente. expected:&lt;0.15&gt; but was:&lt;0.0&gt;
-	at ec.espe.edu.finvory.model.FinvoryDataTest.testSetProfit_AcceptsValidValue_Success(FinvoryDataTest.java:89)
+  <testcase classname="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" name="test_RemoveStock_InsufficientStock_ExpectedFail" time="0.012">
+    <failure message="El stock debe permanecer en 5. expected:&lt;6.0&gt; but was:&lt;5.0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: El stock debe permanecer en 5. expected:&lt;6.0&gt; but was:&lt;5.0&gt;
+	at ec.espe.edu.finvory.model.InventoryOfObsoleteTest.test_RemoveStock_InsufficientStock_ExpectedFail(InventoryOfObsoleteTest.java:95)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 </failure>
   </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetDiscountPremium3_ShouldRejectNegativeValue_NewRed" time="0.001">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetDiscountPremium_ShouldRejectNegativeValue_NewRed" time="0.001">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="test_SetTaxRate_Precision_ExpectedFail" time="0.001">
-    <failure message="Falla en la verificación de precisión. expected:&lt;0.16&gt; but was:&lt;0.15&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Falla en la verificación de precisión. expected:&lt;0.16&gt; but was:&lt;0.15&gt;
-	at ec.espe.edu.finvory.model.FinvoryDataTest.test_SetTaxRate_Precision_ExpectedFail(FinvoryDataTest.java:215)
+  <testcase classname="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" name="test_AddStock_PositiveQuantity_ExpectedFail" time="0.001">
+    <failure message="La adición debe ser 25. expected:&lt;26.0&gt; but was:&lt;25.0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: La adición debe ser 25. expected:&lt;26.0&gt; but was:&lt;25.0&gt;
+	at ec.espe.edu.finvory.model.InventoryOfObsoleteTest.test_AddStock_PositiveQuantity_ExpectedFail(InventoryOfObsoleteTest.java:55)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 </failure>
   </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetDiscounts_ShouldRejectEqualDiscounts_ExpectedFail" time="0.001">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetStandardDiscount_AcceptsValidValue_Success" time="0.0" />
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetPremiumDiscount_ShouldRejectNegativeValue_ExpectedFail" time="0.0">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetDiscounts_ShouldRejectProfitEqualsDiscountVip_ExpectedFail" time="0.0">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetTaxRate_ShouldRejectZero_RED" time="0.002">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetTaxRate_ShouldRejectAboveOneHundredPercent_RED" time="0.001">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetDiscounts_ShouldCheckStandardGreaterThanVip_ExpectedFail" time="0.001">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetDiscount_ShouldCheckAgainstProfit_ExpectedFail" time="0.071">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="test_SetTaxRate_InvalidInput_ExpectedFail" time="0.002">
-    <failure message="Falla en la validación de entrada. expected:&lt;0.16&gt; but was:&lt;0.15&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Falla en la validación de entrada. expected:&lt;0.16&gt; but was:&lt;0.15&gt;
-	at ec.espe.edu.finvory.model.FinvoryDataTest.test_SetTaxRate_InvalidInput_ExpectedFail(FinvoryDataTest.java:182)
+  <testcase classname="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" name="test_GetInitialStock_ExpectedFail" time="0.001">
+    <failure message="El stock inicial debe ser 0. expected:&lt;1.0&gt; but was:&lt;0.0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: El stock inicial debe ser 0. expected:&lt;1.0&gt; but was:&lt;0.0&gt;
+	at ec.espe.edu.finvory.model.InventoryOfObsoleteTest.test_GetInitialStock_ExpectedFail(InventoryOfObsoleteTest.java:45)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 </failure>
   </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetDiscountStandard_ShouldRejectAboveOneHundredPercent_RED" time="0.003">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetDiscountStandard2_ShouldRejectAboveOneHundredPercent_RED" time="0.002">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetProfitPercentage2_ShouldRejectNegativeValue_RED" time="0.002">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="test_SetTaxRate_ZeroValidation_ExpectedFail" time="0.003">
-    <failure message="El sistema aceptó una tasa de 0% cuando la lógica requiere rechazo. expected:&lt;0.15&gt; but was:&lt;0.0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: El sistema aceptó una tasa de 0% cuando la lógica requiere rechazo. expected:&lt;0.15&gt; but was:&lt;0.0&gt;
-	at ec.espe.edu.finvory.model.FinvoryDataTest.test_SetTaxRate_ZeroValidation_ExpectedFail(FinvoryDataTest.java:173)
+  <testcase classname="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" name="test_RemoveStock_ProductInexistent_ExpectedFail" time="0.0">
+    <failure message="El stock del inexistente debe ser 0. expected:&lt;1.0&gt; but was:&lt;0.0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: El stock del inexistente debe ser 0. expected:&lt;1.0&gt; but was:&lt;0.0&gt;
+	at ec.espe.edu.finvory.model.InventoryOfObsoleteTest.test_RemoveStock_ProductInexistent_ExpectedFail(InventoryOfObsoleteTest.java:104)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 </failure>
   </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="test_SetTaxRate_NullCheck_ExpectedFail" time="0.002">
-    <failure message="Falla en la verificación de valor nulo. expected:&lt;0.16000001&gt; but was:&lt;0.15&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Falla en la verificación de valor nulo. expected:&lt;0.16000001&gt; but was:&lt;0.15&gt;
-	at ec.espe.edu.finvory.model.FinvoryDataTest.test_SetTaxRate_NullCheck_ExpectedFail(FinvoryDataTest.java:204)
+  <testcase classname="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" name="test_RemoveStock_PartialRemoval_ExpectedFail" time="0.001">
+    <failure message="La remoción parcial debe dejar 13. expected:&lt;14.0&gt; but was:&lt;13.0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: La remoción parcial debe dejar 13. expected:&lt;14.0&gt; but was:&lt;13.0&gt;
+	at ec.espe.edu.finvory.model.InventoryOfObsoleteTest.test_RemoveStock_PartialRemoval_ExpectedFail(InventoryOfObsoleteTest.java:85)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 </failure>
   </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="test_SetTaxRate_Recalculation_ExpectedFail" time="0.002">
-    <failure message="Falla en la verificación de cambio de tasa. expected:&lt;0.13&gt; but was:&lt;0.12&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Falla en la verificación de cambio de tasa. expected:&lt;0.13&gt; but was:&lt;0.12&gt;
-	at ec.espe.edu.finvory.model.FinvoryDataTest.test_SetTaxRate_Recalculation_ExpectedFail(FinvoryDataTest.java:193)
+  <testcase classname="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" name="test_SetStock_ZeroValue_ExpectedFail" time="0.001">
+    <failure message="El stock debe ser 0. expected:&lt;1.0&gt; but was:&lt;0.0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: El stock debe ser 0. expected:&lt;1.0&gt; but was:&lt;0.0&gt;
+	at ec.espe.edu.finvory.model.InventoryOfObsoleteTest.test_SetStock_ZeroValue_ExpectedFail(InventoryOfObsoleteTest.java:114)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 </failure>
   </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetVipDiscount_ShouldRejectNegativeValue_ExpectedFail" time="0.001">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
+  <testcase classname="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" name="test_AddStock_MultipleTimes_ExpectedFail" time="0.001">
+    <failure message="La suma total debe ser 15. expected:&lt;16.0&gt; but was:&lt;15.0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: La suma total debe ser 15. expected:&lt;16.0&gt; but was:&lt;15.0&gt;
+	at ec.espe.edu.finvory.model.InventoryOfObsoleteTest.test_AddStock_MultipleTimes_ExpectedFail(InventoryOfObsoleteTest.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 </failure>
   </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetDiscountPremium2_ShouldRejectNegativeValue_NewRed" time="0.001">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
+  <testcase classname="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" name="test_AddStock_EmptyId_Success" time="0.0" />
+  <testcase classname="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" name="test_RemoveStock_FullRemoval_ExpectedFail" time="0.001">
+    <failure message="La remoción total debe dejar 0. expected:&lt;1.0&gt; but was:&lt;0.0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: La remoción total debe dejar 0. expected:&lt;1.0&gt; but was:&lt;0.0&gt;
+	at ec.espe.edu.finvory.model.InventoryOfObsoleteTest.test_RemoveStock_FullRemoval_ExpectedFail(InventoryOfObsoleteTest.java:75)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 </failure>
   </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetProfit_ShouldRejectOutOfRangeValue_ExpectedFail" time="0.001">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
+  <testcase classname="ec.espe.edu.finvory.model.InventoryOfObsoleteTest" name="test_AddStock_NegativeQuantity_ExpectedFail" time="0.004">
+    <failure message="TEST FAILURE (Error Lógico de Negocio): La función &apos;addStock&apos; permite restar stock, resultando en 40 cuando se esperaba 50. expected:&lt;50.0&gt; but was:&lt;40.0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: TEST FAILURE (Error Lógico de Negocio): La función &apos;addStock&apos; permite restar stock, resultando en 40 cuando se esperaba 50. expected:&lt;50.0&gt; but was:&lt;40.0&gt;
+	at ec.espe.edu.finvory.model.InventoryOfObsoleteTest.test_AddStock_NegativeQuantity_ExpectedFail(InventoryOfObsoleteTest.java:131)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 </failure>
   </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetProfitPercentage_ShouldRejectNegativeValue_RED" time="0.001">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <testcase classname="ec.espe.edu.finvory.model.FinvoryDataTest" name="testSetStandardDiscount_ShouldRejectNegativeValue_ExpectedFail" time="0.0">
-    <failure message="Expected exception: java.lang.IllegalArgumentException" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Expected exception: java.lang.IllegalArgumentException
-</failure>
-  </testcase>
-  <system-out><![CDATA[TEST ROJO: Rechazando descuento Standard negativo.
-TEST ROJO: Rechazando descuento Premium negativo.
-TEST ROJO: Rechazando Tasa de IVA = 0.
-TEST ROJO: Rechazando Tasa de IVA > 1.0.
-TEST ROJO: Rechazando descuento Standard > 100%.
-TEST ROJO: Rechazando descuento VIP > 100%.
-TEST ROJO: Rechazando porcentaje de beneficio nulo.
-TEST ROJO: Rechazando descuento VIP negativo.
-TEST ROJO: Rechazando porcentaje de beneficio negativo.
-]]></system-out>
+  <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
