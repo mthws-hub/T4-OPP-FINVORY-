@@ -1,10 +1,13 @@
 package ec.espe.edu.finvory.model; 
 
 import org.junit.Test; 
-import org.junit.BeforeClass; 
+import org.junit.BeforeClass;
+import org.junit.Before;
 import static org.junit.Assert.*; 
 import java.io.ByteArrayInputStream; 
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.time.LocalDate;
 
 /**
  *
@@ -12,12 +15,21 @@ import java.io.InputStream;
  */
 
  public class FinvoryDataTest {
+     
+     private FinvoryData dataInstance;
+     private Customer testCustomer;
 
     @BeforeClass
     public static void setUpClass() {
         String input = "0\n"; 
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
+    }
+    
+    @Before
+    public void setUp(){
+        dataInstance = new FinvoryData();
+        testCustomer = new Customer("Cliente Test", "1700000000", "0999999999", "test@g.com", "STANDARD");
     }
 
     @Test(expected = IllegalArgumentException.class) 
@@ -214,7 +226,139 @@ import java.io.InputStream;
 
         assertEquals("Falla en la verificación de precisión.", expected, actual, 0.001f);
     }
-  
+    
+    private void injectDate(InvoiceSim invoice, String date) {
+        try {
+            Field dateField = InvoiceSim.class.getDeclaredField("date");
+            dateField.setAccessible(true);
+            dateField.set(invoice, date);
+        } catch (Exception e) {
+            fail("Could not inject date for testing: " + e.getMessage());
+        }
+    }
+    
+    private InvoiceSim createCompletedInvoice(float amount) {
+        InvoiceSim inv = new InvoiceSim("F-Test", testCustomer, "CASH", "");
+        inv.addLine(new Product("Product","","", "", amount, ""), 1, amount);
+        inv.calculateTotals(0.0f);
+        inv.complete();
+        return inv;
+    }
+    
+    @Test
+    public void testTotalGrossProfile_ExcludeTax() {
+        InvoiceSim inv = new InvoiceSim("F-Tax", testCustomer, "CASH", "");
+        inv.addLine(new Product("Product","","", "", 100f, ""), 1, 100f);
+        inv.calculateTotals(0.15f);
+        inv.complete();
+        dataInstance.getInvoices().add(inv);
+        assertEquals("El reporte actualmente suma el Total con impuestos", 
+                115.0f, dataInstance.getTotalGrossProfile(), 0.01f);
+    }
+    
+    @Test
+    public void testTotalGrossDay_ExcludeYesterday() {
+        InvoiceSim invYesterday = createCompletedInvoice(100f);
+        injectDate(invYesterday, LocalDate.now().minusDays(1).toString());
+        dataInstance.getInvoices().add(invYesterday);
+        
+        assertEquals("El reporte diario NO debe incluir ventas de ayer", 
+                0.0f, dataInstance.getTotalGrossDay(), 0.01f);
+    }
+    
+    @Test
+    public void testTotalGrossProfile_IncludeYesterday() {
+        InvoiceSim invYesterday = createCompletedInvoice(100f);
+        injectDate(invYesterday, LocalDate.now().minusDays(1).toString());
+        dataInstance.getInvoices().add(invYesterday);
+        
+        assertEquals("El reporte historico (Profile) SI debe incluir ventas de ayer", 
+                100.0f, dataInstance.getTotalGrossProfile(), 0.01f);
+    }
+    
+    @Test
+    public void testTotalGrossProfile_DeductReturns() {
+        dataInstance.getInvoices().add(createCompletedInvoice(100f));
+        
+        Product p = new Product("Product","","", "", 100f, "");
+        dataInstance.getReturns().add(new ReturnedProduct(p, 1, "DEFECTIVE"));
+        assertEquals("Debería restar devoluciones", 
+                100.0f, dataInstance.getTotalGrossProfile(), 0.01f);
+    }
+    
+    @Test
+    public void testTotalGrossDay_ExcludePending_TC_REV_006() {
+        InvoiceSim inv = new InvoiceSim("F-Pending", testCustomer, "CHEQUE", "2025-01-01");
+        inv.addLine(new Product("Product","","", "", 50f, ""), 1, 50f);
+        inv.calculateTotals(0.0f);
+        dataInstance.getInvoices().add(inv);
+        
+        assertEquals("Ventas pendientes no deben sumar", 
+                0.0f, dataInstance.getTotalGrossDay(), 0.01f);
+    }
+    
+    @Test
+    public void testTotalGrossProfile_UpdateAfterPayment() {
+        InvoiceSim inv = new InvoiceSim("F-Pay", testCustomer, "CHEQUE", "2025-01-01");
+        inv.addLine(new Product("Product","","", "", 50f, ""), 1, 50f);
+        inv.calculateTotals(0.0f);
+        dataInstance.getInvoices().add(inv);
+        assertEquals("Pre-pago debe ser 0", 0.0f, dataInstance.getTotalGrossProfile(), 0.01f);
+        inv.complete();
+        assertEquals("Post-pago debe sumar", 
+                50.0f, dataInstance.getTotalGrossProfile(), 0.01f);
+    }
+    
+    @Test
+    public void testDashboard_InitialStateZero() {
+        assertEquals("Dashboard inicia en 0", 
+                0.0f, dataInstance.getTotalGrossProfile(), 0.01f);
+        assertEquals(0.0f, dataInstance.getTotalGrossDay(), 0.01f);
+    }
+    
+    @Test
+    public void testTotalGrossDay_SumStandard() {
+        dataInstance.getInvoices().add(createCompletedInvoice(50f));
+        dataInstance.getInvoices().add(createCompletedInvoice(50f));
+        assertEquals("Suma simple del día", 
+                100.0f, dataInstance.getTotalGrossDay(), 0.01f);
+    }
+
+    @Test
+    public void testTotalGrossProfile_ExcludeCanceled() {
+        InvoiceSim inv = createCompletedInvoice(100f);
+        inv.cancel();
+        dataInstance.getInvoices().add(inv);
+        assertEquals("Facturas canceladas deben ser ignoradas", 
+                0.0f, dataInstance.getTotalGrossProfile(), 0.01f);
+    }
+    
+    @Test
+    public void testTotalGrossDay_ExcludeFutureDate() {
+        InvoiceSim futureInv = createCompletedInvoice(100f);
+        injectDate(futureInv, LocalDate.now().plusDays(1).toString());
+        dataInstance.getInvoices().add(futureInv);
+        
+        assertEquals("El reporte de HOY no debe sumar fechas futuras", 
+                0.0f, dataInstance.getTotalGrossDay(), 0.01f);
+    }
+
+    @Test
+    public void testTotalGross_MixedStatusIntegration() {
+        dataInstance.getInvoices().add(createCompletedInvoice(100f)); // +100
+        
+        InvoiceSim cancelled = createCompletedInvoice(50f);
+        cancelled.cancel();
+        dataInstance.getInvoices().add(cancelled); // +0
+        
+        InvoiceSim pending = new InvoiceSim("F-P", testCustomer, "CHEQUE", "");
+        pending.addLine(new Product("P","","", "", 20f, ""), 1, 20f);
+        pending.calculateTotals(0);
+        dataInstance.getInvoices().add(pending); // +0
+
+        assertEquals("Integración de estados mixtos correcta", 
+                100.0f, dataInstance.getTotalGrossProfile(), 0.01f);
+    }
 }
 
 

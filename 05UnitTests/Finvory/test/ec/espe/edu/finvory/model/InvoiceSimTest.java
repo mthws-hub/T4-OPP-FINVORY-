@@ -92,4 +92,75 @@ public class InvoiceSimTest {
         InvoiceSim invoice = new InvoiceSim("F010", customer, "EFECTIVO", "");
         invoice.addLine(null, 1, 10.0f);
     }
+    
+    @Test
+    public void testAutoFilledData_Visibility() {
+        InvoiceSim invoice = new InvoiceSim("F-Auto", customer, "CASH", "");
+        
+        assertNotNull("El cliente no debe ser nulo", invoice.getCustomer());
+        assertEquals("Nombre debe autocompletarse", "Test Client", invoice.getCustomer().getName());
+        assertEquals("ID debe autocompletarse", "1700000000", invoice.getCustomer().getIdentification());
+        assertEquals("Email debe autocompletarse", "client@test.com", invoice.getCustomer().getEmail());
+    }
+    
+    @Test
+    public void testAutoCalculate_LineTotal() {
+        InvoiceSim invoice = new InvoiceSim("F-Calc", customer, "CASH", "");
+        int qty = 5;
+        float price = 10.0f;
+        
+        invoice.addLine(product, qty, price);
+        
+        float expectedLineTotal = 50.0f;
+        assertEquals("El total de línea debe ser qty * price", 
+                expectedLineTotal, invoice.getLines().get(0).getLineTotal(), 0.01f);
+    }
+
+    @Test
+    public void testAutoCalculate_FinalTax() {
+        InvoiceSim invoice = new InvoiceSim("F-Tax", customer, "CASH", "");
+        invoice.addLine(product, 10, 10.0f);
+        
+        float taxRate = 0.15f;
+        invoice.calculateTotals(taxRate);
+        
+        assertEquals("Impuesto calculado incorrectamente", 15.0f, invoice.getTax(), 0.01f);
+        assertEquals("Total final incorrecto", 115.0f, invoice.getTotal(), 0.01f);
+    }
+    
+    @Test
+    public void testCalculation_MultipleLines_Accumulation() {
+        InvoiceSim invoice = new InvoiceSim("F-Multi", customer, "CASH", "");
+        invoice.addLine(product, 1, 10f); 
+        invoice.addLine(product, 2, 20f);
+        invoice.calculateTotals(0.0f);
+        
+        assertEquals("Debe sumar múltiples líneas correctamente", 50.0f, invoice.getTotal(), 0.01f);
+    }
+    
+    @Test
+    public void testCalculation_ZeroQuantity() {
+        InvoiceSim invoice = new InvoiceSim("F-Zero", customer, "CASH", "");
+        invoice.addLine(product, 0, 10f);
+        invoice.calculateTotals(0.0f);
+        
+        assertEquals("Cantidad 0 no debe sumar valor", 0.0f, invoice.getTotal(), 0.01f);
+    }
+    
+    @Test
+    public void testCalculation_WithDiscountLogic_Validation() {
+        InvoiceSim invoice = new InvoiceSim("F-Disc", customer, "CASH", "");
+        float discountedPrice = 8.0f;
+        invoice.addLine(product, 1, discountedPrice);
+        invoice.calculateTotals(0.0f);
+        
+        assertEquals("El total debe basarse en el precio aplicado (descuento)", 
+                8.0f, invoice.getTotal(), 0.01f);
+    }
+    
+    @Test
+    public void testInvoice_StatusPendingByDefault() {
+        InvoiceSim invoice = new InvoiceSim("F-Status", customer, "CASH", "");
+        assertEquals("El estado inicial debe ser PENDING para reportes correctos", "PENDING", invoice.getStatus());
+    }
 }
