@@ -1,19 +1,24 @@
 package ec.espe.edu.finvory.view;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
-public class FrmObsoleteInventories extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmObsoleteInventories.class.getName());
-
+public class FrmObsoleteInventories extends JDialog {
     /**
      * Creates new form FrmObsoleteInventories
      */
-    public FrmObsoleteInventories() {
+    public FrmObsoleteInventories(java.awt.Frame parent, boolean modal) {
+        super(parent,modal);
         initComponents();
+        this.setLocationRelativeTo(parent);
     }
+    
+    private FrmProductReturns searchProductReturnsWindows;
+    private FrmReassignedProduct searchReassignedProductWindows;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -37,11 +42,11 @@ public class FrmObsoleteInventories extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnReassignProduct = new javax.swing.JButton();
+        btnProductReturns = new javax.swing.JButton();
+        btnReturn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(224, 224, 224));
 
@@ -146,24 +151,44 @@ public class FrmObsoleteInventories extends javax.swing.JFrame {
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("DESECHAR");
         jButton2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
-        jButton3.setBackground(new java.awt.Color(0, 123, 0));
-        jButton3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("REASIGNAR");
-        jButton3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnReassignProduct.setBackground(new java.awt.Color(0, 123, 0));
+        btnReassignProduct.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnReassignProduct.setForeground(new java.awt.Color(255, 255, 255));
+        btnReassignProduct.setText("REASIGNAR");
+        btnReassignProduct.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnReassignProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReassignProductActionPerformed(evt);
+            }
+        });
 
-        jButton4.setBackground(new java.awt.Color(0, 123, 0));
-        jButton4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("REGISTRAR DEVOLUCIÓN");
-        jButton4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnProductReturns.setBackground(new java.awt.Color(0, 123, 0));
+        btnProductReturns.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnProductReturns.setForeground(new java.awt.Color(255, 255, 255));
+        btnProductReturns.setText("REGISTRAR DEVOLUCIÓN");
+        btnProductReturns.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnProductReturns.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProductReturnsActionPerformed(evt);
+            }
+        });
 
-        jButton5.setBackground(new java.awt.Color(0, 123, 0));
-        jButton5.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("VOLVER");
-        jButton5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnReturn.setBackground(new java.awt.Color(0, 123, 0));
+        btnReturn.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnReturn.setForeground(new java.awt.Color(255, 255, 255));
+        btnReturn.setText("VOLVER");
+        btnReturn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnReturn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReturnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -173,14 +198,14 @@ public class FrmObsoleteInventories extends javax.swing.JFrame {
                 .addGap(59, 59, 59)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton5)
+                        .addComponent(btnReturn)
                         .addGap(184, 184, 184))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(btnReassignProduct)
                         .addGap(35, 35, 35)))
-                .addComponent(jButton4)
+                .addComponent(btnProductReturns)
                 .addGap(31, 31, 31))
         );
         jPanel2Layout.setVerticalGroup(
@@ -190,10 +215,10 @@ public class FrmObsoleteInventories extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton4)
-                            .addComponent(jButton3))
+                            .addComponent(btnProductReturns)
+                            .addComponent(btnReassignProduct))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton5))
+                        .addComponent(btnReturn))
                     .addComponent(jButton2))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
@@ -222,37 +247,38 @@ public class FrmObsoleteInventories extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnReturnActionPerformed
+
+    private void btnProductReturnsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductReturnsActionPerformed
+        if(searchProductReturnsWindows == null){
+            searchProductReturnsWindows = new FrmProductReturns(this,true);
+        }
+        searchProductReturnsWindows.setVisible(true);
+    }//GEN-LAST:event_btnProductReturnsActionPerformed
+
+    private void btnReassignProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReassignProductActionPerformed
+        if(searchReassignedProductWindows== null){
+            searchReassignedProductWindows = new FrmReassignedProduct(this,true);
+        }
+        searchReassignedProductWindows.setVisible(true);
+    }//GEN-LAST:event_btnReassignProductActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        JOptionPane.showMessageDialog(rootPane, "El producto ha sido desechado de los inventarios","",JOptionPane.WARNING_MESSAGE);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmObsoleteInventories().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnProductReturns;
+    private javax.swing.JButton btnReassignProduct;
+    private javax.swing.JButton btnReturn;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

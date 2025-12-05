@@ -1,5 +1,5 @@
 package ec.espe.edu.finvory.view;
-
+import ec.espe.edu.finvory.view.FrmObsoleteInventories;
 /**
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
@@ -7,7 +7,8 @@ package ec.espe.edu.finvory.view;
 public class FrmInventories extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmInventories.class.getName());
-
+    private FrmObsoleteInventories searchObsoleteInventoryWindow;
+    private FrmAddNewInventory searchNewInventoryWindow;
     /**
      * Creates new form FrmInventories
      */
@@ -36,12 +37,13 @@ public class FrmInventories extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnReturnToMenu = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnHandleObsoleteInventory = new javax.swing.JButton();
+        btnAddNewInventory = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(224, 224, 224));
 
@@ -77,7 +79,7 @@ public class FrmInventories extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCountryInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
                         .addComponent(txtCityInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -123,34 +125,53 @@ public class FrmInventories extends javax.swing.JFrame {
         jButton1.setText("GESTIONAR PRODUCTOS");
         jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jButton2.setBackground(new java.awt.Color(0, 123, 0));
-        jButton2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("GESTIONAR OBSOLETOS");
-        jButton2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnHandleObsoleteInventory.setBackground(new java.awt.Color(0, 123, 0));
+        btnHandleObsoleteInventory.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnHandleObsoleteInventory.setForeground(new java.awt.Color(255, 255, 255));
+        btnHandleObsoleteInventory.setText("GESTIONAR OBSOLETOS");
+        btnHandleObsoleteInventory.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnHandleObsoleteInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHandleObsoleteInventoryActionPerformed(evt);
+            }
+        });
+
+        btnAddNewInventory.setBackground(new java.awt.Color(0, 123, 0));
+        btnAddNewInventory.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnAddNewInventory.setForeground(new java.awt.Color(242, 242, 242));
+        btnAddNewInventory.setText("AGREGAR NUEVO INVENTARIO");
+        btnAddNewInventory.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAddNewInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddNewInventoryActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(72, 72, 72)
+                .addGap(27, 27, 27)
                 .addComponent(btnReturnToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(32, 32, 32)
                 .addComponent(jButton1)
-                .addGap(82, 82, 82)
-                .addComponent(jButton2)
-                .addGap(42, 42, 42))
+                .addGap(18, 18, 18)
+                .addComponent(btnHandleObsoleteInventory)
+                .addGap(18, 18, 18)
+                .addComponent(btnAddNewInventory)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addGap(68, 68, 68)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnReturnToMenu)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addContainerGap(60, Short.MAX_VALUE))
+                    .addComponent(btnHandleObsoleteInventory)
+                    .addComponent(btnAddNewInventory))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(224, 224, 224));
@@ -218,6 +239,22 @@ public class FrmInventories extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnHandleObsoleteInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHandleObsoleteInventoryActionPerformed
+        if (searchObsoleteInventoryWindow == null){
+            searchObsoleteInventoryWindow = new FrmObsoleteInventories(this,true);
+        }
+        
+        searchObsoleteInventoryWindow.setVisible(true);
+    }//GEN-LAST:event_btnHandleObsoleteInventoryActionPerformed
+
+    private void btnAddNewInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewInventoryActionPerformed
+        if (searchNewInventoryWindow == null){
+            searchNewInventoryWindow = new FrmAddNewInventory(this,true);
+        }
+        
+        searchNewInventoryWindow.setVisible(true);
+    }//GEN-LAST:event_btnAddNewInventoryActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -244,10 +281,11 @@ public class FrmInventories extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddNewInventory;
     private javax.swing.JButton btnFindInventory;
+    private javax.swing.JButton btnHandleObsoleteInventory;
     private javax.swing.JButton btnReturnToMenu;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

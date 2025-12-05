@@ -1,13 +1,19 @@
 package ec.espe.edu.finvory.view;
 
+import ec.espe.edu.finvory.model.Customer;
+import ec.espe.edu.finvory.model.InvoiceSim;
+import javax.swing.JOptionPane;
+import ec.espe.edu.finvory.view.FrmEditProductListOnInvoice;
+
 /**
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
 public class FrmSaleInvoice extends javax.swing.JFrame {
     
+    private FrmEditProductListOnInvoice searchWindow  = null;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmSaleInvoice.class.getName());
-
+    InvoiceSim invoice = new InvoiceSim();
     /**
      * Creates new form FrmSaleInvoice
      */
@@ -31,9 +37,9 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtId = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtName = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -41,12 +47,11 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         txtClientType = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        radPaymentMethodCash = new javax.swing.JRadioButton();
+        radPaymentMethodTransfer = new javax.swing.JRadioButton();
+        radPaymentMethodCheque = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
-        btnAddProduct = new javax.swing.JButton();
-        btnDeleteProduct = new javax.swing.JButton();
+        btnHandleList = new javax.swing.JButton();
         btnConfirmSale = new javax.swing.JButton();
         btnCancelSale = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
@@ -78,18 +83,18 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel5.setText("CI:");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtIdActionPerformed(evt);
             }
         });
 
         jLabel6.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel6.setText("Nombre:");
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtNameActionPerformed(evt);
             }
         });
 
@@ -105,19 +110,24 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel12.setText("Tipo de Pago:");
 
-        jRadioButton1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jRadioButton1.setText("efectivo");
-
-        jRadioButton2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jRadioButton2.setText("transferencia");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        radPaymentMethodCash.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        radPaymentMethodCash.setText("efectivo");
+        radPaymentMethodCash.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                radPaymentMethodCashActionPerformed(evt);
             }
         });
 
-        jRadioButton3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jRadioButton3.setText("cheque");
+        radPaymentMethodTransfer.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        radPaymentMethodTransfer.setText("transferencia");
+        radPaymentMethodTransfer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radPaymentMethodTransferActionPerformed(evt);
+            }
+        });
+
+        radPaymentMethodCheque.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        radPaymentMethodCheque.setText("cheque");
 
         javax.swing.GroupLayout txtEmailLayout = new javax.swing.GroupLayout(txtEmail);
         txtEmail.setLayout(txtEmailLayout);
@@ -137,7 +147,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                     .addGroup(txtEmailLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(txtEmailLayout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -151,15 +161,15 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                 .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(txtEmailLayout.createSequentialGroup()
                         .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(txtEmailLayout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
+                        .addComponent(radPaymentMethodCash)
                         .addGap(18, 18, 18)
-                        .addComponent(jRadioButton2)
+                        .addComponent(radPaymentMethodTransfer)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton3)
+                        .addComponent(radPaymentMethodCheque)
                         .addGap(0, 22, Short.MAX_VALUE))))
             .addGroup(txtEmailLayout.createSequentialGroup()
                 .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,14 +198,13 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addComponent(jLabel5))
                     .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel6)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel7)
-                        .addComponent(jLabel8))
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8)
                     .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel9)
                         .addComponent(jLabel10)))
@@ -204,40 +213,49 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                     .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel11)
                         .addComponent(txtClientType))
+                    .addComponent(radPaymentMethodTransfer)
                     .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel12)
-                        .addComponent(jRadioButton1)
-                        .addComponent(jRadioButton2)
-                        .addComponent(jRadioButton3)))
+                        .addComponent(radPaymentMethodCash)
+                        .addComponent(radPaymentMethodCheque)))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(224, 224, 224));
         jPanel2.setForeground(new java.awt.Color(162, 188, 224));
 
-        btnAddProduct.setBackground(new java.awt.Color(0, 123, 0));
-        btnAddProduct.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        btnAddProduct.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddProduct.setText("AGREGAR");
-        btnAddProduct.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        btnDeleteProduct.setBackground(new java.awt.Color(0, 123, 0));
-        btnDeleteProduct.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        btnDeleteProduct.setForeground(new java.awt.Color(255, 255, 255));
-        btnDeleteProduct.setText("BORRAR");
-        btnDeleteProduct.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnHandleList.setBackground(new java.awt.Color(0, 123, 0));
+        btnHandleList.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnHandleList.setForeground(new java.awt.Color(255, 255, 255));
+        btnHandleList.setText("GESTIONAR LISTA");
+        btnHandleList.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnHandleList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHandleListActionPerformed(evt);
+            }
+        });
 
         btnConfirmSale.setBackground(new java.awt.Color(0, 123, 0));
         btnConfirmSale.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         btnConfirmSale.setForeground(new java.awt.Color(255, 255, 255));
         btnConfirmSale.setText("CONFIRMAR");
         btnConfirmSale.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnConfirmSale.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmSaleActionPerformed(evt);
+            }
+        });
 
         btnCancelSale.setBackground(new java.awt.Color(0, 123, 0));
         btnCancelSale.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         btnCancelSale.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelSale.setText("CANCELAR");
         btnCancelSale.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCancelSale.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelSaleActionPerformed(evt);
+            }
+        });
 
         jLabel13.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel13.setText("TOTAL");
@@ -263,15 +281,12 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnAddProduct)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDeleteProduct))
+                            .addComponent(btnHandleList)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(btnConfirmSale)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnCancelSale)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel14)
                             .addComponent(jLabel15)
@@ -290,8 +305,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                 .addComponent(jLabel13)
                 .addGap(5, 5, 5)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddProduct)
-                    .addComponent(btnDeleteProduct)
+                    .addComponent(btnHandleList)
                     .addComponent(jLabel14)
                     .addComponent(txtSubtotal))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -312,7 +326,6 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         jPanel3.setForeground(new java.awt.Color(162, 188, 224));
 
         tabProductList.setBackground(new java.awt.Color(242, 242, 242));
-        tabProductList.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(11, 85, 99)));
         tabProductList.setFont(new java.awt.Font("Footlight MT Light", 0, 14)); // NOI18N
         tabProductList.setForeground(new java.awt.Color(162, 188, 224));
         tabProductList.setModel(new javax.swing.table.DefaultTableModel(
@@ -380,18 +393,69 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtIdActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtNameActionPerformed
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+    private void radPaymentMethodTransferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radPaymentMethodTransferActionPerformed
+        if(radPaymentMethodTransfer.isSelected()){
+            radPaymentMethodCheque.setEnabled(false);
+            radPaymentMethodCash.setEnabled(false);
+        } else {
+            radPaymentMethodCheque.setEnabled(true);
+            radPaymentMethodCash.setEnabled(true);
+        }
+    }//GEN-LAST:event_radPaymentMethodTransferActionPerformed
 
+    private void btnCancelSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelSaleActionPerformed
+            JOptionPane.showMessageDialog(rootPane, "LOS DATOS SERÁN ELIMINADOS","",JOptionPane.WARNING_MESSAGE);
+            emptyFields();
+    }//GEN-LAST:event_btnCancelSaleActionPerformed
+
+    private void btnConfirmSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmSaleActionPerformed
+        if ("".equals(txtId.getText()) || "".equals(txtName.getText())){
+            JOptionPane.showMessageDialog(rootPane, "NO HAY DATOS INGRESADOS", "", JOptionPane.ERROR_MESSAGE);
+            emptyFields();
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "VENTA REGISTRADA CON ÉXITO");
+            emptyFields();
+        }
+    }//GEN-LAST:event_btnConfirmSaleActionPerformed
+
+    private void radPaymentMethodCashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radPaymentMethodCashActionPerformed
+        if(radPaymentMethodCash.isSelected()){
+            radPaymentMethodCheque.setEnabled(false);
+            radPaymentMethodTransfer.setEnabled(false);
+        } else {
+            radPaymentMethodCheque.setEnabled(true);
+            radPaymentMethodTransfer.setEnabled(true);
+        }
+    }//GEN-LAST:event_radPaymentMethodCashActionPerformed
+
+    private void btnHandleListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHandleListActionPerformed
+        if (searchWindow == null){
+            searchWindow = new FrmEditProductListOnInvoice(this,true);
+        }
+        
+        searchWindow.setVisible(true);
+    }//GEN-LAST:event_btnHandleListActionPerformed
+
+    private void readValues(){
+
+    }
+    
+    private void emptyFields(){
+     txtName.setText("");
+     txtId.setText("");
+     radPaymentMethodCash.setSelected(false);
+     radPaymentMethodTransfer.setSelected(false);
+     radPaymentMethodCheque.setSelected(false);
+     tabProductList.setCellSelectionEnabled(false);
+    }
     /**
      * @param args the command line arguments
      */
@@ -418,10 +482,9 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddProduct;
     private javax.swing.JButton btnCancelSale;
     private javax.swing.JButton btnConfirmSale;
-    private javax.swing.JButton btnDeleteProduct;
+    private javax.swing.JButton btnHandleList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -440,15 +503,15 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JRadioButton radPaymentMethodCash;
+    private javax.swing.JRadioButton radPaymentMethodCheque;
+    private javax.swing.JRadioButton radPaymentMethodTransfer;
     private javax.swing.JTable tabProductList;
     private javax.swing.JLabel txtClientType;
     private javax.swing.JPanel txtEmail;
+    private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtName;
     private javax.swing.JLabel txtSalesNumber;
     private javax.swing.JLabel txtSubtotal;
     private javax.swing.JLabel txtTax;

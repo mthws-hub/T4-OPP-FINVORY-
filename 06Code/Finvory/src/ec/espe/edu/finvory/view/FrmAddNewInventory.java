@@ -1,18 +1,21 @@
 package ec.espe.edu.finvory.view;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
-public class FrmAddNewInventory extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmAddNewInventory.class.getName());
+public class FrmAddNewInventory extends JDialog {
 
     /**
      * Creates new form FrmAddNewInventory
      */
-    public FrmAddNewInventory() {
+    public FrmAddNewInventory(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(parent);
     }
 
     /**
@@ -45,7 +48,7 @@ public class FrmAddNewInventory extends javax.swing.JFrame {
         btnAdd = new javax.swing.JButton();
         btnReturn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(224, 224, 224));
 
@@ -147,6 +150,11 @@ public class FrmAddNewInventory extends javax.swing.JFrame {
         btnCancel.setForeground(new java.awt.Color(255, 255, 255));
         btnCancel.setText("CANCELAR");
         btnCancel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 130, 30));
 
         btnAdd.setBackground(new java.awt.Color(0, 123, 0));
@@ -154,6 +162,11 @@ public class FrmAddNewInventory extends javax.swing.JFrame {
         btnAdd.setForeground(new java.awt.Color(255, 255, 255));
         btnAdd.setText("AGREGAR");
         btnAdd.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 110, 30));
 
         btnReturn.setBackground(new java.awt.Color(0, 123, 0));
@@ -161,6 +174,11 @@ public class FrmAddNewInventory extends javax.swing.JFrame {
         btnReturn.setForeground(new java.awt.Color(255, 255, 255));
         btnReturn.setText("VOLVER");
         btnReturn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnReturn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReturnActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnReturn, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 60, 110, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -187,30 +205,47 @@ public class FrmAddNewInventory extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnReturnActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        String[] mandatoryFields = readValues();
+        String name = mandatoryFields[0];
+        String country = mandatoryFields[1];
+        String city = mandatoryFields[2];
+        String street = mandatoryFields[3];
+        
+        if (name.isEmpty() || country.isEmpty() || city.isEmpty() || street.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Los campos Nombre, País, Ciudad y Calle son obligatorios y no pueden estar vacíos.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Inventario Creado para: " + name);
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        emptyFields();
+    }//GEN-LAST:event_btnCancelActionPerformed
+    private String[] readValues() {
+        String name = txtName.getText().trim();
+        String country = txtCountry.getText().trim();
+        String city = txtCity.getText().trim();
+        String street = txtStreet.getText().trim();
+        
+        return new String[]{name, country, city, street};
+    }
+    private void emptyFields(){
+        txtCity.setText("");
+        txtCountry.setText("");
+        txtName.setText("");
+        txtRegion.setText("");
+        txtStreet.setText("");
+        txtStreetNumber.setText("");
+        txtZipCode.setText("");
+    }
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmAddNewInventory().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
