@@ -129,7 +129,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Perpetua Titling MT" size="20" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="AGREGAR/ELIMAR PRODUCTO"/>
+            <Property name="text" type="java.lang.String" value="AGREGAR/ELIMinAR PRODUCTO"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">

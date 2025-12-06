@@ -36,7 +36,7 @@ public class FrmInventories extends javax.swing.JFrame {
         txtCityInventory = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         btnReturnToMenu = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnManageProducts = new javax.swing.JButton();
         btnHandleObsoleteInventory = new javax.swing.JButton();
         btnAddNewInventory = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -119,11 +119,16 @@ public class FrmInventories extends javax.swing.JFrame {
         btnReturnToMenu.setText("ATRÁS");
         btnReturnToMenu.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jButton1.setBackground(new java.awt.Color(0, 123, 0));
-        jButton1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("GESTIONAR PRODUCTOS");
-        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnManageProducts.setBackground(new java.awt.Color(0, 123, 0));
+        btnManageProducts.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnManageProducts.setForeground(new java.awt.Color(255, 255, 255));
+        btnManageProducts.setText("GESTIONAR PRODUCTOS");
+        btnManageProducts.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnManageProducts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageProductsActionPerformed(evt);
+            }
+        });
 
         btnHandleObsoleteInventory.setBackground(new java.awt.Color(0, 123, 0));
         btnHandleObsoleteInventory.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
@@ -155,7 +160,7 @@ public class FrmInventories extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(btnReturnToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
-                .addComponent(jButton1)
+                .addComponent(btnManageProducts)
                 .addGap(18, 18, 18)
                 .addComponent(btnHandleObsoleteInventory)
                 .addGap(18, 18, 18)
@@ -168,7 +173,7 @@ public class FrmInventories extends javax.swing.JFrame {
                 .addGap(68, 68, 68)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnReturnToMenu)
-                    .addComponent(jButton1)
+                    .addComponent(btnManageProducts)
                     .addComponent(btnHandleObsoleteInventory)
                     .addComponent(btnAddNewInventory))
                 .addContainerGap(36, Short.MAX_VALUE))
@@ -255,6 +260,10 @@ public class FrmInventories extends javax.swing.JFrame {
         searchNewInventoryWindow.setVisible(true);
     }//GEN-LAST:event_btnAddNewInventoryActionPerformed
 
+    private void btnManageProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageProductsActionPerformed
+        FrmProducts productsWindow = new FrmProducts();
+        productsWindow.setVisible(true);
+    }//GEN-LAST:event_btnManageProductsActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -284,8 +293,8 @@ public class FrmInventories extends javax.swing.JFrame {
     private javax.swing.JButton btnAddNewInventory;
     private javax.swing.JButton btnFindInventory;
     private javax.swing.JButton btnHandleObsoleteInventory;
+    private javax.swing.JButton btnManageProducts;
     private javax.swing.JButton btnReturnToMenu;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

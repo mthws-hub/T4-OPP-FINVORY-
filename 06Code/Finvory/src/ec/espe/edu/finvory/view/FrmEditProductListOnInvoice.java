@@ -46,7 +46,7 @@ public class FrmEditProductListOnInvoice extends JDialog {
         jPanel1.setBackground(new java.awt.Color(224, 224, 224));
 
         jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
-        jLabel1.setText("AGREGAR/ELIMAR PRODUCTO");
+        jLabel1.setText("AGREGAR/ELIMinAR PRODUCTO");
 
         jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel2.setText("Id:");
