@@ -22,14 +22,20 @@ import org.bson.Document;
 
 public class MongoDataExporter {
 
-    private static final String CONNECTION_STRING = "mongodb+srv://Joseph:Joseph2006@cluster0.h8pi0ir.mongodb.net/?appName=Cluster0";
+    private static final String ENV_URI_NAME = "MONGODB_URI";
     private static final String DATABASE_NAME = "FinvoryDB";
 
     public static void main(String[] args) {
+        String connectionString = System.getenv(ENV_URI_NAME);
+        if (connectionString == null || connectionString.isEmpty()) {
+            System.err.println("La variable de entorno MONGODB_URI no está definida.");
+            return;
+        }
+
         Database localDatabase = new Database();
         SystemUsers systemUsers = localDatabase.loadUsers();
 
-        MongoDBConnection connection = new MongoDBConnection(CONNECTION_STRING, DATABASE_NAME);
+        MongoDBConnection connection = new MongoDBConnection(connectionString, DATABASE_NAME);
         MongoDatabase mongoDatabase = connection.getDatabase();
 
         exportUsers(systemUsers, mongoDatabase);
