@@ -1,0 +1,88 @@
+{
+  "companyInfo": {
+    "name": "McDonalds",
+    "address": {
+      "country": "Ecuador",
+      "city": "QUITO",
+      "street": "Solanda",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "ruc": "0011751774793",
+    "phone": "0963514785",
+    "email": "joseph3elcrac@gmail.com",
+    "username": "Joseph",
+    "password": "123"
+  },
+  "customers": [],
+  "products": [
+    {
+      "id": "MC1",
+      "name": "Hamburguesa",
+      "description": "Rico y facil de hacer",
+      "barcode": "32423213213",
+      "baseCostPrice": 1.75,
+      "supplierId": "0011234567891"
+    }
+  ],
+  "suppliers": [
+    {
+      "fullName": "Carlos Enrique Casemiro",
+      "id1": "0011234567891",
+      "id2": "",
+      "phone": "0987654321",
+      "email": "asjdjads@gmail.com",
+      "description": "Buen proveedor"
+    }
+  ],
+  "inventories": [
+    {
+      "name": "Hamburguesería",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Solanda",
+        "zipCode": "2334",
+        "streetNumber": "12",
+        "region": "Sierra"
+      },
+      "productStock": {
+        "MC1": 70
+      }
+    }
+  ],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Bodega Obsoletos",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "productStock": {
+      "MC1": 20
+    }
+  },
+  "invoices": [],
+  "returns": [
+    {
+      "product": {
+        "id": "MC1",
+        "name": "Hamburguesa",
+        "description": "Rico y facil de hacer",
+        "barcode": "32423213213",
+        "baseCostPrice": 1.75,
+        "supplierId": "0011234567891"
+      },
+      "quantity": 20,
+      "reason": "DEFECTIVE"
+    }
+  ],
+  "taxRate": 0.15,
+  "profitPercentage": 0.0,
+  "discountStandard": 0.0,
+  "discountPremium": 0.0,
+  "discountVip": 0.0
+}

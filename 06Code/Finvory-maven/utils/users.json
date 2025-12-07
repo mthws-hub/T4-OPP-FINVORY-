@@ -1,0 +1,43 @@
+{
+  "companyAccounts": [
+    {
+      "name": "Frico Autopartes S.A.",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Av. 10 de Agosto N45",
+        "zipCode": "170504",
+        "streetNumber": "N45-23",
+        "region": "Pichincha"
+      },
+      "ruc": "1790011223001",
+      "phone": "022445566",
+      "email": "admin@frico.com",
+      "username": "adminFrico",
+      "password": "123"
+    },
+    {
+      "name": "McDonalds",
+      "address": {
+        "country": "Ecuador",
+        "city": "QUITO",
+        "street": "Solanda",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0011751774793",
+      "phone": "0963514785",
+      "email": "joseph3elcrac@gmail.com",
+      "username": "Joseph",
+      "password": "123"
+    }
+  ],
+  "personalAccounts": [
+    {
+      "fullName": "Juan Perez",
+      "username": "juanp",
+      "password": "123"
+    }
+  ]
+}

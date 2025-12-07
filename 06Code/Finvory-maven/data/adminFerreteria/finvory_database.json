@@ -1,0 +1,186 @@
+{
+  "companyInfo": {
+    "name": "Ferretería Espinoza",
+    "address": {
+      "country": "Ecuador",
+      "city": "Cuenca",
+      "street": "Calle Larga",
+      "zipCode": "010101",
+      "streetNumber": "12-45",
+      "region": "Azuay"
+    },
+    "ruc": "0190005556001",
+    "phone": "072888999",
+    "email": "ventas@ferreteriaespinoza.ec",
+    "username": "adminFerreteria",
+    "password": "123"
+  },
+  "customers": [
+    
+    {
+      "id": "FER-006",
+      "name": "Juego Destornilladores",
+      "description": "Set 6 piezas Stanley",
+      "barcode": "786200001006",
+      "baseCostPrice": 14.5,
+      "supplierId": "1790033333001"
+    },
+    {
+      "id": "FER-007",
+      "name": "Grifo Lavabo Monocomando",
+      "description": "Cromado línea básica FV",
+      "barcode": "786200001007",
+      "baseCostPrice": 32.0,
+      "supplierId": "1790044444001"
+    },
+    {
+      "id": "FER-008",
+      "name": "SikaTop 107",
+      "description": "Impermeabilizante cementoso 25kg",
+      "barcode": "786200001008",
+      "baseCostPrice": 22.0,
+      "supplierId": "1790022222001"
+    }
+  ],
+  "suppliers": [
+    {
+      "fullName": "Holcim Ecuador",
+      "id1": "1790099999001",
+      "id2": "",
+      "phone": "042000111",
+      "email": "ventas@holcim.com.ec",
+      "description": "Cemento y hormigón"
+    },
+    {
+      "fullName": "Acería del Ecuador (ADELCA)",
+      "id1": "1790088888001",
+      "id2": "",
+      "phone": "022000222",
+      "email": "pedidos@adelca.com",
+      "description": "Hierro y acero"
+    },
+    {
+      "fullName": "Pinturas Condor",
+      "id1": "1790077777001",
+      "id2": "",
+      "phone": "022000333",
+      "email": "info@pinturascondor.com",
+      "description": "Pinturas y recubrimientos"
+    },
+    {
+      "fullName": "Herramientas Bosch",
+      "id1": "1790066666001",
+      "id2": "IMP-BOSH",
+      "phone": "022000444",
+      "email": "ventas@bosch.ec",
+      "description": "Herramientas eléctricas profesionales"
+    },
+    {
+      "fullName": "Plastigama Wavin",
+      "id1": "1790055555001",
+      "id2": "",
+      "phone": "042000555",
+      "email": "contacto@plastigama.com",
+      "description": "Tuberías y conexiones PVC"
+    },
+    {
+      "fullName": "FV Andina",
+      "id1": "1790044444001",
+      "id2": "",
+      "phone": "022000666",
+      "email": "ventas@fv.com.ec",
+      "description": "Grifería y sanitarios"
+    },
+    {
+      "fullName": "Stanley Black \u0026 Decker",
+      "id1": "1790033333001",
+      "id2": "",
+      "phone": "022000777",
+      "email": "info@stanley.com",
+      "description": "Herramientas manuales"
+    },
+    {
+      "fullName": "Sika Ecuatoriana",
+      "id1": "1790022222001",
+      "id2": "",
+      "phone": "042000888",
+      "email": "pedidos@sika.com.ec",
+      "description": "Impermeabilizantes y aditivos"
+    }
+  ],
+  "inventories": [
+    {
+      "name": "Local Centro",
+      "address": {
+        "country": "Ecuador",
+        "city": "Cuenca",
+        "street": "Calle Larga"
+      },
+      "productStock": {
+        "FER-004": 20,
+        "FER-003": 10,
+        "FER-007": 8,
+        "FER-006": 15,
+        "FER-001": 50
+      }
+    },
+    {
+      "name": "Bodega Materiales Pesados",
+      "address": {
+        "country": "Ecuador",
+        "city": "Cuenca",
+        "street": "Parque Industrial"
+      },
+      "productStock": {
+        "FER-005": 100,
+        "FER-002": 199,
+        "FER-008": 40,
+        "FER-001": 500
+      }
+    }
+  ],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Cuenca",
+      "street": "Bodega Devoluciones"
+    },
+    "productStock": {
+      "FER-004": 1
+    }
+  },
+  "invoices": [
+    {
+      "id": "F-1",
+      "date": "2025-12-04",
+      "customer": {
+        "name": "Jose Maria Velez",
+        "identification": "0105060708",
+        "phone": "0988883333",
+        "email": "jmvelez@outlook.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "FER-002",
+          "productName": "Varilla Hierro 12mm",
+          "quantity": 1,
+          "priceApplied": 11.049999,
+          "lineTotal": 11.049999
+        }
+      ],
+      "subtotal": 11.049999,
+      "tax": 1.6574999,
+      "total": 12.7074995,
+      "paymentMethod": "CASH",
+      "paymentDueDate": "",
+      "status": "COMPLETED"
+    }
+  ],
+  "returns": [],
+  "taxRate": 0.15,
+  "profitPercentage": 0.3,
+  "discountStandard": 0.0,
+  "discountPremium": 0.08,
+  "discountVip": 0.15
+}

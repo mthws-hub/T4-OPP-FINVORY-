@@ -1,0 +1,110 @@
+{
+  "companyInfo": {
+    "name": "Frico Autopartes S.A.",
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Av. Galo Plaza Lasso N45",
+      "zipCode": "170101",
+      "streetNumber": "N45-23",
+      "region": "Pichincha"
+    },
+    "ruc": "1799999999001",
+    "phone": "022444555",
+    "email": "gerencia@frico.com",
+    "username": "admin",
+    "password": "123"
+  },
+  "adminInfo": null,
+  "companyAccounts": [],
+  "products": [
+    {
+      "id": "P-001",
+      "name": "Pastillas de Freno Ceramica",
+      "description": "Juego delantero para Chevrolet/Aveo",
+      "barcode": "786100000001",
+      "baseCostPrice": 25.0,
+      "supplierId": "1790012345001"
+    }
+  ],
+  "inventories": [
+    {
+      "name": "Bodega Norte (Matriz)",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Av. Galo Plaza Lasso"
+      },
+      "productStock": {
+        "P-001": 100,
+        "P-002": 200,
+        "P-003": 30,
+        "P-004": 40,
+        "P-005": 100,
+        "P-011": 15,
+        "P-012": 10
+      }
+    },
+    {
+      "name": "Bodega Sur",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Av. Maldonado"
+      },
+      "productStock": {
+        "P-001": 50,
+        "P-006": 80,
+        "P-007": 20,
+        "P-008": 15,
+        "P-013": 25,
+        "P-014": 30
+      }
+    },
+    {
+      "name": "Sucursal Guayaquil",
+      "address": {
+        "country": "Ecuador",
+        "city": "Guayaquil",
+        "street": "Av. Juan Tanca Marengo"
+      },
+      "productStock": {
+        "P-002": 100,
+        "P-003": 50,
+        "P-009": 60,
+        "P-010": 25,
+        "P-015": 200
+      }
+    }
+  ],
+  "personalAccounts": [
+    {
+      "fullName": "Vendedor Mostrador 1",
+      "username": "vend1",
+      "password": "123"
+    },
+    {
+      "fullName": "Vendedor Mayorista",
+      "username": "vend2",
+      "password": "123"
+    }
+  ],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Bodega Obsoletos"
+    },
+    "productStock": {
+      "P-001": 2,
+      "P-005": 5
+    }
+  },
+  "invoices": [],
+  "returns": [],
+  "taxRate": 0.15,
+  "profitPercentage": 0.40,
+  "discountStandard": 0.0,
+  "discountPremium": 0.05,
+  "discountVip": 0.12
+}

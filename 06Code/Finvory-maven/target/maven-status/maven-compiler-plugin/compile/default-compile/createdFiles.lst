@@ -72,11 +72,13 @@ ec\edu\espe\finvory\model\Address.class
 ec\edu\espe\finvory\model\InvoiceLineSim.class
 ec\edu\espe\finvory\view\FrmCustomers$1.class
 ec\edu\espe\finvory\view\FrmAddNewSupplier.class
+ec\edu\espe\finvory\mongo\MongoDataExporter.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$3.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$3.class
 ec\edu\espe\finvory\view\FrmPrices$1.class
 ec\edu\espe\finvory\view\FrmProducts$1.class
 ec\edu\espe\finvory\view\FrmProductReturns$3.class
+ec\edu\espe\finvory\mongo\MongoDBConnection.class
 ec\edu\espe\finvory\view\FrmCustomers$4.class
 ec\edu\espe\finvory\view\FrmEditProductListOnInvoice$1.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$3.class
