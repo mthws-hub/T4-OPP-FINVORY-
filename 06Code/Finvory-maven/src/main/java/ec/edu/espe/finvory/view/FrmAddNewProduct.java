@@ -1,5 +1,9 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.model.Supplier;
+import ec.edu.espe.finvory.model.Product;
+import ec.edu.espe.finvory.model.Inventory;
 import javax.swing.JOptionPane;
 
 /**
@@ -9,25 +13,94 @@ import javax.swing.JOptionPane;
 public class FrmAddNewProduct extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmAddNewProduct.class.getName());
+    private FinvoryController controller;
+    private String productIdToEdit = null;
+    private boolean isInitialized = false;
+    
+    public FrmAddNewProduct() {
+        initComponents();
+        this.setLocationRelativeTo(null);
+    }
 
     /**
      * Creates new form FrmAddNewProduct
+     * @param controller
      */
-    public FrmAddNewProduct() {
-        initComponents();
+    public FrmAddNewProduct(FinvoryController controller) {
+        this();
+        this.controller = controller;
         initializeComboBoxModels();
+        txtDescription.setText("");
     }
+    /**
+     * Creates new form FrmAddNewProduct
+     * @param controller 
+     * @param productId
+     */
+    public FrmAddNewProduct(FinvoryController controller, String productId) {
+        this(controller); 
+        this.productIdToEdit = productId;
+        loadProductData(productId); 
+    }
+    
     private void initializeComboBoxModels() {
+        if (isInitialized) {
+            return;
+        }
         cmbProductSupplier.removeAllItems();
-        cmbProductSupplier.addItem("Seleccione Proveedor..."); 
-        cmbProductSupplier.addItem("Jose Rodriguez (ID: 00145)"); 
-        cmbProductSupplier.addItem("Martin Sanchez (ID: 17223)");
+        cmbProductSupplier.addItem("Seleccione Proveedor");
+        
+        if (controller.getData() != null && controller.getData().getSuppliers() != null) {
+            for (Supplier s : controller.getData().getSuppliers()) {
+                cmbProductSupplier.addItem(s.getFullName() + " (ID: " + s.getId1() + ")");
+            }
+        }
+
         cmbInitialStock.removeAllItems();
-        cmbInitialStock.addItem("Seleccione Inventario..."); 
-        cmbInitialStock.addItem("Bodega Norte (Matriz)");
-        cmbInitialStock.addItem("Sucursal Guayaquil");
-        txtDescription.setText(""); 
+        cmbInitialStock.addItem("Seleccione Inventario...");
+
+        if (controller.getData() != null && controller.getData().getSuppliers() != null) {
+            for (Supplier s : controller.getData().getSuppliers()) {
+                cmbProductSupplier.addItem(s.getFullName() + " (ID: " + s.getId1() + ")");
+            }
+        }
+
+        if (controller.getData() != null && controller.getData().getInventories() != null) {
+            for (Inventory i : controller.getData().getInventories()) {
+                cmbInitialStock.addItem(i.getName());
+            }
+        }
+        isInitialized = true;
     }
+    
+    private void loadProductData(String productId) {
+        Product product = controller.findProduct(productId); 
+        
+        if (product == null) {
+            JOptionPane.showMessageDialog(this, "Producto no encontrado para edición.", "Error", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+            return;
+        }
+       
+        txtID.setText(product.getId());
+        txtID.setEnabled(false); 
+        txtBarCode.setText(product.getBarcode());
+        txtProductName.setText(product.getName());
+        txtDescription.setText(product.getDescription());
+        ftfPrice.setText(String.valueOf(product.getBaseCostPrice()));
+        ftfInitialStock.setText("0"); 
+        cmbInitialStock.setSelectedIndex(0); 
+        
+        if (product.getSupplierId() != null) {
+            for (int i = 0; i < cmbProductSupplier.getItemCount(); i++) {
+                if (cmbProductSupplier.getItemAt(i).contains("(ID: " + product.getSupplierId() + ")")) {
+                    cmbProductSupplier.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+    }
+    
     private void emptyFields() {
     txtID.setText("");
     txtBarCode.setText("");
@@ -37,6 +110,9 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
     ftfInitialStock.setText("");
     cmbProductSupplier.setSelectedIndex(0);
     cmbInitialStock.setSelectedIndex(0);
+    if (productIdToEdit == null) {
+            txtID.setEnabled(true);
+        }
     }
     
     private Object[] validateFieldsAndConvert() {
@@ -79,6 +155,25 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error: Ingrese un número decimal válido para el Precio de Costo.", "Dato Incorrecto", JOptionPane.ERROR_MESSAGE);
             return null;
         }
+        
+        try {
+            String stockText = ftfInitialStock.getText().trim();
+            
+            if (!stockText.matches("^-?\\d+$")) { 
+                JOptionPane.showMessageDialog(this, "Error: El Stock Inicial debe ser un número entero (sin decimales).", "Dato Incorrecto", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+
+            stock = Integer.parseInt(stockText);
+            if (stock < 0) {
+                JOptionPane.showMessageDialog(this, "Error: El Stock Inicial no puede ser negativo.", "Validación Numérica", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Error: Ingrese un número entero válido para el Stock Inicial.", "Dato Incorrecto", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        
         return new Object[]{id, barcode, name, description, costPrice, stock, supplierName, inventoryName};
     }
 
@@ -156,48 +251,45 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane5))
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(44, 44, 44)))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel9)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(cmbInitialStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel8)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(cmbProductSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel6)
-                                        .addComponent(jLabel7))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(ftfInitialStock, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(ftfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(209, 209, 209))))
-                        .addGap(26, 26, 26)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(44, 44, 44)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel9)
+                            .addGap(18, 18, 18)
+                            .addComponent(cmbInitialStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel8)
+                            .addGap(18, 18, 18)
+                            .addComponent(cmbProductSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel7))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(ftfInitialStock, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ftfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(209, 209, 209))))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,12 +442,79 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         Object[] productData = validateFieldsAndConvert();
     
         if (productData != null) {
-        // SIN DB: Se confirma el registro y limpia la pantalla.
-        JOptionPane.showMessageDialog(this, 
-            "Producto '" + productData[2] + "' validado y listo para ser guardado.", 
-            "Validación Completa", JOptionPane.INFORMATION_MESSAGE);
-        emptyFields();
-    }
+            
+            String id = (String) productData[0];
+            String barcode = (String) productData[1];
+            String name = (String) productData[2];
+            String description = (String) productData[3];
+            float costPrice = (float) productData[4];
+            int stock = (int) productData[5];
+            String supplierItem = (String) productData[6];
+            String inventoryName = (String) productData[7];
+            String supplierId = supplierItem.substring(supplierItem.indexOf("(ID: ") + 5, supplierItem.length() - 1);
+            
+            if (productIdToEdit == null) {
+                if (controller.findProduct(id) != null) {
+                    JOptionPane.showMessageDialog(this, "Error: ID de producto duplicado.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (controller.findProductByBarcode(barcode) != null) {
+                    JOptionPane.showMessageDialog(this, "Error: Código de Barras duplicado.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                Inventory targetInventory = null;
+                for (Inventory inv : controller.getData().getInventories()) {
+                    if (inv.getName().equals(inventoryName)) {
+                        targetInventory = inv;
+                        break;
+                    }
+                }
+                
+                if (targetInventory != null) {
+                    Product newProduct = new Product(id, name, description, barcode, costPrice, supplierId);
+                    controller.getData().getProducts().add(newProduct);
+                    targetInventory.setStock(id, stock);
+                    
+                    controller.saveData(); 
+                    JOptionPane.showMessageDialog(this, "Producto '" + name + "' registrado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose(); 
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error: Inventario de destino no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } else {
+                Product existingProduct = controller.findProduct(productIdToEdit);
+                
+                if (existingProduct != null) {
+                    existingProduct.setBarcode(barcode);
+                    existingProduct.setName(name);
+                    existingProduct.setDescription(description);
+                    existingProduct.setBaseCostPrice(costPrice);
+                    existingProduct.setSupplierId(supplierId);
+                    
+                    if (stock > 0) {
+                        Inventory targetInventory = null;
+                        for (Inventory inv : controller.getData().getInventories()) {
+                            if (inv.getName().equals(inventoryName)) {
+                                targetInventory = inv;
+                                break;
+                            }
+                        }
+                        if (targetInventory != null) {
+                            targetInventory.addStock(existingProduct.getId(), stock);
+                            JOptionPane.showMessageDialog(this, "Se agregaron " + stock + " unidades a " + targetInventory.getName(), "Stock Añadido", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                    
+                    controller.saveData(); 
+                    JOptionPane.showMessageDialog(this, "Producto '" + name + "' actualizado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error: Producto no encontrado para actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -390,11 +549,6 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -405,9 +559,6 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrmAddNewProduct().setVisible(true));
     }
 

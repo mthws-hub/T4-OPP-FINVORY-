@@ -74,4 +74,8 @@ public class Product {
     public void setSupplierId(String supplierId) { 
         this.supplierId = supplierId; 
     }
+    
+    public void setBarcode(String barcode) { 
+        this.barcode = barcode; 
+    }
 }

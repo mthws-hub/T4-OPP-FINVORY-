@@ -113,6 +113,23 @@ public class MongoDataExporter {
 
         collection.insertOne(document);
     }
+    
+    public static void exportCompanyData(String companyUsername, FinvoryData data, CompanyAccount companyAccount) {
+        MongoDatabase mongoDatabase = ec.edu.espe.finvory.FinvoryApp.getMongoDBConnection().getDatabase();
+
+        if (mongoDatabase == null) {
+            System.err.println("ERROR: La conexión a MongoDB no está activa.");
+            return;
+        }
+        exportCompanyInfo(companyUsername, companyAccount, data, mongoDatabase);
+        exportCustomers(companyUsername, data.getCustomers(), mongoDatabase);
+        exportSuppliers(companyUsername, data.getSuppliers(), mongoDatabase);
+        exportProducts(companyUsername, data.getProducts(), mongoDatabase);
+        exportInventories(companyUsername, data.getInventories(), data.getProducts(), mongoDatabase);
+        exportObsoleteInventory(companyUsername, data.getObsoleteInventory(), data.getProducts(), mongoDatabase);
+        exportInvoices(companyUsername, data.getInvoices(), mongoDatabase);
+        exportReturns(companyUsername, data.getReturns(), mongoDatabase);
+    }
 
     private static void exportCustomers(String companyUsername, List<Customer> customers, MongoDatabase mongoDatabase) {
         MongoCollection<Document> collection = mongoDatabase.getCollection("customers");

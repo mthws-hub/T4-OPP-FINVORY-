@@ -1,7 +1,10 @@
 package ec.edu.espe.finvory.controller;
 
+import ec.edu.espe.finvory.view.FrmProducts;
+import ec.edu.espe.finvory.view.FrmCustomers;
 import ec.edu.espe.finvory.model.*;
 import ec.edu.espe.finvory.view.FinvoryView;
+import ec.edu.espe.finvory.mongo.MongoDataExporter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,6 +25,64 @@ public class FinvoryController {
     private FinvoryView view; 
     private Database dataBase;
     private String currentCompanyUsername;
+    
+    public FinvoryData getData() {
+        return data;
+    }
+    
+    public void saveData() {
+        if (currentCompanyUsername != null && data != null && data.getCompanyInfo() != null) {
+            dataBase.saveCompanyData(data, currentCompanyUsername);
+            
+            try {
+                MongoDataExporter.exportCompanyData(
+                    currentCompanyUsername, 
+                    data, 
+                    data.getCompanyInfo() // Necesitas la CompanyAccount actual
+                );
+                view.showMessage("INFO: Datos sincronizados exitosamente con MongoDB.");
+            } catch (Exception e) {
+                view.showError("ERROR: Fallo la exportación a MongoDB: " + e.getMessage());
+            }
+        }
+    
+    }
+    
+    public Product findProductPublic(String id) {
+        return findProduct(id);
+    }
+    
+    public Product findProductByBarcodePublic(String barcode) {
+        return findProductByBarcode(barcode);
+    }
+    public Customer findCustomerPublic(String format) {
+        return findCustomer(format); 
+    }
+    public boolean handleDeleteProduct(String productId) {
+        Product product = findProduct(productId);
+        if (product == null) {
+            view.showError("Producto no encontrado.");
+            return false;
+        }
+        
+        for (InvoiceSim invoiceSim : data.getInvoices()) {
+            for (InvoiceLineSim line : invoiceSim.getLines()) {
+                if (line.getProductId().equals(product.getId())) {
+                    view.showError("No se puede eliminar. El producto ya está en una factura.");
+                    return false;
+                }
+            }
+        }
+        
+        data.getProducts().remove(product);
+        for (Inventory inventory : data.getInventories()) {
+            inventory.removeStock(product.getId(), inventory.getStock(product.getId()));
+        }
+        data.getObsoleteInventory().removeStock(product.getId(), data.getObsoleteInventory().getStock(product.getId()));
+        saveData();
+        view.showMessage("Producto eliminado del sistema.");
+        return true;
+    }
 
     public FinvoryController(FinvoryView view, Database db) {
         this.view = view;
@@ -39,7 +100,6 @@ public class FinvoryController {
                     if (role.equals("COMPANY")) {
                         this.data = dataBase.loadCompanyData(currentCompanyUsername);
                         
-                        // Asegurar que el objeto CompanyAccount esté actualizado en la data cargada
                         CompanyAccount currentAccount = findCompanyByUsername(currentCompanyUsername);
                         this.data.setCompanyInfo(currentAccount);
                         
@@ -272,20 +332,8 @@ public class FinvoryController {
 
     // --- 2. LOGICA DE INVENTARIO ---
     private void handleInventoryMenu() {
-        boolean running = true;
-        while (running) {
-            int option = view.showInventoryMenu();
-            switch (option) {
-                case 1 -> handleViewProducts();
-                case 2 -> handleEditProduct();
-                case 3 -> handleDeleteProduct();
-                case 4 -> handleProcessReturn();
-                case 5 -> handleManageObsolete();
-                case 6 -> handleAddStockToInventory();
-                case 0 -> running = false;
-                default -> view.showError("Opcion no valida.");
-            }
-        }
+        FrmProducts productsWindow = new FrmProducts(this);
+        productsWindow.setVisible(true);
     }
 
     private void handleViewProducts() {
@@ -327,29 +375,6 @@ public class FinvoryController {
             view.showMessage("Producto actualizado.");
         } catch (NumberFormatException e) {
             view.showError("El costo no es un numero valido.");
-        }
-    }
-
-    private void handleDeleteProduct() {
-        Product product = findProduct(view.askProductId());
-        if (product == null) return;
-        
-        for (InvoiceSim invoiceSim : data.getInvoices()) {
-            for (InvoiceLineSim line : invoiceSim.getLines()) {
-                if (line.getProductId().equals(product.getId())) {
-                    view.showError("No se puede eliminar. El producto ya esta en una factura.");
-                    return;
-                }
-            }
-        }
-        
-        if (view.askConfirmation("Seguro que desea eliminar '" + product.getName() + "'? (s/n)")) {
-            data.getProducts().remove(product);
-            for (Inventory inventory : data.getInventories()) {
-                inventory.removeStock(product.getId(), inventory.getStock(product.getId()));
-            }
-            data.getObsoleteInventory().removeStock(product.getId(), data.getObsoleteInventory().getStock(product.getId()));
-            view.showMessage("Producto eliminado.");
         }
     }
 
@@ -413,19 +438,8 @@ public class FinvoryController {
     }
 
     private void handleCustomerMenu() {
-        boolean running = true;
-        while (running) {
-            int option = view.showCustomerMenu();
-            switch (option) {
-                case 1 -> handleCreateCustomer();
-                case 2 -> handleViewCustomers();
-                case 3 -> handleEditCustomer();
-                case 4 -> handleDeleteCustomer();
-                case 5 -> handleRegisterPayment();
-                case 0 -> running = false;
-                default -> view.showError("Opcion no valida.");
-            }
-        }
+        FrmCustomers customersWindow = new FrmCustomers(this);
+        customersWindow.setVisible(true);
     }
     
     private void handleRegisterPayment() {
@@ -481,37 +495,26 @@ public class FinvoryController {
         view.showMessage("Cliente actualizado.");
     }
     
-    private void handleDeleteCustomer() {
-        Customer customer = findCustomer(view.askCustomerId());
+    public boolean handleDeleteCustomerGUI(String customerId) {
+        Customer customer = findCustomer(customerId);
         if (customer == null) {
             view.showError("Cliente no encontrado.");
-            return;
+            return false;
         }
         for (InvoiceSim invoiceSim : data.getInvoices()) {
             if (invoiceSim.getCustomer().getIdentification().equals(customer.getIdentification())) {
                 view.showError("No se puede eliminar. El cliente tiene facturas.");
-                return;
+                return false;
             }
         }
-        if (view.askConfirmation("Seguro que desea eliminar? (s/n)")) {
-            data.getCustomers().remove(customer);
-            view.showMessage("Cliente eliminado.");
-        }
+        data.getCustomers().remove(customer);
+        saveData();
+        return true;
     }
+        
 
     private void handleSupplierMenu() {
-        boolean running = true;
-        while (running) {
-            int option = view.showSupplierMenu();
-            switch (option) {
-                case 1 -> handleCreateSupplier();
-                case 2 -> handleViewSuppliers();
-                case 3 -> handleEditSupplier();
-                case 4 -> handleDeleteSupplier();
-                case 0 -> running = false;
-                default -> view.showError("Opcion no valida.");
-            }
-        }
+        handleViewSuppliers();
     }
     
     private void handleViewSuppliers() {
@@ -809,12 +812,12 @@ public class FinvoryController {
         }
     }
     
-    private Product findProduct(String id) {
+    public Product findProduct(String id) {
         if (id == null) return null;
         for (Product product : data.getProducts()) if (id.equals(product.getId())) return product;
         return null;
     }
-    private Product findProductByBarcode(String barcode) {
+    public Product findProductByBarcode(String barcode) {
         if (barcode == null) return null;
         for (Product product : data.getProducts()) if (barcode.equals(product.getBarcode())) return product;
         return null;

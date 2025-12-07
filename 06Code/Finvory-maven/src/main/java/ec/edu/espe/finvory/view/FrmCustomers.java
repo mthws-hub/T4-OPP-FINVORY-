@@ -1,5 +1,8 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.model.Customer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -8,6 +11,7 @@ import javax.swing.JOptionPane;
  */
 public class FrmCustomers extends javax.swing.JFrame {
     
+    private FinvoryController controller;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmCustomers.class.getName());
 
     /**
@@ -15,7 +19,43 @@ public class FrmCustomers extends javax.swing.JFrame {
      */
     public FrmCustomers() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
+    
+    /**
+     * Creates new form Customers 
+     * @param controller
+     */
+    public FrmCustomers(FinvoryController controller) {
+        this(); // Llama a initComponents()
+        this.controller = controller;
+        loadCustomerTable();
+    }
+    
+    private void loadCustomerTable() {
+        DefaultTableModel model = (DefaultTableModel) jTableCustomer.getModel();
+        model.setRowCount(0);
+        
+        if (controller == null || controller.getData() == null) {
+            JOptionPane.showMessageDialog(this, "Error: El controlador o los datos no están inicializados.", "Error de Sistema", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        try {
+            for (Customer c : controller.getData().getCustomers()) {
+                model.addRow(new Object[]{
+                    c.getIdentification(),
+                    c.getName(),
+                    c.getEmail(),
+                    c.getClientType()
+                });
+            }
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(this, "Error al cargar la tabla de clientes: " + e.getMessage(), "Error de Datos", JOptionPane.ERROR_MESSAGE);
+             logger.log(java.util.logging.Level.SEVERE, "Error al cargar clientes", e);
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -208,17 +248,19 @@ public class FrmCustomers extends javax.swing.JFrame {
         }
     
         String customerId = jTableCustomer.getValueAt(selectedRow, 0).toString();
-        FrmAddNewCustomer editCustomerWindow = new FrmAddNewCustomer();
+        FrmAddNewCustomer editCustomerWindow = new FrmAddNewCustomer(this.controller, customerId);
         JOptionPane.showMessageDialog(editCustomerWindow, 
-            "Simulación de Edición: Cargando datos para el ID: " + customerId, 
+            "Cargando datos para el ID: " + customerId, 
             "Modo Edición", JOptionPane.INFORMATION_MESSAGE
         );
         editCustomerWindow.setVisible(true);
+        loadCustomerTable();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         FrmAddNewCustomer newCustomerWindow = new FrmAddNewCustomer();
         newCustomerWindow.setVisible(true);
+        loadCustomerTable();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -228,15 +270,22 @@ public class FrmCustomers extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un cliente de la lista para borrar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-    
+        
+        String customerId = jTableCustomer.getValueAt(selectedRow, 0).toString();
         int confirm = JOptionPane.showConfirmDialog(this, 
-            "¿Está seguro de que desea eliminar el cliente seleccionado?", 
+            "¿Está seguro de que desea eliminar el cliente con ID: " + customerId + "?", 
             "Confirmar Eliminación", 
             JOptionPane.YES_NO_OPTION
         );
+        
         if (confirm == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(this, "Cliente eliminado con éxito (Simulación).", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            if (controller.handleDeleteCustomerGUI(customerId)) {
+                JOptionPane.showMessageDialog(this, "Cliente eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                 JOptionPane.showMessageDialog(this, "No se pudo eliminar. El cliente tiene facturas pendientes o no fue encontrado.", "Error de Eliminación", JOptionPane.ERROR_MESSAGE);
+            }
         }
+        loadCustomerTable();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
@@ -247,11 +296,6 @@ public class FrmCustomers extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -262,9 +306,6 @@ public class FrmCustomers extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrmCustomers().setVisible(true));
     }
 

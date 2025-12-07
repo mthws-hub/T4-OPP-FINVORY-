@@ -215,7 +215,7 @@ public class FrmSuppliers extends javax.swing.JFrame {
         String supplierId = cellValue.toString();
         FrmAddNewSupplier editSupplierWindow = new FrmAddNewSupplier();
         JOptionPane.showMessageDialog(editSupplierWindow, 
-            "Simulación de Edición: Cargando datos para el RUC: " + supplierId, 
+            "Cargando datos para el RUC: " + supplierId, 
         "Modo Edición", JOptionPane.INFORMATION_MESSAGE
         );
         editSupplierWindow.setVisible(true);

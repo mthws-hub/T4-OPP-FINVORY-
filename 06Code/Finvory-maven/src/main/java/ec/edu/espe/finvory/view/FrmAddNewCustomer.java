@@ -1,5 +1,8 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.model.Customer;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 
 /**
@@ -8,6 +11,8 @@ import javax.swing.JOptionPane;
  */
 public class FrmAddNewCustomer extends javax.swing.JFrame {
     
+    private FinvoryController controller;
+    private String customerIdToEdit = null;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmAddNewCustomer.class.getName());
 
     /**
@@ -15,22 +20,53 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
      */
     public FrmAddNewCustomer() {
         initComponents(); 
+        this.setLocationRelativeTo(null);
     }
-    private boolean validateData(String id, String phone, String email) {
+    
+    /**
+     * Builder for ADD MODE
+     */
+    public FrmAddNewCustomer(FinvoryController controller) {
+        this();
+        this.controller = controller;
+    }
+    
+    /**
+     * Builder for EDIT MODE
+     */
+    public FrmAddNewCustomer(FinvoryController controller, String customerId) {
+        this(controller);
+        this.customerIdToEdit = customerId;
+        loadCustomerData(customerId);
+    }
+    
+    private void loadCustomerData(String customerId) {
+        Customer customer = controller.findCustomerPublic(customerId);
         
-        //Validación de ID (RUC/CI)
+        if (customer == null) {
+            JOptionPane.showMessageDialog(this, "Cliente no encontrado para edición.", "Error", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+            return;
+        }
+        txtID.setText(customer.getIdentification());
+        txtID.setEnabled(false); 
+        txtName.setText(customer.getName());
+        txtPhone.setText(customer.getPhone());
+        txtEmail.setText(customer.getEmail());
+        cmbTypeOfCustomer.setSelectedItem(customer.getClientType());
+    }
+    
+    private boolean validateData(String id, String phone, String email) {
         if (id.length() != 10 && id.length() != 13) {
             JOptionPane.showMessageDialog(this, "Error: El ID (RUC/CI) debe tener 10 o 13 dígitos.", "Validación", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         
-        //Validación de Teléfono
         if (!phone.matches("^\\+?[0-9\\s]{7,15}$")) {
             JOptionPane.showMessageDialog(this, "Error: Ingrese un formato de teléfono válido.", "Validación", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-        //Validación de Email
         if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
             JOptionPane.showMessageDialog(this, "Error: Ingrese un formato de email válido.", "Validación", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -44,6 +80,8 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
         txtPhone.setText("");
         txtEmail.setText("");
         cmbTypeOfCustomer.setSelectedIndex(0);
+        txtID.setEnabled(true);
+        this.customerIdToEdit = null;
     }
   
 
@@ -258,8 +296,35 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
         if (!validateData(id, phone, email)) {
             return;
         }
-        JOptionPane.showMessageDialog(this, "Cliente '" + name + "' registrado con éxito como " + clientType + ".", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        emptyFields();
+        
+        if (customerIdToEdit == null) {
+            Customer existing = controller.findCustomerPublic(id);
+            if (existing != null) {
+                 JOptionPane.showMessageDialog(this, "Error: Ya existe un cliente con esta identificación.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
+                 return;
+            }
+            
+            Customer newCustomer = new Customer(name, id, phone, email, clientType);
+            controller.getData().getCustomers().add(newCustomer);
+            JOptionPane.showMessageDialog(this, "Cliente '" + name + "' registrado con éxito como " + clientType + ".", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            controller.saveData();
+            emptyFields();
+            this.dispose();
+            
+        } else {
+            Customer existing = controller.findCustomerPublic(id);
+            if (existing != null) {
+                existing.setName(name);
+                existing.setPhone(phone);
+                existing.setEmail(email);
+                existing.setClientType(clientType);
+                controller.saveData();
+                JOptionPane.showMessageDialog(this, "Cliente '" + name + "' actualizado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error: Cliente de edición no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
@@ -282,11 +347,6 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -297,9 +357,6 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrmAddNewCustomer().setVisible(true));
     }
 
