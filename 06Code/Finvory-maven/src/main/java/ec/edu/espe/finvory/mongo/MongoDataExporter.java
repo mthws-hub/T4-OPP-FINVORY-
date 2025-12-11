@@ -2,6 +2,7 @@ package ec.edu.espe.finvory.mongo;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import ec.edu.espe.finvory.model.Address;
 import ec.edu.espe.finvory.model.CompanyAccount;
 import ec.edu.espe.finvory.model.Customer;
@@ -129,6 +130,24 @@ public class MongoDataExporter {
         exportObsoleteInventory(companyUsername, data.getObsoleteInventory(), data.getProducts(), mongoDatabase);
         exportInvoices(companyUsername, data.getInvoices(), mongoDatabase);
         exportReturns(companyUsername, data.getReturns(), mongoDatabase);
+        
+        try {
+            MongoCollection<Document> configCol = MongoDBConnection.getCollection("configurations");
+            
+            configCol.deleteMany(Filters.eq("companyUsername", companyUsername));
+     
+            Document configDoc = new Document("companyUsername", companyUsername)
+                    .append("taxRate", data.getTaxRate())
+                    .append("profitPercentage", data.getProfitPercentage())
+                    .append("discountStandard", data.getDiscountStandard())
+                    .append("discountPremium", data.getDiscountPremium())
+                    .append("discountVip", data.getDiscountVip());
+            configCol.insertOne(configDoc);
+            System.out.println("DEBUG: Algoritmo de precios sincronizado con la nube.");
+            
+        } catch (Exception e) {
+            System.err.println("Error subiendo configuración: " + e.getMessage());
+        }
     }
 
     private static void exportCustomers(String companyUsername, List<Customer> customers, MongoDatabase mongoDatabase) {

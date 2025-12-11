@@ -16,9 +16,63 @@
     "password": "123"
   },
   "customers": [],
-  "products": [],
-  "suppliers": [],
-  "inventories": [],
+  "products": [
+    {
+      "id": "DLLA123",
+      "name": "Frenos BMW",
+      "description": "sirven para los bmw",
+      "barcode": "12434354231",
+      "baseCostPrice": 70.6,
+      "supplierId": "1234315652001"
+    },
+    {
+      "id": "DSSA",
+      "name": "Pastillas de frenos",
+      "description": "Sirven apra frenar",
+      "barcode": "1234512094531",
+      "baseCostPrice": 23.0,
+      "supplierId": "1234315652001"
+    }
+  ],
+  "suppliers": [
+    {
+      "fullName": "Maryuri Salome Quina Molina",
+      "id1": "1234315652001",
+      "id2": "",
+      "phone": "0927890399",
+      "email": "maryuri@gmail.com",
+      "description": "buenos productos"
+    }
+  ],
+  "inventories": [
+    {
+      "name": "Bodega Sur",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Azcasubi",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {
+        "DLLA123": 34,
+        "DSSA": 50
+      }
+    },
+    {
+      "name": "Central",
+      "address": {
+        "country": "Colombia",
+        "city": "Cali",
+        "street": "Avenida Principal",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {}
+    }
+  ],
   "obsoleteInventory": {
     "address": {
       "country": "Ecuador",

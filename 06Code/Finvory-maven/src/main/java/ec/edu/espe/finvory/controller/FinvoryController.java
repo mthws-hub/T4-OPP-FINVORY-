@@ -671,6 +671,8 @@ public class FinvoryController {
     private void handleSetTaxRate() {
         float newRate = view.askNewTaxRate(data.getTaxRate());
         data.setTaxRate(newRate);
+        
+        saveData();
         view.showMessage("Impuesto actualizado.");
     }
 
@@ -721,11 +723,12 @@ public class FinvoryController {
     private void handleSetPriceAlgorithm() {
         view.showMessage("Configurando algoritmo de precios...");
         HashMap<String, Float> percentages = view.askPriceAlgorithmData(data);
+
         data.setProfitPercentage(percentages.get("profit"));
         data.setDiscountStandard(percentages.get("discountStandard"));
         data.setDiscountPremium(percentages.get("discountPremium"));
         data.setDiscountVip(percentages.get("discountVip"));
-        view.showMessage("Algoritmo actualizado.");
+        saveData();
     }
 
     private void handleReportsMenu() {

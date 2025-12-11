@@ -2,58 +2,134 @@ package ec.edu.espe.finvory.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import ec.edu.espe.finvory.mongo.MongoDBConnection;
+import org.bson.Document;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Locale;
-/**
- *
- * @author Joseph Medina, The POOwer Rangers of Programming
- */
 
+/**
+ * 
+ * @author Joseph Medina
+ */
 public class Database {
 
     private static final String ROOT_DATA_FOLDER = "data";
     private static final String UTILS_FOLDER = "utils";
     private static final String USERS_FILE = UTILS_FOLDER + File.separator + "users.json";
-    
     private static final String DELIMITER = ";";
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public SystemUsers loadUsers() {
-        File file = new File(USERS_FILE);
-        if (file.exists()) {
-            try (Reader reader = new FileReader(file)) {
-                SystemUsers users = gson.fromJson(reader, SystemUsers.class);
-                if (users != null) return users;
-            } catch (IOException e) {
-                System.err.println("Error cargando usuarios: " + e.getMessage());
-            }
-        }
-        return new SystemUsers(); 
-    }
-
-    public void saveUsers(SystemUsers users) {
-        try {
-            File file = new File(USERS_FILE);
-            new File(file.getParent()).mkdirs();
-            try (Writer writer = new FileWriter(file)) {
-                gson.toJson(users, writer);
-            }
-        } catch (IOException e) {
-            System.err.println("Error guardando usuarios: " + e.getMessage());
-        }
-    }
-
     public FinvoryData loadCompanyData(String companyUsername) {
+        System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
+
+        FinvoryData cloudData = loadDataFromCloud(companyUsername);
+        
+        if (cloudData != null) {
+            System.out.println("Datos descargados de MongoDB Atlas.");
+            System.out.println("   -> Inventarios: " + cloudData.getInventories().size());
+            System.out.println("   -> Productos: " + cloudData.getProducts().size());
+            saveCompanyData(cloudData, companyUsername);
+            return cloudData;
+        }
+
+        System.out.println("No se pudo cargar de la nube (o está vacía). Usando datos locales.");
         String folder = ROOT_DATA_FOLDER + File.separator + companyUsername;
-        FinvoryData data = loadJson(folder);
+        FinvoryData localData = loadJson(folder);
+        localData.getCustomers().addAll(loadCustomersCsv(folder));
+        localData.getSuppliers().addAll(loadSuppliersCsv(folder));
         
-        data.getCustomers().addAll(loadCustomersCsv(folder));
-        data.getSuppliers().addAll(loadSuppliersCsv(folder));
-        
-        return data;
+        return localData;
+    }
+
+    private FinvoryData loadDataFromCloud(String username) {
+        try {
+            if (MongoDBConnection.getCollection("products") == null) {
+                return null;
+            }
+
+            FinvoryData data = new FinvoryData();
+
+            
+            MongoCollection<Document> prodCol = MongoDBConnection.getCollection("products");
+            for (Document doc : prodCol.find(Filters.eq("companyUsername", username))) {
+                Product p = new Product(
+                    doc.getString("productId"), 
+                    doc.getString("name"),
+                    doc.getString("description"),
+                    doc.getString("barcode"), 
+                    doc.getDouble("baseCostPrice").floatValue(),
+                    doc.getString("supplierId")
+                );
+                if(p.getId() == null) p = new Product(doc.getString("id"), doc.getString("name"), doc.getString("description"), doc.getString("barcode"), doc.getDouble("baseCostPrice").floatValue(), doc.getString("supplierId"));
+                
+                data.getProducts().add(p);
+            }
+
+            MongoCollection<Document> invCol = MongoDBConnection.getCollection("inventories");
+            for (Document doc : invCol.find(Filters.eq("companyUsername", username))) {
+                Document addrDoc = (Document) doc.get("address");
+                Address addr = null;
+                if (addrDoc != null) {
+                    addr = new Address(
+                        addrDoc.getString("country"),
+                        addrDoc.getString("city"),
+                        addrDoc.getString("street")
+                    );
+                }
+                
+                Inventory inv = new Inventory(doc.getString("name"), addr);
+                
+                Document stockDoc = (Document) doc.get("productStock");
+                if (stockDoc != null) {
+                    for (String key : stockDoc.keySet()) {
+                        Number qty = (Number) stockDoc.get(key);
+                        inv.setStock(key, qty.intValue());
+                    }
+                }
+                data.getInventories().add(inv);
+            }
+
+            MongoCollection<Document> cliCol = MongoDBConnection.getCollection("customers");
+            if (cliCol != null) {
+                for (Document doc : cliCol.find(Filters.eq("companyUsername", username))) {
+                    Customer c = new Customer(
+                        doc.getString("name"),
+                        doc.getString("identification"),
+                        doc.getString("phone"),
+                        doc.getString("email"),
+                        doc.getString("clientType")
+                    );
+                    data.getCustomers().add(c);
+                }
+            }
+
+            MongoCollection<Document> supCol = MongoDBConnection.getCollection("suppliers");
+            if (supCol != null) {
+                for (Document doc : supCol.find(Filters.eq("companyUsername", username))) {
+                    Supplier s = new Supplier(
+                        doc.getString("fullName"),
+                        doc.getString("id1"),
+                        doc.getString("phone"),
+                        doc.getString("email"),
+                        doc.getString("description")
+                    );
+                    s.setId2(doc.getString("id2"));
+                    data.getSuppliers().add(s);
+                }
+            }
+            
+            return data;
+
+        } catch (Exception e) {
+            System.err.println("Error descargando de MongoDB: " + e.getMessage());
+            return null; // Fallback a local
+        }
     }
 
     public void saveCompanyData(FinvoryData data, String companyUsername) {
@@ -83,6 +159,27 @@ public class Database {
         }
     }
 
+    public SystemUsers loadUsers() {
+        File file = new File(USERS_FILE);
+        if (file.exists()) {
+            try (Reader reader = new FileReader(file)) {
+                SystemUsers users = gson.fromJson(reader, SystemUsers.class);
+                if (users != null) return users;
+            } catch (IOException e) { }
+        }
+        return new SystemUsers(); 
+    }
+
+    public void saveUsers(SystemUsers users) {
+        try {
+            File file = new File(USERS_FILE);
+            new File(file.getParent()).mkdirs();
+            try (Writer writer = new FileWriter(file)) {
+                gson.toJson(users, writer);
+            }
+        } catch (IOException e) { }
+    }
+    
     private void saveCustomersCsv(ArrayList<Customer> customers, String folder) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(folder + File.separator + "clients.csv"))) {
             pw.println("Identification" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "ClientType");
