@@ -1,46 +1,63 @@
 package ec.edu.espe.finvory.view;
+
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.model.Product;
-import javax.swing.table.DefaultTableModel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Maryuri Quiña, @ESPE
  */
 public class FrmProducts extends javax.swing.JFrame {
-    
+
     private FinvoryController controller;
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmProducts.class.getName());
+    private Inventory specificInventory;
 
     /**
      * Creates new form FrmProducts
      */
-    public FrmProducts() {
-        initComponents();
-    }
-    
-    /**
-     * Creates new form FrmProducts.
-     * @param controller The application controller for data access.
-     */
     public FrmProducts(FinvoryController controller) {
-        initComponents();
-        this.controller = controller;
-        this.setLocationRelativeTo(null);
-        loadProductTable();
+        this(controller, null);
     }
-    
+
+    public FrmProducts(FinvoryController controller, Inventory inventory) {
+        this.controller = controller;
+        this.specificInventory = inventory;
+        initComponents();
+        this.setLocationRelativeTo(null);
+        if (specificInventory != null) {
+            jLabel1.setText("Gestionando: " + specificInventory.getName());
+        } else {
+            jLabel1.setText("Catálogo Global de Productos");
+        }
+        loadProductTable();
+        setupTableSelection();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+    private void setupTableSelection() {
+        jTableProducts.getSelectionModel().addListSelectionListener(e -> {
+            boolean rowSelected = jTableProducts.getSelectedRow() != -1;
+            btnEdit.setEnabled(rowSelected);
+            btnDelete.setEnabled(rowSelected);
+        });
+        btnEdit.setEnabled(false);
+        btnDelete.setEnabled(false);
+    }
+
     private void loadProductTable() {
         DefaultTableModel model = (DefaultTableModel) jTableProducts.getModel();
         model.setRowCount(0);
-        
+
         if (controller == null || controller.getData() == null) {
-            JOptionPane.showMessageDialog(this, "Error: El controlador o los datos no están inicializados.", "Error de Sistema", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         try {
             float profit = controller.getData().getProfitPercentage();
             float dStd = controller.getData().getDiscountStandard();
@@ -48,39 +65,53 @@ public class FrmProducts extends javax.swing.JFrame {
             float dVip = controller.getData().getDiscountVip();
 
             for (Product p : controller.getData().getProducts()) {
-                
-                int totalMainStock = 0;
-                if (controller.getData().getInventories() != null) {
-                    for (Inventory inventory : controller.getData().getInventories()) {
-                        totalMainStock += inventory.getStock(p.getId());
+
+                int stockToShow = 0;
+                boolean shouldAddRow = false;
+
+                if (specificInventory != null) {
+                    stockToShow = specificInventory.getStock(p.getId());
+                    if (stockToShow >= 0) {
+                        shouldAddRow = true;
                     }
-                }
-                
-                int totalObsoleteStock = 0;
-                if (controller.getData().getObsoleteInventory() != null) {
-                    totalObsoleteStock = controller.getData().getObsoleteInventory().getStock(p.getId());
+                } else {
+                    shouldAddRow = true;
                 }
 
-                String pStd = String.format("$%.2f", p.getPrice("STANDARD", profit, dStd, dPrm, dVip));
-                String pPrm = String.format("$%.2f", p.getPrice("PREMIUM", profit, dStd, dPrm, dVip));
-                String pVip = String.format("$%.2f", p.getPrice("VIP", profit, dStd, dPrm, dVip));
-                
-                model.addRow(new Object[]{
-                    p.getId(),
-                    p.getName(),
-                    p.getBarcode(),
-                    String.format("$%.2f", p.getBaseCostPrice()),
-                    pStd,
-                    pPrm,
-                    pVip,
-                    totalMainStock,
-                    totalObsoleteStock
-                });
+                if (shouldAddRow) {
+                    model.addRow(new Object[]{
+                        p.getId(),
+                        p.getName(),
+                        p.getBarcode(),
+                        String.format("$%.2f", p.getBaseCostPrice()),
+                        String.format("$%.2f", p.getPrice("STANDARD", profit, dStd, dPrm, dVip)),
+                        String.format("$%.2f", p.getPrice("PREMIUM", profit, dStd, dPrm, dVip)),
+                        String.format("$%.2f", p.getPrice("VIP", profit, dStd, dPrm, dVip)),
+                        stockToShow,
+                        0
+                    });
+                }
             }
         } catch (Exception e) {
-             JOptionPane.showMessageDialog(this, "Error al cargar la tabla de productos: " + e.getMessage(), "Error de Datos", JOptionPane.ERROR_MESSAGE);
-             logger.log(java.util.logging.Level.SEVERE, "Error al cargar productos", e);
+            e.printStackTrace();
         }
+    }
+
+    private void openProductForm(String productIdToEdit) {
+        FrmAddNewProduct form;
+
+        if (productIdToEdit == null) {
+            form = new FrmAddNewProduct(this.controller, this.specificInventory);
+        } else {
+            form = new FrmAddNewProduct(this.controller, this.specificInventory, productIdToEdit);
+        }
+        form.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadProductTable();
+            }
+        });
+        form.setVisible(true);
     }
 
     /**
@@ -190,16 +221,16 @@ public class FrmProducts extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(64, 64, 64)
+                .addGap(173, 173, 173)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnReturn)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnEdit)
-                        .addGap(160, 160, 160)
-                        .addComponent(btnAdd))
-                    .addComponent(btnReturn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(51, 51, 51)
+                        .addComponent(btnAdd)))
+                .addGap(71, 71, 71)
                 .addComponent(btnDelete)
-                .addGap(100, 100, 100))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,16 +253,16 @@ public class FrmProducts extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(216, 216, 216)
+                .addGap(140, 140, 140)
                 .addComponent(jLabel1)
-                .addContainerGap(238, Short.MAX_VALUE))
+                .addContainerGap(314, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
                 .addComponent(jLabel1)
-                .addGap(21, 21, 21))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -264,33 +295,24 @@ public class FrmProducts extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         int selectedRow = jTableProducts.getSelectedRow();
-    
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un producto de la lista para borrar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
-        Object cellValue = jTableProducts.getValueAt(selectedRow, 0);
-        if (cellValue == null) {
-            JOptionPane.showMessageDialog(this, "Error: El ID del producto no pudo ser recuperado.", "Error de Datos", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String productId = cellValue.toString();
-        
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "¿Está seguro de que desea eliminar el producto con ID: " + productId + "?", 
-            "Confirmar Eliminación", 
-            JOptionPane.YES_NO_OPTION
-        );
-        
+
+        String productId = jTableProducts.getValueAt(selectedRow, 0).toString();
+        String productName = jTableProducts.getValueAt(selectedRow, 1).toString();
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Desea eliminar '" + productName + "' del inventario '" + specificInventory.getName() + "'?\n"
+                + "Esto dejará el stock en 0.",
+                "Confirmar", JOptionPane.YES_NO_OPTION);
+
         if (confirm == JOptionPane.YES_OPTION) {
-            if (controller.handleDeleteProduct(productId)) {
-                JOptionPane.showMessageDialog(this, "Producto eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                 JOptionPane.showMessageDialog(this, "No se pudo eliminar el producto. Consulte la consola para ver el motivo.", "Error de Eliminación", JOptionPane.ERROR_MESSAGE);
-            }
+            specificInventory.setStock(productId, 0);
+            controller.saveData();
+            loadProductTable();
+            JOptionPane.showMessageDialog(this, "Stock eliminado.");
         }
-        loadProductTable();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
@@ -298,52 +320,25 @@ public class FrmProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        FrmAddNewProduct newProductWindow = new FrmAddNewProduct(this.controller);
-        newProductWindow.setVisible(true);
-        loadProductTable();
+        openProductForm(null);
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         int selectedRow = jTableProducts.getSelectedRow();
-    
+
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un producto de la lista para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        Object cellValue = jTableProducts.getValueAt(selectedRow, 0);
-        if (cellValue == null) {
-            JOptionPane.showMessageDialog(this, "Error: La fila seleccionada está vacía o el ID no fue cargado.", "Error de Datos", JOptionPane.ERROR_MESSAGE);
-            return;
+        Object idObj = jTableProducts.getValueAt(selectedRow, 0);
+        if (idObj != null) {
+            openProductForm(idObj.toString());
         }
-        String productId = cellValue.toString();
-    
-        FrmAddNewProduct editProductWindow = new FrmAddNewProduct(this.controller, productId);
-        JOptionPane.showMessageDialog(editProductWindow, 
-            "Cargando datos para el ID: " + productId, 
-            "Modo Edición", JOptionPane.INFORMATION_MESSAGE
-        );
-        editProductWindow.setVisible(true);
-        loadProductTable();
     }//GEN-LAST:event_btnEditActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> {
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;

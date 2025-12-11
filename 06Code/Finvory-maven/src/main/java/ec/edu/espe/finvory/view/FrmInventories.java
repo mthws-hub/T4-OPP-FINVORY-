@@ -1,19 +1,68 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.model.Inventory;
+import ec.edu.espe.finvory.model.Product;
+import java.awt.Cursor;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
 public class FrmInventories extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmInventories.class.getName());
+
+    private FinvoryController controller;
+    private Inventory currentInventory = null;
     private FrmObsoleteInventories searchObsoleteInventoryWindow;
     private FrmAddNewInventory searchNewInventoryWindow;
+
     /**
      * Creates new form FrmInventories
      */
+    public FrmInventories(FinvoryController controller) {
+        this.controller = controller;
+        initComponents();
+        this.setLocationRelativeTo(null);
+        setupTableNonEditable();
+
+        if (controller != null && controller.getData() != null) {
+            System.out.println("VENTANA ABIERTA PARA USUARIO: " + controller.getData().getCompanyInfo().getUsername());
+        } else {
+            System.out.println("PELIGRO: CONTROLADOR O DATA SON NULL");
+        }
+    }
+
     public FrmInventories() {
         initComponents();
+    }
+
+    private void setupTableNonEditable() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"ID", "NOMBRE", "BARCODE", "COSTO", "P. STD", "P. PRM", "P. VIP", "STOCK", "STOCK OBS."}
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+            Class[] types = new Class[]{
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
+                java.lang.Object.class, java.lang.Integer.class, java.lang.Double.class
+            };
+
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+        };
+        tabProducts.setModel(model);
     }
 
     /**
@@ -34,6 +83,7 @@ public class FrmInventories extends javax.swing.JFrame {
         btnFindInventory = new javax.swing.JButton();
         txtCountryInventory = new javax.swing.JLabel();
         txtCityInventory = new javax.swing.JLabel();
+        btnCancel = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         btnReturnToMenu = new javax.swing.JButton();
         btnManageProducts = new javax.swing.JButton();
@@ -41,7 +91,7 @@ public class FrmInventories extends javax.swing.JFrame {
         btnAddNewInventory = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabProducts = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -64,6 +114,22 @@ public class FrmInventories extends javax.swing.JFrame {
         btnFindInventory.setForeground(new java.awt.Color(255, 255, 255));
         btnFindInventory.setText("BUSCAR");
         btnFindInventory.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnFindInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFindInventoryActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setBackground(new java.awt.Color(0, 123, 0));
+        btnCancel.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnCancel.setForeground(new java.awt.Color(242, 242, 242));
+        btnCancel.setText("CANCELAR");
+        btnCancel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -79,13 +145,15 @@ public class FrmInventories extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCountryInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
                         .addComponent(txtCityInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(166, 166, 166)
                         .addComponent(btnFindInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(212, 212, 212))
+                        .addGap(51, 51, 51)
+                        .addComponent(btnCancel)
+                        .addGap(86, 86, 86))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -105,7 +173,8 @@ public class FrmInventories extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(btnFindInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCountryInventory)
-                    .addComponent(txtCityInventory))
+                    .addComponent(txtCityInventory)
+                    .addComponent(btnCancel))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addContainerGap(16, Short.MAX_VALUE))
@@ -118,6 +187,11 @@ public class FrmInventories extends javax.swing.JFrame {
         btnReturnToMenu.setForeground(new java.awt.Color(255, 255, 255));
         btnReturnToMenu.setText("ATRÁS");
         btnReturnToMenu.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnReturnToMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReturnToMenuActionPerformed(evt);
+            }
+        });
 
         btnManageProducts.setBackground(new java.awt.Color(0, 123, 0));
         btnManageProducts.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
@@ -181,8 +255,8 @@ public class FrmInventories extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(224, 224, 224));
 
-        jTable1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabProducts.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        tabProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -201,7 +275,7 @@ public class FrmInventories extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabProducts);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -245,52 +319,150 @@ public class FrmInventories extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnHandleObsoleteInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHandleObsoleteInventoryActionPerformed
-        if (searchObsoleteInventoryWindow == null){
-            searchObsoleteInventoryWindow = new FrmObsoleteInventories(this,true);
+        if (searchObsoleteInventoryWindow == null) {
+            searchObsoleteInventoryWindow = new FrmObsoleteInventories(this, true);
         }
-        
+
         searchObsoleteInventoryWindow.setVisible(true);
     }//GEN-LAST:event_btnHandleObsoleteInventoryActionPerformed
 
     private void btnAddNewInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewInventoryActionPerformed
-        if (searchNewInventoryWindow == null){
-            searchNewInventoryWindow = new FrmAddNewInventory(this,true);
-        }
-        
-        searchNewInventoryWindow.setVisible(true);
+        FrmAddNewInventory win = new FrmAddNewInventory(this, true, this.controller);
+        win.setVisible(true);
     }//GEN-LAST:event_btnAddNewInventoryActionPerformed
 
     private void btnManageProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageProductsActionPerformed
-        FrmProducts productsWindow = new FrmProducts();
-        productsWindow.setVisible(true);
+        if (this.currentInventory != null) {
+            new FrmProducts(controller, this.currentInventory).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Primero debe buscar y seleccionar un inventario.");
+        }
     }//GEN-LAST:event_btnManageProductsActionPerformed
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+
+    private void btnFindInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindInventoryActionPerformed
+        String queryText = txtName.getText().trim();
+
+        if (queryText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Escriba un nombre.");
+            return;
+        }
+
+        if (controller == null) {
+            return;
+        }
+
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+            ArrayList<Inventory> matches = controller.findInventoriesByPartialName(queryText);
+
+            int cantidadEncontrada = (matches != null) ? matches.size() : 0;
+
+            this.currentInventory = null;
+
+            if (matches.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No se encontraron coincidencias.");
+                emptyFields();
+
+            } else if (matches.size() == 1) {
+                this.currentInventory = matches.get(0);
+                fillInventoryDetails(this.currentInventory);
+            } else {
+                FrmInventorySelector selector = new FrmInventorySelector(this, true, matches);
+                selector.setVisible(true);
+                this.currentInventory = selector.getSelectedInventory();
+
+                if (this.currentInventory != null) {
+                    fillInventoryDetails(this.currentInventory);
+                } else {
+                    emptyFields();
                 }
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmInventories().setVisible(true));
+        } catch (Exception e) {
+            System.out.println("Mensaje: " + e.getMessage());
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error crítico: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnFindInventoryActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        emptyFields();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnReturnToMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnToMenuActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnReturnToMenuActionPerformed
+
+    private void fillInventoryDetails(Inventory inv) {
+        if (inv.getAddress() != null) {
+            txtCountryInventory.setText(inv.getAddress().getCountry());
+            txtCityInventory.setText(inv.getAddress().getCity());
+        } else {
+            txtCountryInventory.setText("Desconocido");
+        }
+        populateTable(inv);
+    }
+
+    private void populateTable(Inventory currentInventory) {
+        DefaultTableModel model = (DefaultTableModel) tabProducts.getModel();
+        model.setRowCount(0);
+
+        ArrayList<Product> globalProducts = controller.getData().getProducts();
+        if (globalProducts == null || globalProducts.isEmpty()) {
+            return;
+        }
+
+        float profit = controller.getData().getProfitPercentage();
+        float dStd = controller.getData().getDiscountStandard();
+        float dPrm = controller.getData().getDiscountPremium();
+        float dVip = controller.getData().getDiscountVip();
+
+        int coincidencias = 0;
+
+        for (Product p : globalProducts) {
+            String globalID = p.getId();
+
+            int stock = currentInventory.getStock(globalID);
+
+            if (stock == 0) {
+                stock = currentInventory.getStock(globalID.trim());
+            }
+
+            if (stock >= 0) { 
+                coincidencias++;
+
+                int obsoleteStock = 0;
+                if (controller.getData().getObsoleteInventory() != null) {
+                    obsoleteStock = controller.getData().getObsoleteInventory().getStock(globalID);
+                }
+
+                model.addRow(new Object[]{
+                    p.getId(),
+                    p.getName(),
+                    p.getBarcode(),
+                    String.format("$%.2f", p.getBaseCostPrice()),
+                    String.format("$%.2f", p.getPrice("STANDARD", profit, dStd, dPrm, dVip)),
+                    String.format("$%.2f", p.getPrice("PREMIUM", profit, dStd, dPrm, dVip)),
+                    String.format("$%.2f", p.getPrice("VIP", profit, dStd, dPrm, dVip)),
+                    stock,
+                    (double) obsoleteStock
+                });
+            }
+        }
+        
+        tabProducts.revalidate();
+        tabProducts.repaint();
+    }
+
+    private void emptyFields() {
+        txtCountryInventory.setText("");
+        txtCityInventory.setText("");
+        DefaultTableModel model = (DefaultTableModel) tabProducts.getModel();
+        model.setRowCount(0);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddNewInventory;
+    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnFindInventory;
     private javax.swing.JButton btnHandleObsoleteInventory;
     private javax.swing.JButton btnManageProducts;
@@ -303,7 +475,7 @@ public class FrmInventories extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabProducts;
     private javax.swing.JLabel txtCityInventory;
     private javax.swing.JLabel txtCountryInventory;
     private javax.swing.JTextField txtName;

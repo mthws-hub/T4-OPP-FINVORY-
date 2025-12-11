@@ -1,5 +1,8 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.model.Address;
+import ec.edu.espe.finvory.model.Inventory;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -9,13 +12,21 @@ import javax.swing.JOptionPane;
  */
 public class FrmAddNewInventory extends JDialog {
 
+    private FinvoryController controller;
+
     /**
      * Creates new form FrmAddNewInventory
      */
+    public FrmAddNewInventory(java.awt.Frame parent, boolean modal, FinvoryController controller) {
+        super(parent, modal);
+        this.controller = controller;
+        initComponents();
+        this.setLocationRelativeTo(parent);
+    }
+
     public FrmAddNewInventory(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.setLocationRelativeTo(parent);
     }
 
     /**
@@ -104,11 +115,11 @@ public class FrmAddNewInventory extends JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtZipCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtZipCode, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jLabel1)))
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,31 +221,60 @@ public class FrmAddNewInventory extends JDialog {
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        String[] mandatoryFields = readValues();
-        String name = mandatoryFields[0];
-        String country = mandatoryFields[1];
-        String city = mandatoryFields[2];
-        String street = mandatoryFields[3];
-        
+        if (controller == null) {
+            JOptionPane.showMessageDialog(this, "Error: Controlador no conectado.", "Error Fatal", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String name = txtName.getText().trim();
+        String country = txtCountry.getText().trim();
+        String city = txtCity.getText().trim();
+        String street = txtStreet.getText().trim();
+
         if (name.isEmpty() || country.isEmpty() || city.isEmpty() || street.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Los campos Nombre, País, Ciudad y Calle son obligatorios y no pueden estar vacíos.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Inventario Creado para: " + name);
+            JOptionPane.showMessageDialog(this, "Nombre, País, Ciudad y Calle son obligatorios.");
+            return;
+        }
+
+        if (controller.getData() != null) {
+            for (Inventory inv : controller.getData().getInventories()) {
+                if (inv.getName().equalsIgnoreCase(name)) {
+                    JOptionPane.showMessageDialog(this, "Ya existe un inventario con ese nombre.");
+                    return;
+                }
+            }
+        }
+
+        try {
+            Address addr = new Address(country, city, street);
+            Inventory newInv = new Inventory(name, addr);
+            controller.getData().getInventories().add(newInv);
+            controller.saveData();
+
+            JOptionPane.showMessageDialog(this, "Inventario guardado correctamente.");
+            this.dispose();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage());
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        emptyFields();
+        int opt = JOptionPane.showConfirmDialog(this, "¿Borrar campos?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (opt == JOptionPane.YES_OPTION) {
+            emptyFields();
+        }
     }//GEN-LAST:event_btnCancelActionPerformed
     private String[] readValues() {
         String name = txtName.getText().trim();
         String country = txtCountry.getText().trim();
         String city = txtCity.getText().trim();
         String street = txtStreet.getText().trim();
-        
+
         return new String[]{name, country, city, street};
     }
-    private void emptyFields(){
+
+    private void emptyFields() {
         txtCity.setText("");
         txtCountry.setText("");
         txtName.setText("");

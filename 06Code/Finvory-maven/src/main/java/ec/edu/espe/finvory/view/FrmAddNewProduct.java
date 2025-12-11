@@ -4,6 +4,7 @@ import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Supplier;
 import ec.edu.espe.finvory.model.Product;
 import ec.edu.espe.finvory.model.Inventory;
+import java.util.HashSet;
 import javax.swing.JOptionPane;
 
 /**
@@ -11,131 +12,161 @@ import javax.swing.JOptionPane;
  * @author Maryuri Quiña, @ESPE
  */
 public class FrmAddNewProduct extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmAddNewProduct.class.getName());
     private FinvoryController controller;
     private String productIdToEdit = null;
-    private boolean isInitialized = false;
-    
-    public FrmAddNewProduct() {
-        initComponents();
-        this.setLocationRelativeTo(null);
+    private Inventory targetInventory = null;
+
+    public FrmAddNewProduct(FinvoryController controller) {
+        this(controller, null, null);
+    }
+
+    public FrmAddNewProduct(FinvoryController controller, String productId) {
+        this(controller, null, productId);
+    }
+
+    public FrmAddNewProduct(FinvoryController controller, Inventory targetInventory) {
+        this(controller, targetInventory, null);
     }
 
     /**
      * Creates new form FrmAddNewProduct
+     *
      * @param controller
      */
-    public FrmAddNewProduct(FinvoryController controller) {
-        this();
+    public FrmAddNewProduct(FinvoryController controller, Inventory inventory, String productId) {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
         this.controller = controller;
-        initializeComboBoxModels();
-        txtDescription.setText("");
-    }
-    /**
-     * Creates new form FrmAddNewProduct
-     * @param controller 
-     * @param productId
-     */
-    public FrmAddNewProduct(FinvoryController controller, String productId) {
-        this(controller); 
+        this.targetInventory = inventory;
         this.productIdToEdit = productId;
-        loadProductData(productId); 
-    }
-    
-    private void initializeComboBoxModels() {
-        if (isInitialized) {
-            return;
+
+        initializeComboBoxes();
+
+        if (productId != null) {
+            jLabel1.setText("EDITAR PRODUCTO");
+            btnAdd.setText("ACTUALIZAR");
+            btnCancel.setEnabled(false);
+            btnCancel.setVisible(false);
+            loadProductData(productId);
+        } else {
+            jLabel1.setText("NUEVO PRODUCTO");
+            btnAdd.setText("GUARDAR");
+            btnCancel.setEnabled(true);
+            btnCancel.setVisible(true);
+
+            if (targetInventory != null) {
+                cmbInitialStock.setSelectedItem(targetInventory.getName());
+                cmbInitialStock.setEnabled(false);
+            }
         }
+    }
+
+    public FrmAddNewProduct() {
+        initComponents();
+    }
+
+    private void initializeComboBoxes() {
         cmbProductSupplier.removeAllItems();
-        cmbProductSupplier.addItem("Seleccione Proveedor");
-        
+        cmbProductSupplier.addItem("Seleccione Proveedor...");
+
         if (controller.getData() != null && controller.getData().getSuppliers() != null) {
+            HashSet<String> addedSuppliers = new HashSet<>();
+
             for (Supplier s : controller.getData().getSuppliers()) {
-                cmbProductSupplier.addItem(s.getFullName() + " (ID: " + s.getId1() + ")");
+                if (!addedSuppliers.contains(s.getId1())) {
+                    cmbProductSupplier.addItem(s.getFullName() + " (ID: " + s.getId1() + ")");
+                    addedSuppliers.add(s.getId1());
+                }
             }
         }
 
         cmbInitialStock.removeAllItems();
         cmbInitialStock.addItem("Seleccione Inventario...");
-
-        if (controller.getData() != null && controller.getData().getSuppliers() != null) {
-            for (Supplier s : controller.getData().getSuppliers()) {
-                cmbProductSupplier.addItem(s.getFullName() + " (ID: " + s.getId1() + ")");
-            }
-        }
-
         if (controller.getData() != null && controller.getData().getInventories() != null) {
             for (Inventory i : controller.getData().getInventories()) {
                 cmbInitialStock.addItem(i.getName());
             }
         }
-        isInitialized = true;
     }
-    
+
     private void loadProductData(String productId) {
-        Product product = controller.findProduct(productId); 
-        
+        Product product = controller.findProduct(productId);
+
         if (product == null) {
-            JOptionPane.showMessageDialog(this, "Producto no encontrado para edición.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error: Producto no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
             this.dispose();
             return;
         }
-       
+
         txtID.setText(product.getId());
-        txtID.setEnabled(false); 
+        txtID.setEnabled(false);
         txtBarCode.setText(product.getBarcode());
         txtProductName.setText(product.getName());
         txtDescription.setText(product.getDescription());
         ftfPrice.setText(String.valueOf(product.getBaseCostPrice()));
-        ftfInitialStock.setText("0"); 
-        cmbInitialStock.setSelectedIndex(0); 
+
+        if (targetInventory != null) {
+            int currentStock = targetInventory.getStock(product.getId());
+            ftfInitialStock.setText(String.valueOf(currentStock));
+            ftfInitialStock.setEnabled(true);
+            cmbInitialStock.setSelectedItem(targetInventory.getName());
+            cmbInitialStock.setEnabled(false);
+        } else {
+            ftfInitialStock.setText("0");
+            ftfInitialStock.setEnabled(false);
+            cmbInitialStock.setEnabled(false);
+        }
         
         if (product.getSupplierId() != null) {
             for (int i = 0; i < cmbProductSupplier.getItemCount(); i++) {
-                if (cmbProductSupplier.getItemAt(i).contains("(ID: " + product.getSupplierId() + ")")) {
+                String item = cmbProductSupplier.getItemAt(i);
+                if (item.contains("(ID: " + product.getSupplierId() + ")")) {
                     cmbProductSupplier.setSelectedIndex(i);
                     break;
                 }
             }
         }
     }
-    
+
     private void emptyFields() {
-    txtID.setText("");
-    txtBarCode.setText("");
-    txtProductName.setText("");
-    txtDescription.setText("");
-    ftfPrice.setText("");
-    ftfInitialStock.setText("");
-    cmbProductSupplier.setSelectedIndex(0);
-    cmbInitialStock.setSelectedIndex(0);
-    if (productIdToEdit == null) {
+        txtID.setText("");
+        txtBarCode.setText("");
+        txtProductName.setText("");
+        txtDescription.setText("");
+        ftfPrice.setText("");
+        ftfInitialStock.setText("");
+        cmbProductSupplier.setSelectedIndex(0);
+        cmbInitialStock.setSelectedIndex(0);
+        if (productIdToEdit == null) {
             txtID.setEnabled(true);
         }
     }
-    
+
     private Object[] validateFieldsAndConvert() {
         String id = txtID.getText().trim();
         String barcode = txtBarCode.getText().trim();
         String name = txtProductName.getText().trim();
         String description = txtDescription.getText().trim();
-        String supplierName = (String) cmbProductSupplier.getSelectedItem(); 
+        String supplierName = (String) cmbProductSupplier.getSelectedItem();
         String inventoryName = (String) cmbInitialStock.getSelectedItem();
         float costPrice = 0.0f;
         int stock = 0;
-    
+
         if (id.isEmpty() || barcode.isEmpty() || name.isEmpty() || description.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Error: Todos los campos de texto son obligatorios.", "Validación", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-           
-        if (supplierName.startsWith("Item") || supplierName.equals("Seleccione...")) { 
+
+        if (supplierName.startsWith("Item") || supplierName.equals("Seleccione...")) {
             JOptionPane.showMessageDialog(this, "Error: Debe seleccionar un Proveedor válido.", "Validación", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-        
-        if (inventoryName.startsWith("Item") || inventoryName.equals("Seleccione...")) { 
+
+        if (inventoryName.startsWith("Item") || inventoryName.equals("Seleccione...")) {
             JOptionPane.showMessageDialog(this, "Error: Debe seleccionar un Inventario válido.", "Validación", JOptionPane.ERROR_MESSAGE);
             return null;
         }
@@ -155,11 +186,11 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error: Ingrese un número decimal válido para el Precio de Costo.", "Dato Incorrecto", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-        
+
         try {
             String stockText = ftfInitialStock.getText().trim();
-            
-            if (!stockText.matches("^-?\\d+$")) { 
+
+            if (!stockText.matches("^-?\\d+$")) {
                 JOptionPane.showMessageDialog(this, "Error: El Stock Inicial debe ser un número entero (sin decimales).", "Dato Incorrecto", JOptionPane.ERROR_MESSAGE);
                 return null;
             }
@@ -173,7 +204,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error: Ingrese un número entero válido para el Stock Inicial.", "Dato Incorrecto", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-        
+
         return new Object[]{id, barcode, name, description, costPrice, stock, supplierName, inventoryName};
     }
 
@@ -439,100 +470,109 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        Object[] productData = validateFieldsAndConvert();
-    
-        if (productData != null) {
-            
-            String id = (String) productData[0];
-            String barcode = (String) productData[1];
-            String name = (String) productData[2];
-            String description = (String) productData[3];
-            float costPrice = (float) productData[4];
-            int stock = (int) productData[5];
-            String supplierItem = (String) productData[6];
-            String inventoryName = (String) productData[7];
-            String supplierId = supplierItem.substring(supplierItem.indexOf("(ID: ") + 5, supplierItem.length() - 1);
-            
-            if (productIdToEdit == null) {
-                if (controller.findProduct(id) != null) {
-                    JOptionPane.showMessageDialog(this, "Error: ID de producto duplicado.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                if (controller.findProductByBarcode(barcode) != null) {
-                    JOptionPane.showMessageDialog(this, "Error: Código de Barras duplicado.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                
-                Inventory targetInventory = null;
+        String id = txtID.getText().trim();
+        String barcode = txtBarCode.getText().trim();
+        String name = txtProductName.getText().trim();
+        String description = txtDescription.getText().trim();
+        String supplierItem = (String) cmbProductSupplier.getSelectedItem();
+        String inventoryName = (String) cmbInitialStock.getSelectedItem();
+
+        if (id.isEmpty() || name.isEmpty() || barcode.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Complete los campos obligatorios (*).");
+            return;
+        }
+
+        if (cmbProductSupplier.getSelectedIndex() <= 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione un proveedor válido.");
+            return;
+        }
+
+        float costPrice = 0;
+        int stock = 0;
+        try {
+            costPrice = Float.parseFloat(ftfPrice.getText().trim());
+            stock = Integer.parseInt(ftfInitialStock.getText().trim());
+            if (costPrice < 0 || stock < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Precio y Stock deben ser números positivos válidos.");
+            return;
+        }
+
+        String supplierId = supplierItem.substring(supplierItem.indexOf("(ID: ") + 5, supplierItem.length() - 1);
+
+        if (productIdToEdit == null) {
+
+            if (controller.findProduct(id) != null) {
+                JOptionPane.showMessageDialog(this, "El ID '" + id + "' ya existe.");
+                return;
+            }
+
+            Inventory destInventory = null;
+            if (targetInventory != null) {
+                destInventory = targetInventory;
+            } else {
                 for (Inventory inv : controller.getData().getInventories()) {
                     if (inv.getName().equals(inventoryName)) {
-                        targetInventory = inv;
+                        destInventory = inv;
                         break;
                     }
                 }
+            }
+
+            if (destInventory == null) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar un inventario para el stock inicial.");
+                return;
+            }
+
+            Product newProduct = new Product(id, name, description, barcode, costPrice, supplierId);
+            controller.getData().getProducts().add(newProduct);
+
+            if (stock > 0) {
+                destInventory.addStock(id, stock);
+            }
+
+            controller.saveData();
+            JOptionPane.showMessageDialog(this, "Producto creado exitosamente.");
+
+        } else {
+            Product existingProduct = controller.findProduct(productIdToEdit);
+            if (existingProduct != null) {
+                existingProduct.setName(name);
+                existingProduct.setBarcode(barcode);
+                existingProduct.setDescription(description);
+                existingProduct.setBaseCostPrice(costPrice);
+                existingProduct.setSupplierId(supplierId);
                 
                 if (targetInventory != null) {
-                    Product newProduct = new Product(id, name, description, barcode, costPrice, supplierId);
-                    controller.getData().getProducts().add(newProduct);
-                    targetInventory.setStock(id, stock);
-                    
-                    controller.saveData(); 
-                    JOptionPane.showMessageDialog(this, "Producto '" + name + "' registrado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose(); 
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error: Inventario de destino no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+                    targetInventory.setStock(existingProduct.getId(), stock);
                 }
 
-            } else {
-                Product existingProduct = controller.findProduct(productIdToEdit);
-                
-                if (existingProduct != null) {
-                    existingProduct.setBarcode(barcode);
-                    existingProduct.setName(name);
-                    existingProduct.setDescription(description);
-                    existingProduct.setBaseCostPrice(costPrice);
-                    existingProduct.setSupplierId(supplierId);
-                    
-                    if (stock > 0) {
-                        Inventory targetInventory = null;
-                        for (Inventory inv : controller.getData().getInventories()) {
-                            if (inv.getName().equals(inventoryName)) {
-                                targetInventory = inv;
-                                break;
-                            }
-                        }
-                        if (targetInventory != null) {
-                            targetInventory.addStock(existingProduct.getId(), stock);
-                            JOptionPane.showMessageDialog(this, "Se agregaron " + stock + " unidades a " + targetInventory.getName(), "Stock Añadido", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                    }
-                    
-                    controller.saveData(); 
-                    JOptionPane.showMessageDialog(this, "Producto '" + name + "' actualizado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error: Producto no encontrado para actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                controller.saveData();
+                JOptionPane.showMessageDialog(this, "Producto actualizado.");
             }
         }
+
+        this.dispose();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         int option = JOptionPane.showConfirmDialog(
-            this,
-            "¿Está seguro de cancelar el registro? Todos los datos serán borrados.",
-            "Confirmación de Cancelación",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
+                this,
+                "¿Está seguro de cancelar el registro? Todos los datos serán borrados.",
+                "Confirmación de Cancelación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
         );
 
         if (option == JOptionPane.YES_OPTION) {
             emptyFields();
             JOptionPane.showMessageDialog(
-                this,
-                "Registro cancelado. Los campos han sido limpiados.",
-                "Cancelado",
-                JOptionPane.INFORMATION_MESSAGE
+                    this,
+                    "Registro cancelado. Los campos han sido limpiados.",
+                    "Cancelado",
+                    JOptionPane.INFORMATION_MESSAGE
             );
         }
     }//GEN-LAST:event_btnCancelActionPerformed
@@ -544,23 +584,6 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnReturnActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> new FrmAddNewProduct().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
