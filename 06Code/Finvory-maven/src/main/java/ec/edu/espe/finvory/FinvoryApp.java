@@ -4,6 +4,7 @@ import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Database;
 import ec.edu.espe.finvory.view.FinvoryView;
 import ec.edu.espe.finvory.mongo.MongoDBConnection;
+import ec.edu.espe.finvory.view.FrmFinvorySplash;
 /**
  *
  * @author Joseph Medina, The POOwer Rangers of Programming
@@ -24,7 +25,11 @@ public class FinvoryApp {
         
         FinvoryController controller = new FinvoryController(view, db);
         
-        controller.run(); 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            new FrmFinvorySplash(controller).setVisible(true);
+        }
+        });
     }
     
     public static MongoDBConnection getMongoDBConnection() {

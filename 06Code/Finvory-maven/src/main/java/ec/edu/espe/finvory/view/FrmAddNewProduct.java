@@ -238,11 +238,13 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnAdd = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-        btnReturn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        itemInventories = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel2.setText("ID (SKU):");
@@ -320,7 +322,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(209, 209, 209))))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -380,42 +382,25 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
             }
         });
 
-        btnReturn.setBackground(new java.awt.Color(0, 123, 0));
-        btnReturn.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        btnReturn.setForeground(new java.awt.Color(255, 255, 255));
-        btnReturn.setText("Volver");
-        btnReturn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReturnActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(112, 112, 112)
-                        .addComponent(btnAdd)
-                        .addGap(108, 108, 108)
-                        .addComponent(btnCancel))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(211, 211, 211)
-                        .addComponent(btnReturn)))
+                .addGap(108, 108, 108)
+                .addComponent(btnAdd)
+                .addGap(99, 99, 99)
+                .addComponent(btnCancel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(44, 44, 44)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd)
                     .addComponent(btnCancel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(btnReturn)
-                .addContainerGap())
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
@@ -437,6 +422,20 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addContainerGap(21, Short.MAX_VALUE))
         );
+
+        jMenu1.setText("Finvory");
+
+        itemInventories.setText("Inventarios");
+        itemInventories.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemInventoriesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemInventories);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -581,18 +580,20 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIDActionPerformed
 
-    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnReturnActionPerformed
+    private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
+        FrmInventories frmInventories = new FrmInventories(this.controller);
+        this.setVisible(false);
+        frmInventories.setVisible(true);
+    }//GEN-LAST:event_itemInventoriesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnReturn;
     private javax.swing.JComboBox<String> cmbInitialStock;
     private javax.swing.JComboBox<String> cmbProductSupplier;
     private javax.swing.JFormattedTextField ftfInitialStock;
     private javax.swing.JFormattedTextField ftfPrice;
+    private javax.swing.JMenuItem itemInventories;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -602,6 +603,8 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

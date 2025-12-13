@@ -143,7 +143,6 @@ public class MongoDataExporter {
                     .append("discountPremium", data.getDiscountPremium())
                     .append("discountVip", data.getDiscountVip());
             configCol.insertOne(configDoc);
-            System.out.println("DEBUG: Algoritmo de precios sincronizado con la nube.");
             
         } catch (Exception e) {
             System.err.println("Error subiendo configuración: " + e.getMessage());

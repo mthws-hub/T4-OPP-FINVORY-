@@ -21,7 +21,8 @@ public class FrmAddNewInventory extends JDialog {
         super(parent, modal);
         this.controller = controller;
         initComponents();
-        this.setLocationRelativeTo(parent);
+        this.setLocationRelativeTo(null);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     public FrmAddNewInventory(java.awt.Frame parent, boolean modal) {
@@ -55,9 +56,10 @@ public class FrmAddNewInventory extends JDialog {
         jLabel8 = new javax.swing.JLabel();
         txtRegion = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        btnCancel = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
-        btnReturn = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        itemInventories = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -156,18 +158,6 @@ public class FrmAddNewInventory extends JDialog {
         jPanel2.setBackground(new java.awt.Color(224, 224, 224));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnCancel.setBackground(new java.awt.Color(0, 123, 0));
-        btnCancel.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        btnCancel.setForeground(new java.awt.Color(255, 255, 255));
-        btnCancel.setText("CANCELAR");
-        btnCancel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 130, 30));
-
         btnAdd.setBackground(new java.awt.Color(0, 123, 0));
         btnAdd.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         btnAdd.setForeground(new java.awt.Color(255, 255, 255));
@@ -178,19 +168,30 @@ public class FrmAddNewInventory extends JDialog {
                 btnAddActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 110, 30));
+        jPanel2.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 110, 30));
 
-        btnReturn.setBackground(new java.awt.Color(0, 123, 0));
-        btnReturn.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        btnReturn.setForeground(new java.awt.Color(255, 255, 255));
-        btnReturn.setText("VOLVER");
-        btnReturn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnReturn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReturnActionPerformed(evt);
+        jMenu1.setText("Finvory");
+        jMenu1.addMenuKeyListener(new javax.swing.event.MenuKeyListener() {
+            public void menuKeyPressed(javax.swing.event.MenuKeyEvent evt) {
+                jMenu1MenuKeyPressed(evt);
+            }
+            public void menuKeyReleased(javax.swing.event.MenuKeyEvent evt) {
+            }
+            public void menuKeyTyped(javax.swing.event.MenuKeyEvent evt) {
             }
         });
-        jPanel2.add(btnReturn, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 60, 110, 30));
+
+        itemInventories.setText("Inventarios");
+        itemInventories.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemInventoriesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemInventories);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -209,16 +210,12 @@ public class FrmAddNewInventory extends JDialog {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnReturnActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         if (controller == null) {
@@ -259,12 +256,17 @@ public class FrmAddNewInventory extends JDialog {
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        int opt = JOptionPane.showConfirmDialog(this, "¿Borrar campos?", "Confirmar", JOptionPane.YES_NO_OPTION);
+    private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
+        int opt = JOptionPane.showConfirmDialog(this, "¿Desea regresar al menu de inventarios?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (opt == JOptionPane.YES_OPTION) {
             emptyFields();
+            this.dispose();
         }
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_itemInventoriesActionPerformed
+
+    private void jMenu1MenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_jMenu1MenuKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1MenuKeyPressed
     private String[] readValues() {
         String name = txtName.getText().trim();
         String country = txtCountry.getText().trim();
@@ -289,8 +291,7 @@ public class FrmAddNewInventory extends JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnReturn;
+    private javax.swing.JMenuItem itemInventories;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -299,6 +300,8 @@ public class FrmAddNewInventory extends JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField txtCity;

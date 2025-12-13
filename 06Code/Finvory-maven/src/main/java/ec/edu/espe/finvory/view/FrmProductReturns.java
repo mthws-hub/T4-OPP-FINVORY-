@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
 import javax.swing.JDialog;
 import ec.edu.espe.finvory.model.ReturnedProduct;
 import javax.swing.JOptionPane;
@@ -9,13 +10,14 @@ import javax.swing.JOptionPane;
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
 public class FrmProductReturns extends JDialog {
-    
+    FinvoryController controller;
     ReturnedProduct product = new ReturnedProduct();
     /**
      * Creates new form FrmProductReturns
      */
-    public FrmProductReturns(java.awt.Dialog parent, boolean modal){
+    public FrmProductReturns(java.awt.Dialog parent, boolean modal, FinvoryController controller){
         super(parent,modal);
+        this.controller = controller;
         initComponents();
         this.setLocationRelativeTo(parent);
     }

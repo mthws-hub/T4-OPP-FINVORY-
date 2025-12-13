@@ -6,6 +6,7 @@ import ec.edu.espe.finvory.model.*;
 import ec.edu.espe.finvory.view.FinvoryView;
 import ec.edu.espe.finvory.mongo.MongoDataExporter;
 import ec.edu.espe.finvory.view.FrmInventories;
+import ec.edu.espe.finvory.view.FrmMainMenu;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -39,9 +40,8 @@ public class FinvoryController {
                 MongoDataExporter.exportCompanyData(
                         currentCompanyUsername,
                         data,
-                        data.getCompanyInfo() // Necesitas la CompanyAccount actual
+                        data.getCompanyInfo()
                 );
-                view.showMessage("INFO: Datos sincronizados exitosamente con MongoDB.");
             } catch (Exception e) {
                 view.showError("ERROR: Fallo la exportación a MongoDB: " + e.getMessage());
             }
@@ -148,6 +148,24 @@ public class FinvoryController {
 
         view.showError("Credenciales incorrectas.");
         return "INVALID";
+    }
+
+    public boolean handleLoginGUI(String username, String password) {
+        for (CompanyAccount company : users.getCompanyAccounts()) {
+            if (company.getUsername().equals(username) && company.checkPassword(password)) {
+                this.currentCompanyUsername = username;
+                this.data = dataBase.loadCompanyData(currentCompanyUsername);
+                this.data.setCompanyInfo(company);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void startMainMenuPublic() {
+        FrmMainMenu menu = new FrmMainMenu(this);
+        menu.setVisible(true);
+        //startMainMenu();
     }
 
     private void handleRegistrationMenu() {
@@ -363,11 +381,7 @@ public class FinvoryController {
     }
 
     private void handleInventoryMenu() {
-        System.out.println("--- ABRIENDO INTERFAZ GRÁFICA DE INVENTARIOS ---");
-        System.out.println("Por favor, continúe la gestión en la ventana emergente...");
-
-        FrmInventories inventoryWindow = new FrmInventories(this);
-        inventoryWindow.setVisible(true);
+        
     }
 
     private void handleViewProducts() {
@@ -671,7 +685,7 @@ public class FinvoryController {
     private void handleSetTaxRate() {
         float newRate = view.askNewTaxRate(data.getTaxRate());
         data.setTaxRate(newRate);
-        
+
         saveData();
         view.showMessage("Impuesto actualizado.");
     }

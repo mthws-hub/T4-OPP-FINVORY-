@@ -1,20 +1,4 @@
 {
-  "companyInfo": {
-    "name": "Frico Autopartes S.A.",
-    "address": {
-      "country": "Ecuador",
-      "city": "Quito",
-      "street": "Av. 10 de Agosto N45",
-      "zipCode": "170504",
-      "streetNumber": "N45-23",
-      "region": "Pichincha"
-    },
-    "ruc": "1790011223001",
-    "phone": "022445566",
-    "email": "admin@frico.com",
-    "username": "adminFrico",
-    "password": "123"
-  },
   "customers": [],
   "products": [
     {
@@ -70,7 +54,9 @@
         "streetNumber": "",
         "region": ""
       },
-      "productStock": {}
+      "productStock": {
+        "DLLA123": 2
+      }
     }
   ],
   "obsoleteInventory": {
