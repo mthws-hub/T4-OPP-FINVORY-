@@ -1,5 +1,7 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
+import java.awt.Color;
 import javax.swing.JOptionPane;
 
 /**
@@ -7,57 +9,77 @@ import javax.swing.JOptionPane;
  * @author Maryuri Quiña, @ESPE
  */
 public class FrmAddNewSupplier extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmAddNewSupplier.class.getName());
+
+    private FinvoryController controller;
 
     /**
      * Creates new form FrmAddNewSupplier
      */
-    public FrmAddNewSupplier() {
+    public FrmAddNewSupplier(FinvoryController controller) {
+        this.controller = controller;
         initComponents();
+        this.setLocationRelativeTo(null);
     }
+
     private void emptyFields() {
-    txtId1Supplier.setText("");
-    txtId2Supplier.setText("");
-    txtName.setText("");
-    txtPhone.setText("");
-    txtEmail.setText("");
-    txtpDescription.setText("");
+        txtId1Supplier.setText("");
+        txtId2Supplier.setText("");
+        txtName.setText("");
+        txtPhone.setText("");
+        txtEmail.setText("");
+        txtpDescription.setText("");
     }
-    
+
     private boolean validateSupplierData() {
         String id1 = txtId1Supplier.getText().trim();
         String name = txtName.getText().trim();
         String phone = txtPhone.getText().trim();
         String email = txtEmail.getText().trim();
-        String description = txtpDescription.getText().trim();
 
-        if (id1.isEmpty() || name.isEmpty() || phone.isEmpty() || email.isEmpty() || description.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Error: Los campos ID 1, Nombre, Teléfono, Email y Descripción son obligatorios.", "Validación", JOptionPane.ERROR_MESSAGE);
+        if (id1.isEmpty() || name.isEmpty() || phone.isEmpty() || email.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Error: Los campos ID 1, Nombre, Teléfono y Email son obligatorios.", "Validación", JOptionPane.ERROR_MESSAGE);
+            lblId1.setForeground(Color.red);
+            lblFullName.setForeground(Color.red);
+            lblPhone.setForeground(Color.red);
+            lblEmail.setForeground(Color.red);
+            txtId1Supplier.requestFocus();
             return false;
         }
-        
+        lblId1.setForeground(Color.black);
+        lblFullName.setForeground(Color.black);
+        lblPhone.setForeground(Color.black);
+        lblEmail.setForeground(Color.black);
         if (id1.length() != 13 || !id1.matches("\\d+")) {
             JOptionPane.showMessageDialog(this, "Error: El ID 1 (RUC) debe contener exactamente 13 dígitos numéricos.", "Validación de ID", JOptionPane.ERROR_MESSAGE);
+            lblId1.setForeground(Color.red);
+            txtId1Supplier.requestFocus();
             return false;
         }
-
+        lblId1.setForeground(Color.black);
+        if(!name.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")){
+           JOptionPane.showMessageDialog(this, "Error: Ingrese un formato de nombre válido.", "Validación", JOptionPane.ERROR_MESSAGE); 
+           lblFullName.setForeground(Color.red);
+           txtName.requestFocus();
+           return false;
+        }
+        lblFullName.setForeground(Color.red);
         if (!phone.matches("^\\+?[0-9\\s]{7,15}$")) {
             JOptionPane.showMessageDialog(this, "Error: Ingrese un formato de teléfono válido.", "Validación", JOptionPane.ERROR_MESSAGE);
+            lblPhone.setForeground(Color.red);
+            txtPhone.requestFocus();
             return false;
         }
-
+        lblFullName.setForeground(Color.black);
         if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
             JOptionPane.showMessageDialog(this, "Error: Ingrese un formato de email válido.", "Validación", JOptionPane.ERROR_MESSAGE);
+            lblEmail.setForeground(Color.red);
+            txtEmail.requestFocus();
             return false;
         }
-
-        String id2 = txtId2Supplier.getText().trim();
-        if (!id2.isEmpty() && id2.length() < 5) {
-            JOptionPane.showMessageDialog(this, "Advertencia: El ID 2 parece muy corto. Debe ser un identificador válido.", "Validación", JOptionPane.WARNING_MESSAGE);
-        }
+        lblEmail.setForeground(Color.black);
         return true;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -69,12 +91,12 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblId1 = new javax.swing.JLabel();
+        lblFullName = new javax.swing.JLabel();
+        lblPhone = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        lblId2 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         txtpDescription = new javax.swing.JTextPane();
         txtId1Supplier = new javax.swing.JTextField();
@@ -85,31 +107,33 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         btnAdd = new javax.swing.JButton();
-        btnReturn = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        itemSuppliers = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
         jLabel1.setText("Registro Proveedor");
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel2.setText("ID 1 (RUC):");
+        lblId1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblId1.setText("ID 1 (RUC):");
 
-        jLabel3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel3.setText("Nombre Completo:");
+        lblFullName.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblFullName.setText("Nombre Completo:");
 
-        jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel4.setText("Telefono:");
+        lblPhone.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblPhone.setText("Telefono:");
 
-        jLabel5.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel5.setText("Email:");
+        lblEmail.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblEmail.setText("Email:");
 
         jLabel6.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel6.setText("Descripcion:");
 
-        jLabel7.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel7.setText("ID 2 (RUC):");
+        lblId2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblId2.setText("ID 2 (Opcional):");
 
         jScrollPane5.setViewportView(txtpDescription);
 
@@ -120,12 +144,12 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
+                    .addComponent(lblId1)
+                    .addComponent(lblFullName)
+                    .addComponent(lblPhone)
+                    .addComponent(lblEmail)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel7))
+                    .addComponent(lblId2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -142,23 +166,23 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
+                    .addComponent(lblId1)
                     .addComponent(txtId1Supplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel7)
+                    .addComponent(lblId2)
                     .addComponent(txtId2Supplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(lblFullName))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4)
+                    .addComponent(lblPhone)
                     .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
+                    .addComponent(lblEmail)
                     .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,16 +212,6 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
             }
         });
 
-        btnReturn.setBackground(new java.awt.Color(0, 123, 0));
-        btnReturn.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        btnReturn.setForeground(new java.awt.Color(255, 255, 255));
-        btnReturn.setText("Volver");
-        btnReturn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReturnActionPerformed(evt);
-            }
-        });
-
         btnCancel.setBackground(new java.awt.Color(0, 123, 0));
         btnCancel.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
         btnCancel.setForeground(new java.awt.Color(255, 255, 255));
@@ -213,28 +227,35 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(177, 177, 177)
-                        .addComponent(btnAdd)
-                        .addGap(52, 52, 52)
-                        .addComponent(btnCancel))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(btnReturn)))
-                .addContainerGap(84, Short.MAX_VALUE))
+                .addGap(116, 116, 116)
+                .addComponent(btnAdd)
+                .addGap(94, 94, 94)
+                .addComponent(btnCancel)
+                .addContainerGap(103, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
+                .addGap(23, 23, 23)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd)
                     .addComponent(btnCancel))
-                .addGap(18, 18, 18)
-                .addComponent(btnReturn)
-                .addContainerGap())
+                .addContainerGap(36, Short.MAX_VALUE))
         );
+
+        jMenu1.setText("Finvory");
+
+        itemSuppliers.setText("Proveedores");
+        itemSuppliers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemSuppliersActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemSuppliers);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -274,72 +295,58 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         if (validateSupplierData()) {
-            JOptionPane.showMessageDialog(this, 
-                "Proveedor '" + txtName.getText().trim() + "' registrado con éxito.", 
-                "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE
-            );
-            emptyFields();
+            String id1 = txtId1Supplier.getText().trim();
+            String id2 = txtId2Supplier.getText().trim();
+            String name = txtName.getText().trim();
+            String phone = txtPhone.getText().trim();
+            String email = txtEmail.getText().trim();
+            String desc = txtpDescription.getText().trim();
+            boolean exito = controller.createSupplierGUI(id1, id2, name, phone, email, desc);
+            if (exito) {
+                JOptionPane.showMessageDialog(this,
+                        "Proveedor registrado y sincronizado con la nube exitosamente.",
+                        "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE
+                );
+                emptyFields();
+            }
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
-    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnReturnActionPerformed
-
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         int option = JOptionPane.showConfirmDialog(
-            this, 
-            "¿Está seguro de cancelar el registro y borrar los datos?", 
-            "Confirmación de Cancelación", 
-            JOptionPane.YES_NO_OPTION, 
-            JOptionPane.WARNING_MESSAGE
+                this,
+                "¿Está seguro de cancelar el registro y borrar los datos?",
+                "Confirmación de Cancelación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
         );
-    
+
         if (option == JOptionPane.YES_OPTION) {
             emptyFields();
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmAddNewSupplier().setVisible(true));
-    }
+    private void itemSuppliersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSuppliersActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_itemSuppliersActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnReturn;
+    private javax.swing.JMenuItem itemSuppliers;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblFullName;
+    private javax.swing.JLabel lblId1;
+    private javax.swing.JLabel lblId2;
+    private javax.swing.JLabel lblPhone;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtId1Supplier;
     private javax.swing.JTextField txtId2Supplier;

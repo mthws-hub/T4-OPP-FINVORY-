@@ -1,20 +1,55 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.model.Supplier;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Maryuri Quiña, @ESPE
  */
 public class FrmSuppliers extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmSuppliers.class.getName());
+
+    FinvoryController controller;
 
     /**
      * Creates new form FrmSuppliers
      */
-    public FrmSuppliers() {
+    public FrmSuppliers(FinvoryController controller) {
+        this.controller = controller;
         initComponents();
+        this.setLocationRelativeTo(null);
+        setupTableSelection();
+        loadSupplierTable();
+    }
+
+    private void setupTableSelection() {
+        btnEdit.setEnabled(false);
+        btnDelete.setEnabled(false);
+        jTableSuppliers.getSelectionModel().addListSelectionListener(e -> {
+            boolean rowSelected = jTableSuppliers.getSelectedRow() != -1;
+            btnEdit.setEnabled(rowSelected);
+            btnDelete.setEnabled(rowSelected);
+        });
+    }
+
+    public void loadSupplierTable() {
+        DefaultTableModel model = (DefaultTableModel) jTableSuppliers.getModel();
+        model.setRowCount(0);
+        if (controller == null || controller.getData() == null) {
+            return;
+        }
+        for (Supplier s : controller.getData().getSuppliers()) {
+            model.addRow(new Object[]{
+                s.getId1(),
+                s.getFullName(),
+                s.getPhone(),
+                s.getEmail()
+            });
+        }
     }
 
     /**
@@ -34,11 +69,13 @@ public class FrmSuppliers extends javax.swing.JFrame {
         btnAdd = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
-        btnReturn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel2.setText("Lista de proovedores");
@@ -107,43 +144,28 @@ public class FrmSuppliers extends javax.swing.JFrame {
             }
         });
 
-        btnReturn.setBackground(new java.awt.Color(0, 123, 0));
-        btnReturn.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        btnReturn.setForeground(new java.awt.Color(255, 255, 255));
-        btnReturn.setText("Volver");
-        btnReturn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReturnActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnReturn)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnEdit)
-                        .addGap(86, 86, 86)
-                        .addComponent(btnAdd)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addGap(61, 61, 61)
+                .addComponent(btnEdit)
+                .addGap(18, 18, 18)
                 .addComponent(btnDelete)
-                .addGap(73, 73, 73))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+                .addComponent(btnAdd)
+                .addGap(77, 77, 77))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdd)
+                    .addComponent(btnDelete)
                     .addComponent(btnEdit)
-                    .addComponent(btnDelete))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(btnReturn)
-                .addGap(18, 18, 18))
+                    .addComponent(btnAdd))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
@@ -165,6 +187,20 @@ public class FrmSuppliers extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jMenu1.setText("Finvory");
+
+        jMenuItem1.setText("Menu Principal");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -200,87 +236,62 @@ public class FrmSuppliers extends javax.swing.JFrame {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         int selectedRow = jTableSuppliers.getSelectedRow();
-    
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un proveedor de la lista para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        Object cellValue = jTableSuppliers.getValueAt(selectedRow, 0);
-    
-        if (cellValue == null) {
-            JOptionPane.showMessageDialog(this, "Error: La fila seleccionada está vacía o el ID no fue cargado.", "Error de Datos", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-    
-        String supplierId = cellValue.toString();
-        FrmAddNewSupplier editSupplierWindow = new FrmAddNewSupplier();
-        JOptionPane.showMessageDialog(editSupplierWindow, 
-            "Cargando datos para el RUC: " + supplierId, 
-        "Modo Edición", JOptionPane.INFORMATION_MESSAGE
-        );
-        editSupplierWindow.setVisible(true);
+        String ruc = jTableSuppliers.getValueAt(selectedRow, 0).toString();
+        JOptionPane.showMessageDialog(this, "Seleccionaste editar el RUC: " + ruc + "\n(//TODO)");
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        FrmAddNewSupplier newSupplierWindow = new FrmAddNewSupplier();
-        newSupplierWindow.setVisible(true);
+        FrmAddNewSupplier win = new FrmAddNewSupplier(this.controller);
+        win.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadSupplierTable();
+                setVisible(true);
+            }
+        });
+        this.setVisible(false);
+        win.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         int selectedRow = jTableSuppliers.getSelectedRow();
-    
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un proveedor de la lista para borrar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-    
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "¿Está seguro de que desea eliminar el proveedor seleccionado?", 
-            "Confirmar Eliminación", 
-            JOptionPane.YES_NO_OPTION
+        String ruc = jTableSuppliers.getValueAt(selectedRow, 0).toString();
+        String nombre = jTableSuppliers.getValueAt(selectedRow, 1).toString();
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar al proveedor '" + nombre + "'?\nEsto no se puede deshacer.",
+                "Confirmar Eliminación",
+                JOptionPane.YES_NO_OPTION
         );
 
         if (confirm == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(this, "Proveedor eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            boolean eliminado = controller.deleteSupplierGUI(ruc);
+            if (eliminado) {
+                JOptionPane.showMessageDialog(this, "Proveedor eliminado.");
+                loadSupplierTable();
+            }
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnReturnActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmSuppliers().setVisible(true));
-    }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
-    private javax.swing.JButton btnReturn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

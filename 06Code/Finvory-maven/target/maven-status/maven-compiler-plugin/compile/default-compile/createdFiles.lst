@@ -4,7 +4,9 @@ ec\edu\espe\finvory\view\FrmMainMenu$1.class
 ec\edu\espe\finvory\view\FrmSuppliers$2.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$2.class
+ec\edu\espe\finvory\view\FrmNewAccount.class
 ec\edu\espe\finvory\view\FrmPrices$3.class
+ec\edu\espe\finvory\view\FrmFinvorySplash$2.class
 ec\edu\espe\finvory\view\FrmInventorySelector$1.class
 ec\edu\espe\finvory\view\FrmCustomers.class
 ec\edu\espe\finvory\model\AdminDetail.class
@@ -20,6 +22,9 @@ ec\edu\espe\finvory\view\FrmObsoleteInventories$4.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$4.class
 ec\edu\espe\finvory\view\FrmMainMenu.class
 ec\edu\espe\finvory\view\FrmSaleInvoice.class
+ec\edu\espe\finvory\view\FrmMainMenu$4.class
+ec\edu\espe\finvory\view\FrmNewAccount$1.class
+ec\edu\espe\finvory\view\FrmSuppliers$5.class
 ec\edu\espe\finvory\model\Inventory.class
 ec\edu\espe\finvory\view\FrmReassignedProduct.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$2.class
@@ -68,7 +73,9 @@ ec\edu\espe\finvory\view\FrmProducts$2.class
 ec\edu\espe\finvory\model\InventoryOfObsolete.class
 ec\edu\espe\finvory\view\FrmProducts.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$6.class
+ec\edu\espe\finvory\view\FrmNewAccount$3.class
 ec\edu\espe\finvory\view\FrmProductReturns$2.class
+ec\edu\espe\finvory\view\FrmMainMenu$5.class
 ec\edu\espe\finvory\view\FrmProductReturns.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$2.class
 ec\edu\espe\finvory\view\FrmInventories$6.class
@@ -87,7 +94,9 @@ ec\edu\espe\finvory\view\FrmObsoleteInventories.class
 ec\edu\espe\finvory\view\FrmSuppliers.class
 ec\edu\espe\finvory\view\FrmFinvorySplash.class
 ec\edu\espe\finvory\view\FrmAddNewInventory.class
+ec\edu\espe\finvory\view\FrmNewAccount$2.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$3.class
+ec\edu\espe\finvory\view\FrmLogin$4.class
 ec\edu\espe\finvory\view\FrmPrices$2.class
 ec\edu\espe\finvory\view\FrmPrices.class
 ec\edu\espe\finvory\model\FinvoryData.class
@@ -101,6 +110,7 @@ ec\edu\espe\finvory\view\FrmAddNewSupplier.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$3.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$3.class
 ec\edu\espe\finvory\view\FrmPrices$1.class
+ec\edu\espe\finvory\view\FrmLogin$3.class
 ec\edu\espe\finvory\mongo\MongoDBConnection.class
 ec\edu\espe\finvory\view\FrmInventories$8.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$3.class

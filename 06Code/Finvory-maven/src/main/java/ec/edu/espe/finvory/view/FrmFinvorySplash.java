@@ -1,8 +1,12 @@
 package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.Timer;
 
 /**
@@ -17,9 +21,31 @@ public class FrmFinvorySplash extends javax.swing.JFrame {
      * Creates new form FrmFinvorySplash
      */
     public FrmFinvorySplash(FinvoryController controller) {
+        this.setUndecorated(true);
         this.controller = controller;
         initComponents();
-        this.setLocationRelativeTo(null); // Centrar en pantalla
+        this.setLocationRelativeTo(null);
+        paintImage(lblLogo, "/FinvoryLogo.jpeg");
+        prgBar.setUI(new javax.swing.plaf.basic.BasicProgressBarUI() {
+            @Override
+            protected void paintDeterminate(java.awt.Graphics g, javax.swing.JComponent c) {
+                java.awt.Graphics2D g2d = (java.awt.Graphics2D) g;
+                g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                int width = c.getWidth();
+                int height = c.getHeight();
+                double percent = prgBar.getPercentComplete();
+                int fillWidth = (int) (width * percent);
+                g2d.setColor(new java.awt.Color(230, 230, 230));
+                g2d.fillRoundRect(0, 0, width, height, height, height);
+                if (fillWidth > 0) {
+                    java.awt.Color colorInicio = new java.awt.Color(0, 200, 83);
+                    java.awt.Color colorFin = new java.awt.Color(41, 121, 255);
+                    java.awt.GradientPaint gradient = new java.awt.GradientPaint(0, 0, colorInicio, width, 0, colorFin);
+                    g2d.setPaint(gradient);
+                    g2d.fillRoundRect(0, 0, fillWidth, height, height, height);
+                }
+            }
+        });
         run();
     }
 
@@ -33,70 +59,164 @@ public class FrmFinvorySplash extends javax.swing.JFrame {
     private void initComponents() {
 
         prgBar = new javax.swing.JProgressBar();
+        jLabel4 = new javax.swing.JLabel();
+        lblLogo = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        lblStatus = new javax.swing.JLabel();
+        lblPercent = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
-        jLabel1.setText("LOGO");
+        prgBar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(0, 204, 255), new java.awt.Color(0, 204, 0), null, null));
 
-        jLabel2.setText("FINVORY SYSTEAM");
+        jLabel4.setFont(new java.awt.Font("Perpetua", 1, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(112, 112, 112));
+        jLabel4.setText("© Finvory All right recovered");
+
+        jLabel1.setFont(new java.awt.Font("Perpetua", 1, 24)); // NOI18N
+        jLabel1.setText("Bienvenido a");
+
+        jLabel2.setFont(new java.awt.Font("Perpetua", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 123, 0));
+        jLabel2.setText("Finvory");
+
+        jLabel5.setFont(new java.awt.Font("Perpetua", 1, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(112, 112, 112));
+        jLabel5.setText("Sistema Inteligente de Gestion de Inventarios");
+
+        lblStatus.setFont(new java.awt.Font("Perpetua", 1, 12)); // NOI18N
+        lblStatus.setForeground(new java.awt.Color(112, 112, 112));
+        lblStatus.setText("Iniciando Sistema");
+
+        lblPercent.setFont(new java.awt.Font("Perpetua", 1, 12)); // NOI18N
+        lblPercent.setForeground(new java.awt.Color(112, 112, 112));
+        lblPercent.setText("0%");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(231, 231, 231)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(prgBar, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(228, 228, 228))
+                .addContainerGap(85, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2))
+                            .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addGap(220, 220, 220))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(255, 255, 255))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(lblStatus)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblPercent, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(prgBar, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(65, 65, 65))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(53, 53, 53)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(74, 74, 74)
-                .addComponent(prgBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(102, 102, 102))
+                .addGap(22, 22, 22)
+                .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addComponent(prgBar, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblStatus)
+                    .addComponent(lblPercent))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void run() {
-        Timer timer = new Timer(50, new ActionListener() {
-            int progress = 0;
-
+        Thread hilo = new Thread(new Runnable() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                progress += 2; // Sube la barra de 2 en 2
-                prgBar.setValue(progress); // 'prgBar' es el nombre de tu JProgressBar
-
-                if (progress >= 100) {
-                    ((Timer) e.getSource()).stop(); // Detener timer
+            public void run() {
+                try {
+                    for (int i = 0; i <= 100; i++) {
+                        Thread.sleep(30);
+                        prgBar.setValue(i);
+                        lblPercent.setText(i + "%");
+                        if (i == 10) {
+                            lblStatus.setText("Cargando módulos...");
+                        }
+                        if (i == 30) {
+                            lblStatus.setText("Conectando a base de datos...");
+                        }
+                        if (i == 60) {
+                            lblStatus.setText("Cargando inventarios...");
+                        }
+                        if (i == 90) {
+                            lblStatus.setText("Iniciando interfaz...");
+                        }
+                    }
+                    Thread.sleep(500);
                     openLogin();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
-        timer.start();
+        hilo.start();
     }
-    
-    private void openLogin(){
+
+    private void openLogin() {
         this.dispose();
         FrmLogin frmLogin = new FrmLogin(controller);
         frmLogin.setVisible(true);
     }
 
+    private void paintImage(JLabel lbl, String route) {
+        URL url = getClass().getResource(route);
+        if (url != null) {
+            ImageIcon imagenOriginal = new ImageIcon(url);
+            int imgW = imagenOriginal.getIconWidth();
+            int imgH = imagenOriginal.getIconHeight();
+            int lblW = lbl.getWidth();
+            int lblH = lbl.getHeight();
+            double ratio = Math.min((double) lblW / imgW, (double) lblH / imgH);
+
+            int newWidth = (int) (imgW * ratio);
+            int newHeight = (int) (imgH * ratio);
+            Image imagen = imagenOriginal.getImage();
+            Image imagenEscalada = imagen.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+            lbl.setIcon(new ImageIcon(imagenEscalada));
+            lbl.setHorizontalAlignment(JLabel.CENTER);
+            lbl.setVerticalAlignment(JLabel.CENTER);
+
+        } else {
+            System.out.println("ERROR checks the route" + route);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblPercent;
+    private javax.swing.JLabel lblStatus;
     private javax.swing.JProgressBar prgBar;
     // End of variables declaration//GEN-END:variables
 

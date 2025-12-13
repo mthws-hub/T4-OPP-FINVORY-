@@ -31,6 +31,38 @@
       "email": "joseph3elcrac@gmail.com",
       "username": "Joseph",
       "password": "123"
+    },
+    {
+      "name": "TropiBurger",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Dr. José Peralta",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "001751132869",
+      "phone": "0983249630",
+      "email": "tropi@gmail.com",
+      "username": "Said",
+      "password": "123"
+    },
+    {
+      "name": "Repuestos",
+      "address": {
+        "country": "545454",
+        "city": "4545",
+        "street": "54545",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "17545454",
+      "phone": "5454454",
+      "email": "455454",
+      "username": "adminPrueba",
+      "password": "123"
     }
   ],
   "personalAccounts": [
@@ -38,6 +70,11 @@
       "fullName": "Juan Perez",
       "username": "juanp",
       "password": "123"
+    },
+    {
+      "fullName": "Pedro Pascal",
+      "username": "pedrito",
+      "password": "1236"
     }
   ]
 }

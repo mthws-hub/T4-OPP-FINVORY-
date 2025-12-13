@@ -3,6 +3,7 @@ package ec.edu.espe.finvory.controller;
 import ec.edu.espe.finvory.view.FrmProducts;
 import ec.edu.espe.finvory.view.FrmCustomers;
 import ec.edu.espe.finvory.model.*;
+import ec.edu.espe.finvory.mongo.MongoDBConnection;
 import ec.edu.espe.finvory.view.FinvoryView;
 import ec.edu.espe.finvory.mongo.MongoDataExporter;
 import ec.edu.espe.finvory.view.FrmInventories;
@@ -213,6 +214,27 @@ public class FinvoryController {
         view.showMessage("Ahora puede iniciar sesion.");
     }
 
+    public boolean registerCompanyGUI(HashMap<String, String> data, Address address) {
+        String username = data.get("username");
+        if (findCompanyByUsername(username) != null || findPersonalByUsername(username) != null) {
+            view.showError("Ese nombre de usuario ya está en uso.");
+            return false;
+        }
+        CompanyAccount newCompany = new CompanyAccount(
+                data.get("companyName"), address, data.get("ruc"),
+                data.get("phone"), data.get("email"),
+                username, data.get("password")
+        );
+        users.getCompanyAccounts().add(newCompany);
+        dataBase.saveUsers(users);
+        FinvoryData initialData = new FinvoryData();
+        initialData.setCompanyInfo(newCompany);
+        dataBase.saveCompanyData(initialData, username);
+        syncUsersToCloud();
+
+        return true;
+    }
+
     private void handleRegisterPersonal() {
         HashMap<String, String> personalData = view.askNewPersonalAccountData();
         String username = personalData.get("username");
@@ -230,6 +252,37 @@ public class FinvoryController {
         dataBase.saveUsers(users);
         view.showMessage("Cuenta Personal registrada con exito!");
         view.showMessage("Ahora puede iniciar sesion.");
+    }
+
+    public boolean registerPersonalGUI(HashMap<String, String> data) {
+        String username = data.get("username");
+        if (findCompanyByUsername(username) != null || findPersonalByUsername(username) != null) {
+            view.showError("Ese nombre de usuario ya está en uso.");
+            return false;
+        }
+        PersonalAccount newPersonal = new PersonalAccount(
+                data.get("fullName"), username, data.get("password")
+        );
+        users.getPersonalAccounts().add(newPersonal);
+        dataBase.saveUsers(users);
+        syncUsersToCloud();
+        return true;
+    }
+
+    private void syncUsersToCloud() {
+        try {
+            String uri = System.getenv("MONGODB_URI");
+            if (uri != null && !uri.isEmpty()) {
+                MongoDBConnection connection = new MongoDBConnection(uri, "FinvoryDB");
+                ec.edu.espe.finvory.mongo.MongoDataExporter.exportUsers(this.users, connection.getDatabase());
+                connection.close();
+                System.out.println("INFO: Usuarios sincronizados con la nube.");
+            } else {
+                System.err.println("WARNING: No se pudo sincronizar con la nube (MONGODB_URI no definida).");
+            }
+        } catch (Exception e) {
+            System.err.println("ERROR al subir usuarios a la nube: " + e.getMessage());
+        }
     }
 
     private void startMainMenu() {
@@ -381,7 +434,7 @@ public class FinvoryController {
     }
 
     private void handleInventoryMenu() {
-        
+
     }
 
     private void handleViewProducts() {
@@ -604,6 +657,35 @@ public class FinvoryController {
         data.getSuppliers().add(supplier);
         view.showMessage("Proveedor creado con exito!");
         return supplier;
+    }
+
+    public boolean createSupplierGUI(String id1, String id2, String name, String phone, String email, String description) {
+        if (findSupplier(id1) != null) {
+            view.showError("Error: Ya existe un proveedor registrado con el ID: " + id1);
+            return false;
+        }
+        Supplier newSupplier = new Supplier(name, id1, phone, email, description);
+        newSupplier.setId2(id2);
+        data.getSuppliers().add(newSupplier);
+        saveData();
+        return true;
+    }
+
+    public boolean deleteSupplierGUI(String id1) {
+        Supplier supplier = findSupplier(id1);
+        if (supplier == null) {
+            view.showError("Proveedor no encontrado.");
+            return false;
+        }
+        for (Product product : data.getProducts()) {
+            if (product.getSupplierId() != null && product.getSupplierId().equals(supplier.getId1())) {
+                view.showError("No se puede eliminar. El proveedor está asignado al producto: " + product.getName());
+                return false;
+            }
+        }
+        data.getSuppliers().remove(supplier);
+        saveData();
+        return true;
     }
 
     private void handleEditSupplier() {

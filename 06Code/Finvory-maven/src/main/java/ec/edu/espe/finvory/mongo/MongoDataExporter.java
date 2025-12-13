@@ -50,7 +50,7 @@ public class MongoDataExporter {
         connection.close();
     }
 
-    private static void exportUsers(SystemUsers systemUsers, MongoDatabase mongoDatabase) {
+    public static void exportUsers(SystemUsers systemUsers, MongoDatabase mongoDatabase) {
         MongoCollection<Document> collection = mongoDatabase.getCollection("users");
 
         List<Document> documents = new ArrayList<>();
