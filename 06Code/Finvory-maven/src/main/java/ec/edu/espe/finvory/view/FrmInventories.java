@@ -5,6 +5,7 @@ import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.model.Product;
 import java.awt.Cursor;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
@@ -15,12 +16,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmInventories extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmInventories.class.getName());
-
     private FinvoryController controller;
     private Inventory currentInventory = null;
-    private FrmObsoleteInventories searchObsoleteInventoryWindow;
-    private FrmAddNewInventory searchNewInventoryWindow;
 
     /**
      * Creates new form FrmInventories
@@ -44,22 +41,6 @@ public class FrmInventories extends javax.swing.JFrame {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
-            }
-            Class[] types = new Class[]{
-                java.lang.Object.class,
-                java.lang.Object.class,
-                java.lang.Object.class,
-                java.lang.Object.class,
-                java.lang.Object.class,
-                java.lang.Object.class,
-                java.lang.Object.class,
-                java.lang.Integer.class,
-                java.lang.Double.class
-            };
-
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
             }
         };
         tabProducts.setModel(model);
@@ -281,47 +262,24 @@ public class FrmInventories extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFindInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindInventoryActionPerformed
-        String queryText = txtName.getText().trim();
+        String query = txtName.getText().trim();
 
-        if (queryText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Escriba un nombre.");
+        if (query.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Escriba un nombre.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        if (controller == null) {
-            return;
-        }
-
         try {
-            ArrayList<Inventory> matches = controller.findInventoriesByPartialName(queryText);
-
-            int cantidadEncontrada = (matches != null) ? matches.size() : 0;
-
-            this.currentInventory = null;
+            ArrayList<Inventory> matches = controller.findInventoriesByPartialName(query);
 
             if (matches.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No se encontraron coincidencias.");
-                emptyFields();
-
+                handleNoMatches();
             } else if (matches.size() == 1) {
-                this.currentInventory = matches.get(0);
-                fillInventoryDetails(this.currentInventory);
+                handleSingleMatch(matches.get(0));
             } else {
-                FrmInventorySelector selector = new FrmInventorySelector(this, true, matches);
-                selector.setVisible(true);
-                this.currentInventory = selector.getSelectedInventory();
-
-                if (this.currentInventory != null) {
-                    fillInventoryDetails(this.currentInventory);
-                } else {
-                    emptyFields();
-                }
+                handleMultipleMatches(matches);
             }
-
         } catch (Exception e) {
-            System.out.println("Mensaje: " + e.getMessage());
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error crítico: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
     }//GEN-LAST:event_btnFindInventoryActionPerformed
 
@@ -342,99 +300,82 @@ public class FrmInventories extends javax.swing.JFrame {
     }//GEN-LAST:event_itemProductsActionPerformed
 
     private void itemObsoleteProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemObsoleteProductsActionPerformed
-        FrmObsoleteInventories win = new FrmObsoleteInventories(this,true,controller);
+        FrmObsoleteInventories win = new FrmObsoleteInventories(this, true, controller);
+        this.setVisible(false);
         win.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmInventories.this.setVisible(true);
+                if (currentInventory != null) {
+                    populateTable();
+                }
             }
         });
-        this.setVisible(false);
         win.setVisible(true);
     }//GEN-LAST:event_itemObsoleteProductsActionPerformed
 
     private void itemAddNewInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAddNewInventoryActionPerformed
-        FrmAddNewInventory win = new FrmAddNewInventory(this,true,controller);
+        FrmAddNewInventory win = new FrmAddNewInventory(this, true, controller);
+        this.setVisible(false);
         win.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmInventories.this.setVisible(true);
             }
         });
-        this.setVisible(false);
         win.setVisible(true);
     }//GEN-LAST:event_itemAddNewInventoryActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void fillInventoryDetails(Inventory inv) {
-        if (inv.getAddress() != null) {
-            txtCountryInventory.setText(inv.getAddress().getCountry());
-            txtCityInventory.setText(inv.getAddress().getCity());
-        } else {
-            txtCountryInventory.setText("Desconocido");
-        }
-        populateTable(inv);
+    private void handleNoMatches() {
+        JOptionPane.showMessageDialog(this, "No se encontraron coincidencias.");
+        clearFields();
     }
 
-    private void populateTable(Inventory currentInventory) {
+    private void handleSingleMatch(Inventory inv) {
+        this.currentInventory = inv;
+        updateInterface();
+    }
+
+    private void handleMultipleMatches(ArrayList<Inventory> matches) {
+        FrmInventorySelector selector = new FrmInventorySelector(this, true, matches);
+        selector.setVisible(true);
+        this.currentInventory = selector.getSelectedInventory();
+        if (this.currentInventory != null) {
+            updateInterface();
+        } else {
+            clearFields();
+        }
+    }
+
+    private void updateInterface() {
+        if (currentInventory.getAddress() != null) {
+            txtCountryInventory.setText(currentInventory.getAddress().getCountry());
+            txtCityInventory.setText(currentInventory.getAddress().getCity());
+        } else {
+            txtCountryInventory.setText("-");
+            txtCityInventory.setText("-");
+        }
+        populateTable();
+    }
+
+    private void populateTable() {
         DefaultTableModel model = (DefaultTableModel) tabProducts.getModel();
         model.setRowCount(0);
-
-        ArrayList<Product> globalProducts = controller.getData().getProducts();
-        if (globalProducts == null || globalProducts.isEmpty()) {
-            return;
+        List<Object[]> rows = controller.getInventoryTableData(currentInventory);
+        for (Object[] row : rows) {
+            model.addRow(row);
         }
-
-        float profit = controller.getData().getProfitPercentage();
-        float dStd = controller.getData().getDiscountStandard();
-        float dPrm = controller.getData().getDiscountPremium();
-        float dVip = controller.getData().getDiscountVip();
-
-        int coincidencias = 0;
-
-        for (Product p : globalProducts) {
-            String globalID = p.getId();
-
-            int stock = currentInventory.getStock(globalID);
-
-            if (stock == 0) {
-                stock = currentInventory.getStock(globalID.trim());
-            }
-
-            if (stock >= 0) {
-                coincidencias++;
-
-                int obsoleteStock = 0;
-                if (controller.getData().getObsoleteInventory() != null) {
-                    obsoleteStock = controller.getData().getObsoleteInventory().getStock(globalID);
-                }
-
-                model.addRow(new Object[]{
-                    p.getId(),
-                    p.getName(),
-                    p.getBarcode(),
-                    String.format("$%.2f", p.getBaseCostPrice()),
-                    String.format("$%.2f", p.getPrice("STANDARD", profit, dStd, dPrm, dVip)),
-                    String.format("$%.2f", p.getPrice("PREMIUM", profit, dStd, dPrm, dVip)),
-                    String.format("$%.2f", p.getPrice("VIP", profit, dStd, dPrm, dVip)),
-                    stock,
-                    (double) obsoleteStock
-                });
-            }
-        }
-
-        tabProducts.revalidate();
-        tabProducts.repaint();
     }
 
-    private void emptyFields() {
+    private void clearFields() {
         txtCountryInventory.setText("");
         txtCityInventory.setText("");
         DefaultTableModel model = (DefaultTableModel) tabProducts.getModel();
         model.setRowCount(0);
+        this.currentInventory = null;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -1,13 +1,8 @@
 package ec.edu.espe.finvory.model;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import java.io.*;
-import java.util.Scanner;
 /**
  *
  * @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
-
 public class Address {
     private String country;
     private String city;
@@ -16,45 +11,47 @@ public class Address {
     private String streetNumber;
     private String region;
 
-    public Address() {}
+    public Address() {
+        
+    }
+
+    public Address(String country, String city, String street, String zipCode, String streetNumber, String region) {
+        this.country = country;
+        this.city = city;
+        this.street = street;
+        this.zipCode = zipCode;
+        this.streetNumber = streetNumber;
+        this.region = region;
+    }
 
     public Address(String country, String city, String street) {
         this.country = country;
         this.city = city;
         this.street = street;
-        this.zipCode = "";
+        this.zipCode = ""; 
         this.streetNumber = "";
         this.region = "";
     }
     
-    public void setZipCode(String zipCode) { 
-        this.zipCode = zipCode; 
-    }
-    
-    public void setStreetNumber(String streetNumber) { 
-        this.streetNumber = streetNumber; 
-    }
-    
-    public void setRegion(String region) { 
-        this.region = region; 
-    }
-    
-    public String getCountry() { 
-        return country; 
-    }
-    
-    public String getCity() { 
-        return city; 
-    }
-    
-    public String getStreet() { 
-        return street; 
-    }
+    public String getCountry() { return country; }
+    public void setCountry(String country) { this.country = country; }
 
-    @Override
-    public String toString() { 
-        return street + ", " + city + ", " + country; 
-    }
-    
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
+
+    public String getStreet() { return street; }
+    public void setStreet(String street) { this.street = street; }
+
+    public String getZipCode() { return zipCode; }
+    public void setZipCode(String zipCode) { this.zipCode = zipCode; }
+
+    public String getStreetNumber() { return streetNumber; }
+    public void setStreetNumber(String streetNumber) { this.streetNumber = streetNumber; }
+
+    public String getRegion() { return region; }
+    public void setRegion(String region) { this.region = region; }
 }
+
+    
+
 

@@ -1,13 +1,14 @@
 package ec.edu.espe.finvory.controller;
 
 import ec.edu.espe.finvory.view.FrmProducts;
+import ec.edu.espe.finvory.view.FrmPrices;
 import ec.edu.espe.finvory.view.FrmCustomers;
 import ec.edu.espe.finvory.model.*;
 import ec.edu.espe.finvory.mongo.MongoDBConnection;
-import ec.edu.espe.finvory.view.FinvoryView;
 import ec.edu.espe.finvory.mongo.MongoDataExporter;
 import ec.edu.espe.finvory.view.FrmInventories;
 import ec.edu.espe.finvory.view.FrmMainMenu;
+import ec.edu.espe.finvory.view.FrmMainMenuPersonalAccount;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,6 +17,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+import org.bson.Document;
 
 /**
  *
@@ -25,29 +30,57 @@ public class FinvoryController {
 
     private FinvoryData data;
     private SystemUsers users;
-    private FinvoryView view;
     private Database dataBase;
     private String currentCompanyUsername;
+    private String userType = "";
+
+    private static final BigDecimal DEFAULT_TAX_RATE = new BigDecimal("0.12");
+
+    public FinvoryController(Database db) {
+        this.dataBase = db;
+        this.users = db.loadUsers();
+    }
 
     public FinvoryData getData() {
         return data;
     }
 
+    public List<Product> getProducts() {
+        return data.getProducts();
+    }
+
+    public List<Inventory> getInventories() {
+        return data.getInventories();
+    }
+
+    public List<Customer> getCustomers() {
+        return data.getCustomers();
+    }
+
+    public List<Supplier> getSuppliers() {
+        return data.getSuppliers();
+    }
+
     public void saveData() {
         if (currentCompanyUsername != null && data != null && data.getCompanyInfo() != null) {
             dataBase.saveCompanyData(data, currentCompanyUsername);
-
             try {
-                MongoDataExporter.exportCompanyData(
-                        currentCompanyUsername,
-                        data,
-                        data.getCompanyInfo()
-                );
+                MongoDataExporter.exportCompanyData(currentCompanyUsername, data, data.getCompanyInfo());
             } catch (Exception e) {
-                view.showError("ERROR: Fallo la exportación a MongoDB: " + e.getMessage());
             }
         }
+    }
 
+    public Document buildInvoiceDocument(InvoiceSim invoice, String companyUsername) {
+        Document document = new Document();
+        document.append("companyUsername", companyUsername);
+        document.append("invoiceId", invoice.getId());
+        document.append("date", invoice.getDate());
+        document.append("paymentDueDate", invoice.getPaymentDueDate());
+        document.append("subtotal", invoice.getSubtotal().doubleValue());
+        document.append("tax", invoice.getTaxAmount().doubleValue());
+        document.append("total", invoice.getTotal().doubleValue());
+        return document;
     }
 
     public Product findProductPublic(String id) {
@@ -65,90 +98,24 @@ public class FinvoryController {
     public boolean handleDeleteProduct(String productId) {
         Product product = findProduct(productId);
         if (product == null) {
-            view.showError("Producto no encontrado.");
             return false;
         }
 
         for (InvoiceSim invoiceSim : data.getInvoices()) {
             for (InvoiceLineSim line : invoiceSim.getLines()) {
                 if (line.getProductId().equals(product.getId())) {
-                    view.showError("No se puede eliminar. El producto ya está en una factura.");
                     return false;
                 }
             }
         }
+        data.removeProduct(product);
 
-        data.getProducts().remove(product);
         for (Inventory inventory : data.getInventories()) {
             inventory.removeStock(product.getId(), inventory.getStock(product.getId()));
         }
         data.getObsoleteInventory().removeStock(product.getId(), data.getObsoleteInventory().getStock(product.getId()));
         saveData();
-        view.showMessage("Producto eliminado del sistema.");
         return true;
-    }
-
-    public FinvoryController(FinvoryView view, Database db) {
-        this.view = view;
-        this.dataBase = db;
-        this.users = db.loadUsers();
-    }
-
-    public void run() {
-        boolean running = true;
-        while (running) {
-            int opt = view.showStartMenu();
-            switch (opt) {
-                case 1 -> {
-                    String role = handleLogin();
-                    if (role.equals("COMPANY")) {
-                        this.data = dataBase.loadCompanyData(currentCompanyUsername);
-
-                        CompanyAccount currentAccount = findCompanyByUsername(currentCompanyUsername);
-                        this.data.setCompanyInfo(currentAccount);
-
-                        startMainMenu();
-
-                        dataBase.saveCompanyData(data, currentCompanyUsername);
-                    } else if (role.equals("PERSONAL")) {
-                        startPersonalAccountMenu();
-                    }
-                }
-                case 2 ->
-                    handleRegistrationMenu();
-                case 0 ->
-                    running = false;
-                default ->
-                    view.showError("Opcion no valida.");
-            }
-        }
-        view.showMessage("Saliendo del sistema...");
-        System.exit(0);
-    }
-
-    private String handleLogin() {
-        String input = view.showLogin();
-        String[] parts = input.split(":");
-        String username = parts[0];
-        String password = parts[1];
-
-        for (CompanyAccount company : users.getCompanyAccounts()) {
-            if (company.getUsername().equals(username) && company.checkPassword(password)) {
-                view.showMessage("Bienvenido (Compania) " + company.getName());
-                this.currentCompanyUsername = username;
-                return "COMPANY";
-            }
-        }
-
-        for (PersonalAccount personal : users.getPersonalAccounts()) {
-            if (personal.getUsername().equals(username) && personal.checkPassword(password)) {
-                view.showMessage("Bienvenido (Personal) " + personal.getFullName());
-                return "PERSONAL";
-            }
-        }
-
-        view.showError("Credenciales incorrectas.");
-        return "INVALID";
     }
 
     public boolean handleLoginGUI(String username, String password) {
@@ -157,112 +124,56 @@ public class FinvoryController {
                 this.currentCompanyUsername = username;
                 this.data = dataBase.loadCompanyData(currentCompanyUsername);
                 this.data.setCompanyInfo(company);
+                this.userType = "COMPANY";
                 return true;
             }
         }
+        for (PersonalAccount personal : users.getPersonalAccounts()) {
+            if (personal.getUsername().equals(username) && personal.checkPassword(password)) {
+                this.currentCompanyUsername = null;
+                this.data = null;
+                this.userType = "PERSONAL";
+                return true;
+            }
+        }
+
         return false;
     }
 
     public void startMainMenuPublic() {
-        FrmMainMenu menu = new FrmMainMenu(this);
-        menu.setVisible(true);
-        //startMainMenu();
-    }
-
-    private void handleRegistrationMenu() {
-        boolean running = true;
-        while (running) {
-            int opt = view.showRegistrationMenu();
-            switch (opt) {
-                case 1 ->
-                    handleRegisterCompany();
-                case 2 ->
-                    handleRegisterPersonal();
-                case 0 ->
-                    running = false;
-                default ->
-                    view.showError("Opcion no valida.");
-            }
+        if ("COMPANY".equals(this.userType)) {
+            FrmMainMenu menu = new FrmMainMenu(this);
+            menu.setVisible(true);
+        } else if ("PERSONAL".equals(this.userType)) {
+            FrmMainMenuPersonalAccount menu = new FrmMainMenuPersonalAccount(this);
+            menu.setVisible(true);
         }
-    }
-
-    private void handleRegisterCompany() {
-        HashMap<String, String> companyData = view.askNewCompanyAccountData();
-        String username = companyData.get("username");
-
-        if (findCompanyByUsername(username) != null || findPersonalByUsername(username) != null) {
-            view.showError("Ese nombre de usuario ya esta en uso.");
-            return;
-        }
-
-        Address address = view.askAddressData("-> Direccion de la Compania:");
-
-        CompanyAccount newCompany = new CompanyAccount(
-                companyData.get("companyName"), address, companyData.get("ruc"),
-                companyData.get("phone"), companyData.get("email"),
-                username, companyData.get("password")
-        );
-
-        users.getCompanyAccounts().add(newCompany);
-        dataBase.saveUsers(users);
-
-        FinvoryData initialData = new FinvoryData();
-        initialData.setCompanyInfo(newCompany);
-        dataBase.saveCompanyData(initialData, username);
-
-        view.showMessage("Cuenta de Compania registrada con exito!");
-        view.showMessage("Ahora puede iniciar sesion.");
     }
 
     public boolean registerCompanyGUI(HashMap<String, String> data, Address address) {
         String username = data.get("username");
         if (findCompanyByUsername(username) != null || findPersonalByUsername(username) != null) {
-            view.showError("Ese nombre de usuario ya está en uso.");
             return false;
         }
-        CompanyAccount newCompany = new CompanyAccount(
-                data.get("companyName"), address, data.get("ruc"),
-                data.get("phone"), data.get("email"),
-                username, data.get("password")
-        );
+
+        CompanyAccount newCompany = new CompanyAccount(data.get("companyName"), address, data.get("ruc"), data.get("phone"), data.get("email"), username, data.get("password"));
         users.getCompanyAccounts().add(newCompany);
         dataBase.saveUsers(users);
+
         FinvoryData initialData = new FinvoryData();
         initialData.setCompanyInfo(newCompany);
         dataBase.saveCompanyData(initialData, username);
         syncUsersToCloud();
-
         return true;
-    }
-
-    private void handleRegisterPersonal() {
-        HashMap<String, String> personalData = view.askNewPersonalAccountData();
-        String username = personalData.get("username");
-
-        if (findCompanyByUsername(username) != null || findPersonalByUsername(username) != null) {
-            view.showError("Ese nombre de usuario ya esta en uso.");
-            return;
-        }
-
-        PersonalAccount newPersonal = new PersonalAccount(
-                personalData.get("fullName"), username, personalData.get("password")
-        );
-
-        users.getPersonalAccounts().add(newPersonal);
-        dataBase.saveUsers(users);
-        view.showMessage("Cuenta Personal registrada con exito!");
-        view.showMessage("Ahora puede iniciar sesion.");
     }
 
     public boolean registerPersonalGUI(HashMap<String, String> data) {
         String username = data.get("username");
         if (findCompanyByUsername(username) != null || findPersonalByUsername(username) != null) {
-            view.showError("Ese nombre de usuario ya está en uso.");
             return false;
         }
-        PersonalAccount newPersonal = new PersonalAccount(
-                data.get("fullName"), username, data.get("password")
-        );
+
+        PersonalAccount newPersonal = new PersonalAccount(data.get("fullName"), username, data.get("password"));
         users.getPersonalAccounts().add(newPersonal);
         dataBase.saveUsers(users);
         syncUsersToCloud();
@@ -273,337 +184,63 @@ public class FinvoryController {
         try {
             String uri = System.getenv("MONGODB_URI");
             if (uri != null && !uri.isEmpty()) {
-                MongoDBConnection connection = new MongoDBConnection(uri, "FinvoryDB");
-                ec.edu.espe.finvory.mongo.MongoDataExporter.exportUsers(this.users, connection.getDatabase());
+                MongoDBConnection connection = new MongoDBConnection();
+                MongoDataExporter.exportUsers(this.users, connection.getDatabase());
                 connection.close();
-                System.out.println("INFO: Usuarios sincronizados con la nube.");
-            } else {
-                System.err.println("WARNING: No se pudo sincronizar con la nube (MONGODB_URI no definida).");
             }
         } catch (Exception e) {
-            System.err.println("ERROR al subir usuarios a la nube: " + e.getMessage());
         }
     }
 
-    private void startMainMenu() {
-        boolean running = true;
-        while (running) {
-            int option = view.showMainMenu();
-            switch (option) {
-                case 1 ->
-                    handleNewSale();
-                case 2 ->
-                    handleInventoryMenu();
-                case 3 ->
-                    handleCustomerMenu();
-                case 4 ->
-                    handleSupplierMenu();
-                case 5 ->
-                    handleAdminMenu();
-                case 6 ->
-                    handleReportsMenu();
-                case 7 ->
-                    handleGenerateQuote();
-                case 0 ->
-                    running = false;
-                default ->
-                    view.showError("Opcion no valida.");
-            }
-        }
-        dataBase.saveCompanyData(data, currentCompanyUsername);
-    }
-
-    private void startPersonalAccountMenu() {
-        boolean running = true;
-        while (running) {
-            int opt = view.showPersonalAccountMenu();
-            switch (opt) {
-                case 1 ->
-                    handleViewLimitedProducts();
-                case 2 ->
-                    handleViewCompanyPhones();
-                case 0 ->
-                    running = false;
-                default ->
-                    view.showError("Opcion no valida.");
-            }
-        }
-    }
-
-    private void handleViewLimitedProducts() {
-        CompanyAccount target = view.chooseCompany(users.getCompanyAccounts());
-        if (target != null) {
-            FinvoryData tempData = dataBase.loadCompanyData(target.getUsername());
-            view.showLimitedProductList(tempData.getProducts());
-        }
-    }
-
-    private void handleViewCompanyPhones() {
-        view.showCompanyPhones(users.getCompanyAccounts());
-    }
-
-    private void handleNewSale() {
-        String query = view.askCustomerQuery();
-        Customer customer = findCustomer(query);
-
-        if (customer == null) {
-            if (view.askToCreateNewCustomer(query)) {
-                customer = handleCreateCustomer();
-                if (customer == null) {
-                    view.showError("No se pudo crear el cliente. Venta cancelada.");
-                    return;
-                }
-            } else {
-                view.showMessage("Venta cancelada.");
-                return;
-            }
-        }
-
-        view.showMessage("Cliente encontrado: " + customer.getName());
-
-        HashMap<Product, HashMap<Inventory, Integer>> cart = new HashMap<>();
-
-        while (true) {
-            String id = view.askProductId();
-            if (id.equalsIgnoreCase("fin")) {
-                break;
-            }
-
-            Product product = findProduct(id);
-            if (product == null) {
-                continue;
-            }
-
-            Inventory inventory = view.chooseInventoryToSellFrom(data.getInventories(), product.getId());
-            if (inventory == null) {
-                continue;
-            }
-
-            int quantity = view.askQuantity(inventory.getStock(product.getId()));
-            if (quantity == 0) {
-                continue;
-            }
-
-            cart.putIfAbsent(product, new HashMap<>());
-            cart.get(product).put(inventory, quantity);
-            view.showMessage("Anadido: " + product.getName() + " (x" + quantity + ") desde " + inventory.getName());
-        }
-
-        if (cart.isEmpty()) {
-            view.showMessage("Venta cancelada.");
-            return;
-        }
-
-        String payment = view.askPaymentMethod();
-        String dueDate = "";
-
-        if (payment.equals("CHEQUE POSTFECHADO")) {
-            dueDate = view.askPaymentDueDate();
-        }
-
-        String invoiceId = "F-" + (data.getInvoices().size() + 1);
-        InvoiceSim invoice = new InvoiceSim(invoiceId, customer, payment, dueDate);
-
-        float profitPercentage = data.getProfitPercentage();
-        float discountStandard = data.getDiscountStandard();
-        float discountPremium = data.getDiscountPremium();
-        float discountVip = data.getDiscountVip();
-
-        for (Map.Entry<Product, HashMap<Inventory, Integer>> entry : cart.entrySet()) {
-            Product product = entry.getKey();
-            for (Map.Entry<Inventory, Integer> stockEntry : entry.getValue().entrySet()) {
-                Inventory inventory = stockEntry.getKey();
-                int quantity = stockEntry.getValue();
-
-                inventory.removeStock(product.getId(), quantity);
-                float price = product.getPrice(customer.getClientType(), profitPercentage, discountStandard, discountPremium, discountVip);
-                invoice.addLine(product, quantity, price);
-            }
-        }
-
-        invoice.calculateTotals(data.getTaxRate());
-
-        if (!payment.equals("CHEQUE POSTFECHADO")) {
-            invoice.complete();
-        } else {
-            view.showMessage("Venta registrada como PENDIENTE DE PAGO (Cheque Postfechado).");
-        }
-
-        data.getInvoices().add(invoice);
-        view.showSaleSummary(invoice);
-    }
-
-    private void handleInventoryMenu() {
-
-    }
-
-    private void handleViewProducts() {
-        view.showProductList(
-                data.getProducts(),
-                data.getInventories(),
+    public ProductDisplayData getProductDisplayData() {
+        return new ProductDisplayData(
+                new ArrayList<>(data.getProducts()),
+                new ArrayList<>(data.getInventories()),
                 data.getObsoleteInventory(),
-                data.getProfitPercentage(),
-                data.getDiscountStandard(),
-                data.getDiscountPremium(),
-                data.getDiscountVip()
+                data.getProfitPercentage() != null ? data.getProfitPercentage().floatValue() : 0.0f,
+                data.getDiscountStandard() != null ? data.getDiscountStandard().floatValue() : 0.0f,
+                data.getDiscountPremium() != null ? data.getDiscountPremium().floatValue() : 0.0f,
+                data.getDiscountVip() != null ? data.getDiscountVip().floatValue() : 0.0f
         );
     }
 
-    private void handleEditProduct() {
-        Product product = findProduct(view.askProductId());
-        if (product == null) {
-            return;
-        }
+    public static class ProductDisplayData {
 
-        HashMap<String, String> updates = view.askProductUpdateData(product);
-        String newName = updates.get("name");
-        if (!newName.isEmpty()) {
-            product.setName(newName);
-        }
-        String newDesc = updates.get("description");
-        if (!newDesc.isEmpty()) {
-            product.setDescription(newDesc);
-        }
-        String newSupplierId = updates.get("supplierId");
-        if (!newSupplierId.isEmpty()) {
-            if (findSupplier(newSupplierId) != null) {
-                product.setSupplierId(newSupplierId);
-            } else {
-                view.showError("ID de Proveedor no encontrado. No se actualizo.");
-            }
-        }
-        try {
-            String newCost = updates.get("costPrice");
-            if (!newCost.isEmpty()) {
-                float cost = Float.parseFloat(newCost);
-                if (cost >= 0) {
-                    product.setBaseCostPrice(cost);
-                } else {
-                    view.showError("El costo no puede ser negativo.");
-                }
-            }
-            view.showMessage("Producto actualizado.");
-        } catch (NumberFormatException e) {
-            view.showError("El costo no es un numero valido.");
+        public final List<Product> products;
+        public final List<Inventory> inventories;
+        public final InventoryOfObsolete obsoleteInventory;
+        public final float profitPercentage;
+        public final float discountStandard;
+        public final float discountPremium;
+        public final float discountVip;
+
+        public ProductDisplayData(List<Product> p, List<Inventory> i, InventoryOfObsolete o, float pp, float ds, float dp, float dv) {
+            this.products = p;
+            this.inventories = i;
+            this.obsoleteInventory = o;
+            this.profitPercentage = pp;
+            this.discountStandard = ds;
+            this.discountPremium = dp;
+            this.discountVip = dv;
         }
     }
 
-    private void handleProcessReturn() {
-        Product product = findProduct(view.askProductId());
-        if (product == null) {
-            return;
-        }
-        int qty = view.askQuantity(9999);
-        if (qty == 0) {
-            return;
-        }
-        String reason = view.askReturnReason();
-        data.getObsoleteInventory().addStock(product.getId(), qty);
-        data.getReturns().add(new ReturnedProduct(product, qty, reason));
-        view.showMessage("Devolucion registrada.");
-    }
-
-    private void handleManageObsolete() {
-        Product product = findProduct(view.askProductId());
-        if (product == null) {
-            return;
-        }
-        int obsoleteStock = data.getObsoleteInventory().getStock(product.getId());
-        if (obsoleteStock == 0) {
-            view.showMessage("El producto no tiene stock obsoleto.");
-            return;
-        }
-        Address obsoleteLocation = data.getObsoleteInventory().getAddress();
-        Inventory targetInventory = view.askObsoleteAction(product.getName(), obsoleteStock, obsoleteLocation, data.getInventories());
-
-        if (targetInventory != null) {
-            data.getObsoleteInventory().removeStock(product.getId(), obsoleteStock);
-            targetInventory.addStock(product.getId(), obsoleteStock);
-            view.showMessage("Stock reasignado a " + targetInventory.getName());
-        } else {
-            data.getObsoleteInventory().removeStock(product.getId(), obsoleteStock);
-            view.showMessage("Stock obsoleto desechado.");
-        }
-    }
-
-    private void handleAddStockToInventory() {
-        Product product = findProduct(view.askProductId());
-        if (product == null) {
-            view.showError("Producto no encontrado.");
-            return;
-        }
-
-        if (data.getInventories().isEmpty()) {
-            view.showError("No hay inventarios creados para agregar stock.");
-            return;
-        }
-
-        Inventory targetInventory = view.chooseInventory(data.getInventories());
-        if (targetInventory == null) {
-            view.showError("Accion cancelada.");
-            return;
-        }
-
-        int quantity = view.askQuantity(Integer.MAX_VALUE);
-        if (quantity > 0) {
-            targetInventory.addStock(product.getId(), quantity);
-            view.showMessage("Se agregaron " + quantity + " unidades de '" + product.getName() + "' a " + targetInventory.getName());
-        } else {
-            view.showMessage("Stock no modificado.");
-        }
-    }
-
-    private void handleCustomerMenu() {
-        FrmCustomers customersWindow = new FrmCustomers(this);
-        customersWindow.setVisible(true);
-    }
-
-    private void handleRegisterPayment() {
-        view.showMessage("Cargando facturas pendientes...");
-        ArrayList<InvoiceSim> pendingInvoices = new ArrayList<>();
-        for (InvoiceSim inv : data.getInvoices()) {
-            if (inv.getStatus().equals("PENDING")) {
-                pendingInvoices.add(inv);
-            }
-        }
-        InvoiceSim invoiceToPay = view.choosePendingInvoice(pendingInvoices);
-        if (invoiceToPay == null) {
-            view.showMessage("Accion cancelada.");
-            return;
-        }
-        if (view.askConfirmation("Confirma el pago de la factura? (s/n)")) {
-            invoiceToPay.complete();
-            view.showMessage("Pago registrado.");
-        }
-    }
-
-    private void handleViewCustomers() {
-        view.showCustomerList(data.getCustomers());
-    }
-
-    private Customer handleCreateCustomer() {
-        HashMap<String, String> customerData = view.askNewCustomerData();
+    public Customer handleCreateCustomer(HashMap<String, String> customerData) {
         String id = customerData.get("id");
         if (findCustomer(id) != null) {
-            view.showError("Un cliente con esa identificacion ya existe.");
             return null;
         }
-        Customer newCustomer = new Customer(
-                customerData.get("name"), id, customerData.get("phone"),
-                customerData.get("email"), customerData.get("clientType")
-        );
-        this.data.getCustomers().add(newCustomer);
-        view.showMessage("Cliente creado con exito!");
+        Customer newCustomer = new Customer(customerData.get("name"), id, customerData.get("phone"), customerData.get("email"), customerData.get("clientType"));
+        this.data.addCustomer(newCustomer);
+        saveData();
         return newCustomer;
     }
 
-    private void handleEditCustomer() {
-        Customer customer = findCustomer(view.askCustomerId());
+    public boolean handleEditCustomerGUI(String customerId, HashMap<String, String> updates) {
+        Customer customer = findCustomer(customerId);
         if (customer == null) {
-            view.showError("Cliente no encontrado.");
-            return;
+            return false;
         }
-        HashMap<String, String> updates = view.askCustomerUpdateData(customer);
         if (!updates.get("name").isEmpty()) {
             customer.setName(updates.get("name"));
         }
@@ -614,59 +251,34 @@ public class FinvoryController {
             customer.setEmail(updates.get("email"));
         }
         customer.setClientType(updates.get("clientType"));
-        view.showMessage("Cliente actualizado.");
+        saveData();
+        return true;
     }
 
     public boolean handleDeleteCustomerGUI(String customerId) {
         Customer customer = findCustomer(customerId);
         if (customer == null) {
-            view.showError("Cliente no encontrado.");
             return false;
         }
         for (InvoiceSim invoiceSim : data.getInvoices()) {
             if (invoiceSim.getCustomer().getIdentification().equals(customer.getIdentification())) {
-                view.showError("No se puede eliminar. El cliente tiene facturas.");
                 return false;
             }
         }
-        data.getCustomers().remove(customer);
+        data.removeCustomer(customer);
+
         saveData();
         return true;
     }
 
-    private void handleSupplierMenu() {
-        handleViewSuppliers();
-    }
-
-    private void handleViewSuppliers() {
-        view.showSupplierList(data.getSuppliers());
-    }
-
-    private Supplier handleCreateSupplier() {
-        HashMap<String, String> supplierData = view.askNewSupplierData();
-        String id1 = supplierData.get("id1");
-        if (findSupplier(id1) != null) {
-            view.showError("Un proveedor con ese ID ya existe.");
-            return null;
-        }
-        Supplier supplier = new Supplier(
-                supplierData.get("name"), id1, supplierData.get("phone"),
-                supplierData.get("email"), supplierData.get("description")
-        );
-        supplier.setId2(supplierData.get("id2"));
-        data.getSuppliers().add(supplier);
-        view.showMessage("Proveedor creado con exito!");
-        return supplier;
-    }
-
     public boolean createSupplierGUI(String id1, String id2, String name, String phone, String email, String description) {
         if (findSupplier(id1) != null) {
-            view.showError("Error: Ya existe un proveedor registrado con el ID: " + id1);
             return false;
         }
         Supplier newSupplier = new Supplier(name, id1, phone, email, description);
         newSupplier.setId2(id2);
-        data.getSuppliers().add(newSupplier);
+        data.addSupplier(newSupplier);
+
         saveData();
         return true;
     }
@@ -674,226 +286,107 @@ public class FinvoryController {
     public boolean deleteSupplierGUI(String id1) {
         Supplier supplier = findSupplier(id1);
         if (supplier == null) {
-            view.showError("Proveedor no encontrado.");
             return false;
         }
         for (Product product : data.getProducts()) {
             if (product.getSupplierId() != null && product.getSupplierId().equals(supplier.getId1())) {
-                view.showError("No se puede eliminar. El proveedor está asignado al producto: " + product.getName());
                 return false;
             }
         }
-        data.getSuppliers().remove(supplier);
+        data.removeSupplier(supplier);
         saveData();
         return true;
     }
 
-    private void handleEditSupplier() {
-        Supplier supplier = findSupplier(view.askSupplierId());
-        if (supplier == null) {
-            view.showError("Proveedor no encontrado.");
-            return;
-        }
-        HashMap<String, String> updates = view.askSupplierUpdateData(supplier);
-        if (!updates.get("name").isEmpty()) {
-            supplier.setFullName(updates.get("name"));
-        }
-        if (!updates.get("phone").isEmpty()) {
-            supplier.setPhone(updates.get("phone"));
-        }
-        if (!updates.get("email").isEmpty()) {
-            supplier.setEmail(updates.get("email"));
-        }
-        if (!updates.get("description").isEmpty()) {
-            supplier.setDescription(updates.get("description"));
-        }
-        supplier.setId2(updates.get("id2"));
-        view.showMessage("Proveedor actualizado.");
-    }
-
-    private void handleDeleteSupplier() {
-        Supplier supplier = findSupplier(view.askSupplierId());
-        if (supplier == null) {
-            view.showError("Proveedor no encontrado.");
-            return;
-        }
-        for (Product product : data.getProducts()) {
-            if (product.getSupplierId() != null && product.getSupplierId().equals(supplier.getId1())) {
-                view.showError("No se puede eliminar. El proveedor esta en uso.");
-                return;
-            }
-        }
-        if (view.askConfirmation("Seguro que desea eliminar? (s/n)")) {
-            data.getSuppliers().remove(supplier);
-            view.showMessage("Proveedor eliminado.");
-        }
-    }
-
-    private void handleAdminMenu() {
-        boolean running = true;
-        while (running) {
-            int opt = view.showAdminMenu();
-            switch (opt) {
-                case 1 ->
-                    handleSetTaxRate();
-                case 2 ->
-                    handleSetPriceAlgorithm();
-                case 3 ->
-                    handleCreateProduct();
-                case 4 ->
-                    handleCreateInventory();
-                case 0 ->
-                    running = false;
-                default ->
-                    view.showError("Opcion no valida.");
-            }
-        }
-    }
-
-    private void handleCreateInventory() {
-        String name = view.askNewInventoryName();
+    public boolean handleCreateInventory(String name, Address address) {
         for (Inventory inv : data.getInventories()) {
             if (inv.getName().equalsIgnoreCase(name)) {
-                view.showError("Nombre de inventario duplicado.");
-                return;
+                return false;
             }
         }
-        Address address = view.askAddressData("-> Direccion del Nuevo Inventario:");
         Inventory newInv = new Inventory(name, address);
-        data.getInventories().add(newInv);
-        view.showMessage("Inventario creado.");
-    }
-
-    private void handleSetTaxRate() {
-        float newRate = view.askNewTaxRate(data.getTaxRate());
-        data.setTaxRate(newRate);
+        data.addInventory(newInv);
 
         saveData();
-        view.showMessage("Impuesto actualizado.");
+        return true;
     }
 
-    private void handleCreateProduct() {
-        HashMap<String, String> productData = view.askNewProductData();
+    public boolean handleSetTaxRate(float newRateFloat) {
+        try {
+            BigDecimal newRate = new BigDecimal(Float.toString(newRateFloat)).setScale(4, RoundingMode.HALF_UP);
+            data.setTaxRate(newRate);
+            saveData();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean handleCreateProduct(HashMap<String, String> productData, Supplier supplier, Inventory targetInventory) {
         String id = productData.get("id");
-        String barcode = productData.get("barcode");
-
         if (findProduct(id) != null) {
-            view.showError("ID de producto duplicado.");
-            return;
-        }
-        if (findProductByBarcode(barcode) != null) {
-            view.showError("Codigo de barras duplicado.");
-            return;
-        }
-
-        Supplier supplier = view.chooseSupplier(data.getSuppliers());
-        if (supplier == null) {
-            supplier = handleCreateSupplier();
-            if (supplier == null) {
-                return;
-            }
-        }
-
-        Inventory targetInventory = view.chooseInventory(data.getInventories());
-        if (targetInventory == null) {
-            view.showError("Cree un inventario primero.");
-            return;
+            return false;
         }
 
         try {
-            float costPrice = Float.parseFloat(productData.get("costPrice"));
+            BigDecimal costPrice = new BigDecimal(productData.get("costPrice")).setScale(2, RoundingMode.HALF_UP);
             int stock = Integer.parseInt(productData.get("stock"));
-
-            Product newProduct = new Product(
-                    id, productData.get("name"), productData.get("description"),
-                    barcode, costPrice, supplier.getId1()
-            );
-            data.getProducts().add(newProduct);
+            Product newProduct = new Product(id, productData.get("name"), productData.get("description"), productData.get("barcode"), costPrice, supplier.getId1());
+            data.addProduct(newProduct);
             targetInventory.setStock(id, stock);
-            view.showMessage("Producto creado!");
+            saveData();
+            return true;
         } catch (NumberFormatException e) {
-            view.showError("Error en formato de numero.");
+            return false;
         }
     }
 
-    private void handleSetPriceAlgorithm() {
-        view.showMessage("Configurando algoritmo de precios...");
-        HashMap<String, Float> percentages = view.askPriceAlgorithmData(data);
-
-        data.setProfitPercentage(percentages.get("profit"));
-        data.setDiscountStandard(percentages.get("discountStandard"));
-        data.setDiscountPremium(percentages.get("discountPremium"));
-        data.setDiscountVip(percentages.get("discountVip"));
-        saveData();
+    public void handleSetPriceAlgorithm() {
+        FrmPrices frmPrices = new FrmPrices(this);
+        frmPrices.setVisible(true);
     }
 
-    private void handleReportsMenu() {
-        boolean running = true;
-        while (running) {
-            int option = view.showReportsMenu();
-            switch (option) {
-                case 1 ->
-                    view.showDashboard(data.getTotalGrossDay(), data.getTotalGrossProfile());
-                case 2 -> {
-                    HashMap<String, Integer> report = generateSalesOrDemandReport();
-                    view.showReport("Reporte de Ventas por Producto (Unidades)", report);
-                }
-                case 3 -> {
-                    HashMap<String, Integer> report = new HashMap<>();
-                    for (InvoiceSim i : data.getInvoices()) {
-                        if ("COMPLETED".equals(i.getStatus())) {
-                            String name = i.getCustomer().getName();
-                            report.put(name, report.getOrDefault(name, 0) + 1);
-                        }
-                    }
-                    view.showReport("Reporte de Actividad de Clientes (N° Facturas)", report);
-                }
-                case 4 -> {
-                    HashMap<String, Integer> report = generateSupplierDemandReport();
-                    view.showReport("Reporte de Demanda de Proveedores", report);
-                }
-                case 5 ->
-                    handleExportReports();
-                case 0 ->
-                    running = false;
-                default ->
-                    view.showError("Opcion no valida.");
+    public boolean handleNewSale(Customer customer, HashMap<Product, HashMap<Inventory, Integer>> cart, String payment) {
+        if (cart.isEmpty() || customer == null) {
+            return false;
+        }
+
+        BigDecimal profitPercentage = data.getProfitPercentage() != null ? data.getProfitPercentage() : BigDecimal.ZERO;
+        BigDecimal discountStandard = data.getDiscountStandard() != null ? data.getDiscountStandard() : BigDecimal.ZERO;
+        BigDecimal discountPremium = data.getDiscountPremium() != null ? data.getDiscountPremium() : BigDecimal.ZERO;
+        BigDecimal discountVip = data.getDiscountVip() != null ? data.getDiscountVip() : BigDecimal.ZERO;
+        BigDecimal taxRate = data.getTaxRate() != null ? data.getTaxRate() : DEFAULT_TAX_RATE;
+        BigDecimal discountRate = customer.getDiscountRate(discountStandard, discountPremium, discountVip);
+
+        ArrayList<InvoiceLineSim> lines = new ArrayList<>();
+        for (Map.Entry<Product, HashMap<Inventory, Integer>> entry : cart.entrySet()) {
+            Product product = entry.getKey();
+            for (Map.Entry<Inventory, Integer> stockEntry : entry.getValue().entrySet()) {
+                Inventory inventory = stockEntry.getKey();
+                int quantity = stockEntry.getValue();
+                inventory.removeStock(product.getId(), quantity);
+                BigDecimal price = product.getPrice(customer.getClientType(), profitPercentage, discountStandard, discountPremium, discountVip);
+                lines.add(new InvoiceLineSim(product.getId(), product.getName(), quantity, price));
             }
         }
+        String invoiceId = "F-" + (data.getInvoices().size() + 1);
+        InvoiceSim invoice = new InvoiceSim(invoiceId, LocalDate.now(), LocalDate.now(), customer, lines, taxRate, discountRate);
+        if (!payment.equals("CHEQUE POSTFECHADO")) {
+            invoice.complete();
+        }
+        data.addInvoice(invoice);
+
+        saveData();
+        return true;
     }
 
-    private void handleExportReports() {
-        int reportType = view.askReportToExport();
-        HashMap<String, ? extends Object> reportData = new HashMap<>();
-        String title = "";
-
-        switch (reportType) {
-            case 1:
-                reportData = generateSalesOrDemandReport();
-                title = "DemandReport";
-                break;
-            case 2:
-                reportData = generateCustomerReportData();
-                title = "CustomerPurchaseReport";
-                break;
-            case 3:
-                reportData = generateSupplierDemandReport();
-                title = "SupplierDemandReport";
-                break;
-            default:
-                view.showError("Seleccion de reporte invalida.");
-                return;
-        }
-
-        boolean success = dataBase.exportToCsv(title, reportData, currentCompanyUsername);
-        if (success) {
-            view.showMessage("Reporte '" + title + ".csv' exportado con exito.");
-        } else {
-            view.showError("Fallo la exportacion del reporte.");
-        }
+    public float[] getDashboardData() {
+        float totalGrossDay = data.getTotalGrossDay() != null ? data.getTotalGrossDay().floatValue() : 0.0f;
+        float totalGrossProfile = data.getTotalGrossProfile() != null ? data.getTotalGrossProfile().floatValue() : 0.0f;
+        return new float[]{totalGrossDay, totalGrossProfile};
     }
 
-    private HashMap<String, Integer> generateSalesOrDemandReport() {
+    public HashMap<String, Integer> getSalesOrDemandReport() {
         HashMap<String, Integer> map = new HashMap<>();
         for (InvoiceSim i : data.getInvoices()) {
             if ("COMPLETED".equals(i.getStatus())) {
@@ -905,17 +398,17 @@ public class FinvoryController {
         return map;
     }
 
-    private HashMap<String, Float> generateCustomerReportData() {
+    public HashMap<String, Float> getCustomerPurchaseReport() {
         HashMap<String, Float> map = new HashMap<>();
         for (InvoiceSim i : data.getInvoices()) {
             if ("COMPLETED".equals(i.getStatus())) {
-                map.put(i.getCustomer().getName(), map.getOrDefault(i.getCustomer().getName(), 0f) + i.getTotal());
+                map.put(i.getCustomer().getName(), map.getOrDefault(i.getCustomer().getName(), 0f) + i.getTotal().floatValue());
             }
         }
         return map;
     }
 
-    private HashMap<String, Integer> generateSupplierDemandReport() {
+    public HashMap<String, Integer> getSupplierDemandReport() {
         HashMap<String, Integer> map = new HashMap<>();
         for (InvoiceSim i : data.getInvoices()) {
             if ("COMPLETED".equals(i.getStatus())) {
@@ -933,81 +426,13 @@ public class FinvoryController {
         return map;
     }
 
-    private void handleGenerateQuote() {
-        view.showMessage("Generando Cotizacion...");
-        String query = view.askCustomerQuery();
-        Customer customer = findCustomer(query);
-        if (customer == null) {
-            if (view.askToCreateNewCustomer(query)) {
-                customer = handleCreateCustomer();
-                if (customer == null) {
-                    return;
-                }
-            } else {
-                return;
-            }
-        }
-
-        InvoiceSim quote = new InvoiceSim("COT-" + System.currentTimeMillis(), customer, "COTIZACION", "");
-        float profit = data.getProfitPercentage();
-        float dStd = data.getDiscountStandard();
-        float dPrm = data.getDiscountPremium();
-        float dVip = data.getDiscountVip();
-
-        while (true) {
-            String id = view.askProductId();
-            if (id.equalsIgnoreCase("fin")) {
-                break;
-            }
-            Product product = findProduct(id);
-            if (product == null) {
-                continue;
-            }
-            view.chooseInventoryToSellFrom(data.getInventories(), product.getId());
-
-            System.out.print("-> Cantidad a cotizar: ");
-            int quantity = -1;
-            try {
-                quantity = view.askQuantity(999999);
-            } catch (Exception e) {
-                quantity = 0;
-            }
-            if (quantity <= 0) {
-                continue;
-            }
-
-            float price = product.getPrice(customer.getClientType(), profit, dStd, dPrm, dVip);
-            quote.addLine(product, quantity, price);
-            view.showMessage("Agregado: " + product.getName());
-        }
-
-        if (quote.getLines().isEmpty()) {
-            return;
-        }
-        quote.calculateTotals(data.getTaxRate());
-
-        String filename = "data/" + currentCompanyUsername + "/cotizacion_" + customer.getName().replaceAll("\\s+", "_") + ".txt";
-        try (PrintWriter out = new PrintWriter(new FileWriter(new File(filename)))) {
-            out.println("COTIZACION - FINVORY");
-            out.println("Cliente: " + customer.getName());
-            out.println("----------------------");
-            for (InvoiceLineSim line : quote.getLines()) {
-                out.printf("%-20s %d $%.2f%n", line.getProductName(), line.getQuantity(), line.getLineTotal());
-            }
-            out.printf("TOTAL: $%.2f%n", quote.getTotal());
-            view.showMessage("Archivo guardado: " + filename);
-        } catch (IOException e) {
-            view.showError("Error al guardar archivo.");
-        }
-    }
-
     public Product findProduct(String id) {
         if (id == null) {
             return null;
         }
-        for (Product product : data.getProducts()) {
-            if (id.equals(product.getId())) {
-                return product;
+        for (Product p : data.getProducts()) {
+            if (id.equals(p.getId())) {
+                return p;
             }
         }
         return null;
@@ -1017,15 +442,15 @@ public class FinvoryController {
         if (barcode == null) {
             return null;
         }
-        for (Product product : data.getProducts()) {
-            if (barcode.equals(product.getBarcode())) {
-                return product;
+        for (Product p : data.getProducts()) {
+            if (barcode.equals(p.getBarcode())) {
+                return p;
             }
         }
         return null;
     }
 
-    private Customer findCustomer(String format) {
+    public Customer findCustomer(String format) {
         if (format == null) {
             return null;
         }
@@ -1038,48 +463,47 @@ public class FinvoryController {
         return null;
     }
 
-    private Supplier findSupplier(String id) {
+    public Supplier findSupplier(String id) {
         if (id == null) {
             return null;
         }
-        for (Supplier supplier : data.getSuppliers()) {
-            if (id.equals(supplier.getId1())) {
-                return supplier;
+        for (Supplier s : data.getSuppliers()) {
+            if (id.equals(s.getId1())) {
+                return s;
             }
         }
         return null;
     }
 
-    private CompanyAccount findCompanyByUsername(String usernameCompany) {
-        if (usernameCompany == null) {
+    private CompanyAccount findCompanyByUsername(String u) {
+        if (u == null) {
             return null;
         }
         for (CompanyAccount c : users.getCompanyAccounts()) {
-            if (usernameCompany.equals(c.getUsername())) {
+            if (u.equals(c.getUsername())) {
                 return c;
             }
         }
         return null;
     }
 
-    private PersonalAccount findPersonalByUsername(String username) {
-        if (username == null) {
+    private PersonalAccount findPersonalByUsername(String u) {
+        if (u == null) {
             return null;
         }
-        for (PersonalAccount personalAccount : users.getPersonalAccounts()) {
-            if (username.equals(personalAccount.getUsername())) {
-                return personalAccount;
+        for (PersonalAccount p : users.getPersonalAccounts()) {
+            if (u.equals(p.getUsername())) {
+                return p;
             }
         }
         return null;
     }
 
     public Inventory findInventoryByName(String name) {
-        if (this.data == null || this.data.getInventories() == null) {
+        if (data == null || data.getInventories() == null) {
             return null;
         }
-
-        for (Inventory inv : this.data.getInventories()) {
+        for (Inventory inv : data.getInventories()) {
             if (inv.getName().equalsIgnoreCase(name)) {
                 return inv;
             }
@@ -1089,14 +513,188 @@ public class FinvoryController {
 
     public ArrayList<Inventory> findInventoriesByPartialName(String query) {
         ArrayList<Inventory> matches = new ArrayList<>();
-
-        String queryNormalized = query.trim().toLowerCase();
-
-        for (Inventory inv : this.data.getInventories()) {
-            if (inv.getName() != null && inv.getName().toLowerCase().contains(queryNormalized)) {
+        String q = query.trim().toLowerCase();
+        for (Inventory inv : data.getInventories()) {
+            if (inv.getName() != null && inv.getName().toLowerCase().contains(q)) {
                 matches.add(inv);
             }
         }
         return matches;
     }
+
+    public Supplier findSupplierByName(String name) {
+        if (data == null || data.getSuppliers() == null || name == null) {
+            return null;
+        }
+        String q = name.trim();
+        for (Supplier s : data.getSuppliers()) {
+            if (s.getFullName() != null && s.getFullName().equalsIgnoreCase(q)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    public List<Object[]> getInventoryTableData(Inventory currentInventory) {
+        List<Object[]> rows = new ArrayList<>();
+        List<Product> globalProducts = getProducts();
+        if (globalProducts == null || globalProducts.isEmpty()) {
+            return rows;
+        }
+
+        float profit = data.getProfitPercentage() != null ? data.getProfitPercentage().floatValue() : 0.0f;
+        float dStd = data.getDiscountStandard() != null ? data.getDiscountStandard().floatValue() : 0.0f;
+        float dPrm = data.getDiscountPremium() != null ? data.getDiscountPremium().floatValue() : 0.0f;
+        float dVip = data.getDiscountVip() != null ? data.getDiscountVip().floatValue() : 0.0f;
+
+        for (Product p : globalProducts) {
+            String productId = p.getId();
+            int stock = currentInventory.getStock(productId);
+            if (stock == 0 && currentInventory.getStock(productId.trim()) > 0) {
+                stock = currentInventory.getStock(productId.trim());
+            }
+            int obsoleteStock = data.getObsoleteInventory() != null ? data.getObsoleteInventory().getStock(productId) : 0;
+
+            rows.add(new Object[]{
+                p.getId(), p.getName(), p.getBarcode(),
+                String.format("$%.2f", p.getBaseCostPrice()),
+                String.format("$%.2f", p.getPrice("STANDARD", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                String.format("$%.2f", p.getPrice("PREMIUM", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                String.format("$%.2f", p.getPrice("VIP", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                stock, (double) obsoleteStock
+            });
+        }
+        return rows;
+    }
+
+    public List<Object[]> getProductTableData(Inventory specificInventory) {
+        List<Object[]> rows = new ArrayList<>();
+        List<Product> products = getProducts();
+        if (products == null || products.isEmpty()) {
+            return rows;
+        }
+
+        float profit = data.getProfitPercentage() != null ? data.getProfitPercentage().floatValue() : 0.0f;
+        float dStd = data.getDiscountStandard() != null ? data.getDiscountStandard().floatValue() : 0.0f;
+        float dPrm = data.getDiscountPremium() != null ? data.getDiscountPremium().floatValue() : 0.0f;
+        float dVip = data.getDiscountVip() != null ? data.getDiscountVip().floatValue() : 0.0f;
+
+        for (Product p : products) {
+            int stockToShow = 0;
+            boolean shouldAdd = false;
+            if (specificInventory != null) {
+                int stock = specificInventory.getStock(p.getId());
+                if (stock >= 0) {
+                    stockToShow = stock;
+                    shouldAdd = true;
+                }
+            } else {
+                shouldAdd = true;
+            }
+
+            if (shouldAdd) {
+                rows.add(new Object[]{
+                    p.getId(), p.getName(), p.getBarcode(),
+                    String.format("$%.2f", p.getBaseCostPrice()),
+                    String.format("$%.2f", p.getPrice("STANDARD", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                    String.format("$%.2f", p.getPrice("PREMIUM", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                    String.format("$%.2f", p.getPrice("VIP", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                    stockToShow, 0
+                });
+            }
+        }
+        return rows;
+    }
+
+    public boolean handleUpdateProductGUI(String originalId, HashMap<String, String> data, Inventory targetInventory) {
+        Product product = findProduct(originalId);
+        if (product == null) {
+            return false;
+        }
+        try {
+            product.setName(data.get("name"));
+            product.setBarcode(data.get("barcode"));
+            product.setDescription(data.get("description"));
+            product.setSupplierId(data.get("supplierId"));
+            BigDecimal newCost = new BigDecimal(data.get("costPrice")).setScale(2, RoundingMode.HALF_UP);
+            product.setBaseCostPrice(newCost);
+            if (targetInventory != null) {
+                int newStock = Integer.parseInt(data.get("stock"));
+                targetInventory.setStock(originalId, newStock);
+            }
+            saveData();
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error actualizando producto: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean handleZeroStock(Inventory inventory, String productId) {
+        if (inventory == null || productId == null) {
+            return false;
+        }
+        inventory.setStock(productId, 0);
+        saveData();
+        return true;
+    }
+
+    public boolean handleUpdatePricesGUI(String profit, String std, String prm, String vip, String tax) {
+        try {
+            BigDecimal profitVal = new BigDecimal(profit);
+            BigDecimal stdVal = new BigDecimal(std);
+            BigDecimal prmVal = new BigDecimal(prm);
+            BigDecimal vipVal = new BigDecimal(vip);
+            BigDecimal taxVal = new BigDecimal(tax);
+            data.setProfitPercentage(profitVal);
+            data.setDiscountStandard(stdVal);
+            data.setDiscountPremium(prmVal);
+            data.setDiscountVip(vipVal);
+            data.setTaxRate(taxVal);
+            saveData();
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error actualizando precios: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public List<Object[]> searchProductsByCompany(String companyNameQuery) {
+        List<Object[]> rows = new ArrayList<>();
+        String query = companyNameQuery.toLowerCase().trim();
+        String targetUsername = null;
+
+        for (CompanyAccount c : users.getCompanyAccounts()) {
+            if (c.getName() != null && c.getName().toLowerCase().contains(query)) {
+                targetUsername = c.getUsername();
+                break; 
+            }
+        }
+
+        if (targetUsername == null) {
+            return rows; 
+        }
+        
+        FinvoryData targetData = dataBase.loadCompanyData(targetUsername);
+
+        if (targetData == null || targetData.getProducts().isEmpty()) {
+            return rows;
+        }
+
+        for (Product p : targetData.getProducts()) {
+            int totalStock = 0;
+            for (Inventory inv : targetData.getInventories()) {
+                totalStock += inv.getStock(p.getId());
+            }
+
+            rows.add(new Object[]{
+                p.getId(),
+                p.getName(),
+                p.getBarcode(),
+                totalStock
+            });
+        }
+        return rows;
+    }
+
 }

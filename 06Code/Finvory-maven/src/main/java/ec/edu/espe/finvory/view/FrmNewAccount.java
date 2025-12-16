@@ -2,6 +2,7 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Address;
+import ec.edu.espe.finvory.utils.ValidationUtils;
 import java.awt.Color;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -353,131 +354,73 @@ public class FrmNewAccount extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterPersonalActionPerformed
-        registerPersonal();
+        String name = txtPersonalFullName.getText().trim();
+        String username = txtPersonalUserName.getText().trim();
+        String password = new String(passPersonalPassword.getPassword());
+
+        String errorMsg = ValidationUtils.getPersonalFormError(name, username, password);
+
+        if (errorMsg != null) {
+            JOptionPane.showMessageDialog(this, errorMsg, "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        HashMap<String, String> personalData = new HashMap<>();
+        personalData.put("username", username);
+        personalData.put("password", password);
+        personalData.put("fullName", name);
+
+        boolean success = controller.registerPersonalGUI(personalData);
+
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Personal Account creada exitosamente!");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: Username ya existe", "Registration Failed", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnRegisterPersonalActionPerformed
 
     private void btnRegisterCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterCompanyActionPerformed
-        registerCompany();
+        String name = txtCompanyName.getText().trim();
+        String ruc = txtCompanyRuc.getText().trim();
+        String phone = txtPhone.getText().trim();
+        String email = txtEmail.getText().trim();
+        String country = txtCountry.getText().trim();
+        String city = txtCity.getText().trim();
+        String street = txtStreet.getText().trim();
+        String username = txtCompanyUserName.getText().trim();
+        String password = new String(passCompanyPassword.getPassword());
+        String errorMsg = ValidationUtils.getCompanyFormError(name, ruc, phone, email, country, city, street, username, password);
+
+        if (errorMsg != null) {
+            JOptionPane.showMessageDialog(this, errorMsg, "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        HashMap<String, String> companyData = new HashMap<>();
+        companyData.put("username", username);
+        companyData.put("password", password);
+        companyData.put("companyName", name);
+        companyData.put("ruc", ruc);
+        companyData.put("phone", phone);
+        companyData.put("email", email);
+
+        Address address = new Address(country, city, street);
+
+        boolean success = controller.registerCompanyGUI(companyData, address);
+
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Company Account creada exitosamente!");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: Username ya existente", "Registration Failed", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnRegisterCompanyActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void registerCompany() {
-        String user = txtCompanyUserName.getText().trim();
-        String pass = new String(passCompanyPassword.getPassword());
-        String name = txtCompanyName.getText().trim();
-        String ruc = txtCompanyRuc.getText().trim();
-        String phone = txtPhone.getText().trim();
-        String email = txtEmail.getText().trim();
-
-        String country = txtCountry.getText().trim();
-        String city = txtCity.getText().trim();
-        String street = txtStreet.getText().trim();
-        if (user.isEmpty() || pass.isEmpty() || name.isEmpty() || ruc.isEmpty()
-                || phone.isEmpty() || email.isEmpty() || country.isEmpty() || city.isEmpty() || street.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (!validateCompanyFields(name, ruc, phone, email, country, city)) {
-            return;
-        }
-
-        HashMap<String, String> data = new HashMap<>();
-        data.put("username", user);
-        data.put("password", pass);
-        data.put("companyName", name);
-        data.put("ruc", ruc);
-        data.put("phone", phone);
-        data.put("email", email);
-
-        Address addr = new Address(country, city, street);
-        boolean success = controller.registerCompanyGUI(data, addr);
-        if (success) {
-            JOptionPane.showMessageDialog(this, "¡Cuenta de Empresa creada exitosamente! Ahora puede iniciar sesión");
-            this.dispose();
-        }
-    }
-
-    private void registerPersonal() {
-        String user = txtPersonalUserName.getText().trim();
-        String pass = new String(passPersonalPassword.getPassword());
-        String name = txtPersonalFullName.getText().trim();
-
-        if (user.isEmpty() || pass.isEmpty() || name.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        if (!isTextOnly(name)) {
-            JOptionPane.showMessageDialog(this, "El nombre personal no puede contener números.", "Error de Formato", JOptionPane.WARNING_MESSAGE);
-            lblPersonalFullName.setForeground(Color.red);
-            txtPersonalFullName.requestFocus();
-            return;
-        }
-        lblPersonalFullName.setForeground(Color.black);
-
-        HashMap<String, String> data = new HashMap<>();
-        data.put("username", user);
-        data.put("password", pass);
-        data.put("fullName", name);
-
-        boolean success = controller.registerPersonalGUI(data);
-        if (success) {
-            JOptionPane.showMessageDialog(this, "¡Cuenta Personal creada exitosamente! Ahora puede iniciar sesión");
-            this.dispose();
-        }
-    }
-
-    private boolean isValid(String text, String regex) {
-        return text != null && text.matches(regex);
-    }
-
-    private boolean isTextOnly(String text) {
-        return isValid(text, "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$");
-    }
-
-    private boolean validateCompanyFields(String name, String ruc, String phone, String email, String country, String city) {
-        if (!isTextOnly(name)) {
-            JOptionPane.showMessageDialog(this, "El nombre de la empresa solo debe contener letras.", "Error de Formato", JOptionPane.WARNING_MESSAGE);
-            lblCompanyName.setForeground(Color.red);
-            txtCompanyName.requestFocus();
-            return false;
-        }
-        lblCompanyName.setForeground(Color.black);
-        if (!isTextOnly(country) || !isTextOnly(city)) {
-            JOptionPane.showMessageDialog(this, "País y Ciudad solo deben contener letras.", "Error de Formato", JOptionPane.WARNING_MESSAGE);
-            lblCountry.setForeground(Color.red);
-            lblCity.setForeground(Color.red);
-            txtCountry.requestFocus();
-            return false;
-        }
-        lblCountry.setForeground(Color.black);
-        lblCity.setForeground(Color.black);
-        if (!isValid(ruc, "^\\d{13}$") && !ruc.startsWith("001")) {
-            JOptionPane.showMessageDialog(this, "El RUC debe contener exactamente 13 dígitos numéricos (sin letras y  debe empezar con '001').", "Error de Formato", JOptionPane.WARNING_MESSAGE);
-            lblRuc.setForeground(Color.red);
-            txtCompanyRuc.requestFocus();
-            return false;
-        }
-        lblRuc.setForeground(Color.black);
-        if (!isValid(phone, "^\\d{10}$")) {
-            JOptionPane.showMessageDialog(this, "El teléfono debe contener 10 dígitos numéricos (sin letras).", "Error de Formato", JOptionPane.WARNING_MESSAGE);
-            lblPhone.setForeground(Color.red);
-            txtPhone.requestFocus();
-            return false;
-        }
-        lblPhone.setForeground(Color.black);
-        if (!isValid(email, "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            JOptionPane.showMessageDialog(this, "El correo electrónico no es válido.", "Error de Formato", JOptionPane.WARNING_MESSAGE);
-            lblEmail.setForeground(Color.red);
-            txtEmail.requestFocus();
-            return false;
-        }
-        lblEmail.setForeground(Color.black);
-        return true;
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegisterCompany;
     private javax.swing.JButton btnRegisterPersonal;

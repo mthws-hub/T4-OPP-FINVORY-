@@ -1,13 +1,21 @@
 package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.utils.ValidationUtils;
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.Timer;
+import javax.swing.plaf.basic.BasicProgressBarUI;
 
 /**
  *
@@ -17,36 +25,15 @@ public class FrmFinvorySplash extends javax.swing.JFrame {
 
     private FinvoryController controller;
 
-    /**
-     * Creates new form FrmFinvorySplash
-     */
     public FrmFinvorySplash(FinvoryController controller) {
         this.setUndecorated(true);
         this.controller = controller;
         initComponents();
         this.setLocationRelativeTo(null);
-        paintImage(lblLogo, "/FinvoryLogo.jpeg");
-        prgBar.setUI(new javax.swing.plaf.basic.BasicProgressBarUI() {
-            @Override
-            protected void paintDeterminate(java.awt.Graphics g, javax.swing.JComponent c) {
-                java.awt.Graphics2D g2d = (java.awt.Graphics2D) g;
-                g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                int width = c.getWidth();
-                int height = c.getHeight();
-                double percent = prgBar.getPercentComplete();
-                int fillWidth = (int) (width * percent);
-                g2d.setColor(new java.awt.Color(230, 230, 230));
-                g2d.fillRoundRect(0, 0, width, height, height, height);
-                if (fillWidth > 0) {
-                    java.awt.Color colorInicio = new java.awt.Color(0, 200, 83);
-                    java.awt.Color colorFin = new java.awt.Color(41, 121, 255);
-                    java.awt.GradientPaint gradient = new java.awt.GradientPaint(0, 0, colorInicio, width, 0, colorFin);
-                    g2d.setPaint(gradient);
-                    g2d.fillRoundRect(0, 0, fillWidth, height, height, height);
-                }
-            }
-        });
-        run();
+
+        setupLogo();
+        setupProgressBarDesign();
+        startAnimation();
     }
 
     /**
@@ -137,9 +124,9 @@ public class FrmFinvorySplash extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(prgBar, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblStatus)
-                    .addComponent(lblPercent))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblPercent)
+                    .addComponent(lblStatus))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addContainerGap(44, Short.MAX_VALUE))
@@ -209,6 +196,66 @@ public class FrmFinvorySplash extends javax.swing.JFrame {
         }
     }
 
+    private void setupLogo() {
+        ImageIcon icon = ValidationUtils.getScaledIcon(
+                getClass().getResource("/FinvoryLogo.jpeg"),
+                lblLogo.getWidth(),
+                lblLogo.getHeight()
+        );
+
+        if (icon != null) {
+            lblLogo.setIcon(icon);
+            lblLogo.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+            lblLogo.setVerticalAlignment(javax.swing.JLabel.CENTER);
+        }
+    }
+
+    private void setupProgressBarDesign() {
+        prgBar.setUI(new BasicProgressBarUI() {
+            @Override
+            protected void paintDeterminate(Graphics g, JComponent c) {
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                int width = c.getWidth();
+                int height = c.getHeight();
+                int fillWidth = (int) (width * prgBar.getPercentComplete());
+                g2d.setColor(new Color(230, 230, 230));
+                g2d.fillRoundRect(0, 0, width, height, height, height);
+                if (fillWidth > 0) {
+                    GradientPaint gradient = new GradientPaint(0, 0, new Color(0, 200, 83), width, 0, new Color(41, 121, 255));
+                    g2d.setPaint(gradient);
+                    g2d.fillRoundRect(0, 0, fillWidth, height, height, height);
+                }
+            }
+        });
+    }
+
+    private void startAnimation() {
+        Thread hilo = new Thread(() -> {
+            try {
+                for (int i = 0; i <= 100; i++) {
+                    Thread.sleep(30);
+                    updateProgress(i);
+                }
+                Thread.sleep(500);
+                openLogin();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        hilo.start();
+    }
+    
+    private void updateProgress(int i) {
+        prgBar.setValue(i);
+        lblPercent.setText(i + "%");
+        if (i == 10) lblStatus.setText("Cargando módulos...");
+        if (i == 30) lblStatus.setText("Conectando a base de datos...");
+        if (i == 60) lblStatus.setText("Cargando inventarios...");
+        if (i == 90) lblStatus.setText("Iniciando interfaz...");
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

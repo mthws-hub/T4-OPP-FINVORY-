@@ -190,21 +190,21 @@ public class FrmLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
-        String user = txtUserName.getText();
-        String pass = new String(passPassword.getPassword()); 
-        boolean loginExitoso = controller.handleLoginGUI(user, pass);
-        if (loginExitoso) {
-            this.dispose();
+String user = txtUserName.getText();
+        String pass = new String(passPassword.getPassword());
+        boolean successfulLogin = controller.handleLoginGUI(user, pass);
+        if (successfulLogin) {
             lblUser.setForeground(Color.black);
             lblPassword.setForeground(Color.black);
-            System.out.println("\nLogin Exitoso");
+            System.out.println("Login Exitoso");
+            
+            this.dispose(); 
             controller.startMainMenuPublic();
         } else {
-            JOptionPane.showMessageDialog(this, "Credenciales Incorrectas");
+            JOptionPane.showMessageDialog(this, "Credenciales Incorrectas", "Error de Acceso", JOptionPane.ERROR_MESSAGE);
             lblUser.setForeground(Color.red);
             lblPassword.setForeground(Color.red);
             txtUserName.requestFocus();
-            
         }
     }//GEN-LAST:event_btnLogInActionPerformed
 

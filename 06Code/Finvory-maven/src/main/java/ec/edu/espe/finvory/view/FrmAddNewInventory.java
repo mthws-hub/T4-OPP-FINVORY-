@@ -3,6 +3,7 @@ package ec.edu.espe.finvory.view;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Address;
 import ec.edu.espe.finvory.model.Inventory;
+import ec.edu.espe.finvory.utils.ValidationUtils;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -56,7 +57,8 @@ public class FrmAddNewInventory extends JDialog {
         jLabel8 = new javax.swing.JLabel();
         txtRegion = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        btnAdd = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        btnAdd1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         itemInventories = new javax.swing.JMenuItem();
@@ -158,17 +160,29 @@ public class FrmAddNewInventory extends JDialog {
         jPanel2.setBackground(new java.awt.Color(224, 224, 224));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnAdd.setBackground(new java.awt.Color(0, 123, 0));
-        btnAdd.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
-        btnAdd.setText("AGREGAR");
-        btnAdd.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+        btnCancel.setBackground(new java.awt.Color(0, 123, 0));
+        btnCancel.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnCancel.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancel.setText("AGREGAR");
+        btnCancel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
+                btnCancelActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 110, 30));
+        jPanel2.add(btnCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 110, 30));
+
+        btnAdd1.setBackground(new java.awt.Color(0, 123, 0));
+        btnAdd1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnAdd1.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd1.setText("CANCELAR");
+        btnAdd1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAdd1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdd1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnAdd1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 110, 30));
 
         jMenu1.setText("Finvory");
         jMenu1.addMenuKeyListener(new javax.swing.event.MenuKeyListener() {
@@ -217,80 +231,58 @@ public class FrmAddNewInventory extends JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        if (controller == null) {
-            JOptionPane.showMessageDialog(this, "Error: Controlador no conectado.", "Error Fatal", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         String name = txtName.getText().trim();
         String country = txtCountry.getText().trim();
         String city = txtCity.getText().trim();
         String street = txtStreet.getText().trim();
+        String streetNumber = txtStreetNumber.getText().trim();
+        String zipCode = txtZipCode.getText().trim();
+        String region = txtRegion.getText().trim();
+        String errorMsg = ValidationUtils.getAddressFormError(name, country, city, street);
 
-        if (name.isEmpty() || country.isEmpty() || city.isEmpty() || street.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nombre, País, Ciudad y Calle son obligatorios.");
+        if (errorMsg != null) {
+            JOptionPane.showMessageDialog(this, errorMsg, "Error de Validación", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        Address address = new Address(country, city, street);
+        address.setStreetNumber(streetNumber);
+        address.setZipCode(zipCode);
+        address.setRegion(region);
+        boolean success = controller.handleCreateInventory(name, address);
 
-        if (controller.getData() != null) {
-            for (Inventory inv : controller.getData().getInventories()) {
-                if (inv.getName().equalsIgnoreCase(name)) {
-                    JOptionPane.showMessageDialog(this, "Ya existe un inventario con ese nombre.");
-                    return;
-                }
-            }
-        }
-
-        try {
-            Address addr = new Address(country, city, street);
-            Inventory newInv = new Inventory(name, addr);
-            controller.getData().getInventories().add(newInv);
-            controller.saveData();
-
-            JOptionPane.showMessageDialog(this, "Inventario guardado correctamente.");
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Inventario creado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage());
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: Ya existe un inventario con ese nombre.", "Error al Guardar", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnAddActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
-        int opt = JOptionPane.showConfirmDialog(this, "¿Desea regresar al menu de inventarios?", "Confirmar", JOptionPane.YES_NO_OPTION);
-        if (opt == JOptionPane.YES_OPTION) {
-            emptyFields();
-            this.dispose();
-        }
+        this.dispose();
     }//GEN-LAST:event_itemInventoriesActionPerformed
 
     private void jMenu1MenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_jMenu1MenuKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu1MenuKeyPressed
-    private String[] readValues() {
-        String name = txtName.getText().trim();
-        String country = txtCountry.getText().trim();
-        String city = txtCity.getText().trim();
-        String street = txtStreet.getText().trim();
 
-        return new String[]{name, country, city, street};
-    }
-
-    private void emptyFields() {
-        txtCity.setText("");
-        txtCountry.setText("");
-        txtName.setText("");
-        txtRegion.setText("");
-        txtStreet.setText("");
-        txtStreetNumber.setText("");
-        txtZipCode.setText("");
-    }
-    /**
-     * @param args the command line arguments
-     */
+    private void btnAdd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd1ActionPerformed
+        int opt = JOptionPane.showConfirmDialog(this, "Sus datos ingresados se perderán ¿Está seguro?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (opt == JOptionPane.YES_OPTION) {
+            txtCity.setText("");
+            txtCountry.setText("");
+            txtName.setText("");
+            txtRegion.setText("");
+            txtStreet.setText("");
+            txtStreetNumber.setText("");
+            txtZipCode.setText("");
+        }
+    }//GEN-LAST:event_btnAdd1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnAdd1;
+    private javax.swing.JButton btnCancel;
     private javax.swing.JMenuItem itemInventories;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

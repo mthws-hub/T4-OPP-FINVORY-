@@ -2,20 +2,24 @@ package ec.edu.espe.finvory.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import ec.edu.espe.finvory.mongo.MongoDBConnection;
 import org.bson.Document;
-
 import java.io.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Locale;
+import java.util.List;
 
 /**
- * 
- * @author Joseph Medina
+ * * @author Joseph Medina
  */
 public class Database {
 
@@ -23,17 +27,31 @@ public class Database {
     private static final String UTILS_FOLDER = "utils";
     private static final String USERS_FILE = UTILS_FOLDER + File.separator + "users.json";
     private static final String DELIMITER = ";";
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    private Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class, new TypeAdapter<LocalDate>() {
+                @Override
+                public void write(JsonWriter jsonWriter, LocalDate localDate) throws IOException {
+                    jsonWriter.value(localDate == null ? null : localDate.toString());
+                }
+                @Override
+                public LocalDate read(JsonReader jsonReader) throws IOException {
+                    String str = jsonReader.nextString();
+                    return (str == null || str.isEmpty()) ? null : LocalDate.parse(str);
+                }
+            })
+            .setPrettyPrinting()
+            .create();
 
     public FinvoryData loadCompanyData(String companyUsername) {
         System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
 
         FinvoryData cloudData = loadDataFromCloud(companyUsername);
-        
+
         if (cloudData != null) {
             System.out.println("Datos descargados de MongoDB Atlas.");
-            System.out.println("   -> Inventarios: " + cloudData.getInventories().size());
-            System.out.println("   -> Productos: " + cloudData.getProducts().size());
+            System.out.println("    -> Inventarios: " + cloudData.getInventories().size());
+            System.out.println("    -> Productos: " + cloudData.getProducts().size());
             saveCompanyData(cloudData, companyUsername);
             return cloudData;
         }
@@ -41,9 +59,14 @@ public class Database {
         System.out.println("No se pudo cargar de la nube (o está vacía). Usando datos locales.");
         String folder = ROOT_DATA_FOLDER + File.separator + companyUsername;
         FinvoryData localData = loadJson(folder);
-        localData.getCustomers().addAll(loadCustomersCsv(folder));
-        localData.getSuppliers().addAll(loadSuppliersCsv(folder));
-        
+
+        for (Customer c : loadCustomersCsv(folder)) {
+            localData.addCustomer(c);
+        }
+        for (Supplier s : loadSuppliersCsv(folder)) {
+            localData.addSupplier(s);
+        }
+
         return localData;
     }
 
@@ -54,58 +77,64 @@ public class Database {
             }
 
             FinvoryData data = new FinvoryData();
-
-            
             MongoCollection<Document> prodCol = MongoDBConnection.getCollection("products");
             for (Document doc : prodCol.find(Filters.eq("companyUsername", username))) {
-                Product p = new Product(
-                    doc.getString("productId"), 
-                    doc.getString("name"),
-                    doc.getString("description"),
-                    doc.getString("barcode"), 
-                    doc.getDouble("baseCostPrice").floatValue(),
-                    doc.getString("supplierId")
+
+                Double baseCostPriceDouble = doc.getDouble("baseCostPrice");
+                BigDecimal baseCostPrice = (baseCostPriceDouble != null)
+                        ? BigDecimal.valueOf(baseCostPriceDouble)
+                        : BigDecimal.ZERO;
+
+                Product product = new Product(
+                        doc.getString("productId"),
+                        doc.getString("name"),
+                        doc.getString("description"),
+                        doc.getString("barcode"),
+                        baseCostPrice,
+                        doc.getString("supplierId")
                 );
-                if(p.getId() == null) p = new Product(doc.getString("id"), doc.getString("name"), doc.getString("description"), doc.getString("barcode"), doc.getDouble("baseCostPrice").floatValue(), doc.getString("supplierId"));
-                
-                data.getProducts().add(p);
+                if (product.getId() == null) {
+                    product = new Product(doc.getString("id"), doc.getString("name"), doc.getString("description"), doc.getString("barcode"), baseCostPrice, doc.getString("supplierId"));
+                }
+
+                data.addProduct(product);
             }
 
             MongoCollection<Document> invCol = MongoDBConnection.getCollection("inventories");
-            for (Document doc : invCol.find(Filters.eq("companyUsername", username))) {
-                Document addrDoc = (Document) doc.get("address");
+            for (Document document : invCol.find(Filters.eq("companyUsername", username))) {
+                Document addrDoc = (Document) document.get("address");
                 Address addr = null;
                 if (addrDoc != null) {
                     addr = new Address(
-                        addrDoc.getString("country"),
-                        addrDoc.getString("city"),
-                        addrDoc.getString("street")
+                            addrDoc.getString("country"),
+                            addrDoc.getString("city"),
+                            addrDoc.getString("street")
                     );
                 }
-                
-                Inventory inv = new Inventory(doc.getString("name"), addr);
-                
-                Document stockDoc = (Document) doc.get("productStock");
+
+                Inventory inv = new Inventory(document.getString("name"), addr);
+
+                Document stockDoc = (Document) document.get("productStock");
                 if (stockDoc != null) {
                     for (String key : stockDoc.keySet()) {
                         Number qty = (Number) stockDoc.get(key);
                         inv.setStock(key, qty.intValue());
                     }
                 }
-                data.getInventories().add(inv);
+                data.addInventory(inv);
             }
 
             MongoCollection<Document> cliCol = MongoDBConnection.getCollection("customers");
             if (cliCol != null) {
                 for (Document doc : cliCol.find(Filters.eq("companyUsername", username))) {
-                    Customer c = new Customer(
-                        doc.getString("name"),
-                        doc.getString("identification"),
-                        doc.getString("phone"),
-                        doc.getString("email"),
-                        doc.getString("clientType")
+                    Customer customer = new Customer(
+                            doc.getString("name"),
+                            doc.getString("identification"),
+                            doc.getString("phone"),
+                            doc.getString("email"),
+                            doc.getString("clientType")
                     );
-                    data.getCustomers().add(c);
+                    data.addCustomer(customer);
                 }
             }
 
@@ -113,32 +142,44 @@ public class Database {
             if (supCol != null) {
                 for (Document doc : supCol.find(Filters.eq("companyUsername", username))) {
                     Supplier s = new Supplier(
-                        doc.getString("fullName"),
-                        doc.getString("id1"),
-                        doc.getString("phone"),
-                        doc.getString("email"),
-                        doc.getString("description")
+                            doc.getString("fullName"),
+                            doc.getString("id1"),
+                            doc.getString("phone"),
+                            doc.getString("email"),
+                            doc.getString("description")
                     );
                     s.setId2(doc.getString("id2"));
-                    data.getSuppliers().add(s);
+                    data.addSupplier(s);
                 }
             }
-            
+
             return data;
 
         } catch (Exception e) {
             System.err.println("Error descargando de MongoDB: " + e.getMessage());
-            return null; // Fallback a local
+            return null;
         }
     }
 
     public void saveCompanyData(FinvoryData data, String companyUsername) {
         String folder = ROOT_DATA_FOLDER + File.separator + companyUsername;
-        new File(folder).mkdirs(); 
-        
+        new File(folder).mkdirs();
+
         saveJson(data, folder);
         saveCustomersCsv(data.getCustomers(), folder);
         saveSuppliersCsv(data.getSuppliers(), folder);
+    }
+
+    public void saveUsers(SystemUsers users) {
+        try {
+            File file = new File(USERS_FILE);
+            new File(file.getParent()).mkdirs();
+            try (Writer writer = new FileWriter(file)) {
+                gson.toJson(users, writer);
+            }
+        } catch (IOException e) {
+            System.err.println("Error guardando usuarios: " + e.getMessage());
+        }
     }
 
     private FinvoryData loadJson(String folder) {
@@ -146,7 +187,9 @@ public class Database {
         if (file.exists()) {
             try (Reader reader = new FileReader(file)) {
                 return gson.fromJson(reader, FinvoryData.class);
-            } catch (IOException e) { }
+            } catch (IOException e) {
+                System.err.println("Error leyendo JSON: " + e.getMessage());
+            }
         }
         return new FinvoryData();
     }
@@ -164,59 +207,54 @@ public class Database {
         if (file.exists()) {
             try (Reader reader = new FileReader(file)) {
                 SystemUsers users = gson.fromJson(reader, SystemUsers.class);
-                if (users != null) return users;
-            } catch (IOException e) { }
+                if (users != null) {
+                    return users;
+                }
+            } catch (IOException e) {
+                System.err.println("Error leyendo usuarios: " + e.getMessage());
+            }
         }
-        return new SystemUsers(); 
-    }
-
-    public void saveUsers(SystemUsers users) {
-        try {
-            File file = new File(USERS_FILE);
-            new File(file.getParent()).mkdirs();
-            try (Writer writer = new FileWriter(file)) {
-                gson.toJson(users, writer);
-            }
-        } catch (IOException e) { }
-    }
-    
-    private void saveCustomersCsv(ArrayList<Customer> customers, String folder) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(folder + File.separator + "clients.csv"))) {
-            pw.println("Identification" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "ClientType");
-            for (Customer c : customers) {
-                pw.println(c.getIdentification() + DELIMITER + c.getName() + DELIMITER + c.getPhone() + DELIMITER + c.getEmail() + DELIMITER + c.getClientType());
-            }
-        } catch (IOException e) { }
+        return new SystemUsers();
     }
 
     private ArrayList<Customer> loadCustomersCsv(String folder) {
         ArrayList<Customer> list = new ArrayList<>();
         File file = new File(folder + File.separator + "clients.csv");
-        if (!file.exists()) return list;
+        if (!file.exists()) {
+            return list;
+        }
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             br.readLine();
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(DELIMITER);
-                if (parts.length == 5) list.add(new Customer(parts[1], parts[0], parts[2], parts[3], parts[4]));
+                if (parts.length == 5) {
+                    list.add(new Customer(parts[1], parts[0], parts[2], parts[3], parts[4]));
+                }
             }
-        } catch (IOException e) { }
+        } catch (IOException e) {
+            System.err.println("Error leyendo CSV de clientes: " + e.getMessage());
+        }
         return list;
     }
 
-    private void saveSuppliersCsv(ArrayList<Supplier> suppliers, String folder) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(folder + File.separator + "suppliers.csv"))) {
-            pw.println("ID1" + DELIMITER + "ID2" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "Description");
-            for (Supplier s : suppliers) {
-                pw.println(s.getId1() + DELIMITER + s.getId2() + DELIMITER + s.getFullName() + DELIMITER + s.getPhone() + DELIMITER + s.getEmail() + DELIMITER + s.getDescription());
+    private void saveCustomersCsv(List<Customer> customers, String folder) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(folder + File.separator + "clients.csv"))) {
+            pw.println("Identification" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "ClientType");
+            for (Customer c : customers) {
+                pw.println(c.getIdentification() + DELIMITER + c.getName() + DELIMITER + c.getPhone() + DELIMITER + c.getEmail() + DELIMITER + c.getClientType());
             }
-        } catch (IOException e) { }
+        } catch (IOException e) {
+            System.err.println("Error guardando CSV de clientes: " + e.getMessage());
+        }
     }
 
     private ArrayList<Supplier> loadSuppliersCsv(String folder) {
         ArrayList<Supplier> list = new ArrayList<>();
         File file = new File(folder + File.separator + "suppliers.csv");
-        if (!file.exists()) return list;
+        if (!file.exists()) {
+            return list;
+        }
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             br.readLine();
             String line;
@@ -228,10 +266,23 @@ public class Database {
                     list.add(s);
                 }
             }
-        } catch (IOException e) { }
+        } catch (IOException e) {
+            System.err.println("Error leyendo CSV de proveedores: " + e.getMessage());
+        }
         return list;
     }
-    
+
+    private void saveSuppliersCsv(List<Supplier> suppliers, String folder) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(folder + File.separator + "suppliers.csv"))) {
+            pw.println("ID1" + DELIMITER + "ID2" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "Description");
+            for (Supplier s : suppliers) {
+                pw.println(s.getId1() + DELIMITER + s.getId2() + DELIMITER + s.getFullName() + DELIMITER + s.getPhone() + DELIMITER + s.getEmail() + DELIMITER + s.getDescription());
+            }
+        } catch (IOException e) {
+            System.err.println("Error guardando CSV de proveedores: " + e.getMessage());
+        }
+    }
+
     public boolean exportToCsv(String title, HashMap<String, ? extends Object> data, String companyUsername) {
         String fileName = ROOT_DATA_FOLDER + File.separator + companyUsername + File.separator + title + ".csv";
         try {
@@ -241,11 +292,18 @@ public class Database {
                 pw.println("Key" + DELIMITER + "Value");
                 for (Map.Entry<String, ? extends Object> entry : data.entrySet()) {
                     String val = String.valueOf(entry.getValue());
-                    if (entry.getValue() instanceof Float) val = String.format(Locale.US, "%.2f", (Float) entry.getValue());
+
+                    if (entry.getValue() instanceof BigDecimal) {
+                        val = String.format(Locale.US, "%.2f", (BigDecimal) entry.getValue());
+                    } else if (entry.getValue() instanceof Float) {
+                        val = String.format(Locale.US, "%.2f", (Float) entry.getValue());
+                    }
                     pw.println(entry.getKey() + DELIMITER + val);
                 }
             }
             return true;
-        } catch (IOException e) { return false; }
+        } catch (IOException e) {
+            return false;
+        }
     }
 }

@@ -5,6 +5,7 @@ import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.model.Product;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,9 +18,6 @@ public class FrmProducts extends javax.swing.JFrame {
     private FinvoryController controller;
     private Inventory specificInventory;
 
-    /**
-     * Creates new form FrmProducts
-     */
     public FrmProducts(FinvoryController controller) {
         this(controller, null);
     }
@@ -29,15 +27,19 @@ public class FrmProducts extends javax.swing.JFrame {
         this.specificInventory = inventory;
         initComponents();
         this.setLocationRelativeTo(null);
+        updateTitle();
+        setupTableSelection();
+        loadProductTable();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+    private void updateTitle() {
         if (specificInventory != null) {
             jLabel1.setText("Gestionando: " + specificInventory.getName());
         } else {
             jLabel1.setText("Catálogo Global de Productos");
         }
-        loadProductTable();
-        setupTableSelection();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private void setupTableSelection() {
@@ -54,66 +56,15 @@ public class FrmProducts extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTableProducts.getModel();
         model.setRowCount(0);
 
-        if (controller == null || controller.getData() == null) {
+        if (controller == null) {
             return;
         }
 
-        try {
-            float profit = controller.getData().getProfitPercentage();
-            float dStd = controller.getData().getDiscountStandard();
-            float dPrm = controller.getData().getDiscountPremium();
-            float dVip = controller.getData().getDiscountVip();
+        List<Object[]> rows = controller.getProductTableData(specificInventory);
 
-            for (Product p : controller.getData().getProducts()) {
-
-                int stockToShow = 0;
-                boolean shouldAddRow = false;
-
-                if (specificInventory != null) {
-                    stockToShow = specificInventory.getStock(p.getId());
-                    if (stockToShow >= 0) {
-                        shouldAddRow = true;
-                    }
-                } else {
-                    shouldAddRow = true;
-                }
-
-                if (shouldAddRow) {
-                    model.addRow(new Object[]{
-                        p.getId(),
-                        p.getName(),
-                        p.getBarcode(),
-                        String.format("$%.2f", p.getBaseCostPrice()),
-                        String.format("$%.2f", p.getPrice("STANDARD", profit, dStd, dPrm, dVip)),
-                        String.format("$%.2f", p.getPrice("PREMIUM", profit, dStd, dPrm, dVip)),
-                        String.format("$%.2f", p.getPrice("VIP", profit, dStd, dPrm, dVip)),
-                        stockToShow,
-                        0
-                    });
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (Object[] row : rows) {
+            model.addRow(row);
         }
-    }
-
-    private void openProductForm(String productIdToEdit) {
-        FrmAddNewProduct form;
-
-        if (productIdToEdit == null) {
-            form = new FrmAddNewProduct(this.controller, this.specificInventory);
-        } else {
-            form = new FrmAddNewProduct(this.controller, this.specificInventory, productIdToEdit);
-        }
-        form.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                loadProductTable();
-                setVisible(true);
-            }
-        });
-        this.setVisible(false);
-        form.setVisible(true);
     }
 
     /**
@@ -323,25 +274,52 @@ public class FrmProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        int selectedRow = jTableProducts.getSelectedRow();
-
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un producto de la lista para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        if (specificInventory == null) {
+            JOptionPane.showMessageDialog(this, "Solo se puede borrar stock desde un inventario específico.", "Acción no permitida", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        Object idObj = jTableProducts.getValueAt(selectedRow, 0);
-        if (idObj != null) {
-            openProductForm(idObj.toString());
+        int selectedRow = jTableProducts.getSelectedRow();
+        if (selectedRow == -1) {
+            return;
+        }
+        String productId = jTableProducts.getValueAt(selectedRow, 0).toString();
+        String productName = jTableProducts.getValueAt(selectedRow, 1).toString();
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Desea dejar en 0 el stock de '" + productName + "' en este inventario?",
+                "Confirmar Borrado de Stock",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            boolean success = controller.handleZeroStock(specificInventory, productId);
+            if (success) {
+                loadProductTable();
+                JOptionPane.showMessageDialog(this, "Stock eliminado correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar stock.");
+            }
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
         this.dispose();
     }//GEN-LAST:event_itemInventoriesActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
+    private void openProductForm(String productIdToEdit) {
+        FrmAddNewProduct form;
+        if (productIdToEdit == null) {
+            form = new FrmAddNewProduct(this.controller, this.specificInventory);
+        } else {
+            form = new FrmAddNewProduct(this.controller, this.specificInventory, productIdToEdit);
+        }
+        this.setVisible(false);
+        form.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadProductTable();
+                setVisible(true);
+            }
+        });
+        form.setVisible(true);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;

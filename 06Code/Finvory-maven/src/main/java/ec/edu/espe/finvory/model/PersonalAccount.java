@@ -8,8 +8,8 @@ package ec.edu.espe.finvory.model;
 public class PersonalAccount {
     
     private String fullName;
-    private String username;
-    private String password;
+    private String username; 
+    private String password; 
     
     public PersonalAccount() {}
     
@@ -18,7 +18,12 @@ public class PersonalAccount {
         this.username = username;
         this.password = password;
     }
+
+    public boolean checkPassword(String attempt) {
+        return this.password != null && this.password.equals(attempt);
+    }
     
+
     public String getFullName() { 
         return fullName; 
     }
@@ -26,8 +31,9 @@ public class PersonalAccount {
     public String getUsername() { 
         return username; 
     }
-    
-    public boolean checkPassword(String attempt) {
-        return this.password != null && this.password.equals(attempt);
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
+
 }

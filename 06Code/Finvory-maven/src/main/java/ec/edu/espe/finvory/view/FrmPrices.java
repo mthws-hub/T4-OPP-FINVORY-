@@ -1,5 +1,8 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.model.FinvoryData;
+import ec.edu.espe.finvory.utils.ValidationUtils;
 import javax.swing.JOptionPane;
 
 /**
@@ -7,94 +10,31 @@ import javax.swing.JOptionPane;
  * @author Maryuri Quiña, @ESPE
  */
 public class FrmPrices extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmPrices.class.getName());
-    private final float CURRENT_TAX = 0.15f;
-    private final float CURRENT_PROFIT = 0.40f;
-    private final float CURRENT_DISC_STD = 0.0f;
-    private final float CURRENT_DISC_PRM = 0.05f;
-    private final float CURRENT_DISC_VIP = 0.12f;
 
-    /**
-     * Creates new form FrmPrices
-     */
-    public FrmPrices() {
+    private FinvoryController controller;
+
+    public FrmPrices(FinvoryController controller) {
+        this.controller = controller;
         initComponents();
         loadCurrentValues();
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
+
+    public FrmPrices() {
+        initComponents();
+    }
+
     private void loadCurrentValues() {
-        ftfProfit.setText(String.valueOf(CURRENT_PROFIT));
-        ftfDiscountStd.setText(String.valueOf(CURRENT_DISC_STD));
-        ftfDiscountPrm.setText(String.valueOf(CURRENT_DISC_PRM));
-        ftfDiscountVip.setText(String.valueOf(CURRENT_DISC_VIP));
-        ftfTax.setText(String.valueOf(CURRENT_TAX));
-    }
-
-    private void emptyFields() {
-        ftfProfit.setText("");
-        ftfDiscountStd.setText("");
-        ftfDiscountPrm.setText("");
-        ftfDiscountVip.setText("");
-        ftfTax.setText("");
-    }
-
-    private float parseField(javax.swing.JFormattedTextField field, String fieldName) throws NumberFormatException {
-        String text = field.getText().trim();
-        if (text.isEmpty()) {
-            throw new NumberFormatException("El campo " + fieldName + " es obligatorio y no puede estar vacío.");
+        if (controller != null && controller.getData() != null) {
+            FinvoryData data = controller.getData();
+            ftfProfit.setText(String.valueOf(data.getProfitPercentage()));
+            ftfDiscountStd.setText(String.valueOf(data.getDiscountStandard()));
+            ftfDiscountPrm.setText(String.valueOf(data.getDiscountPremium()));
+            ftfDiscountVip.setText(String.valueOf(data.getDiscountVip()));
+            ftfTax.setText(String.valueOf(data.getTaxRate()));
         }
-        if (!text.matches("^[0-9]+(\\.[0-9]{1,4})?$|^[0-9]*\\.[0-9]{1,4}$|^[0-9]+$")) { 
-            throw new NumberFormatException("El campo " + fieldName + " debe usar punto decimal y máximo 4 decimales.");
-        }
-        
-        return Float.parseFloat(text);
     }
-
-    private Object[] validateAndConvertPrices() {
-        float profit, std, prm, vip, tax;
-        
-        try {
-            profit = parseField(ftfProfit, "Ganancia");
-            std = parseField(ftfDiscountStd, "Descuento Standard");
-            prm = parseField(ftfDiscountPrm, "Descuento Premium");
-            vip = parseField(ftfDiscountVip, "Descuento VIP");
-            tax = parseField(ftfTax, "Tasa de Impuesto");
-            
-            if (profit < 0 || std < 0 || prm < 0 || vip < 0 || tax < 0) {
-                JOptionPane.showMessageDialog(this, "Error: Ningún porcentaje puede ser negativo.", "Validación Numérica", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-            if (tax <= 0.0f) {
-                JOptionPane.showMessageDialog(this, "Error: La Tasa de Impuesto no puede ser 0.", "Validación de Impuesto", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-            if (profit <= 0.0f) {
-                JOptionPane.showMessageDialog(this, "Error: La Ganancia no puede ser 0.", "Validación de Ganancia", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-            if (profit > 1.0f || std > 1.0f || prm > 1.0f || vip > 1.0f) {
-                JOptionPane.showMessageDialog(this, "Error: Los porcentajes no deben exceder 1 (100%).", "Validación de Rango", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-            if (std >= prm) {
-                JOptionPane.showMessageDialog(this, "Error: El descuento Standard debe ser menor que el Premium.", "Validación Lógica", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-             if (prm >= vip) {
-                JOptionPane.showMessageDialog(this, "Error: El descuento Premium debe ser menor que el VIP.", "Validación Lógica", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-            if (vip >= profit) {
-                 JOptionPane.showMessageDialog(this, "Error: El Descuento VIP no puede ser mayor o igual a la Ganancia (Margen Cero).", "Validación Lógica", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Error de Formato: " + e.getMessage(), "Dato Inválido", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        return new Object[]{profit, std, prm, vip, tax};
-    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -327,14 +267,25 @@ public class FrmPrices extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        Object[] pricesData = validateAndConvertPrices();
-        
-        if (pricesData != null) {
-            
-            JOptionPane.showMessageDialog(this, 
-                "Parámetros de Precios actualizados con éxito.", 
-                "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
+        String profitStr = ftfProfit.getText().trim();
+        String stdStr = ftfDiscountStd.getText().trim();
+        String prmStr = ftfDiscountPrm.getText().trim();
+        String vipStr = ftfDiscountVip.getText().trim();
+        String taxStr = ftfTax.getText().trim();
+        String errorMsg = ValidationUtils.getPriceConfigError(profitStr, stdStr, prmStr, vipStr, taxStr);
+
+        if (errorMsg != null) {
+            JOptionPane.showMessageDialog(this, errorMsg, "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        boolean success = controller.handleUpdatePricesGUI(profitStr, stdStr, prmStr, vipStr, taxStr);
+
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Precios actualizados y guardados correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             loadCurrentValues();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error crítico al guardar la configuración.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
@@ -348,46 +299,21 @@ public class FrmPrices extends javax.swing.JFrame {
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         int option = JOptionPane.showConfirmDialog(
-            this, 
-            "¿Está seguro de cancelar la actualización y borrar los datos?", 
-            "Confirmación de Cancelación", 
-            JOptionPane.YES_NO_OPTION, 
-            JOptionPane.WARNING_MESSAGE
+                this,
+                "¿Está seguro de cancelar la actualización? Se recargarán los valores guardados.",
+                "Confirmación de Cancelación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
         );
         if (option == JOptionPane.YES_OPTION) {
-            emptyFields();
-            JOptionPane.showMessageDialog(this, 
-                "Campos limpiados y operación cancelada.", 
-                "Cancelado", 
-                JOptionPane.INFORMATION_MESSAGE
+            loadCurrentValues();
+            JOptionPane.showMessageDialog(this,
+                    "Operación cancelada. Valores restaurados.",
+                    "Cancelado",
+                    JOptionPane.INFORMATION_MESSAGE
             );
         }
     }//GEN-LAST:event_btnCancelActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmPrices().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
