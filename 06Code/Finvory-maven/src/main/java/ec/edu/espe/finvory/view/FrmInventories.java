@@ -334,8 +334,8 @@ public class FrmInventories extends javax.swing.JFrame {
         clearFields();
     }
 
-    private void handleSingleMatch(Inventory inv) {
-        this.currentInventory = inv;
+    private void handleSingleMatch(Inventory inventory) {
+        this.currentInventory = inventory;
         updateInterface();
     }
 

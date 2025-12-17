@@ -28,6 +28,7 @@ public class FinvoryData {
     private BigDecimal discountVip;
 
     public FinvoryData() {
+        
         customers = new ArrayList<>();
         suppliers = new ArrayList<>();
         products = new ArrayList<>();

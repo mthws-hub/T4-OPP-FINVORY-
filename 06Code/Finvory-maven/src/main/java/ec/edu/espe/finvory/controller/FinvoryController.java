@@ -214,14 +214,14 @@ public class FinvoryController {
         public final float discountPremium;
         public final float discountVip;
 
-        public ProductDisplayData(List<Product> p, List<Inventory> i, InventoryOfObsolete o, float pp, float ds, float dp, float dv) {
-            this.products = p;
-            this.inventories = i;
-            this.obsoleteInventory = o;
-            this.profitPercentage = pp;
-            this.discountStandard = ds;
-            this.discountPremium = dp;
-            this.discountVip = dv;
+        public ProductDisplayData(List<Product> products, List<Inventory> inventories, InventoryOfObsolete inventoryObsolete, float profitPercetage, float discountStandard, float discountPremium, float discountVip) {
+            this.products = products;
+            this.inventories = inventories;
+            this.obsoleteInventory = inventoryObsolete;
+            this.profitPercentage = profitPercetage;
+            this.discountStandard = discountStandard;
+            this.discountPremium = discountPremium;
+            this.discountVip = discountVip;
         }
     }
 
@@ -299,8 +299,8 @@ public class FinvoryController {
     }
 
     public boolean handleCreateInventory(String name, Address address) {
-        for (Inventory inv : data.getInventories()) {
-            if (inv.getName().equalsIgnoreCase(name)) {
+        for (Inventory inventory : data.getInventories()) {
+            if (inventory.getName().equalsIgnoreCase(name)) {
                 return false;
             }
         }
@@ -430,9 +430,9 @@ public class FinvoryController {
         if (id == null) {
             return null;
         }
-        for (Product p : data.getProducts()) {
-            if (id.equals(p.getId())) {
-                return p;
+        for (Product product : data.getProducts()) {
+            if (id.equals(product.getId())) {
+                return product;
             }
         }
         return null;
@@ -442,9 +442,9 @@ public class FinvoryController {
         if (barcode == null) {
             return null;
         }
-        for (Product p : data.getProducts()) {
-            if (barcode.equals(p.getBarcode())) {
-                return p;
+        for (Product product : data.getProducts()) {
+            if (barcode.equals(product.getBarcode())) {
+                return product;
             }
         }
         return null;
@@ -467,9 +467,9 @@ public class FinvoryController {
         if (id == null) {
             return null;
         }
-        for (Supplier s : data.getSuppliers()) {
-            if (id.equals(s.getId1())) {
-                return s;
+        for (Supplier supplier : data.getSuppliers()) {
+            if (id.equals(supplier.getId1())) {
+                return supplier;
             }
         }
         return null;
@@ -479,9 +479,9 @@ public class FinvoryController {
         if (u == null) {
             return null;
         }
-        for (CompanyAccount c : users.getCompanyAccounts()) {
-            if (u.equals(c.getUsername())) {
-                return c;
+        for (CompanyAccount companyAccount : users.getCompanyAccounts()) {
+            if (u.equals(companyAccount.getUsername())) {
+                return companyAccount;
             }
         }
         return null;
@@ -491,9 +491,9 @@ public class FinvoryController {
         if (u == null) {
             return null;
         }
-        for (PersonalAccount p : users.getPersonalAccounts()) {
-            if (u.equals(p.getUsername())) {
-                return p;
+        for (PersonalAccount personalAccount : users.getPersonalAccounts()) {
+            if (u.equals(personalAccount.getUsername())) {
+                return personalAccount;
             }
         }
         return null;
@@ -503,9 +503,9 @@ public class FinvoryController {
         if (data == null || data.getInventories() == null) {
             return null;
         }
-        for (Inventory inv : data.getInventories()) {
-            if (inv.getName().equalsIgnoreCase(name)) {
-                return inv;
+        for (Inventory inventory : data.getInventories()) {
+            if (inventory.getName().equalsIgnoreCase(name)) {
+                return inventory;
             }
         }
         return null;
@@ -527,9 +527,9 @@ public class FinvoryController {
             return null;
         }
         String q = name.trim();
-        for (Supplier s : data.getSuppliers()) {
-            if (s.getFullName() != null && s.getFullName().equalsIgnoreCase(q)) {
-                return s;
+        for (Supplier supplier : data.getSuppliers()) {
+            if (supplier.getFullName() != null && supplier.getFullName().equalsIgnoreCase(q)) {
+                return supplier;
             }
         }
         return null;
@@ -543,12 +543,12 @@ public class FinvoryController {
         }
 
         float profit = data.getProfitPercentage() != null ? data.getProfitPercentage().floatValue() : 0.0f;
-        float dStd = data.getDiscountStandard() != null ? data.getDiscountStandard().floatValue() : 0.0f;
-        float dPrm = data.getDiscountPremium() != null ? data.getDiscountPremium().floatValue() : 0.0f;
-        float dVip = data.getDiscountVip() != null ? data.getDiscountVip().floatValue() : 0.0f;
+        float discountStandard = data.getDiscountStandard() != null ? data.getDiscountStandard().floatValue() : 0.0f;
+        float discountPremium = data.getDiscountPremium() != null ? data.getDiscountPremium().floatValue() : 0.0f;
+        float discountVip = data.getDiscountVip() != null ? data.getDiscountVip().floatValue() : 0.0f;
 
-        for (Product p : globalProducts) {
-            String productId = p.getId();
+        for (Product product : globalProducts) {
+            String productId = product.getId();
             int stock = currentInventory.getStock(productId);
             if (stock == 0 && currentInventory.getStock(productId.trim()) > 0) {
                 stock = currentInventory.getStock(productId.trim());
@@ -556,11 +556,11 @@ public class FinvoryController {
             int obsoleteStock = data.getObsoleteInventory() != null ? data.getObsoleteInventory().getStock(productId) : 0;
 
             rows.add(new Object[]{
-                p.getId(), p.getName(), p.getBarcode(),
-                String.format("$%.2f", p.getBaseCostPrice()),
-                String.format("$%.2f", p.getPrice("STANDARD", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
-                String.format("$%.2f", p.getPrice("PREMIUM", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
-                String.format("$%.2f", p.getPrice("VIP", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                product.getId(), product.getName(), product.getBarcode(),
+                String.format("$%.2f", product.getBaseCostPrice()),
+                String.format("$%.2f", product.getPrice("STANDARD", new BigDecimal(profit), new BigDecimal(discountStandard), new BigDecimal(discountPremium), new BigDecimal(discountVip))),
+                String.format("$%.2f", product.getPrice("PREMIUM", new BigDecimal(profit), new BigDecimal(discountStandard), new BigDecimal(discountPremium), new BigDecimal(discountVip))),
+                String.format("$%.2f", product.getPrice("VIP", new BigDecimal(profit), new BigDecimal(discountStandard), new BigDecimal(discountPremium), new BigDecimal(discountVip))),
                 stock, (double) obsoleteStock
             });
         }
@@ -579,11 +579,11 @@ public class FinvoryController {
         float dPrm = data.getDiscountPremium() != null ? data.getDiscountPremium().floatValue() : 0.0f;
         float dVip = data.getDiscountVip() != null ? data.getDiscountVip().floatValue() : 0.0f;
 
-        for (Product p : products) {
+        for (Product product : products) {
             int stockToShow = 0;
             boolean shouldAdd = false;
             if (specificInventory != null) {
-                int stock = specificInventory.getStock(p.getId());
+                int stock = specificInventory.getStock(product.getId());
                 if (stock >= 0) {
                     stockToShow = stock;
                     shouldAdd = true;
@@ -594,11 +594,11 @@ public class FinvoryController {
 
             if (shouldAdd) {
                 rows.add(new Object[]{
-                    p.getId(), p.getName(), p.getBarcode(),
-                    String.format("$%.2f", p.getBaseCostPrice()),
-                    String.format("$%.2f", p.getPrice("STANDARD", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
-                    String.format("$%.2f", p.getPrice("PREMIUM", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
-                    String.format("$%.2f", p.getPrice("VIP", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                    product.getId(), product.getName(), product.getBarcode(),
+                    String.format("$%.2f", product.getBaseCostPrice()),
+                    String.format("$%.2f", product.getPrice("STANDARD", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                    String.format("$%.2f", product.getPrice("PREMIUM", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                    String.format("$%.2f", product.getPrice("VIP", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
                     stockToShow, 0
                 });
             }
@@ -664,9 +664,9 @@ public class FinvoryController {
         String query = companyNameQuery.toLowerCase().trim();
         String targetUsername = null;
 
-        for (CompanyAccount c : users.getCompanyAccounts()) {
-            if (c.getName() != null && c.getName().toLowerCase().contains(query)) {
-                targetUsername = c.getUsername();
+        for (CompanyAccount companyAccount : users.getCompanyAccounts()) {
+            if (companyAccount.getName() != null && companyAccount.getName().toLowerCase().contains(query)) {
+                targetUsername = companyAccount.getUsername();
                 break; 
             }
         }
@@ -681,16 +681,16 @@ public class FinvoryController {
             return rows;
         }
 
-        for (Product p : targetData.getProducts()) {
+        for (Product product : targetData.getProducts()) {
             int totalStock = 0;
             for (Inventory inv : targetData.getInventories()) {
-                totalStock += inv.getStock(p.getId());
+                totalStock += inv.getStock(product.getId());
             }
 
             rows.add(new Object[]{
-                p.getId(),
-                p.getName(),
-                p.getBarcode(),
+                product.getId(),
+                product.getName(),
+                product.getBarcode(),
                 totalStock
             });
         }
