@@ -65,32 +65,32 @@ public class FinvoryData {
         return profitPercentage;
     }
 
-    public void setProfitPercentage(BigDecimal p) {
-        this.profitPercentage = p;
+    public void setProfitPercentage(BigDecimal profitPercetage) {
+        this.profitPercentage = profitPercetage;
     }
 
     public BigDecimal getDiscountStandard() {
         return discountStandard;
     }
 
-    public void setDiscountStandard(BigDecimal d) {
-        this.discountStandard = d;
+    public void setDiscountStandard(BigDecimal discountStandard) {
+        this.discountStandard = discountStandard;
     }
 
     public BigDecimal getDiscountPremium() {
         return discountPremium;
     }
 
-    public void setDiscountPremium(BigDecimal d) {
-        this.discountPremium = d;
+    public void setDiscountPremium(BigDecimal discountPremium) {
+        this.discountPremium = discountPremium;
     }
 
     public BigDecimal getDiscountVip() {
         return discountVip;
     }
 
-    public void setDiscountVip(BigDecimal d) {
-        this.discountVip = d;
+    public void setDiscountVip(BigDecimal discountVip) {
+        this.discountVip = discountVip;
     }
 
     public InventoryOfObsolete getObsoleteInventory() {

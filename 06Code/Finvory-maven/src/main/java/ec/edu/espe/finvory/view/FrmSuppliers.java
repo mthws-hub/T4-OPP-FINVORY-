@@ -42,12 +42,12 @@ public class FrmSuppliers extends javax.swing.JFrame {
         if (controller == null || controller.getData() == null) {
             return;
         }
-        for (Supplier s : controller.getData().getSuppliers()) {
+        for (Supplier supplier : controller.getData().getSuppliers()) {
             model.addRow(new Object[]{
-                s.getId1(),
-                s.getFullName(),
-                s.getPhone(),
-                s.getEmail()
+                supplier.getId1(),
+                supplier.getFullName(),
+                supplier.getPhone(),
+                supplier.getEmail()
             });
         }
     }

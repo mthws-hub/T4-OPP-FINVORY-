@@ -36,8 +36,8 @@ public class Database {
                 }
                 @Override
                 public LocalDate read(JsonReader jsonReader) throws IOException {
-                    String str = jsonReader.nextString();
-                    return (str == null || str.isEmpty()) ? null : LocalDate.parse(str);
+                    String string = jsonReader.nextString();
+                    return (string == null || string.isEmpty()) ? null : LocalDate.parse(string);
                 }
             })
             .setPrettyPrinting()
@@ -60,11 +60,11 @@ public class Database {
         String folder = ROOT_DATA_FOLDER + File.separator + companyUsername;
         FinvoryData localData = loadJson(folder);
 
-        for (Customer c : loadCustomersCsv(folder)) {
-            localData.addCustomer(c);
+        for (Customer customer : loadCustomersCsv(folder)) {
+            localData.addCustomer(customer);
         }
-        for (Supplier s : loadSuppliersCsv(folder)) {
-            localData.addSupplier(s);
+        for (Supplier supplier : loadSuppliersCsv(folder)) {
+            localData.addSupplier(supplier);
         }
 
         return localData;
@@ -78,47 +78,47 @@ public class Database {
 
             FinvoryData data = new FinvoryData();
             MongoCollection<Document> prodCol = MongoDBConnection.getCollection("products");
-            for (Document doc : prodCol.find(Filters.eq("companyUsername", username))) {
+            for (Document document : prodCol.find(Filters.eq("companyUsername", username))) {
 
-                Double baseCostPriceDouble = doc.getDouble("baseCostPrice");
+                Double baseCostPriceDouble = document.getDouble("baseCostPrice");
                 BigDecimal baseCostPrice = (baseCostPriceDouble != null)
                         ? BigDecimal.valueOf(baseCostPriceDouble)
                         : BigDecimal.ZERO;
 
                 Product product = new Product(
-                        doc.getString("productId"),
-                        doc.getString("name"),
-                        doc.getString("description"),
-                        doc.getString("barcode"),
+                        document.getString("productId"),
+                        document.getString("name"),
+                        document.getString("description"),
+                        document.getString("barcode"),
                         baseCostPrice,
-                        doc.getString("supplierId")
+                        document.getString("supplierId")
                 );
                 if (product.getId() == null) {
-                    product = new Product(doc.getString("id"), doc.getString("name"), doc.getString("description"), doc.getString("barcode"), baseCostPrice, doc.getString("supplierId"));
+                    product = new Product(document.getString("id"), document.getString("name"), document.getString("description"), document.getString("barcode"), baseCostPrice, document.getString("supplierId"));
                 }
 
                 data.addProduct(product);
             }
 
-            MongoCollection<Document> invCol = MongoDBConnection.getCollection("inventories");
-            for (Document document : invCol.find(Filters.eq("companyUsername", username))) {
-                Document addrDoc = (Document) document.get("address");
-                Address addr = null;
-                if (addrDoc != null) {
-                    addr = new Address(
-                            addrDoc.getString("country"),
-                            addrDoc.getString("city"),
-                            addrDoc.getString("street")
+            MongoCollection<Document> invoiceCollection = MongoDBConnection.getCollection("inventories");
+            for (Document document : invoiceCollection.find(Filters.eq("companyUsername", username))) {
+                Document addressDocument = (Document) document.get("address");
+                Address address = null;
+                if (addressDocument != null) {
+                    address = new Address(
+                            addressDocument.getString("country"),
+                            addressDocument.getString("city"),
+                            addressDocument.getString("street")
                     );
                 }
 
-                Inventory inv = new Inventory(document.getString("name"), addr);
+                Inventory inv = new Inventory(document.getString("name"), address);
 
                 Document stockDoc = (Document) document.get("productStock");
                 if (stockDoc != null) {
                     for (String key : stockDoc.keySet()) {
-                        Number qty = (Number) stockDoc.get(key);
-                        inv.setStock(key, qty.intValue());
+                        Number quantity = (Number) stockDoc.get(key);
+                        inv.setStock(key, quantity.intValue());
                     }
                 }
                 data.addInventory(inv);
@@ -126,30 +126,30 @@ public class Database {
 
             MongoCollection<Document> cliCol = MongoDBConnection.getCollection("customers");
             if (cliCol != null) {
-                for (Document doc : cliCol.find(Filters.eq("companyUsername", username))) {
+                for (Document document : cliCol.find(Filters.eq("companyUsername", username))) {
                     Customer customer = new Customer(
-                            doc.getString("name"),
-                            doc.getString("identification"),
-                            doc.getString("phone"),
-                            doc.getString("email"),
-                            doc.getString("clientType")
+                            document.getString("name"),
+                            document.getString("identification"),
+                            document.getString("phone"),
+                            document.getString("email"),
+                            document.getString("clientType")
                     );
                     data.addCustomer(customer);
                 }
             }
 
-            MongoCollection<Document> supCol = MongoDBConnection.getCollection("suppliers");
-            if (supCol != null) {
-                for (Document doc : supCol.find(Filters.eq("companyUsername", username))) {
-                    Supplier s = new Supplier(
-                            doc.getString("fullName"),
-                            doc.getString("id1"),
-                            doc.getString("phone"),
-                            doc.getString("email"),
-                            doc.getString("description")
+            MongoCollection<Document> supCollection = MongoDBConnection.getCollection("suppliers");
+            if (supCollection != null) {
+                for (Document document : supCollection.find(Filters.eq("companyUsername", username))) {
+                    Supplier supplier = new Supplier(
+                            document.getString("fullName"),
+                            document.getString("id1"),
+                            document.getString("phone"),
+                            document.getString("email"),
+                            document.getString("description")
                     );
-                    s.setId2(doc.getString("id2"));
-                    data.addSupplier(s);
+                    supplier.setId2(document.getString("id2"));
+                    data.addSupplier(supplier);
                 }
             }
 
@@ -239,10 +239,10 @@ public class Database {
     }
 
     private void saveCustomersCsv(List<Customer> customers, String folder) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(folder + File.separator + "clients.csv"))) {
-            pw.println("Identification" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "ClientType");
-            for (Customer c : customers) {
-                pw.println(c.getIdentification() + DELIMITER + c.getName() + DELIMITER + c.getPhone() + DELIMITER + c.getEmail() + DELIMITER + c.getClientType());
+        try (PrintWriter printWritter = new PrintWriter(new FileWriter(folder + File.separator + "clients.csv"))) {
+            printWritter.println("Identification" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "ClientType");
+            for (Customer customer : customers) {
+                printWritter.println(customer.getIdentification() + DELIMITER + customer.getName() + DELIMITER + customer.getPhone() + DELIMITER + customer.getEmail() + DELIMITER + customer.getClientType());
             }
         } catch (IOException e) {
             System.err.println("Error guardando CSV de clientes: " + e.getMessage());
@@ -255,15 +255,15 @@ public class Database {
         if (!file.exists()) {
             return list;
         }
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            br.readLine();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            bufferedReader.readLine();
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 String[] parts = line.split(DELIMITER);
                 if (parts.length == 6) {
-                    Supplier s = new Supplier(parts[2], parts[0], parts[3], parts[4], parts[5]);
-                    s.setId2(parts[1]);
-                    list.add(s);
+                    Supplier supplier = new Supplier(parts[2], parts[0], parts[3], parts[4], parts[5]);
+                    supplier.setId2(parts[1]);
+                    list.add(supplier);
                 }
             }
         } catch (IOException e) {
@@ -273,10 +273,10 @@ public class Database {
     }
 
     private void saveSuppliersCsv(List<Supplier> suppliers, String folder) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(folder + File.separator + "suppliers.csv"))) {
-            pw.println("ID1" + DELIMITER + "ID2" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "Description");
-            for (Supplier s : suppliers) {
-                pw.println(s.getId1() + DELIMITER + s.getId2() + DELIMITER + s.getFullName() + DELIMITER + s.getPhone() + DELIMITER + s.getEmail() + DELIMITER + s.getDescription());
+        try (PrintWriter printWritter = new PrintWriter(new FileWriter(folder + File.separator + "suppliers.csv"))) {
+            printWritter.println("ID1" + DELIMITER + "ID2" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "Description");
+            for (Supplier supplier : suppliers) {
+                printWritter.println(supplier.getId1() + DELIMITER + supplier.getId2() + DELIMITER + supplier.getFullName() + DELIMITER + supplier.getPhone() + DELIMITER + supplier.getEmail() + DELIMITER + supplier.getDescription());
             }
         } catch (IOException e) {
             System.err.println("Error guardando CSV de proveedores: " + e.getMessage());
@@ -288,17 +288,17 @@ public class Database {
         try {
             File file = new File(fileName);
             new File(file.getParent()).mkdirs();
-            try (PrintWriter pw = new PrintWriter(new FileWriter(file))) {
-                pw.println("Key" + DELIMITER + "Value");
+            try (PrintWriter printWritter = new PrintWriter(new FileWriter(file))) {
+                printWritter.println("Key" + DELIMITER + "Value");
                 for (Map.Entry<String, ? extends Object> entry : data.entrySet()) {
-                    String val = String.valueOf(entry.getValue());
+                    String value = String.valueOf(entry.getValue());
 
                     if (entry.getValue() instanceof BigDecimal) {
-                        val = String.format(Locale.US, "%.2f", (BigDecimal) entry.getValue());
+                        value = String.format(Locale.US, "%.2f", (BigDecimal) entry.getValue());
                     } else if (entry.getValue() instanceof Float) {
-                        val = String.format(Locale.US, "%.2f", (Float) entry.getValue());
+                        value = String.format(Locale.US, "%.2f", (Float) entry.getValue());
                     }
-                    pw.println(entry.getKey() + DELIMITER + val);
+                    printWritter.println(entry.getKey() + DELIMITER + value);
                 }
             }
             return true;

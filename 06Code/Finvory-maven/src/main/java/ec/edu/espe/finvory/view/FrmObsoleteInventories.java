@@ -233,27 +233,27 @@ public class FrmObsoleteInventories extends JDialog {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        FrmReassignedProduct win = new FrmReassignedProduct(this,true,controller);
-        win.addWindowListener(new java.awt.event.WindowAdapter() {
+        FrmReassignedProduct reassignedProduct = new FrmReassignedProduct(this,true,controller);
+        reassignedProduct.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmObsoleteInventories.this.setVisible(true);
             }
         });
         this.setVisible(false);
-        win.setVisible(true);
+        reassignedProduct.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        FrmProductReturns win = new FrmProductReturns(this,true,controller);
-        win.addWindowListener(new java.awt.event.WindowAdapter() {
+        FrmProductReturns productReturns = new FrmProductReturns(this,true,controller);
+        productReturns.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmObsoleteInventories.this.setVisible(true);
             }
         });
         this.setVisible(false);
-        win.setVisible(true);
+        productReturns.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**

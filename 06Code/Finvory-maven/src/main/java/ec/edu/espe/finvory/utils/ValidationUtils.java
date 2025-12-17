@@ -190,27 +190,27 @@ public class ValidationUtils {
         return null;
     }
 
-    public static String getPriceConfigError(String profitStr, String stdStr, String prmStr, String vipStr, String taxStr) {
+    public static String getPriceConfigError(String profitString, String standardString, String premiumString, String vipString, String taxString) {
 
-        if (isEmpty(profitStr) || isEmpty(stdStr) || isEmpty(prmStr) || isEmpty(vipStr) || isEmpty(taxStr)) {
+        if (isEmpty(profitString) || isEmpty(standardString) || isEmpty(premiumString) || isEmpty(vipString) || isEmpty(taxString)) {
             return "Todos los campos son obligatorios.";
         }
-        if (!isPositiveDecimal(profitStr) || !isPositiveDecimal(stdStr)
-                || !isPositiveDecimal(prmStr) || !isPositiveDecimal(vipStr) || !isPositiveDecimal(taxStr)) {
+        if (!isPositiveDecimal(profitString) || !isPositiveDecimal(standardString)
+                || !isPositiveDecimal(premiumString) || !isPositiveDecimal(vipString) || !isPositiveDecimal(taxString)) {
             return "Todos los valores deben ser números positivos (Ej: 0.15).";
         }
 
         try {
-            float profit = Float.parseFloat(profitStr);
-            float std = Float.parseFloat(stdStr);
-            float prm = Float.parseFloat(prmStr);
-            float vip = Float.parseFloat(vipStr);
-            float tax = Float.parseFloat(taxStr);
+            float profit = Float.parseFloat(profitString);
+            float standard = Float.parseFloat(standardString);
+            float premium = Float.parseFloat(premiumString);
+            float vip = Float.parseFloat(vipString);
+            float tax = Float.parseFloat(taxString);
 
             if (profit > 2.0f) {
                 return "La ganancia no debería exceder el 200% (2.0).";
             }
-            if (std > 1.0f || prm > 1.0f || vip > 1.0f || tax > 1.0f) {
+            if (standard > 1.0f || premium > 1.0f || vip > 1.0f || tax > 1.0f) {
                 return "Los porcentajes (Descuentos/Impuesto) deben estar entre 0 y 1 (Ej: 0.12 para 12%).";
             }
             if (tax <= 0) {
@@ -219,10 +219,10 @@ public class ValidationUtils {
             if (profit <= 0) {
                 return "La ganancia debe ser mayor a 0.";
             }
-            if (std >= prm) {
+            if (standard >= premium) {
                 return "El descuento Standard debe ser menor que el Premium.";
             }
-            if (prm >= vip) {
+            if (premium >= vip) {
                 return "El descuento Premium debe ser menor que el VIP.";
             }
             if (vip >= profit) {

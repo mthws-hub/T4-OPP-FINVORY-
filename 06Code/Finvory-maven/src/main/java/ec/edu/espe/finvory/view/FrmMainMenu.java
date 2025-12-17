@@ -121,13 +121,13 @@ public class FrmMainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
-        FrmInventories frmInv = new FrmInventories(this.controller);
-        frmInv.addWindowListener(new java.awt.event.WindowAdapter() {
+        FrmInventories frmInventories = new FrmInventories(this.controller);
+        frmInventories.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmMainMenu.this.setVisible(true);
             }
         });
-        frmInv.setVisible(true);
+        frmInventories.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_itemInventoriesActionPerformed
 
@@ -136,24 +136,24 @@ public class FrmMainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_itemQuitActionPerformed
 
     private void itemSuppliersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSuppliersActionPerformed
-        FrmSuppliers win = new FrmSuppliers(this.controller);
-        win.addWindowListener(new java.awt.event.WindowAdapter() {
+        FrmSuppliers suppliers = new FrmSuppliers(this.controller);
+        suppliers.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmMainMenu.this.setVisible(true);
             }
         });
-        win.setVisible(true);
+        suppliers.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_itemSuppliersActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        FrmPrices win = new FrmPrices(this.controller);
-        win.addWindowListener(new java.awt.event.WindowAdapter() {
+        FrmPrices prices = new FrmPrices(this.controller);
+        prices.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmMainMenu.this.setVisible(true);
             }
         });
-        win.setVisible(true);
+        prices.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 

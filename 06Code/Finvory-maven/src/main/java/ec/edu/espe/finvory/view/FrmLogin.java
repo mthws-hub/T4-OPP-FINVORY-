@@ -213,15 +213,15 @@ String user = txtUserName.getText();
     }//GEN-LAST:event_passPasswordKeyPressed
 
     private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
-        FrmNewAccount win = new FrmNewAccount(controller);
-        win.addWindowListener(new java.awt.event.WindowAdapter() {
+        FrmNewAccount newAccount = new FrmNewAccount(controller);
+        newAccount.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmLogin.this.setVisible(true);
             }
         });
         this.setVisible(false);
-        win.setVisible(true);
+        newAccount.setVisible(true);
     }//GEN-LAST:event_btnSignUpActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

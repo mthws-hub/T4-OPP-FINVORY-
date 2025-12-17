@@ -36,9 +36,9 @@ public class FinvoryController {
 
     private static final BigDecimal DEFAULT_TAX_RATE = new BigDecimal("0.12");
 
-    public FinvoryController(Database db) {
-        this.dataBase = db;
-        this.users = db.loadUsers();
+    public FinvoryController(Database dataBase) {
+        this.dataBase = dataBase;
+        this.users = dataBase.loadUsers();
     }
 
     public FinvoryData getData() {
@@ -400,9 +400,9 @@ public class FinvoryController {
 
     public HashMap<String, Float> getCustomerPurchaseReport() {
         HashMap<String, Float> map = new HashMap<>();
-        for (InvoiceSim i : data.getInvoices()) {
-            if ("COMPLETED".equals(i.getStatus())) {
-                map.put(i.getCustomer().getName(), map.getOrDefault(i.getCustomer().getName(), 0f) + i.getTotal().floatValue());
+        for (InvoiceSim invoiceSim : data.getInvoices()) {
+            if ("COMPLETED".equals(invoiceSim.getStatus())) {
+                map.put(invoiceSim.getCustomer().getName(), map.getOrDefault(invoiceSim.getCustomer().getName(), 0f) + invoiceSim.getTotal().floatValue());
             }
         }
         return map;
@@ -410,9 +410,9 @@ public class FinvoryController {
 
     public HashMap<String, Integer> getSupplierDemandReport() {
         HashMap<String, Integer> map = new HashMap<>();
-        for (InvoiceSim i : data.getInvoices()) {
-            if ("COMPLETED".equals(i.getStatus())) {
-                for (InvoiceLineSim line : i.getLines()) {
+        for (InvoiceSim invoiceSim : data.getInvoices()) {
+            if ("COMPLETED".equals(invoiceSim.getStatus())) {
+                for (InvoiceLineSim line : invoiceSim.getLines()) {
                     Product product = findProduct(line.getProductId());
                     if (product != null) {
                         Supplier supplier = findSupplier(product.getSupplierId());
@@ -455,9 +455,9 @@ public class FinvoryController {
             return null;
         }
         format = format.toLowerCase();
-        for (Customer c : data.getCustomers()) {
-            if (format.equals(c.getIdentification()) || (c.getName() != null && c.getName().toLowerCase().contains(format))) {
-                return c;
+        for (Customer customer : data.getCustomers()) {
+            if (format.equals(customer.getIdentification()) || (customer.getName() != null && customer.getName().toLowerCase().contains(format))) {
+                return customer;
             }
         }
         return null;
@@ -642,15 +642,15 @@ public class FinvoryController {
     public boolean handleUpdatePricesGUI(String profit, String std, String prm, String vip, String tax) {
         try {
             BigDecimal profitVal = new BigDecimal(profit);
-            BigDecimal stdVal = new BigDecimal(std);
-            BigDecimal prmVal = new BigDecimal(prm);
-            BigDecimal vipVal = new BigDecimal(vip);
-            BigDecimal taxVal = new BigDecimal(tax);
+            BigDecimal standardValue = new BigDecimal(std);
+            BigDecimal premiumValue = new BigDecimal(prm);
+            BigDecimal vipValue = new BigDecimal(vip);
+            BigDecimal taxValue = new BigDecimal(tax);
             data.setProfitPercentage(profitVal);
-            data.setDiscountStandard(stdVal);
-            data.setDiscountPremium(prmVal);
-            data.setDiscountVip(vipVal);
-            data.setTaxRate(taxVal);
+            data.setDiscountStandard(standardValue);
+            data.setDiscountPremium(premiumValue);
+            data.setDiscountVip(vipValue);
+            data.setTaxRate(taxValue);
             saveData();
             return true;
         } catch (Exception e) {

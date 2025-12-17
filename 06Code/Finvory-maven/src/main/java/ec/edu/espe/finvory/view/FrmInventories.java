@@ -285,14 +285,14 @@ public class FrmInventories extends javax.swing.JFrame {
 
     private void itemProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProductsActionPerformed
         if (this.currentInventory != null) {
-            FrmProducts win = new FrmProducts(controller, this.currentInventory);
-            win.addWindowListener(new java.awt.event.WindowAdapter() {
+            FrmProducts products = new FrmProducts(controller, this.currentInventory);
+            products.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent e) {
                     FrmInventories.this.setVisible(true);
                 }
             });
-            win.setVisible(true);
+            products.setVisible(true);
             this.setVisible(false);
         } else {
             JOptionPane.showMessageDialog(this, "Primero debe buscar y seleccionar un inventario.");
@@ -300,9 +300,9 @@ public class FrmInventories extends javax.swing.JFrame {
     }//GEN-LAST:event_itemProductsActionPerformed
 
     private void itemObsoleteProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemObsoleteProductsActionPerformed
-        FrmObsoleteInventories win = new FrmObsoleteInventories(this, true, controller);
+        FrmObsoleteInventories obsoleteInventorie = new FrmObsoleteInventories(this, true, controller);
         this.setVisible(false);
-        win.addWindowListener(new java.awt.event.WindowAdapter() {
+        obsoleteInventorie.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmInventories.this.setVisible(true);
@@ -311,19 +311,19 @@ public class FrmInventories extends javax.swing.JFrame {
                 }
             }
         });
-        win.setVisible(true);
+        obsoleteInventorie.setVisible(true);
     }//GEN-LAST:event_itemObsoleteProductsActionPerformed
 
     private void itemAddNewInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAddNewInventoryActionPerformed
-        FrmAddNewInventory win = new FrmAddNewInventory(this, true, controller);
+        FrmAddNewInventory addNewInventory = new FrmAddNewInventory(this, true, controller);
         this.setVisible(false);
-        win.addWindowListener(new java.awt.event.WindowAdapter() {
+        addNewInventory.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmInventories.this.setVisible(true);
             }
         });
-        win.setVisible(true);
+        addNewInventory.setVisible(true);
     }//GEN-LAST:event_itemAddNewInventoryActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

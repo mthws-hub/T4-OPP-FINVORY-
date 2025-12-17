@@ -42,12 +42,12 @@ public class FrmCustomers extends javax.swing.JFrame {
         }
         
         try {
-            for (Customer c : controller.getData().getCustomers()) {
+            for (Customer customer : controller.getData().getCustomers()) {
                 model.addRow(new Object[]{
-                    c.getIdentification(),
-                    c.getName(),
-                    c.getEmail(),
-                    c.getClientType()
+                    customer.getIdentification(),
+                    customer.getName(),
+                    customer.getEmail(),
+                    customer.getClientType()
                 });
             }
         } catch (Exception e) {
