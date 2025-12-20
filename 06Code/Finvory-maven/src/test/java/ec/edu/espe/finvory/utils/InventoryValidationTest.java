@@ -146,4 +146,56 @@ public class InventoryValidationTest {
         String result = ValidationUtils.validateInventoryAddress(null);
         assertNotNull(result);
     }
+    
+    @Test
+    public void testIsTextOnly_PositiveCase() {
+        assertTrue(ValidationUtils.isTextOnly("Juan Perez"), "Debería aceptar nombres con solo letras y espacios.");
+    }
+
+    @Test
+    public void testIsTextOnly_InvalidName() {
+        assertFalse(ValidationUtils.isTextOnly("Bodega123!"), "No debería aceptar números o símbolos en campos de solo texto.");
+    }
+
+    @Test
+    public void testIsTextOnly_InvalidCountry() {
+        assertFalse(ValidationUtils.isTextOnly("Ecuador2024"), "El país no debe contener números.");
+    }
+
+    @Test
+    public void testStreetName_PositiveCase() {
+        assertTrue(ValidationUtils.isTextOnly("Avenida Amazonas"), "Debería aceptar nombres de calle con letras.");
+    }
+
+    @Test
+    public void testStreetName_InvalidWithNumbers() {
+        assertFalse(ValidationUtils.isTextOnly("Calle 123"), "La calle no debe tener números según la validación actual de texto.");
+    }
+
+    @Test
+    public void testIsNonNegativeInteger_PositiveCase() {
+        assertTrue(ValidationUtils.isNonNegativeInteger("455"), "Debería aceptar '455' como un número entero válido.");
+    }
+
+    @Test
+    public void testIsNonNegativeInteger_InvalidWithLetters() {
+        assertFalse(ValidationUtils.isNonNegativeInteger("CasaDiez"), "El campo numérico no debe contener letras.");
+    }
+
+    @Test
+    public void testIsNonNegativeInteger_InvalidDecimal() {
+        assertFalse(ValidationUtils.isNonNegativeInteger("123.5"), "El número debe ser entero, no decimal.");
+    }
+
+    @Test
+    public void testIsTextOnly_InvalidRegion() {
+        assertFalse(ValidationUtils.isTextOnly("Sierra@"), "La región no debe tener caracteres especiales.");
+    }
+    
+    @Test
+    public void testGetAddressFormError_EmptyFields() {
+        String error = ValidationUtils.getAddressFormError("", "Ecuador", "Quito", "");
+        assertNotNull(error, "Debería retornar un mensaje de error si hay campos vacíos.");
+        assertEquals("Todos los campos (Nombre, País, Ciudad, Calle) son obligatorios.", error, "El mensaje de error no coincide.");
+    }
 }

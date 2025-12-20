@@ -17,27 +17,10 @@ public class ProductValidationTest {
     public ProductValidationTest() {
     }
     
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
-    @BeforeEach
-    public void setUp() {
-    }
-    
-    @AfterEach
-    public void tearDown() {
-    }
-    
     @Test
     public void testBarcodeOnlyNumbers() {
         String validBarcode = "1234567890123";
         String invalidBarcode = "123456A890123";
-        
         assertTrue(ValidationUtils.validate(validBarcode, ValidationUtils.REGEX_INTEGER_ONLY), 
                    "El código de barras debería ser válido (solo números)");
         assertFalse(ValidationUtils.validate(invalidBarcode, ValidationUtils.REGEX_INTEGER_ONLY), 
