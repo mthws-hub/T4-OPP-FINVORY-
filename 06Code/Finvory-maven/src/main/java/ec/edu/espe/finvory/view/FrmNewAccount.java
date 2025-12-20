@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 public class FrmNewAccount extends javax.swing.JFrame {
 
     private FinvoryController controller;
+    private final Color ERROR_COLOR = Color.RED;
+    private final Color DEFAULT_COLOR = Color.BLACK;
 
     /**
      * Creates new form FrmNewAccount
@@ -60,9 +62,9 @@ public class FrmNewAccount extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         lblPersonalFullName = new javax.swing.JLabel();
         txtPersonalFullName = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
+        lblPersonalUser = new javax.swing.JLabel();
         txtPersonalUserName = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
+        lblPersonalPassword = new javax.swing.JLabel();
         btnRegisterPersonal = new javax.swing.JButton();
         passPersonalPassword = new javax.swing.JPasswordField();
         jPanel3 = new javax.swing.JPanel();
@@ -79,14 +81,32 @@ public class FrmNewAccount extends javax.swing.JFrame {
         lblCompanyName.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
         lblCompanyName.setText("Nombre de la Empresa:");
 
+        txtCompanyName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                txtCompanyNameMouseEntered(evt);
+            }
+        });
+
         lblRuc.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         lblRuc.setText("RUC:");
+
+        txtCompanyRuc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                txtCompanyRucMouseEntered(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel4.setText("Dirección:");
 
         lblCountry.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         lblCountry.setText("País:");
+
+        txtCountry.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                txtCountryMouseEntered(evt);
+            }
+        });
 
         lblCity.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         lblCity.setText("Ciudad:");
@@ -114,8 +134,20 @@ public class FrmNewAccount extends javax.swing.JFrame {
         lblPhone.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         lblPhone.setText("Celular/Telefono:");
 
+        txtPhone.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                txtPhoneMouseEntered(evt);
+            }
+        });
+
         lblEmail.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         lblEmail.setText("Email:");
+
+        txtEmail.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                txtEmailMouseEntered(evt);
+            }
+        });
 
         jButton1.setBackground(new java.awt.Color(0, 123, 0));
         jButton1.setFont(new java.awt.Font("Perpetua", 1, 14)); // NOI18N
@@ -235,11 +267,22 @@ public class FrmNewAccount extends javax.swing.JFrame {
         lblPersonalFullName.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         lblPersonalFullName.setText("Nombre Completo:");
 
-        jLabel12.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel12.setText("Usuario:");
+        txtPersonalFullName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                txtPersonalFullNameMouseEntered(evt);
+            }
+        });
+        txtPersonalFullName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPersonalFullNameActionPerformed(evt);
+            }
+        });
 
-        jLabel13.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel13.setText("Contraseña:");
+        lblPersonalUser.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblPersonalUser.setText("Usuario:");
+
+        lblPersonalPassword.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblPersonalPassword.setText("Contraseña:");
 
         btnRegisterPersonal.setBackground(new java.awt.Color(0, 123, 0));
         btnRegisterPersonal.setFont(new java.awt.Font("Perpetua", 1, 14)); // NOI18N
@@ -262,8 +305,8 @@ public class FrmNewAccount extends javax.swing.JFrame {
                         .addGap(16, 16, 16)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblPersonalFullName)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel12))
+                            .addComponent(lblPersonalPassword)
+                            .addComponent(lblPersonalUser))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtPersonalFullName, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -284,11 +327,11 @@ public class FrmNewAccount extends javax.swing.JFrame {
                     .addComponent(txtPersonalFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
+                    .addComponent(lblPersonalUser)
                     .addComponent(txtPersonalUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
+                    .addComponent(lblPersonalPassword)
                     .addComponent(passPersonalPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(76, 76, 76)
                 .addComponent(btnRegisterPersonal)
@@ -354,14 +397,31 @@ public class FrmNewAccount extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterPersonalActionPerformed
+        resetColors();
+
         String name = txtPersonalFullName.getText().trim();
         String username = txtPersonalUserName.getText().trim();
         String password = new String(passPersonalPassword.getPassword());
 
-        String errorMsg = ValidationUtils.getPersonalFormError(name, username, password);
+        StringBuilder errors = new StringBuilder();
 
-        if (errorMsg != null) {
-            JOptionPane.showMessageDialog(this, errorMsg, "Validation Error", JOptionPane.WARNING_MESSAGE);
+        if (!ValidationUtils.hasTwoWords(name)) {
+            lblPersonalFullName.setForeground(ERROR_COLOR);
+            errors.append("- El nombre debe contener al menos un Nombre y un Apellido (solo letras).\n");
+        }
+        if (ValidationUtils.isEmpty(username)) {
+            lblPersonalUser.setForeground(ERROR_COLOR);
+            errors.append("- El usuario es obligatorio.\n");
+        } else if (controller.isUsernameTaken(username)) {
+            lblPersonalUser.setForeground(ERROR_COLOR);
+            errors.append("- El nombre de usuario '").append(username).append("' ya está en uso.\n");
+        }
+        if (ValidationUtils.isEmpty(password)) {
+            lblPersonalPassword.setForeground(ERROR_COLOR);
+            errors.append("- La contraseña es obligatoria.\n");
+        }
+        if (errors.length() > 0) {
+            JOptionPane.showMessageDialog(this, "Por favor corrija los siguientes errores:\n\n" + errors.toString(), "Error de Validación", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -373,14 +433,16 @@ public class FrmNewAccount extends javax.swing.JFrame {
         boolean success = controller.registerPersonalGUI(personalData);
 
         if (success) {
-            JOptionPane.showMessageDialog(this, "Personal Account creada exitosamente!");
+            JOptionPane.showMessageDialog(this, "Cuenta Personal creada exitosamente!");
             this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Error: Username ya existe", "Registration Failed", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al registrar.", "Fallo de Registro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnRegisterPersonalActionPerformed
 
     private void btnRegisterCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterCompanyActionPerformed
+        resetColors();
+
         String name = txtCompanyName.getText().trim();
         String ruc = txtCompanyRuc.getText().trim();
         String phone = txtPhone.getText().trim();
@@ -390,10 +452,53 @@ public class FrmNewAccount extends javax.swing.JFrame {
         String street = txtStreet.getText().trim();
         String username = txtCompanyUserName.getText().trim();
         String password = new String(passCompanyPassword.getPassword());
-        String errorMsg = ValidationUtils.getCompanyFormError(name, ruc, phone, email, country, city, street, username, password);
 
-        if (errorMsg != null) {
-            JOptionPane.showMessageDialog(this, errorMsg, "Validation Error", JOptionPane.WARNING_MESSAGE);
+        StringBuilder errors = new StringBuilder();
+
+        if (ValidationUtils.isEmpty(name)) {
+            lblCompanyName.setForeground(ERROR_COLOR);
+            errors.append("- El nombre de la empresa es obligatorio.\n");
+        } else if (!ValidationUtils.isTextOnly(name)) {
+            lblCompanyName.setForeground(ERROR_COLOR);
+            errors.append("- El nombre de la empresa solo debe contener letras.\n");
+        }
+        if (!ValidationUtils.isStrictRuc(ruc)) {
+            lblRuc.setForeground(ERROR_COLOR);
+            errors.append("- El RUC debe tener 13 dígitos numéricos y empezar en '001'.\n");
+        }
+        if (!ValidationUtils.isValidPhone10Digits(phone)) {
+            lblPhone.setForeground(ERROR_COLOR);
+            errors.append("- El celular debe tener exactamente 10 dígitos numéricos.\n");
+        }
+        if (!ValidationUtils.isValidEmail(email)) {
+            lblEmail.setForeground(ERROR_COLOR);
+            errors.append("- El correo electrónico no es válido (ej: usuario@dominio.com).\n");
+        }
+        if (ValidationUtils.isEmpty(country) || !ValidationUtils.isTextOnly(country)) {
+            lblCountry.setForeground(ERROR_COLOR);
+            errors.append("- El país es obligatorio y solo debe contener letras.\n");
+        }
+        if (ValidationUtils.isEmpty(city) || !ValidationUtils.isTextOnly(city)) {
+            lblCity.setForeground(ERROR_COLOR);
+            errors.append("- La ciudad es obligatoria y solo debe contener letras.\n");
+        }
+        if (ValidationUtils.isEmpty(street)) {
+            jLabel7.setForeground(ERROR_COLOR);
+            errors.append("- La calle es obligatoria.\n");
+        }
+        if (ValidationUtils.isEmpty(username)) {
+            jLabel8.setForeground(ERROR_COLOR);
+            errors.append("- El usuario es obligatorio.\n");
+        } else if (controller.isUsernameTaken(username)) {
+            jLabel8.setForeground(ERROR_COLOR);
+            errors.append("- El nombre de usuario '").append(username).append("' ya está en uso.\n");
+        }
+        if (ValidationUtils.isEmpty(password)) {
+            jLabel9.setForeground(ERROR_COLOR);
+            errors.append("- La contraseña es obligatoria.\n");
+        }
+        if (errors.length() > 0) {
+            JOptionPane.showMessageDialog(this, "Por favor corrija los siguientes errores:\n\n" + errors.toString(), "Error de Validación", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -410,10 +515,10 @@ public class FrmNewAccount extends javax.swing.JFrame {
         boolean success = controller.registerCompanyGUI(companyData, address);
 
         if (success) {
-            JOptionPane.showMessageDialog(this, "Company Account creada exitosamente!");
+            JOptionPane.showMessageDialog(this, "Cuenta de Empresa creada exitosamente!");
             this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Error: Username ya existente", "Registration Failed", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al registrar.", "Fallo de Registro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnRegisterCompanyActionPerformed
 
@@ -421,14 +526,54 @@ public class FrmNewAccount extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void txtPersonalFullNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPersonalFullNameActionPerformed
+        // TODO add your handling code here: Validar que halla por lo menos un espacio (Apellido Nombre)
+    }//GEN-LAST:event_txtPersonalFullNameActionPerformed
+
+    private void txtCompanyNameMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCompanyNameMouseEntered
+        txtCompanyName.setToolTipText("El nombre de la compañía solo debe tener letras");
+    }//GEN-LAST:event_txtCompanyNameMouseEntered
+
+    private void txtCompanyRucMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCompanyRucMouseEntered
+        txtCompanyRuc.setToolTipText("El RUC debe contener 13 dígitos y empezar con 001");
+    }//GEN-LAST:event_txtCompanyRucMouseEntered
+
+    private void txtPhoneMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPhoneMouseEntered
+        txtPhone.setToolTipText("El celular debe de tener 10 dígitos");
+    }//GEN-LAST:event_txtPhoneMouseEntered
+
+    private void txtEmailMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtEmailMouseEntered
+        txtEmail.setToolTipText("El formato correcto del email: xxx@xx.xx");
+    }//GEN-LAST:event_txtEmailMouseEntered
+
+    private void txtCountryMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCountryMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCountryMouseEntered
+
+    private void txtPersonalFullNameMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPersonalFullNameMouseEntered
+        txtPersonalFullName.setToolTipText("Ingrese su nombre y apellido");
+    }//GEN-LAST:event_txtPersonalFullNameMouseEntered
+    private void resetColors() {
+        lblCompanyName.setForeground(DEFAULT_COLOR);
+        lblRuc.setForeground(DEFAULT_COLOR);
+        lblPhone.setForeground(DEFAULT_COLOR);
+        lblEmail.setForeground(DEFAULT_COLOR);
+        lblCountry.setForeground(DEFAULT_COLOR);
+        lblCity.setForeground(DEFAULT_COLOR);
+        jLabel7.setForeground(DEFAULT_COLOR);
+        jLabel8.setForeground(DEFAULT_COLOR);
+        jLabel9.setForeground(DEFAULT_COLOR);
+
+        lblPersonalFullName.setForeground(DEFAULT_COLOR);
+        lblPersonalUser.setForeground(DEFAULT_COLOR);
+        lblPersonalPassword.setForeground(DEFAULT_COLOR);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegisterCompany;
     private javax.swing.JButton btnRegisterPersonal;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -442,6 +587,8 @@ public class FrmNewAccount extends javax.swing.JFrame {
     private javax.swing.JLabel lblCountry;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblPersonalFullName;
+    private javax.swing.JLabel lblPersonalPassword;
+    private javax.swing.JLabel lblPersonalUser;
     private javax.swing.JLabel lblPhone;
     private javax.swing.JLabel lblRuc;
     private javax.swing.JPasswordField passCompanyPassword;

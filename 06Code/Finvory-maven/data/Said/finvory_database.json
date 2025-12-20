@@ -1,4 +1,20 @@
 {
+  "companyInfo": {
+    "name": "TropiBurger",
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Dr. José Peralta",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "ruc": "001751132869",
+    "phone": "0983249630",
+    "email": "tropi@gmail.com",
+    "username": "Said",
+    "password": "123"
+  },
   "customers": [],
   "products": [
     {
@@ -7,6 +23,14 @@
       "description": "No descripcion",
       "barcode": "1478458745124",
       "baseCostPrice": 12.00,
+      "supplierId": "0011245784523"
+    },
+    {
+      "id": "S00-2",
+      "name": "Producto Prueba",
+      "description": "No descripción",
+      "barcode": "sadsaa",
+      "baseCostPrice": 10.50,
       "supplierId": "0011245784523"
     }
   ],
@@ -18,6 +42,14 @@
       "phone": "0998374512",
       "email": "jsm@gmail.com",
       "description": "No descripción"
+    },
+    {
+      "fullName": "Said Pastor",
+      "id1": "0011254874512",
+      "id2": "112112",
+      "phone": "0997845121",
+      "email": "sp@espe.edu.ec",
+      "description": "21212"
     }
   ],
   "inventories": [
@@ -32,8 +64,21 @@
         "region": ""
       },
       "productStock": {
+        "S00-2": 1,
         "S00-1": 10
       }
+    },
+    {
+      "name": "L12",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Solanda",
+        "zipCode": "2121",
+        "streetNumber": "1212",
+        "region": "Costa"
+      },
+      "productStock": {}
     }
   ],
   "obsoleteInventory": {

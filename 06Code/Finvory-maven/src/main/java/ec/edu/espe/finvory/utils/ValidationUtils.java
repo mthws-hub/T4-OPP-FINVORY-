@@ -1,17 +1,21 @@
 package ec.edu.espe.finvory.utils;
 
 import java.util.regex.Pattern;
+import java.math.BigDecimal;
 
 /**
  *
- * @author Arelys
+ *
+ * * @author Arelys, Refactored by Assistant
  */
 public class ValidationUtils {
 
     public static final Pattern REGEX_EMAIL = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-    public static final Pattern REGEX_PHONE = Pattern.compile("^\\+?[0-9\\s]{7,15}$");
+    public static final Pattern REGEX_PHONE_GENERAL = Pattern.compile("^\\+?[0-9\\s]{7,15}$");
+    public static final Pattern REGEX_PHONE_10_DIGITS = Pattern.compile("^\\d{10}$");
     public static final Pattern REGEX_ID = Pattern.compile("^\\d{10}$|^\\d{13}$");
     public static final Pattern REGEX_NUMERIC = Pattern.compile("^-?[0-9]+(\\.[0-9]+)?$");
+    public static final Pattern REGEX_INTEGER_ONLY = Pattern.compile("^\\d+$");
     public static final Pattern REGEX_TEXT_ONLY = Pattern.compile("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$");
     public static final Pattern REGEX_RUC_STRICT = Pattern.compile("^\\d{13}$");
 
@@ -19,7 +23,11 @@ public class ValidationUtils {
         if (value == null) {
             return false;
         }
-        return regex.matcher(value).matches();
+        return regex.matcher(value.trim()).matches();
+    }
+
+    public static boolean isEmpty(String str) {
+        return str == null || str.trim().isEmpty();
     }
 
     public static boolean isValidEmail(String email) {
@@ -27,7 +35,11 @@ public class ValidationUtils {
     }
 
     public static boolean isValidPhone(String phone) {
-        return validate(phone, REGEX_PHONE);
+        return validate(phone, REGEX_PHONE_GENERAL);
+    }
+
+    public static boolean isValidPhone10Digits(String phone) {
+        return validate(phone, REGEX_PHONE_10_DIGITS);
     }
 
     public static boolean isValidIdentification(String id) {
@@ -38,53 +50,36 @@ public class ValidationUtils {
         return validate(value, REGEX_NUMERIC);
     }
 
-    public static String validateCustomerFields(String name, String identification, String phone, String email, String clientType) {
+    public static boolean isTextOnly(String text) {
+        return validate(text, REGEX_TEXT_ONLY);
+    }
 
-        if (name == null || name.trim().isEmpty()) {
-            return "Error: El campo Nombre es obligatorio.";
-        }
-        if (identification == null || identification.trim().isEmpty()) {
-            return "Error: El campo Identificación es obligatorio.";
-        }
-        if (phone == null || phone.trim().isEmpty()) {
-            return "Error: El campo Teléfono es obligatorio.";
-        }
-        if (email == null || email.trim().isEmpty()) {
-            return "Error: El campo Email es obligatorio.";
-        }
-        if (clientType == null || clientType.trim().isEmpty() || clientType.equals("Seleccionar...")) {
-            return "Error: Debe seleccionar un Tipo de Cliente.";
-        }
+    public static boolean isStrictRuc(String ruc) {
+        return validate(ruc, REGEX_RUC_STRICT) && ruc.trim().startsWith("001");
+    }
 
-        if (!isValidIdentification(identification.trim())) {
-            return "Error: La identificación (ID) debe tener 10 o 13 dígitos numéricos.";
+    public static boolean hasTwoWords(String text) {
+        if (isEmpty(text)) {
+            return false;
         }
-
-        if (!isValidEmail(email.trim())) {
-            return "Error: El formato del correo electrónico es incorrecto.";
-        }
-
-        if (!isValidPhone(phone.trim())) {
-            return "Error: El formato del teléfono es incorrecto (mínimo 7 dígitos, permite '+' o espacios).";
-        }
-
-        return null;
+        String t = text.trim();
+        return t.indexOf(" ") > 0 && t.indexOf(" ") < t.length() - 1 && isTextOnly(t);
     }
 
     public static boolean isPositiveDecimal(String value) {
-        if (value == null || value.trim().isEmpty()) {
+        if (isEmpty(value)) {
             return false;
         }
         try {
-            java.math.BigDecimal decimal = new java.math.BigDecimal(value.trim());
-            return decimal.compareTo(java.math.BigDecimal.ZERO) > 0;
+            BigDecimal decimal = new BigDecimal(value.trim());
+            return decimal.compareTo(BigDecimal.ZERO) > 0;
         } catch (NumberFormatException e) {
             return false;
         }
     }
 
     public static boolean isNonNegativeInteger(String value) {
-        if (value == null || value.trim().isEmpty()) {
+        if (isEmpty(value)) {
             return false;
         }
         try {
@@ -95,88 +90,61 @@ public class ValidationUtils {
         }
     }
 
+    public static String validateCustomerFields(String name, String identification, String phone, String email, String clientType) {
+        if (isEmpty(name)) {
+            return "Error: El campo Nombre es obligatorio.";
+        }
+        if (isEmpty(identification)) {
+            return "Error: El campo Identificación es obligatorio.";
+        }
+        if (isEmpty(phone)) {
+            return "Error: El campo Teléfono es obligatorio.";
+        }
+        if (isEmpty(email)) {
+            return "Error: El campo Email es obligatorio.";
+        }
+        if (isEmpty(clientType) || clientType.equals("Seleccionar...")) {
+            return "Error: Debe seleccionar un Tipo de Cliente.";
+        }
+
+        if (!isValidIdentification(identification)) {
+            return "Error: La identificación (ID) debe tener 10 o 13 dígitos numéricos.";
+        }
+        if (!isValidEmail(email)) {
+            return "Error: El formato del correo electrónico es incorrecto.";
+        }
+        if (!isValidPhone(phone)) {
+            return "Error: El formato del teléfono es incorrecto (mínimo 7 dígitos, permite '+' o espacios).";
+        }
+        return null;
+    }
+
     public static String validateProductFields(String id, String name, String costPrice, String supplierName, String initialStock, boolean addingStock) {
-        if (id == null || id.trim().isEmpty()) {
+        if (isEmpty(id)) {
             return "Error: El campo ID del producto es obligatorio.";
         }
-        if (name == null || name.trim().isEmpty()) {
+        if (isEmpty(name)) {
             return "Error: El campo Nombre del producto es obligatorio.";
         }
-        if (costPrice == null || costPrice.trim().isEmpty()) {
+        if (isEmpty(costPrice)) {
             return "Error: El campo Precio Base de Costo es obligatorio.";
         }
-        if (supplierName == null || supplierName.trim().isEmpty() || supplierName.equals("Seleccionar...")) {
+        if (isEmpty(supplierName) || supplierName.equals("Seleccionar...")) {
             return "Error: Debe seleccionar un Proveedor.";
         }
 
-        if (!isPositiveDecimal(costPrice.trim())) {
+        if (!isPositiveDecimal(costPrice)) {
             return "Error: El Precio Base de Costo debe ser un valor numérico positivo (ej: 10.50).";
         }
 
         if (addingStock) {
-            if (initialStock == null || initialStock.trim().isEmpty()) {
+            if (isEmpty(initialStock)) {
                 return "Error: El campo Stock Inicial es obligatorio al añadir a un inventario.";
             }
-            if (!isNonNegativeInteger(initialStock.trim())) {
-                return "Error: El Stock Inicial debe ser un número entero no negativo (0 o más).";
+            if (!isNonNegativeInteger(initialStock)) {
+                return "Error: El Stock Inicial debe ser un número entero no negativo.";
             }
         }
-
-        return null;
-    }
-
-    public static boolean isTextOnly(String text) {
-        return validate(text, REGEX_TEXT_ONLY);
-    }
-
-    public static boolean isStrictRuc(String ruc) {
-        return validate(ruc, REGEX_RUC_STRICT) && ruc.endsWith("001");
-    }
-
-    private static boolean isEmpty(String str) {
-        return str == null || str.trim().isEmpty();
-    }
-
-    public static String getPersonalFormError(String fullName, String user, String pass) {
-        if (isEmpty(fullName) || isEmpty(user) || isEmpty(pass)) {
-            return "Todos los campos son obligatorios.";
-        }
-
-        if (!isTextOnly(fullName)) {
-            return "El nombre solo debe contener letras";
-        }
-
-        return null;
-    }
-
-    public static String getCompanyFormError(String name, String ruc, String phone, String email, String country, String city, String street, String user, String pass) {
-        if (isEmpty(name) || isEmpty(ruc) || isEmpty(phone) || isEmpty(email)
-                || isEmpty(country) || isEmpty(city) || isEmpty(street) || isEmpty(user) || isEmpty(pass)) {
-            return "Todos los campos son obligatorios";
-        }
-        if (!isTextOnly(name)) {
-            return "El nombre solo debería contener letras";
-        }
-        if (!isTextOnly(country)) {
-            return "El país solo debe contener letras";
-        }
-        if (!isTextOnly(city)) {
-            return "La ciudad solo debe contener letras";
-        }
-        if (!isStrictRuc(ruc)) {
-            return "RUC debe tener 13 dígitos y empezar con '001'.";
-        }
-        if (!validate(phone, Pattern.compile("^\\d+$"))) {
-            return "El celular solo debe tener numeros";
-        }
-        if (phone.length() != 10) {
-            return "El celular debe tener 10 dígitos";
-        }
-
-        if (!validate(email, REGEX_EMAIL)) {
-            return "Formato de email inválido (revise el @)";
-        }
-
         return null;
     }
 
@@ -190,8 +158,17 @@ public class ValidationUtils {
         return null;
     }
 
-    public static String getPriceConfigError(String profitString, String standardString, String premiumString, String vipString, String taxString) {
+    public static String getSearchError(String query) {
+        if (isEmpty(query)) {
+            return "El campo de búsqueda no puede estar vacío.";
+        }
+        if (query.trim().length() < 3) {
+            return "Ingrese al menos 3 caracteres para buscar.";
+        }
+        return null;
+    }
 
+    public static String getPriceConfigError(String profitString, String standardString, String premiumString, String vipString, String taxString) {
         if (isEmpty(profitString) || isEmpty(standardString) || isEmpty(premiumString) || isEmpty(vipString) || isEmpty(taxString)) {
             return "Todos los campos son obligatorios.";
         }
@@ -211,7 +188,7 @@ public class ValidationUtils {
                 return "La ganancia no debería exceder el 200% (2.0).";
             }
             if (standard > 1.0f || premium > 1.0f || vip > 1.0f || tax > 1.0f) {
-                return "Los porcentajes (Descuentos/Impuesto) deben estar entre 0 y 1 (Ej: 0.12 para 12%).";
+                return "Los porcentajes deben estar entre 0 y 1.";
             }
             if (tax <= 0) {
                 return "La tasa de impuesto debe ser mayor a 0.";
@@ -226,7 +203,7 @@ public class ValidationUtils {
                 return "El descuento Premium debe ser menor que el VIP.";
             }
             if (vip >= profit) {
-                return "El descuento VIP no puede ser mayor o igual a la Ganancia (Margen negativo).";
+                return "El descuento VIP no puede ser mayor o igual a la Ganancia.";
             }
 
         } catch (NumberFormatException e) {
@@ -248,15 +225,5 @@ public class ValidationUtils {
         int newHeight = (int) (imgH * ratio);
         java.awt.Image scaled = original.getImage().getScaledInstance(newWidth, newHeight, java.awt.Image.SCALE_SMOOTH);
         return new javax.swing.ImageIcon(scaled);
-    }
-
-    public static String getSearchError(String query) {
-        if (isEmpty(query)) {
-            return "El campo de búsqueda no puede estar vacío.";
-        }
-        if (query.length() < 3) {
-            return "Ingrese al menos 3 caracteres para buscar.";
-        }
-        return null;
     }
 }

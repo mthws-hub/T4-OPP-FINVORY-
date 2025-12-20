@@ -1,6 +1,7 @@
 package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.utils.ValidationUtils;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 
@@ -11,6 +12,8 @@ import javax.swing.JOptionPane;
 public class FrmAddNewSupplier extends javax.swing.JFrame {
 
     private FinvoryController controller;
+    private final Color ERROR_COLOR = Color.RED;
+    private final Color DEFAULT_COLOR = Color.BLACK;
 
     /**
      * Creates new form FrmAddNewSupplier
@@ -19,6 +22,7 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
         this.controller = controller;
         initComponents();
         this.setLocationRelativeTo(null);
+
     }
 
     private void emptyFields() {
@@ -31,52 +35,46 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
     }
 
     private boolean validateSupplierData() {
+        resetColors();
         String id1 = txtId1Supplier.getText().trim();
         String name = txtName.getText().trim();
         String phone = txtPhone.getText().trim();
         String email = txtEmail.getText().trim();
 
-        if (id1.isEmpty() || name.isEmpty() || phone.isEmpty() || email.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Error: Los campos ID 1, Nombre, Teléfono y Email son obligatorios.", "Validación", JOptionPane.ERROR_MESSAGE);
-            lblId1.setForeground(Color.red);
-            lblFullName.setForeground(Color.red);
-            lblPhone.setForeground(Color.red);
-            lblEmail.setForeground(Color.red);
-            txtId1Supplier.requestFocus();
+        StringBuilder errors = new StringBuilder();
+
+        if (ValidationUtils.isEmpty(name)) {
+            lblFullName.setForeground(ERROR_COLOR);
+            errors.append("- El nombre del proveedor es obligatorio.\n");
+        } else if (!ValidationUtils.isTextOnly(name)) {
+            lblFullName.setForeground(ERROR_COLOR);
+            errors.append("- El nombre del proveedor solo debe contener letras.\n");
+        }
+        if (!ValidationUtils.isStrictRuc(id1)) {
+            lblId1.setForeground(ERROR_COLOR);
+            errors.append("- El RUC debe tener 13 dígitos numéricos y empezar en '001'.\n");
+        } else if (ValidationUtils.isEmpty(id1)) {
+            lblId1.setForeground(ERROR_COLOR);
+            errors.append("- El id 1 (ruc) del proveedor es obligatorio.\n");
+        }
+        if (ValidationUtils.isEmpty(phone)) {
+            errors.append("- El celular del proveedor es obligatorio.\n");
+            lblPhone.setForeground(ERROR_COLOR);
+        } else if (!ValidationUtils.isValidPhone10Digits(phone)) {
+            lblPhone.setForeground(ERROR_COLOR);
+            errors.append("- El celular debe tener exactamente 10 dígitos numéricos.\n");
+        }
+        if (ValidationUtils.isEmpty(email)) {
+            errors.append("El correo del proveedot es obligatorio. \n");
+            lblEmail.setForeground(ERROR_COLOR);
+        } else if (!ValidationUtils.isValidEmail(email)) {
+            lblEmail.setForeground(ERROR_COLOR);
+            errors.append("- El correo electrónico no es válido (ej: usuario@dominio.com).\n");
+        }
+        if (errors.length() > 0) {
+            JOptionPane.showMessageDialog(this, "Por favor corrija los siguientes errores:\n\n" + errors.toString(), "Error de Validación", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        lblId1.setForeground(Color.black);
-        lblFullName.setForeground(Color.black);
-        lblPhone.setForeground(Color.black);
-        lblEmail.setForeground(Color.black);
-        if (id1.length() != 13 || !id1.matches("\\d+")) {
-            JOptionPane.showMessageDialog(this, "Error: El ID 1 (RUC) debe contener exactamente 13 dígitos numéricos.", "Validación de ID", JOptionPane.ERROR_MESSAGE);
-            lblId1.setForeground(Color.red);
-            txtId1Supplier.requestFocus();
-            return false;
-        }
-        lblId1.setForeground(Color.black);
-        if(!name.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")){
-           JOptionPane.showMessageDialog(this, "Error: Ingrese un formato de nombre válido.", "Validación", JOptionPane.ERROR_MESSAGE); 
-           lblFullName.setForeground(Color.red);
-           txtName.requestFocus();
-           return false;
-        }
-        lblFullName.setForeground(Color.red);
-        if (!phone.matches("^\\+?[0-9\\s]{7,15}$")) {
-            JOptionPane.showMessageDialog(this, "Error: Ingrese un formato de teléfono válido.", "Validación", JOptionPane.ERROR_MESSAGE);
-            lblPhone.setForeground(Color.red);
-            txtPhone.requestFocus();
-            return false;
-        }
-        lblFullName.setForeground(Color.black);
-        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            JOptionPane.showMessageDialog(this, "Error: Ingrese un formato de email válido.", "Validación", JOptionPane.ERROR_MESSAGE);
-            lblEmail.setForeground(Color.red);
-            txtEmail.requestFocus();
-            return false;
-        }
-        lblEmail.setForeground(Color.black);
         return true;
     }
 
@@ -294,6 +292,7 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        resetColors();
         if (validateSupplierData()) {
             String id1 = txtId1Supplier.getText().trim();
             String id2 = txtId2Supplier.getText().trim();
@@ -301,8 +300,8 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
             String phone = txtPhone.getText().trim();
             String email = txtEmail.getText().trim();
             String desc = txtpDescription.getText().trim();
-            boolean exito = controller.createSupplierGUI(id1, id2, name, phone, email, desc);
-            if (exito) {
+            boolean success = controller.createSupplierGUI(id1, id2, name, phone, email, desc);
+            if (success) {
                 JOptionPane.showMessageDialog(this,
                         "Proveedor registrado y sincronizado con la nube exitosamente.",
                         "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE
@@ -313,6 +312,7 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        resetColors();
         int option = JOptionPane.showConfirmDialog(
                 this,
                 "¿Está seguro de cancelar el registro y borrar los datos?",
@@ -329,7 +329,12 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
     private void itemSuppliersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSuppliersActionPerformed
         this.dispose();
     }//GEN-LAST:event_itemSuppliersActionPerformed
-
+    private void resetColors() {
+        lblFullName.setForeground(DEFAULT_COLOR);
+        lblPhone.setForeground(DEFAULT_COLOR);
+        lblId1.setForeground(DEFAULT_COLOR);
+        lblEmail.setForeground(DEFAULT_COLOR);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;

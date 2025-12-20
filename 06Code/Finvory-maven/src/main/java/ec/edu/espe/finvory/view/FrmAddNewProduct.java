@@ -5,6 +5,7 @@ import ec.edu.espe.finvory.model.Supplier;
 import ec.edu.espe.finvory.model.Product;
 import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.utils.ValidationUtils;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
 import javax.swing.JOptionPane;
@@ -13,12 +14,14 @@ import javax.swing.JOptionPane;
  *
  * @author Maryuri Quiña, @ESPE
  */
-
 public class FrmAddNewProduct extends javax.swing.JFrame {
 
     private FinvoryController controller;
     private String productIdToEdit = null;
     private Inventory targetInventory = null;
+
+    private final Color ERROR_COLOR = Color.RED;
+    private final Color DEFAULT_COLOR = Color.BLACK;
 
     public FrmAddNewProduct(FinvoryController controller) {
         this(controller, null, null);
@@ -49,13 +52,24 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         txtBarCode.setText("");
         txtProductName.setText("");
         txtDescription.setText("");
-        ftfPrice.setText("");
-        ftfInitialStock.setText("");
+        txtPrice.setText("");
+        txtInitialStock.setText("");
         cmbProductSupplier.setSelectedIndex(0);
         cmbInitialStock.setSelectedIndex(0);
         if (productIdToEdit == null) {
             txtID.setEnabled(true);
         }
+    }
+
+    private void resetColors() {
+        jLabel2.setForeground(DEFAULT_COLOR);
+        lblBarCode.setForeground(DEFAULT_COLOR);
+        jLabel4.setForeground(DEFAULT_COLOR);
+        jLabel5.setForeground(DEFAULT_COLOR);
+        jLabel6.setForeground(DEFAULT_COLOR);
+        lblStock.setForeground(DEFAULT_COLOR);
+        jLabel8.setForeground(DEFAULT_COLOR);
+        jLabel9.setForeground(DEFAULT_COLOR);
     }
 
     /**
@@ -69,19 +83,19 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblBarCode = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        lblStock = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         cmbProductSupplier = new javax.swing.JComboBox<>();
         cmbInitialStock = new javax.swing.JComboBox<>();
         jScrollPane5 = new javax.swing.JScrollPane();
         txtDescription = new javax.swing.JTextPane();
-        ftfPrice = new javax.swing.JFormattedTextField();
-        ftfInitialStock = new javax.swing.JFormattedTextField();
+        txtPrice = new javax.swing.JFormattedTextField();
+        txtInitialStock = new javax.swing.JFormattedTextField();
         txtID = new javax.swing.JTextField();
         txtBarCode = new javax.swing.JTextField();
         txtProductName = new javax.swing.JTextField();
@@ -96,8 +110,8 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel2.setText("ID (SKU):");
 
-        jLabel3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel3.setText("Codigo de Barras:");
+        lblBarCode.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblBarCode.setText("Codigo de Barras:");
 
         jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel4.setText("Nombre del Producto:");
@@ -108,8 +122,8 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel6.setText("Precio de Costo:");
 
-        jLabel7.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel7.setText("Stock Inicial:");
+        lblStock.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblStock.setText("Stock Inicial:");
 
         jLabel8.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel8.setText("Seleccione el proovedor del producto:");
@@ -142,7 +156,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
+                                .addComponent(lblBarCode)
                                 .addGap(44, 44, 44)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -159,11 +173,11 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel6)
-                                .addComponent(jLabel7))
+                                .addComponent(lblStock))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(ftfInitialStock, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(ftfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtInitialStock, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel2)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -181,7 +195,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(lblBarCode))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -193,11 +207,11 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(ftfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(ftfInitialStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblStock)
+                    .addComponent(txtInitialStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
@@ -302,28 +316,55 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        resetColors();
         String id = txtID.getText().trim();
         String barcode = txtBarCode.getText().trim();
         String name = txtProductName.getText().trim();
         String description = txtDescription.getText().trim();
-        String priceStr = ftfPrice.getText().trim();
-        String stockStr = ftfInitialStock.getText().trim();
+        String priceStr = txtPrice.getText().trim();
+        String stockStr = txtInitialStock.getText().trim();
         String supplierSelection = (String) cmbProductSupplier.getSelectedItem();
-        String inventorySelection = (String) cmbInitialStock.getSelectedItem();
 
-        if (cmbProductSupplier.getSelectedIndex() <= 0) {
-            JOptionPane.showMessageDialog(this, "Seleccione un proveedor válido.", "Error", JOptionPane.WARNING_MESSAGE);
+        StringBuilder errors = new StringBuilder();
+
+        if (ValidationUtils.isEmpty(id)) {
+            jLabel2.setForeground(ERROR_COLOR);
+            errors.append("- El ID del producto es obligatorio.\n");
+        } else if (productIdToEdit == null && controller.findProduct(id) != null) {
+            jLabel2.setForeground(ERROR_COLOR);
+            errors.append("- Ya existe un producto con ese ID.\n");
+        }
+        if (ValidationUtils.isEmpty(name)) {
+            jLabel4.setForeground(ERROR_COLOR);
+            errors.append("- El nombre del producto es obligatorio.\n");
+        }
+        if (ValidationUtils.isEmpty(priceStr)) {
+            jLabel6.setForeground(ERROR_COLOR);
+            errors.append("- El precio de costo es obligatorio.\n");
+        } else if (!ValidationUtils.isPositiveDecimal(priceStr)) {
+            jLabel6.setForeground(ERROR_COLOR);
+            errors.append("- El precio debe ser un número positivo (ej: 10.50).\n");
+        }
+        if (ValidationUtils.isEmpty(stockStr)) {
+            lblStock.setForeground(ERROR_COLOR);
+            errors.append("- El stock es obligatorio.\n");
+        } else if (!ValidationUtils.isNonNegativeInteger(stockStr)) {
+            lblStock.setForeground(ERROR_COLOR);
+            errors.append("- El stock debe ser un número entero positivo (ej: 10).\n");
+        }
+        if (ValidationUtils.isNumeric(barcode)) {
+            lblBarCode.setForeground(ERROR_COLOR);
+            errors.append("- El código de barras solo puede contener numeros.\n");
+        } 
+        if (errors.length() > 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor corrija los siguientes errores:\n\n" + errors.toString(),
+                    "Error de Validación",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
         String supplierId = extractIdFromCombo(supplierSelection);
-        Inventory selectedInventory = resolveInventory(inventorySelection);
-        boolean isAddingStock = (selectedInventory != null);
-        String errorMsg = ValidationUtils.validateProductFields(id, name, priceStr, supplierId, stockStr, isAddingStock);
 
-        if (errorMsg != null) {
-            JOptionPane.showMessageDialog(this, errorMsg, "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
         HashMap<String, String> productData = new HashMap<>();
         productData.put("id", id);
         productData.put("barcode", barcode);
@@ -337,26 +378,15 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         boolean success;
 
         if (productIdToEdit == null) {
-            if (selectedInventory == null) {
-                JOptionPane.showMessageDialog(this, "Seleccione un inventario válido.", "Error", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            success = controller.handleCreateProduct(productData, supplierObj, selectedInventory);
+            success = controller.handleCreateProduct(productData, supplierObj, targetInventory);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Producto creado exitosamente.");
             }
-
         } else {
-            success = controller.handleUpdateProductGUI(productIdToEdit, productData, selectedInventory);
+            success = controller.handleUpdateProductGUI(productIdToEdit, productData, targetInventory);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Producto actualizado correctamente.");
             }
-        }
-
-        if (success) {
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al guardar (Verifique ID duplicado o conexión).", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -397,7 +427,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private void initializeComboBoxes() {
         cmbProductSupplier.removeAllItems();
         cmbProductSupplier.addItem("Seleccione Proveedor...");
@@ -420,33 +450,31 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
     }
 
     private void loadProductData(String pid) {
-        Product p = controller.findProduct(pid);
-        if (p == null) {
+        Product product = controller.findProduct(pid);
+        if (product == null) {
             this.dispose();
             return;
         }
 
-        txtID.setText(p.getId());
-        txtID.setEnabled(false); 
-        txtBarCode.setText(p.getBarcode());
-        txtProductName.setText(p.getName());
-        txtDescription.setText(p.getDescription());
-        ftfPrice.setText(String.valueOf(p.getBaseCostPrice()));
+        txtID.setText(product.getId());
+        txtID.setEnabled(false);
+        txtBarCode.setText(product.getBarcode());
+        txtProductName.setText(product.getName());
+        txtDescription.setText(product.getDescription());
+        txtPrice.setText(String.valueOf(product.getBaseCostPrice()));
 
         if (targetInventory != null) {
-            ftfInitialStock.setText(String.valueOf(targetInventory.getStock(pid)));
+            txtInitialStock.setText(String.valueOf(targetInventory.getStock(pid)));
             cmbInitialStock.setSelectedItem(targetInventory.getName());
             cmbInitialStock.setEnabled(false);
         } else {
-            ftfInitialStock.setText("0");
-            ftfInitialStock.setEnabled(false);
+            txtInitialStock.setText("0");
+            txtInitialStock.setEnabled(false);
             cmbInitialStock.setEnabled(false);
         }
-
-        // Set Supplier Combo
-        if (p.getSupplierId() != null) {
+        if (product.getSupplierId() != null) {
             for (int i = 0; i < cmbProductSupplier.getItemCount(); i++) {
-                if (cmbProductSupplier.getItemAt(i).contains(p.getSupplierId())) {
+                if (cmbProductSupplier.getItemAt(i).contains(product.getSupplierId())) {
                     cmbProductSupplier.setSelectedIndex(i);
                     break;
                 }
@@ -476,24 +504,24 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
     private javax.swing.JButton btnCancel;
     private javax.swing.JComboBox<String> cmbInitialStock;
     private javax.swing.JComboBox<String> cmbProductSupplier;
-    private javax.swing.JFormattedTextField ftfInitialStock;
-    private javax.swing.JFormattedTextField ftfPrice;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JLabel lblBarCode;
+    private javax.swing.JLabel lblStock;
     private javax.swing.JTextField txtBarCode;
     private javax.swing.JTextPane txtDescription;
     private javax.swing.JTextField txtID;
+    private javax.swing.JFormattedTextField txtInitialStock;
+    private javax.swing.JFormattedTextField txtPrice;
     private javax.swing.JTextField txtProductName;
     // End of variables declaration//GEN-END:variables
 }

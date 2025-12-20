@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: ec.edu.espe.finvory.utils.InventoryValidationTest
+-------------------------------------------------------------------------------
+Tests run: 17, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.217 s <<< FAILURE! -- in ec.edu.espe.finvory.utils.InventoryValidationTest
+ec.edu.espe.finvory.utils.InventoryValidationTest.testGetPriceConfigError -- Time elapsed: 0.017 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Configuración válida retorna null ==> expected: <null> but was: <Todos los valores deben ser números positivos (Ej: 0.15).>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertNull.failNotNull(AssertNull.java:50)
+	at org.junit.jupiter.api.AssertNull.assertNull(AssertNull.java:35)
+	at org.junit.jupiter.api.Assertions.assertNull(Assertions.java:287)
+	at ec.edu.espe.finvory.utils.InventoryValidationTest.testGetPriceConfigError(InventoryValidationTest.java:171)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+

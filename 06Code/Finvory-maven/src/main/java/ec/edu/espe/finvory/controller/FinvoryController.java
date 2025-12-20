@@ -667,14 +667,14 @@ public class FinvoryController {
         for (CompanyAccount companyAccount : users.getCompanyAccounts()) {
             if (companyAccount.getName() != null && companyAccount.getName().toLowerCase().contains(query)) {
                 targetUsername = companyAccount.getUsername();
-                break; 
+                break;
             }
         }
 
         if (targetUsername == null) {
-            return rows; 
+            return rows;
         }
-        
+
         FinvoryData targetData = dataBase.loadCompanyData(targetUsername);
 
         if (targetData == null || targetData.getProducts().isEmpty()) {
@@ -697,4 +697,43 @@ public class FinvoryController {
         return rows;
     }
 
+    public boolean isUsernameTaken(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            return false;
+        }
+        String user = username.trim();
+
+        for (CompanyAccount companyAccount : users.getCompanyAccounts()) {
+            if (companyAccount.getUsername().equalsIgnoreCase(user)) {
+                return true;
+            }
+        }
+        for (PersonalAccount personalAccount : users.getPersonalAccounts()) {
+            if (personalAccount.getUsername().equalsIgnoreCase(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean handleMoveProductStock(Inventory sourceInventory, Inventory targetInventory, String productId) {
+        if (sourceInventory == null || targetInventory == null || productId == null) {
+            return false;
+        }
+        Product product = findProduct(productId);
+        if (product == null) {
+            return false;
+        }
+        int sourceStock = sourceInventory.getStock(productId);
+        if (sourceStock <= 0) {
+            return false;
+        }
+        int currentTargetStock = targetInventory.getStock(productId);
+        int newTargetStock = currentTargetStock + sourceStock;
+        targetInventory.setStock(productId, newTargetStock);
+        sourceInventory.setStock(productId, 0);
+        saveData();
+
+        return true;
+    }
 }

@@ -1,4 +1,20 @@
 {
+  "companyInfo": {
+    "name": "Frico Autopartes S.A.",
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Av. 10 de Agosto N45",
+      "zipCode": "170504",
+      "streetNumber": "N45-23",
+      "region": "Pichincha"
+    },
+    "ruc": "1790011223001",
+    "phone": "022445566",
+    "email": "admin@frico.com",
+    "username": "adminFrico",
+    "password": "123"
+  },
   "customers": [],
   "products": [
     {
@@ -32,6 +48,14 @@
       "barcode": "178451236",
       "baseCostPrice": 12.00,
       "supplierId": "1234315652001"
+    },
+    {
+      "id": "P00-5",
+      "name": "Pastilla de Frenos",
+      "description": "No descripción",
+      "barcode": "assadada45",
+      "baseCostPrice": 12.30,
+      "supplierId": "1234315652001"
     }
   ],
   "suppliers": [
@@ -56,7 +80,6 @@
         "region": ""
       },
       "productStock": {
-        "DLLA123": 34,
         "P-002": 1,
         "DSSA": 50
       }
@@ -73,7 +96,7 @@
       },
       "productStock": {
         "DLLA123": 2,
-        "P00-11": 1
+        "P00-11": 0
       }
     },
     {
@@ -86,7 +109,10 @@
         "streetNumber": "",
         "region": ""
       },
-      "productStock": {}
+      "productStock": {
+        "P00-11": 1,
+        "P00-5": 16
+      }
     }
   ],
   "obsoleteInventory": {

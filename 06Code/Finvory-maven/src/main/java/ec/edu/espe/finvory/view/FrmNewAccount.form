@@ -209,6 +209,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtCompanyName">
+              <Events>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="txtCompanyNameMouseEntered"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblRuc">
               <Properties>
@@ -219,6 +222,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtCompanyRuc">
+              <Events>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="txtCompanyRucMouseEntered"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
@@ -237,6 +243,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtCountry">
+              <Events>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="txtCountryMouseEntered"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblCity">
               <Properties>
@@ -309,6 +318,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtPhone">
+              <Events>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="txtPhoneMouseEntered"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblEmail">
               <Properties>
@@ -319,6 +331,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtEmail">
+              <Events>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="txtEmailMouseEntered"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton1">
               <Properties>
@@ -367,8 +382,8 @@
                               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="lblPersonalFullName" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblPersonalPassword" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblPersonalUser" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -398,12 +413,12 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblPersonalUser" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtPersonalUserName" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblPersonalPassword" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="passPersonalPassword" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
@@ -423,8 +438,12 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtPersonalFullName">
+              <Events>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="txtPersonalFullNameMouseEntered"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPersonalFullNameActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel12">
+            <Component class="javax.swing.JLabel" name="lblPersonalUser">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Copperplate Gothic Light" size="14" style="0"/>
@@ -434,7 +453,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtPersonalUserName">
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel13">
+            <Component class="javax.swing.JLabel" name="lblPersonalPassword">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Copperplate Gothic Light" size="14" style="0"/>

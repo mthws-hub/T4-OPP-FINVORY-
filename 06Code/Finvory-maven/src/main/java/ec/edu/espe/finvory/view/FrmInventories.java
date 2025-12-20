@@ -263,14 +263,14 @@ public class FrmInventories extends javax.swing.JFrame {
 
     private void btnFindInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindInventoryActionPerformed
         String query = txtName.getText().trim();
-
-        if (query.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Escriba un nombre.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        String errorMsg = ec.edu.espe.finvory.utils.ValidationUtils.getSearchError(query);
+        if (errorMsg != null) {
+            JOptionPane.showMessageDialog(this, errorMsg, "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
+
         try {
             ArrayList<Inventory> matches = controller.findInventoriesByPartialName(query);
-
             if (matches.isEmpty()) {
                 handleNoMatches();
             } else if (matches.size() == 1) {

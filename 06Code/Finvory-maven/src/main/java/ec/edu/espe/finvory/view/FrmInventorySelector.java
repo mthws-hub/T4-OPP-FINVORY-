@@ -64,7 +64,6 @@ public class FrmInventorySelector extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabInventories = new javax.swing.JTable();
@@ -75,11 +74,8 @@ public class FrmInventorySelector extends javax.swing.JDialog {
 
         jPanel1.setBackground(new java.awt.Color(224, 224, 224));
 
-        jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 16)); // NOI18N
-        jLabel1.setText("SE ENCONTRARON VARIAS COINCIDENCIAS");
-
-        jLabel2.setFont(new java.awt.Font("Perpetua Titling MT", 1, 16)); // NOI18N
-        jLabel2.setText("SELECCIONAR UN INVENTARIO");
+        jLabel2.setFont(new java.awt.Font("Perpetua Titling MT", 1, 24)); // NOI18N
+        jLabel2.setText("SELECCIONe UN INVENTARIO");
 
         tabInventories.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         tabInventories.setModel(new javax.swing.table.DefaultTableModel(
@@ -130,36 +126,31 @@ public class FrmInventorySelector extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(72, 72, 72)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(138, 138, 138)
-                            .addComponent(btnSelect)
-                            .addGap(58, 58, 58)
-                            .addComponent(btnCancel))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(136, 136, 136)
-                            .addComponent(jLabel2))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(138, 138, 138)
+                        .addComponent(btnSelect)
+                        .addGap(58, 58, 58)
+                        .addComponent(btnCancel))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addGap(60, 60, 60)
                 .addComponent(jLabel2)
-                .addGap(49, 49, 49)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addGap(41, 41, 41)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(57, 57, 57)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSelect)
                     .addComponent(btnCancel))
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -193,7 +184,6 @@ public class FrmInventorySelector extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnSelect;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

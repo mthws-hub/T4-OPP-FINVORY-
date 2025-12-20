@@ -5,6 +5,7 @@ import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.model.Product;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -47,9 +48,12 @@ public class FrmProducts extends javax.swing.JFrame {
             boolean rowSelected = jTableProducts.getSelectedRow() != -1;
             btnEdit.setEnabled(rowSelected);
             btnDelete.setEnabled(rowSelected);
+            boolean canMove = rowSelected && (specificInventory != null);
+            btnMoveProduct.setEnabled(canMove);
         });
         btnEdit.setEnabled(false);
         btnDelete.setEnabled(false);
+        btnMoveProduct.setEnabled(false);
     }
 
     private void loadProductTable() {
@@ -84,6 +88,7 @@ public class FrmProducts extends javax.swing.JFrame {
         btnEdit = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        btnMoveProduct = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -161,27 +166,41 @@ public class FrmProducts extends javax.swing.JFrame {
             }
         });
 
+        btnMoveProduct.setBackground(new java.awt.Color(0, 123, 0));
+        btnMoveProduct.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        btnMoveProduct.setForeground(new java.awt.Color(242, 242, 242));
+        btnMoveProduct.setText("MOVER PRODUCTOS");
+        btnMoveProduct.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnMoveProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMoveProductActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
+                .addGap(15, 15, 15)
                 .addComponent(btnEdit)
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addComponent(btnDelete)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnMoveProduct)
+                .addGap(34, 34, 34)
                 .addComponent(btnAdd)
-                .addGap(80, 80, 80))
+                .addGap(22, 22, 22))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addGap(17, 17, 17)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEdit)
                     .addComponent(btnDelete)
-                    .addComponent(btnAdd))
+                    .addComponent(btnAdd)
+                    .addComponent(btnMoveProduct))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
 
@@ -303,6 +322,62 @@ public class FrmProducts extends javax.swing.JFrame {
     private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
         this.dispose();
     }//GEN-LAST:event_itemInventoriesActionPerformed
+
+    private void btnMoveProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveProductActionPerformed
+        if (specificInventory == null) {
+            JOptionPane.showMessageDialog(this, "Debe estar dentro de un inventario específico para mover productos.", "Acción no permitida", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int selectedRow = jTableProducts.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un producto para mover.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String productId = jTableProducts.getValueAt(selectedRow, 0).toString();
+        String productName = jTableProducts.getValueAt(selectedRow, 1).toString();
+        int currentStock = (int) jTableProducts.getValueAt(selectedRow, 7);
+
+        if (currentStock <= 0) {
+            JOptionPane.showMessageDialog(this, "El producto no tiene stock disponible para mover.", "Stock Insuficiente", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        List<Inventory> allInventories = controller.getInventories();
+        ArrayList<Inventory> targetInventories = new ArrayList<>();
+
+        for (Inventory inventory : allInventories) {
+            if (!inventory.getName().equals(specificInventory.getName())) {
+                targetInventories.add(inventory);
+            }
+        }
+        if (targetInventories.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No existen otros inventarios creados para mover el producto.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        FrmInventorySelector selector = new FrmInventorySelector(this, true, targetInventories);
+        selector.setVisible(true);
+        Inventory targetInventory = selector.getSelectedInventory();
+
+        if (targetInventory != null) {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "¿Mover todo el stock (" + currentStock + ") de '" + productName + "'\n"
+                    + "desde '" + specificInventory.getName() + "' hacia '" + targetInventory.getName() + "'?",
+                    "Confirmar Movimiento", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                boolean success = controller.handleMoveProductStock(specificInventory, targetInventory, productId);
+
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "Producto movido exitosamente.");
+                    loadProductTable();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al mover el producto.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnMoveProductActionPerformed
     private void openProductForm(String productIdToEdit) {
         FrmAddNewProduct form;
         if (productIdToEdit == null) {
@@ -324,6 +399,7 @@ public class FrmProducts extends javax.swing.JFrame {
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnMoveProduct;
     private javax.swing.JMenuItem itemInventories;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

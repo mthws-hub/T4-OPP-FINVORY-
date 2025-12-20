@@ -76,7 +76,7 @@
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblBarCode" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -99,12 +99,12 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblStock" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="ftfInitialStock" min="-2" pref="120" max="-2" attributes="0"/>
-                                  <Component id="ftfPrice" min="-2" pref="127" max="-2" attributes="0"/>
+                                  <Component id="txtInitialStock" min="-2" pref="120" max="-2" attributes="0"/>
+                                  <Component id="txtPrice" min="-2" pref="127" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
@@ -130,7 +130,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="txtBarCode" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblBarCode" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -145,12 +145,12 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="ftfPrice" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtPrice" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="ftfInitialStock" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblStock" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtInitialStock" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -176,7 +176,7 @@
             <Property name="text" type="java.lang.String" value="ID (SKU):"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel3">
+        <Component class="javax.swing.JLabel" name="lblBarCode">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Copperplate Gothic Light" size="14" style="0"/>
@@ -208,7 +208,7 @@
             <Property name="text" type="java.lang.String" value="Precio de Costo:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel7">
+        <Component class="javax.swing.JLabel" name="lblStock">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Copperplate Gothic Light" size="14" style="0"/>
@@ -263,9 +263,9 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JFormattedTextField" name="ftfPrice">
+        <Component class="javax.swing.JFormattedTextField" name="txtPrice">
         </Component>
-        <Component class="javax.swing.JFormattedTextField" name="ftfInitialStock">
+        <Component class="javax.swing.JFormattedTextField" name="txtInitialStock">
         </Component>
         <Component class="javax.swing.JTextField" name="txtID">
           <Events>

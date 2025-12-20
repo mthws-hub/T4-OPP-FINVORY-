@@ -63,6 +63,38 @@
       "email": "455454",
       "username": "adminPrueba",
       "password": "123"
+    },
+    {
+      "name": "KFC",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Solanda",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "001245878874q",
+      "phone": "0098745127",
+      "email": "lm@gmail.com",
+      "username": "Pepe",
+      "password": "123"
+    },
+    {
+      "name": "CompanyTest",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Solanda",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0012365478451",
+      "phone": "0987541020",
+      "email": "a@a.com",
+      "username": "licas",
+      "password": "123"
     }
   ],
   "personalAccounts": [
@@ -80,6 +112,26 @@
       "fullName": "Moises Caicedo",
       "username": "niñoMoi",
       "password": "123"
+    },
+    {
+      "fullName": "Pepito",
+      "username": "pepito",
+      "password": "123"
+    },
+    {
+      "fullName": "asdas",
+      "username": "prueba@",
+      "password": "123"
+    },
+    {
+      "fullName": "",
+      "username": "",
+      "password": ""
+    },
+    {
+      "fullName": "Said Pastor",
+      "username": "21212",
+      "password": "2112"
     }
   ]
 }
