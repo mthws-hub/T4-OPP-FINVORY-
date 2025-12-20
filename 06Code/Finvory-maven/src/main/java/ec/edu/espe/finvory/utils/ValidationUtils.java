@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.utils;
 
+import ec.edu.espe.finvory.model.Address;
 import java.util.regex.Pattern;
 import java.math.BigDecimal;
 
@@ -225,5 +226,29 @@ public class ValidationUtils {
         int newHeight = (int) (imgH * ratio);
         java.awt.Image scaled = original.getImage().getScaledInstance(newWidth, newHeight, java.awt.Image.SCALE_SMOOTH);
         return new javax.swing.ImageIcon(scaled);
+    }
+    public static final Pattern REGEX_STREET_NUMBER = Pattern.compile("^[a-zA-Z0-9\\s#\\-\\/\\.]+$");
+
+    public static boolean isValidRegion(String region) {
+        return validate(region, REGEX_TEXT_ONLY);
+    }
+
+    public static boolean isValidStreetNumber(String streetNumber) {
+        return validate(streetNumber, REGEX_STREET_NUMBER);
+    }
+
+    public static String validateInventoryAddress(Address address) {
+        if (address == null) {
+            return "La dirección no puede ser nula.";
+        }
+
+        if (!isTextOnly(address.getRegion())) {
+            return "Error: La región solo debe contener letras.";
+        }
+
+        if (!isValidStreetNumber(address.getStreetNumber())) {
+            return "Error: El número de calle contiene caracteres no permitidos.";
+        }
+        return getAddressFormError("Inventario", address.getCountry(), address.getCity(), address.getStreet());
     }
 }
