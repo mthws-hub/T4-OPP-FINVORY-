@@ -75,4 +75,23 @@ public class LoginValidationTest {
         assertFalse(ValidationUtils.isTextOnly(invalidNameWithNumber), "El nombre con numeros deberia ser invalido");
         assertFalse(ValidationUtils.isTextOnly(invalidNameWithSymbol), "El nombre con simbolos deberia ser invalido");
     }
+    
+    @Test
+    public void testFullNameHasAtLeastTwoWords() {
+        String invalidNameOneWord = "Arelys";
+        String invalidNameEmpty = "";
+        String validFullName = "Arelys Otavalo";
+        String validMultipleNames = "Joseph Anthony Medina";
+
+        assertFalse(ValidationUtils.hasTwoWords(invalidNameOneWord), 
+                    "El nombre debe fallar si solo tiene una palabra");
+        
+        assertFalse(ValidationUtils.hasTwoWords(invalidNameEmpty), 
+                    "El nombre no puede estar vacío");
+
+        assertTrue(ValidationUtils.hasTwoWords(validFullName), 
+                   "Debería aceptar un nombre y un apellido");
+        assertTrue(ValidationUtils.hasTwoWords(validMultipleNames), 
+                   "Debería aceptar más de dos palabras");
+    }
 }

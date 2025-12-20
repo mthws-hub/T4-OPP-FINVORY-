@@ -87,4 +87,49 @@ public class PriceValidationTest {
         String result = ValidationUtils.getPriceConfigError("0.30", "0.05", "0.10", "0.15", "0.0");
         assertNull(result, "Should allow 0% tax for duty-free products");
     }
+    
+    @Test
+    public void testProfitIsGreaterThanZero() {
+        String invalidProfit = "0";
+        String negativeProfit = "-0.10";
+        String validProfit = "0.25";
+        
+        assertFalse(ValidationUtils.isPositiveDecimal(invalidProfit), "La ganancia no debería ser cero");
+        assertFalse(ValidationUtils.isPositiveDecimal(negativeProfit), "La ganancia no puede ser negativa");
+        assertTrue(ValidationUtils.isPositiveDecimal(validProfit), "La ganancia positiva debe ser válida");
+    }
+
+    @Test
+    public void testProfitNotEqualToVip() {
+        String profit = "0.20";
+        String sameVip = "0.20";
+        String lowerVip = "0.15";
+        
+        String error = ValidationUtils.getPriceConfigError(profit, "0.05", "0.10", sameVip, "0.15");
+        assertEquals("El descuento VIP no puede ser mayor o igual a la Ganancia.", error, 
+                     "Debería retornar error si VIP es igual a la ganancia");
+        
+        String noError = ValidationUtils.getPriceConfigError(profit, "0.05", "0.10", lowerVip, "0.15");
+        assertNull(noError, "No debería haber error si VIP es menor a la ganancia");
+    }
+
+    @Test
+    public void testTaxIsPositive() {
+        String negativeTax = "-0.12";
+        
+        assertFalse(ValidationUtils.isPositiveDecimal(negativeTax), "El IVA no puede ser negativo");
+    }
+
+    @Test
+    public void testTaxRangeZeroToOne() {
+        String outOfRangeTax = "1.5"; 
+        String validTax = "0.15";
+        
+        String error = ValidationUtils.getPriceConfigError("0.5", "0.1", "0.2", "0.3", outOfRangeTax);
+        assertEquals("Los porcentajes deben estar entre 0 y 1.", error, 
+                     "Debería fallar si el IVA es mayor a 1.0");
+        
+        String noError = ValidationUtils.getPriceConfigError("0.5", "0.1", "0.2", "0.3", validTax);
+        assertNull(noError, "El IVA de 0.15 debería ser aceptado");
+    }
 }

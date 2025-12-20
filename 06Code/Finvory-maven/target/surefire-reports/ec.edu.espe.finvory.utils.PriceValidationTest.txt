@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: ec.edu.espe.finvory.utils.PriceValidationTest
 -------------------------------------------------------------------------------
-Tests run: 12, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.054 s <<< FAILURE! -- in ec.edu.espe.finvory.utils.PriceValidationTest
-ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroDiscounts_Valid -- Time elapsed: 0.006 s <<< FAILURE!
+Tests run: 16, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.095 s <<< FAILURE! -- in ec.edu.espe.finvory.utils.PriceValidationTest
+ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroDiscounts_Valid -- Time elapsed: 0.007 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: expected: <null> but was: <Todos los valores deben ser números positivos (Ej: 0.15).>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
@@ -15,7 +15,7 @@ org.opentest4j.AssertionFailedError: expected: <null> but was: <Todos los valore
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 
-ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroTax_Valid -- Time elapsed: 0.005 s <<< FAILURE!
+ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroTax_Valid -- Time elapsed: 0.001 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: Should allow 0% tax for duty-free products ==> expected: <null> but was: <Todos los valores deben ser números positivos (Ej: 0.15).>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
@@ -27,7 +27,7 @@ org.opentest4j.AssertionFailedError: Should allow 0% tax for duty-free products 
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 
-ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_HighProfitMargin_Valid -- Time elapsed: 0.002 s <<< FAILURE!
+ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_HighProfitMargin_Valid -- Time elapsed: 0.001 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: Should allow profit margins greater than 200% ==> expected: <null> but was: <La ganancia no debería exceder el 200% (2.0).>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
