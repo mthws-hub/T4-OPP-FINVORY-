@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: ec.edu.espe.finvory.utils.PriceValidationTest
 -------------------------------------------------------------------------------
-Tests run: 16, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.095 s <<< FAILURE! -- in ec.edu.espe.finvory.utils.PriceValidationTest
-ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroDiscounts_Valid -- Time elapsed: 0.007 s <<< FAILURE!
+Tests run: 18, Failures: 4, Errors: 0, Skipped: 0, Time elapsed: 0.157 s <<< FAILURE! -- in ec.edu.espe.finvory.utils.PriceValidationTest
+ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroDiscounts_Valid -- Time elapsed: 0.012 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: expected: <null> but was: <Todos los valores deben ser números positivos (Ej: 0.15).>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
@@ -10,19 +10,32 @@ org.opentest4j.AssertionFailedError: expected: <null> but was: <Todos los valore
 	at org.junit.jupiter.api.AssertNull.assertNull(AssertNull.java:35)
 	at org.junit.jupiter.api.AssertNull.assertNull(AssertNull.java:30)
 	at org.junit.jupiter.api.Assertions.assertNull(Assertions.java:279)
-	at ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroDiscounts_Valid(PriceValidationTest.java:25)
+	at ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroDiscounts_Valid(PriceValidationTest.java:24)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 
-ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroTax_Valid -- Time elapsed: 0.001 s <<< FAILURE!
+ec.edu.espe.finvory.utils.PriceValidationTest.testGetPriceConfigError_TaxMustBePositive -- Time elapsed: 0.002 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <La tasa de impuesto debe ser mayor a 0.> but was: <Todos los valores deben ser números positivos (Ej: 0.15).>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:177)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1145)
+	at ec.edu.espe.finvory.utils.PriceValidationTest.testGetPriceConfigError_TaxMustBePositive(PriceValidationTest.java:144)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroTax_Valid -- Time elapsed: 0.003 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: Should allow 0% tax for duty-free products ==> expected: <null> but was: <Todos los valores deben ser números positivos (Ej: 0.15).>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
 	at org.junit.jupiter.api.AssertNull.failNotNull(AssertNull.java:50)
 	at org.junit.jupiter.api.AssertNull.assertNull(AssertNull.java:35)
 	at org.junit.jupiter.api.Assertions.assertNull(Assertions.java:287)
-	at ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroTax_Valid(PriceValidationTest.java:88)
+	at ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_ZeroTax_Valid(PriceValidationTest.java:87)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
@@ -34,7 +47,7 @@ org.opentest4j.AssertionFailedError: Should allow profit margins greater than 20
 	at org.junit.jupiter.api.AssertNull.failNotNull(AssertNull.java:50)
 	at org.junit.jupiter.api.AssertNull.assertNull(AssertNull.java:35)
 	at org.junit.jupiter.api.Assertions.assertNull(Assertions.java:287)
-	at ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_HighProfitMargin_Valid(PriceValidationTest.java:82)
+	at ec.edu.espe.finvory.utils.PriceValidationTest.testPrices_HighProfitMargin_Valid(PriceValidationTest.java:81)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
