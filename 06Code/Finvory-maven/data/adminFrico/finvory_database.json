@@ -43,7 +43,7 @@
     },
     {
       "id": "P-002",
-      "name": "Palanca FIAT",
+      "name": "Palanca FIAT 1",
       "description": "NO descripcion",
       "barcode": "178451236",
       "baseCostPrice": 12.00,
@@ -53,9 +53,17 @@
       "id": "P00-5",
       "name": "Pastilla de Frenos",
       "description": "No descripción",
-      "barcode": "assadada45",
+      "barcode": "7623842123",
       "baseCostPrice": 12.30,
       "supplierId": "1234315652001"
+    },
+    {
+      "id": "PkD 200",
+      "name": "Pastilla de freno",
+      "description": "No descripcion.",
+      "barcode": "342341241234",
+      "baseCostPrice": 32.00,
+      "supplierId": "0012458745123"
     }
   ],
   "suppliers": [
@@ -66,6 +74,14 @@
       "phone": "0927890399",
       "email": "maryuri@gmail.com",
       "description": "buenos productos"
+    },
+    {
+      "fullName": "Provedor Hola",
+      "id1": "0012458745123",
+      "id2": "Hola",
+      "phone": "0359841259",
+      "email": "m@gmail.com",
+      "description": ""
     }
   ],
   "inventories": [
@@ -80,8 +96,11 @@
         "region": ""
       },
       "productStock": {
+        "DLLA123": 12,
+        "P00-5": 0,
         "P-002": 1,
-        "DSSA": 50
+        "DSSA": 50,
+        "PkD 200": 5
       }
     },
     {
@@ -94,10 +113,7 @@
         "streetNumber": "",
         "region": ""
       },
-      "productStock": {
-        "DLLA123": 2,
-        "P00-11": 0
-      }
+      "productStock": {}
     },
     {
       "name": "Bodega Norte",
@@ -111,7 +127,8 @@
       },
       "productStock": {
         "P00-11": 1,
-        "P00-5": 16
+        "P00-5": 16,
+        "P-004": 10
       }
     }
   ],

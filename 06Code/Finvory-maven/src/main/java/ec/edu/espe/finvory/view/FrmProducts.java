@@ -293,30 +293,13 @@ public class FrmProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        if (specificInventory == null) {
-            JOptionPane.showMessageDialog(this, "Solo se puede borrar stock desde un inventario específico.", "Acción no permitida", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
         int selectedRow = jTableProducts.getSelectedRow();
         if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un producto para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
         String productId = jTableProducts.getValueAt(selectedRow, 0).toString();
-        String productName = jTableProducts.getValueAt(selectedRow, 1).toString();
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Desea dejar en 0 el stock de '" + productName + "' en este inventario?",
-                "Confirmar Borrado de Stock",
-                JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            boolean success = controller.handleZeroStock(specificInventory, productId);
-            if (success) {
-                loadProductTable();
-                JOptionPane.showMessageDialog(this, "Stock eliminado correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al eliminar stock.");
-            }
-        }
+        openProductForm(productId);
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed

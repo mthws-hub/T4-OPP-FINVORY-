@@ -237,10 +237,21 @@ public class FrmSuppliers extends javax.swing.JFrame {
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         int selectedRow = jTableSuppliers.getSelectedRow();
         if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un proveedor de la tabla para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
         String ruc = jTableSuppliers.getValueAt(selectedRow, 0).toString();
-        JOptionPane.showMessageDialog(this, "Seleccionaste editar el RUC: " + ruc + "\n(//TODO)");
+        FrmAddNewSupplier editForm = new FrmAddNewSupplier(this.controller, ruc);
+        editForm.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                loadSupplierTable();
+                setVisible(true); 
+            }
+        });
+
+        this.setVisible(false);
+        editForm.setVisible(true);
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed

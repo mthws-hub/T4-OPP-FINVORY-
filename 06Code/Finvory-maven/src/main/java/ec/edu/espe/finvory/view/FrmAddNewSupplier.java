@@ -1,6 +1,7 @@
 package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.model.Supplier;
 import ec.edu.espe.finvory.utils.ValidationUtils;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -12,21 +13,55 @@ import javax.swing.JOptionPane;
 public class FrmAddNewSupplier extends javax.swing.JFrame {
 
     private FinvoryController controller;
+    private String supplierIdToEdit = null; // Variable clave para saber si editamos
+
     private final Color ERROR_COLOR = Color.RED;
     private final Color DEFAULT_COLOR = Color.BLACK;
 
-    /**
-     * Creates new form FrmAddNewSupplier
-     */
     public FrmAddNewSupplier(FinvoryController controller) {
+        this(controller, null);
+    }
+    
+    public FrmAddNewSupplier(FinvoryController controller, String supplierId) {
         this.controller = controller;
+        this.supplierIdToEdit = supplierId;
         initComponents();
         this.setLocationRelativeTo(null);
+        setupFormMode();
+    }
 
+    private void setupFormMode() {
+        if (supplierIdToEdit != null) {
+            jLabel1.setText("EDITAR PROVEEDOR");
+            btnAdd.setText("ACTUALIZAR");
+            txtId1Supplier.setEnabled(false);
+            loadSupplierData();
+        } else {
+            jLabel1.setText("REGISTRO PROVEEDOR");
+            btnAdd.setText("AGREGAR");
+            txtId1Supplier.setEnabled(true);
+        }
+    }
+
+    private void loadSupplierData() {
+        Supplier supplier = controller.findSupplier(supplierIdToEdit);
+        if (supplier != null) {
+            txtId1Supplier.setText(supplier.getId1());
+            txtId2Supplier.setText(supplier.getId2());
+            txtName.setText(supplier.getFullName());
+            txtPhone.setText(supplier.getPhone());
+            txtEmail.setText(supplier.getEmail());
+            txtpDescription.setText(supplier.getDescription());
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: No se pudo cargar la información del proveedor.");
+            this.dispose();
+        }
     }
 
     private void emptyFields() {
-        txtId1Supplier.setText("");
+        if (supplierIdToEdit == null) {
+            txtId1Supplier.setText("");
+        }
         txtId2Supplier.setText("");
         txtName.setText("");
         txtPhone.setText("");
@@ -50,13 +85,14 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
             lblFullName.setForeground(ERROR_COLOR);
             errors.append("- El nombre del proveedor solo debe contener letras.\n");
         }
-        if (!ValidationUtils.isStrictRuc(id1)) {
-            lblId1.setForeground(ERROR_COLOR);
-            errors.append("- El RUC debe tener 13 dígitos numéricos y empezar en '001'.\n");
-        } else if (ValidationUtils.isEmpty(id1)) {
-            lblId1.setForeground(ERROR_COLOR);
-            errors.append("- El id 1 (ruc) del proveedor es obligatorio.\n");
+
+        if (supplierIdToEdit == null) {
+            if (!ValidationUtils.isStrictRuc(id1)) {
+                lblId1.setForeground(ERROR_COLOR);
+                errors.append("- El RUC debe tener 13 dígitos numéricos y empezar en '001'.\n");
+            }
         }
+
         if (ValidationUtils.isEmpty(phone)) {
             errors.append("- El celular del proveedor es obligatorio.\n");
             lblPhone.setForeground(ERROR_COLOR);
@@ -64,18 +100,27 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
             lblPhone.setForeground(ERROR_COLOR);
             errors.append("- El celular debe tener exactamente 10 dígitos numéricos.\n");
         }
+
         if (ValidationUtils.isEmpty(email)) {
-            errors.append("El correo del proveedot es obligatorio. \n");
+            errors.append("- El correo del proveedor es obligatorio.\n");
             lblEmail.setForeground(ERROR_COLOR);
         } else if (!ValidationUtils.isValidEmail(email)) {
             lblEmail.setForeground(ERROR_COLOR);
-            errors.append("- El correo electrónico no es válido (ej: usuario@dominio.com).\n");
+            errors.append("- El correo electrónico no es válido.\n");
         }
+
         if (errors.length() > 0) {
             JOptionPane.showMessageDialog(this, "Por favor corrija los siguientes errores:\n\n" + errors.toString(), "Error de Validación", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;
+    }
+
+    private void resetColors() {
+        lblFullName.setForeground(DEFAULT_COLOR);
+        lblPhone.setForeground(DEFAULT_COLOR);
+        lblId1.setForeground(DEFAULT_COLOR);
+        lblEmail.setForeground(DEFAULT_COLOR);
     }
 
     /**
@@ -292,7 +337,6 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        resetColors();
         if (validateSupplierData()) {
             String id1 = txtId1Supplier.getText().trim();
             String id2 = txtId2Supplier.getText().trim();
@@ -300,41 +344,45 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
             String phone = txtPhone.getText().trim();
             String email = txtEmail.getText().trim();
             String desc = txtpDescription.getText().trim();
-            boolean success = controller.createSupplierGUI(id1, id2, name, phone, email, desc);
-            if (success) {
-                JOptionPane.showMessageDialog(this,
-                        "Proveedor registrado y sincronizado con la nube exitosamente.",
-                        "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE
-                );
-                emptyFields();
+
+            boolean success;
+
+            if (supplierIdToEdit == null) {
+                success = controller.createSupplierGUI(id1, id2, name, phone, email, desc);
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "Proveedor creado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    emptyFields();
+                } else {
+                    JOptionPane.showMessageDialog(this, "El proveedor ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                success = controller.handleUpdateSupplierGUI(supplierIdToEdit, name, phone, email, desc, id2);
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "Proveedor actualizado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         resetColors();
-        int option = JOptionPane.showConfirmDialog(
-                this,
-                "¿Está seguro de cancelar el registro y borrar los datos?",
-                "Confirmación de Cancelación",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE
-        );
-
+        int option = JOptionPane.showConfirmDialog(this, "¿Está seguro de cancelar?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (option == JOptionPane.YES_OPTION) {
-            emptyFields();
+            if (supplierIdToEdit != null) {
+                this.dispose();
+            } else {
+                emptyFields();
+            }
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void itemSuppliersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSuppliersActionPerformed
         this.dispose();
     }//GEN-LAST:event_itemSuppliersActionPerformed
-    private void resetColors() {
-        lblFullName.setForeground(DEFAULT_COLOR);
-        lblPhone.setForeground(DEFAULT_COLOR);
-        lblId1.setForeground(DEFAULT_COLOR);
-        lblEmail.setForeground(DEFAULT_COLOR);
-    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;

@@ -133,11 +133,6 @@ public class FrmMainMenu extends javax.swing.JFrame {
 
     private void itemQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemQuitActionPerformed
         FrmLogin win = new FrmLogin(this.controller);
-        win.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmMainMenu.this.setVisible(true);
-            }
-        });
         win.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_itemQuitActionPerformed

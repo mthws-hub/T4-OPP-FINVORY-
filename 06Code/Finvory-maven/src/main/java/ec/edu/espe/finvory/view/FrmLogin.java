@@ -197,7 +197,6 @@ String user = txtUserName.getText();
             lblUser.setForeground(Color.black);
             lblPassword.setForeground(Color.black);
             System.out.println("Login Exitoso");
-            
             this.dispose(); 
             controller.startMainMenuPublic();
         } else {

@@ -736,4 +736,22 @@ public class FinvoryController {
 
         return true;
     }
+    public boolean handleUpdateSupplierGUI(String originalId, String name, String phone, String email, String desc, String id2) {
+        Supplier supplier = findSupplier(originalId);
+        if (supplier == null) {
+            return false;
+        }
+        try {
+            supplier.setFullName(name);
+            supplier.setPhone(phone);
+            supplier.setEmail(email);
+            supplier.setDescription(desc);
+            supplier.setId2(id2);
+            saveData();
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error actualizando proveedor: " + e.getMessage());
+            return false;
+        }
+    }
 }

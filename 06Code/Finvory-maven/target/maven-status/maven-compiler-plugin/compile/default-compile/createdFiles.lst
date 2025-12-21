@@ -78,7 +78,6 @@ ec\edu\espe\finvory\model\Supplier.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$5.class
 ec\edu\espe\finvory\view\FrmProducts$2.class
 ec\edu\espe\finvory\model\InventoryOfObsolete.class
-ec\edu\espe\finvory\view\FrmMainMenu$8.class
 ec\edu\espe\finvory\view\FrmProducts.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$6.class
 ec\edu\espe\finvory\view\FrmNewAccount$3.class
@@ -128,6 +127,7 @@ ec\edu\espe\finvory\view\FrmLogin$3.class
 ec\edu\espe\finvory\mongo\MongoDBConnection.class
 ec\edu\espe\finvory\view\FrmInventories$8.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$3.class
+ec\edu\espe\finvory\view\FrmSuppliers$6.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$3.class
 ec\edu\espe\finvory\model\Product.class
 ec\edu\espe\finvory\model\Database.class

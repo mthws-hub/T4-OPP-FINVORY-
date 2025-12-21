@@ -139,7 +139,9 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void itemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemExitActionPerformed
-        System.exit(0);
+        FrmLogin win = new FrmLogin(this.controller);
+        win.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_itemExitActionPerformed
 
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed

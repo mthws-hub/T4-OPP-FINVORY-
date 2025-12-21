@@ -352,7 +352,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
             lblStock.setForeground(ERROR_COLOR);
             errors.append("- El stock debe ser un número entero positivo (ej: 10).\n");
         }
-        if (ValidationUtils.isNumeric(barcode)) {
+        if (!ValidationUtils.isNumeric(barcode)) {
             lblBarCode.setForeground(ERROR_COLOR);
             errors.append("- El código de barras solo puede contener numeros.\n");
         } 
@@ -381,6 +381,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
             success = controller.handleCreateProduct(productData, supplierObj, targetInventory);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Producto creado exitosamente.");
+                emptyFields();
             }
         } else {
             success = controller.handleUpdateProductGUI(productIdToEdit, productData, targetInventory);
