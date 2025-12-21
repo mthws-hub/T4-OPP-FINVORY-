@@ -46,6 +46,10 @@ public class ValidationUtils {
     public static boolean isValidIdentification(String id) {
         return validate(id, REGEX_ID);
     }
+    
+    public static boolean isValidInteger(String value){
+        return validate(value, REGEX_INTEGER_ONLY);
+    }
 
     public static boolean isNumeric(String value) {
         return validate(value, REGEX_NUMERIC);
@@ -250,5 +254,17 @@ public class ValidationUtils {
             return "Error: El número de calle contiene caracteres no permitidos.";
         }
         return getAddressFormError("Inventario", address.getCountry(), address.getCity(), address.getStreet());
+    }
+    
+    public static boolean isValidQuantity(String value) {
+        if (isEmpty(value)) {
+            return false;
+        }
+        try {
+            int quantity = Integer.parseInt(value.trim());
+            return quantity > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

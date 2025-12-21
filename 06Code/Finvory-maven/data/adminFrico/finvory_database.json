@@ -1,21 +1,27 @@
 {
-  "companyInfo": {
-    "name": "Frico Autopartes S.A.",
-    "address": {
-      "country": "Ecuador",
-      "city": "Quito",
-      "street": "Av. 10 de Agosto N45",
-      "zipCode": "170504",
-      "streetNumber": "N45-23",
-      "region": "Pichincha"
+  "customers": [
+    {
+      "name": "Rodrigo Delgado",
+      "identification": "0012365478963",
+      "phone": "0983489630",
+      "email": "m@gmail.com",
+      "clientType": "STANDARD"
     },
-    "ruc": "1790011223001",
-    "phone": "022445566",
-    "email": "admin@frico.com",
-    "username": "adminFrico",
-    "password": "123"
-  },
-  "customers": [],
+    {
+      "name": "Pedro Paz",
+      "identification": "0014785236987",
+      "phone": "0994896354",
+      "email": "k@gmail.com",
+      "clientType": "STANDARD"
+    },
+    {
+      "name": "Pedro Martin",
+      "identification": "1245784512",
+      "phone": "0987451254",
+      "email": "pm@gmail.com",
+      "clientType": "PREMIUM"
+    }
+  ],
   "products": [
     {
       "id": "DLLA123",
@@ -64,6 +70,14 @@
       "barcode": "342341241234",
       "baseCostPrice": 32.00,
       "supplierId": "0012458745123"
+    },
+    {
+      "id": "P001-4",
+      "name": "Producto Prueb",
+      "description": "No descripción",
+      "barcode": "12121212",
+      "baseCostPrice": 1.20,
+      "supplierId": "1234315652001"
     }
   ],
   "suppliers": [
@@ -74,14 +88,6 @@
       "phone": "0927890399",
       "email": "maryuri@gmail.com",
       "description": "buenos productos"
-    },
-    {
-      "fullName": "Provedor Hola",
-      "id1": "0012458745123",
-      "id2": "Hola",
-      "phone": "0359841259",
-      "email": "m@gmail.com",
-      "description": ""
     }
   ],
   "inventories": [
@@ -96,11 +102,8 @@
         "region": ""
       },
       "productStock": {
-        "DLLA123": 12,
-        "P00-5": 0,
-        "P-002": 1,
         "DSSA": 50,
-        "PkD 200": 5
+        "PkD 200": 4
       }
     },
     {
@@ -113,7 +116,9 @@
         "streetNumber": "",
         "region": ""
       },
-      "productStock": {}
+      "productStock": {
+        "P001-4": 5
+      }
     },
     {
       "name": "Bodega Norte",
@@ -126,8 +131,7 @@
         "region": ""
       },
       "productStock": {
-        "P00-11": 1,
-        "P00-5": 16,
+        "P00-5": 15,
         "P-004": 10
       }
     }

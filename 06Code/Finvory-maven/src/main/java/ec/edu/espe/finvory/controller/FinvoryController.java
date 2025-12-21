@@ -805,4 +805,49 @@ public class FinvoryController {
         }
     }
 
+    public String generateNextInvoiceId() {
+        if (data == null || data.getCompanyInfo() == null) {
+            return "FUNK-001";
+        }
+
+        String companyName = data.getCompanyInfo().getName().toUpperCase();
+        String prefix = companyName.length() >= 3 ? companyName.substring(0, 3) : companyName;
+        prefix = prefix.replaceAll("[^A-Z0-9]", "");
+        int nextSequence = data.getInvoices().size() + 1;
+        return String.format("F%s-%03d", prefix, nextSequence);
+    }
+
+    public Customer searchCustomerForInvoice(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return null;
+        }
+        String que = query.trim().toLowerCase();
+        for (Customer customer : data.getCustomers()) {
+            if (customer.getIdentification().equals(query.trim())) {
+                return customer;
+            }
+            if (customer.getName().toLowerCase().contains(que)) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Customer> findCustomersByQuery(String query) {
+        ArrayList<Customer> matches = new ArrayList<>();
+        if (query == null || data == null) {
+            return matches;
+        }
+        String que = query.trim().toLowerCase();
+        for (Customer customer : data.getCustomers()) {
+            boolean matchId = customer.getIdentification().startsWith(que);
+            boolean matchName = customer.getName().toLowerCase().contains(que);
+
+            if (matchId || matchName) {
+                matches.add(customer);
+            }
+        }
+        return matches;
+    }
+
 }

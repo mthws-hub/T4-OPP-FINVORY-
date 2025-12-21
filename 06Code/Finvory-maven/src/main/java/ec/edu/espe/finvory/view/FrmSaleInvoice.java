@@ -1,24 +1,106 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Customer;
-import ec.edu.espe.finvory.model.InvoiceSim;
+import ec.edu.espe.finvory.model.Inventory;
+import ec.edu.espe.finvory.model.Product;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
-import ec.edu.espe.finvory.view.FrmEditProductListOnInvoice;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
 public class FrmSaleInvoice extends javax.swing.JFrame {
-    
-    private FrmEditProductListOnInvoice searchWindow  = null;
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmSaleInvoice.class.getName());
-    InvoiceSim invoice = new InvoiceSim();
-    /**
-     * Creates new form FrmSaleInvoice
-     */
+
+    private FinvoryController controller;
+    private Customer selectedCustomer = null;
+    private HashMap<Product, HashMap<Inventory, Integer>> currentCart = new HashMap<>();
+    private BigDecimal subtotalVal = BigDecimal.ZERO;
+    private BigDecimal taxVal = BigDecimal.ZERO;
+    private BigDecimal totalVal = BigDecimal.ZERO;
+
     public FrmSaleInvoice() {
         initComponents();
+    }
+
+    public FrmSaleInvoice(FinvoryController controller) {
+        this.controller = controller;
+        initComponents();
+        this.setLocationRelativeTo(null);
+        initializeInvoiceData();
+        setupFieldsState();
+    }
+
+    private void initializeInvoiceData() {
+        LocalDate today = LocalDate.now();
+        txtDate.setText(today.toString());
+        if (controller != null) {
+            String invoiceId = controller.generateNextInvoiceId();
+            txtSale.setText(invoiceId);
+        } else {
+            txtSale.setText("ERR-CTRL");
+        }
+        txtTypeClient.setEnabled(false);
+        txtEmail.setEnabled(false);
+        txtPhone.setEnabled(false);
+        txtDate.setEnabled(false);
+        txtSale.setEnabled(false);
+        txtTotalSub.setEnabled(false);
+        txTax.setEnabled(false);
+        txtTotal.setEnabled(false);
+    }
+
+    private void setupFieldsState() {
+        txtPhone.setText("");
+        txtEmail.setText("");
+        txtClientType.setText("");
+    }
+
+    public void addProductToCart(Product product, Inventory sourceInventory, int quantity) {
+        if (selectedCustomer == null) {
+            JOptionPane.showMessageDialog(this, "Primero debe seleccionar un cliente para calcular los precios.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        currentCart.putIfAbsent(product, new HashMap<>());
+        Map<Inventory, Integer> inventoryMap = currentCart.get(product);
+        inventoryMap.put(sourceInventory, inventoryMap.getOrDefault(sourceInventory, 0) + quantity);
+        BigDecimal profit = controller.getData().getProfitPercentage();
+        BigDecimal dStd = controller.getData().getDiscountStandard();
+        BigDecimal dPrm = controller.getData().getDiscountPremium();
+        BigDecimal dVip = controller.getData().getDiscountVip();
+
+        BigDecimal unitPrice = product.getPrice(selectedCustomer.getClientType(), profit, dStd, dPrm, dVip);
+        BigDecimal lineTotal = unitPrice.multiply(new BigDecimal(quantity)).setScale(2, RoundingMode.HALF_UP);
+
+        DefaultTableModel model = (DefaultTableModel) tabProductList.getModel();
+        if (currentCart.size() == 1 && inventoryMap.size() == 1 && model.getValueAt(0, 0) == null) {
+            model.setRowCount(0);
+        }
+
+        model.addRow(new Object[]{
+            product.getId(),
+            quantity,
+            product.getName(),
+            lineTotal.doubleValue()
+        });
+
+        updateTotals(lineTotal);
+    }
+
+    private void updateTotals(BigDecimal lineAmountToAdd) {
+        subtotalVal = subtotalVal.add(lineAmountToAdd);
+        BigDecimal taxRate = controller.getData().getTaxRate();
+        taxVal = subtotalVal.multiply(taxRate).setScale(2, RoundingMode.HALF_UP);
+        totalVal = subtotalVal.add(taxVal).setScale(2, RoundingMode.HALF_UP);
+        txtTotalSub.setText(subtotalVal.toString());
+        txTax.setText(taxVal.toString());
+        txtTotal.setText(totalVal.toString());
     }
 
     /**
@@ -30,18 +112,17 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txtEmail = new javax.swing.JPanel();
+        jTextField1 = new javax.swing.JTextField();
+        panel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtSalesNumber = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -50,6 +131,13 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         radPaymentMethodCash = new javax.swing.JRadioButton();
         radPaymentMethodTransfer = new javax.swing.JRadioButton();
         radPaymentMethodCheque = new javax.swing.JRadioButton();
+        btnFind = new javax.swing.JButton();
+        txtSale = new javax.swing.JTextField();
+        txtDate = new javax.swing.JButton();
+        txtPhone = new javax.swing.JTextField();
+        txtTypeClient = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        txtEmail = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         btnHandleList = new javax.swing.JButton();
         btnConfirmSale = new javax.swing.JButton();
@@ -61,24 +149,29 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         txtSubtotal = new javax.swing.JLabel();
         txtTax = new javax.swing.JLabel();
         txtTotalSale = new javax.swing.JLabel();
+        txtTotalSub = new javax.swing.JTextField();
+        txTax = new javax.swing.JTextField();
+        txtTotal = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabProductList = new javax.swing.JTable();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jTextField1.setText("jTextField1");
 
-        txtEmail.setBackground(new java.awt.Color(224, 224, 224));
-        txtEmail.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(162, 188, 224)));
-        txtEmail.setForeground(new java.awt.Color(162, 188, 224));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        panel.setBackground(new java.awt.Color(224, 224, 224));
+        panel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(162, 188, 224)));
+        panel.setForeground(new java.awt.Color(162, 188, 224));
 
         jLabel1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel1.setText("Venta No.");
 
         jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel2.setText("Fecha:");
-
-        jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel4.setText("Cliente:");
 
         jLabel5.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel5.setText("CI:");
@@ -129,96 +222,142 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         radPaymentMethodCheque.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         radPaymentMethodCheque.setText("cheque");
 
-        javax.swing.GroupLayout txtEmailLayout = new javax.swing.GroupLayout(txtEmail);
-        txtEmail.setLayout(txtEmailLayout);
-        txtEmailLayout.setHorizontalGroup(
-            txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(txtEmailLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        btnFind.setBackground(new java.awt.Color(0, 123, 0));
+        btnFind.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnFind.setForeground(new java.awt.Color(242, 242, 242));
+        btnFind.setText("BUSCAR");
+        btnFind.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnFind.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFindActionPerformed(evt);
+            }
+        });
+
+        txtTypeClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTypeClientActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        jLabel8.setText("CLIENTE:");
+
+        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
+        panel.setLayout(panelLayout);
+        panelLayout.setHorizontalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(txtEmailLayout.createSequentialGroup()
-                        .addComponent(txtSalesNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(txtEmailLayout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(txtEmailLayout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtClientType, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addGap(18, 18, 18)
-                .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(txtEmailLayout.createSequentialGroup()
-                        .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(txtEmailLayout.createSequentialGroup()
+                .addComponent(txtSale, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(panelLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jLabel8)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSalesNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(64, 64, 64))
+            .addGroup(panelLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+                            .addComponent(txtPhone)
+                            .addComponent(txtId))
+                        .addGap(29, 29, 29)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))
+                        .addGap(12, 12, 12)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTypeClient, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtClientType, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnFind, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addContainerGap(63, Short.MAX_VALUE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(53, 53, 53)
                         .addComponent(radPaymentMethodCash)
                         .addGap(18, 18, 18)
                         .addComponent(radPaymentMethodTransfer)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(32, 32, 32)
                         .addComponent(radPaymentMethodCheque)
-                        .addGap(0, 22, Short.MAX_VALUE))))
-            .addGroup(txtEmailLayout.createSequentialGroup()
-                .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(txtEmailLayout.createSequentialGroup()
-                        .addGap(89, 89, 89)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(txtEmailLayout.createSequentialGroup()
-                        .addGap(228, 228, 228)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
-        txtEmailLayout.setVerticalGroup(
-            txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(txtEmailLayout.createSequentialGroup()
+        panelLayout.setVerticalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtSalesNumber)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4)
-                        .addComponent(jLabel5))
-                    .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel6)
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
-                    .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel9)
-                        .addComponent(jLabel10)))
-                .addGap(18, 18, 18)
-                .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel11)
-                        .addComponent(txtClientType))
-                    .addComponent(radPaymentMethodTransfer)
-                    .addGroup(txtEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel12)
-                        .addComponent(radPaymentMethodCash)
-                        .addComponent(radPaymentMethodCheque)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addComponent(txtClientType)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnFind)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1)
+                                .addComponent(txtSale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2))
+                            .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8)
+                        .addGap(5, 5, 5)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelLayout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(20, 20, 20))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel11)
+                                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTypeClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel6)
+                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(radPaymentMethodTransfer)
+                                .addComponent(radPaymentMethodCash)
+                                .addComponent(jLabel12))
+                            .addComponent(radPaymentMethodCheque))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel10)
+                        .addGap(0, 7, Short.MAX_VALUE))))
         );
 
         jPanel2.setBackground(new java.awt.Color(224, 224, 224));
@@ -273,29 +412,39 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnHandleList)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnConfirmSale)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCancelSale)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel16))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTax, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTotalSale, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(btnConfirmSale)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelSale)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 250, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnHandleList)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel14)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel16))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTotalSale, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(txtTotalSub, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(txTax, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTax, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(142, 142, 142))
         );
         jPanel2Layout.setVerticalGroup(
@@ -307,17 +456,20 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnHandleList)
                     .addComponent(jLabel14)
-                    .addComponent(txtSubtotal))
+                    .addComponent(txtSubtotal)
+                    .addComponent(txtTotalSub, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
-                    .addComponent(txtTax))
-                .addGap(13, 13, 13)
+                    .addComponent(txtTax)
+                    .addComponent(txTax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfirmSale)
                     .addComponent(btnCancelSale)
                     .addComponent(jLabel16)
-                    .addComponent(txtTotalSale))
+                    .addComponent(txtTotalSale)
+                    .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
@@ -366,23 +518,37 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
+        jMenu1.setText("Finvory");
+
+        jMenuItem1.setText("Menú Principal");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -393,16 +559,79 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdActionPerformed
+    private void btnCancelSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelSaleActionPerformed
+        int option = JOptionPane.showConfirmDialog(this, "¿Está seguro de cancelar la venta? Los datos se perderán.", "Confirmar Cancelación", JOptionPane.YES_NO_OPTION);
+        if (option == JOptionPane.YES_OPTION) {
+            emptyFields();
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnCancelSaleActionPerformed
 
-    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNameActionPerformed
+    private void btnConfirmSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmSaleActionPerformed
+        if (selectedCustomer == null || currentCart.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Faltan datos (Cliente o Productos).", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String payment = "EFECTIVO";
+        if (radPaymentMethodTransfer.isSelected()) {
+            payment = "TRANSFERENCIA";
+        }
+        if (radPaymentMethodCheque.isSelected()) {
+            payment = "CHEQUE POSTFECHADO";
+        }
+        boolean success = controller.handleNewSale(selectedCustomer, currentCart, payment);
+
+        if (success) {
+            JOptionPane.showMessageDialog(this, "¡Venta registrada y guardada en la nube exitosamente!");
+            emptyFields();
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al guardar la venta.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnConfirmSaleActionPerformed
+
+    private void btnHandleListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHandleListActionPerformed
+        if (selectedCustomer == null) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione un cliente antes de agregar productos.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        FrmEditProductListOnInvoice dialog = new FrmEditProductListOnInvoice(this, true, controller);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnHandleListActionPerformed
+
+    private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
+        if (controller == null) {
+            JOptionPane.showMessageDialog(this, "Error: Controlador no inicializado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String idQuery = txtId.getText().trim();
+        String nameQuery = txtName.getText().trim();
+        if (idQuery.isEmpty() && nameQuery.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese ID o Nombre para buscar.", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String query = !idQuery.isEmpty() ? idQuery : nameQuery;
+        java.util.ArrayList<Customer> matches = controller.findCustomersByQuery(query);
+
+        if (matches.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron clientes.", "Sin Resultados", JOptionPane.INFORMATION_MESSAGE);
+            emptyFields();
+
+        } else if (matches.size() == 1) {
+            loadCustomerIntoForm(matches.get(0));
+
+        } else {
+            FrmCustomerSelector selector = new FrmCustomerSelector(this, true, matches);
+            selector.setVisible(true);
+            Customer selected = selector.getSelectedCustomer();
+            if (selected != null) {
+                loadCustomerIntoForm(selected);
+            }
+        }
+    }//GEN-LAST:event_btnFindActionPerformed
 
     private void radPaymentMethodTransferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radPaymentMethodTransferActionPerformed
-        if(radPaymentMethodTransfer.isSelected()){
+        if (radPaymentMethodTransfer.isSelected()) {
             radPaymentMethodCheque.setEnabled(false);
             radPaymentMethodCash.setEnabled(false);
         } else {
@@ -411,23 +640,8 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_radPaymentMethodTransferActionPerformed
 
-    private void btnCancelSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelSaleActionPerformed
-            JOptionPane.showMessageDialog(rootPane, "LOS DATOS SERÁN ELIMINADOS","",JOptionPane.WARNING_MESSAGE);
-            emptyFields();
-    }//GEN-LAST:event_btnCancelSaleActionPerformed
-
-    private void btnConfirmSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmSaleActionPerformed
-        if ("".equals(txtId.getText()) || "".equals(txtName.getText())){
-            JOptionPane.showMessageDialog(rootPane, "NO HAY DATOS INGRESADOS", "", JOptionPane.ERROR_MESSAGE);
-            emptyFields();
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "VENTA REGISTRADA CON ÉXITO");
-            emptyFields();
-        }
-    }//GEN-LAST:event_btnConfirmSaleActionPerformed
-
     private void radPaymentMethodCashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radPaymentMethodCashActionPerformed
-        if(radPaymentMethodCash.isSelected()){
+        if (radPaymentMethodCash.isSelected()) {
             radPaymentMethodCheque.setEnabled(false);
             radPaymentMethodTransfer.setEnabled(false);
         } else {
@@ -436,54 +650,54 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_radPaymentMethodCashActionPerformed
 
-    private void btnHandleListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHandleListActionPerformed
-        if (searchWindow == null){
-            searchWindow = new FrmEditProductListOnInvoice(this,true);
-        }
-        
-        searchWindow.setVisible(true);
-    }//GEN-LAST:event_btnHandleListActionPerformed
+    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNameActionPerformed
 
-    private void readValues(){
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdActionPerformed
 
+    private void txtTypeClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTypeClientActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTypeClientActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void emptyFields() {
+        this.selectedCustomer = null;
+        this.currentCart.clear();
+        this.subtotalVal = BigDecimal.ZERO;
+        this.taxVal = BigDecimal.ZERO;
+        this.totalVal = BigDecimal.ZERO;
+        txtName.setText("");
+        txtId.setText("");
+        txtTypeClient.setText("");
+        txtEmail.setText("");
+        txtPhone.setText("");
+        txtTotalSub.setText("");
+        txTax.setText("");
+        txtTotal.setText("");
+        DefaultTableModel model = (DefaultTableModel) tabProductList.getModel();
+        model.setRowCount(0);
     }
-    
-    private void emptyFields(){
-     txtName.setText("");
-     txtId.setText("");
-     radPaymentMethodCash.setSelected(false);
-     radPaymentMethodTransfer.setSelected(false);
-     radPaymentMethodCheque.setSelected(false);
-     tabProductList.setCellSelectionEnabled(false);
-    }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmSaleInvoice().setVisible(true));
+    private void loadCustomerIntoForm(Customer customer) {
+        this.selectedCustomer = customer;
+        txtId.setText(customer.getIdentification());
+        txtName.setText(customer.getName());
+        txtTypeClient.setText(customer.getClientType());
+        txtEmail.setText(customer.getEmail());
+        txtPhone.setText(customer.getPhone());
+        JOptionPane.showMessageDialog(this, "Cliente cargado: " + customer.getName(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelSale;
     private javax.swing.JButton btnConfirmSale;
+    private javax.swing.JButton btnFind;
     private javax.swing.JButton btnHandleList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -495,26 +709,37 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPanel panel;
     private javax.swing.JRadioButton radPaymentMethodCash;
     private javax.swing.JRadioButton radPaymentMethodCheque;
     private javax.swing.JRadioButton radPaymentMethodTransfer;
     private javax.swing.JTable tabProductList;
+    private javax.swing.JTextField txTax;
     private javax.swing.JLabel txtClientType;
-    private javax.swing.JPanel txtEmail;
+    private javax.swing.JButton txtDate;
+    private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtPhone;
+    private javax.swing.JTextField txtSale;
     private javax.swing.JLabel txtSalesNumber;
     private javax.swing.JLabel txtSubtotal;
     private javax.swing.JLabel txtTax;
+    private javax.swing.JTextField txtTotal;
     private javax.swing.JLabel txtTotalSale;
+    private javax.swing.JTextField txtTotalSub;
+    private javax.swing.JTextField txtTypeClient;
     // End of variables declaration//GEN-END:variables
 }

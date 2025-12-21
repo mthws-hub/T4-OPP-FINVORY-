@@ -80,8 +80,8 @@
       },
       "productStock": {
         "MP14": 45,
-        "ARM-001": 15,
-        "ARM-002": 10
+        "ARM-001": 13,
+        "ARM-002": 7
       }
     },
     {
@@ -110,7 +110,43 @@
     },
     "productStock": {}
   },
-  "invoices": [],
+  "invoices": [
+    {
+      "invoiceNumber": "F-1",
+      "date": "2025-12-21",
+      "paymentDueDate": "2025-12-21",
+      "customer": {
+        "name": "Sebastian",
+        "identification": "0018988987887",
+        "phone": "0976789870",
+        "email": "sebas@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "ARM-001",
+          "productName": "AK-47",
+          "quantity": 2,
+          "priceApplied": 150.00,
+          "lineTotal": 300.00
+        },
+        {
+          "productId": "ARM-002",
+          "productName": "HK G36",
+          "quantity": 3,
+          "priceApplied": 200.00,
+          "lineTotal": 600.00
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 900.00,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 135.00,
+      "total": 1035.00
+    }
+  ],
   "returns": [],
   "taxRate": 0.15,
   "profitPercentage": 0,

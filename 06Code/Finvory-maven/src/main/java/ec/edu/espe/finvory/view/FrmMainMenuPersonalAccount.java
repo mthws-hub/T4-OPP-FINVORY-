@@ -57,6 +57,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         itemExit = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,6 +101,14 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             }
         });
         jMenu1.add(itemExit);
+
+        jMenuItem1.setText("Cerrar Programa");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
 
@@ -162,6 +171,10 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al buscar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnFindActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
     private void updateTable(List<Object[]> rows) {
         DefaultTableModel model = (DefaultTableModel) tabAllProducts.getModel();
         model.setRowCount(0);
@@ -179,6 +192,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabAllProducts;

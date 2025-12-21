@@ -33,6 +33,7 @@ ec\edu\espe\finvory\view\FrmReassignedProduct.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$2.class
 ec\edu\espe\finvory\view\FrmProductReturns$1.class
 ec\edu\espe\finvory\model\Report.class
+ec\edu\espe\finvory\view\FrmMainMenu$11.class
 ec\edu\espe\finvory\view\FrmNewAccount$4.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$1.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$8.class
@@ -56,6 +57,7 @@ ec\edu\espe\finvory\view\FrmObsoleteInventories$7.class
 ec\edu\espe\finvory\FinvoryApp$1.class
 ec\edu\espe\finvory\view\FrmEditProductListOnInvoice$2.class
 ec\edu\espe\finvory\model\InvoiceSim.class
+ec\edu\espe\finvory\view\FrmSaleInvoice$10.class
 ec\edu\espe\finvory\model\PersonalAccount.class
 ec\edu\espe\finvory\view\FrmReassignedProduct$2.class
 ec\edu\espe\finvory\view\FrmSuppliers$3.class
@@ -63,6 +65,8 @@ ec\edu\espe\finvory\view\FrmNewAccount$6.class
 ec\edu\espe\finvory\view\FrmMainMenu$2.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$6.class
 ec\edu\espe\finvory\mongo\MongoDataExporter.class
+ec\edu\espe\finvory\view\FrmCustomerSelector$2.class
+ec\edu\espe\finvory\view\FrmMainMenu$12.class
 ec\edu\espe\finvory\view\FrmMainMenu$9.class
 ec\edu\espe\finvory\view\FrmProducts$1.class
 ec\edu\espe\finvory\view\FrmProductReturns$3.class
@@ -75,7 +79,9 @@ ec\edu\espe\finvory\controller\FinvoryController$ProductDisplayData.class
 ec\edu\espe\finvory\view\FrmPrices$4.class
 ec\edu\espe\finvory\view\FrmAddNewSupplier$2.class
 ec\edu\espe\finvory\view\FrmInventories$9.class
+ec\edu\espe\finvory\view\FrmCustomerSelector.class
 ec\edu\espe\finvory\view\FrmReassignedProduct$1.class
+ec\edu\espe\finvory\view\FrmSaleInvoice$9.class
 ec\edu\espe\finvory\model\Supplier.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$5.class
 ec\edu\espe\finvory\view\FrmProducts$2.class
@@ -83,6 +89,7 @@ ec\edu\espe\finvory\model\InventoryOfObsolete.class
 ec\edu\espe\finvory\view\FrmMainMenu$8.class
 ec\edu\espe\finvory\view\FrmProducts.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$6.class
+ec\edu\espe\finvory\view\FrmMainMenu$10.class
 ec\edu\espe\finvory\view\FrmNewAccount$3.class
 ec\edu\espe\finvory\view\FrmProductReturns$2.class
 ec\edu\espe\finvory\view\FrmMainMenu$5.class
@@ -97,12 +104,14 @@ ec\edu\espe\finvory\view\FrmNewAccount$10.class
 ec\edu\espe\finvory\utils\ValidationUtils.class
 ec\edu\espe\finvory\view\FrmInventories$3.class
 ec\edu\espe\finvory\view\FrmInventorySelector$3.class
+ec\edu\espe\finvory\view\FrmSaleInvoice$11.class
 ec\edu\espe\finvory\model\CompanyAccount.class
 ec\edu\espe\finvory\view\FrmSuppliers$1.class
 ec\edu\espe\finvory\view\FrmCustomers$5.class
 ec\edu\espe\finvory\view\FrmCustomers$2.class
 ec\edu\espe\finvory\view\FrmLogin$1.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$1.class
+ec\edu\espe\finvory\view\FrmCustomerSelector$1.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$4.class
 ec\edu\espe\finvory\view\FrmInventories$7.class
 ec\edu\espe\finvory\view\FrmInventories.class
@@ -111,6 +120,7 @@ ec\edu\espe\finvory\view\FrmSuppliers.class
 ec\edu\espe\finvory\view\FrmFinvorySplash.class
 ec\edu\espe\finvory\view\FrmAddNewInventory.class
 ec\edu\espe\finvory\view\FrmNewAccount$2.class
+ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$4.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$3.class
 ec\edu\espe\finvory\view\FrmLogin$4.class
 ec\edu\espe\finvory\view\FrmPrices$2.class

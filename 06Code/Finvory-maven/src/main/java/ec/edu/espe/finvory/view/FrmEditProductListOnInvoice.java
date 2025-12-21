@@ -1,5 +1,7 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.model.Product;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -9,15 +11,50 @@ import javax.swing.JOptionPane;
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
 public class FrmEditProductListOnInvoice extends JDialog {
-    
-    Product product = new Product();
-    /**
-     * Creates new form FrmEditProductListOnInvoice
-     */
-    public FrmEditProductListOnInvoice(java.awt.Frame parent, boolean modal) {
-        super(parent,modal);
+
+    private FinvoryController controller;
+    private Product foundProduct = null;
+    private FrmSaleInvoice parentInvoice;
+
+    public FrmEditProductListOnInvoice(java.awt.Frame parent, boolean modal, FinvoryController controller) {
+        super(parent, modal);
+        this.controller = controller;
+        if (parent instanceof FrmSaleInvoice) {
+            this.parentInvoice = (FrmSaleInvoice) parent;
+        }
         initComponents();
         this.setLocationRelativeTo(parent);
+        loadInventories();
+    }
+
+    private void loadInventories() {
+        cmbInventory.removeAllItems();
+        if (controller != null && controller.getInventories() != null) {
+            for (Inventory inv : controller.getInventories()) {
+                cmbInventory.addItem(inv.getName());
+            }
+        }
+    }
+
+    private void searchProduct() {
+        String id = txtId.getText().trim();
+        String barcode = txtBarCode.getText().trim();
+
+        foundProduct = null;
+
+        if (!id.isEmpty()) {
+            foundProduct = controller.findProductPublic(id);
+        } else if (!barcode.isEmpty()) {
+            foundProduct = controller.findProductByBarcodePublic(barcode);
+        }
+
+        if (foundProduct != null) {
+            txtId.setText(foundProduct.getId());
+            txtBarCode.setText(foundProduct.getBarcode());
+            txtQuantity.requestFocus();
+        } else {
+            JOptionPane.showMessageDialog(this, "Producto no encontrado.", "Búsqueda", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /**
@@ -35,11 +72,12 @@ public class FrmEditProductListOnInvoice extends JDialog {
         txtId = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtBarCode = new javax.swing.JTextField();
-        btnFind = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         txtQuantity = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        cmbInventory = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -53,12 +91,6 @@ public class FrmEditProductListOnInvoice extends JDialog {
 
         jLabel3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel3.setText("Codigo de Barras:");
-
-        btnFind.setBackground(new java.awt.Color(0, 123, 0));
-        btnFind.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        btnFind.setForeground(new java.awt.Color(242, 242, 242));
-        btnFind.setText("BUSCAR");
-        btnFind.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         btnAdd.setBackground(new java.awt.Color(0, 123, 0));
         btnAdd.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
@@ -85,63 +117,71 @@ public class FrmEditProductListOnInvoice extends JDialog {
         jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel4.setText("Cantidad:");
 
+        jLabel5.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        jLabel5.setText("Inventario:");
+
+        cmbInventory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(132, 132, 132)
-                        .addComponent(btnFind))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(btnAdd)
-                        .addGap(41, 41, 41)
-                        .addComponent(btnDelete)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtQuantity, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                            .addComponent(txtBarCode, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtId, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel1)))
+                        .addGap(65, 65, 65)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbInventory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(39, 39, 39))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addComponent(btnAdd)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnDelete)
+                .addGap(93, 93, 93))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jLabel1)
-                .addGap(38, 38, 38)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(4, 4, 4)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                .addComponent(btnFind)
-                .addGap(34, 34, 34)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel5))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmbInventory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdd)
-                    .addComponent(btnDelete))
-                .addGap(72, 72, 72))
+                    .addComponent(btnDelete)
+                    .addComponent(btnAdd))
+                .addGap(110, 110, 110))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -165,33 +205,61 @@ public class FrmEditProductListOnInvoice extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        if(readValues()==true){
-            JOptionPane.showMessageDialog(rootPane, "Producto añadido a la Lista");
-            emptyFields(); 
+        if (foundProduct == null) {
+            searchProduct();
+            if (foundProduct == null) {
+                return;
+            }
+        }
+        String quantityStr = txtQuantity.getText();
+
+        if (!ec.edu.espe.finvory.utils.ValidationUtils.isValidQuantity(quantityStr)) {
+            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero positivo mayor a 0.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int quantity = Integer.parseInt(quantityStr.trim());
+        String inventoryName = (String) cmbInventory.getSelectedItem();
+        Inventory selectedInv = controller.findInventoryByName(inventoryName);
+
+        if (selectedInv == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione un inventario válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int currentStock = selectedInv.getStock(foundProduct.getId());
+        if (currentStock < quantity) {
+            JOptionPane.showMessageDialog(this,
+                    "Stock insuficiente en " + inventoryName + ".\nDisponible: " + currentStock + "\nSolicitado: " + quantity,
+                    "Stock Insuficiente", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Agregar a la factura?\n\n"
+                + "Producto: " + foundProduct.getName() + "\n"
+                + "ID: " + foundProduct.getId() + "\n"
+                + "Barcode: " + foundProduct.getBarcode() + "\n"
+                + "Cantidad: " + quantity + "\n"
+                + "Desde: " + selectedInv.getName(),
+                "Confirmar Producto",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (parentInvoice != null) {
+                parentInvoice.addProductToCart(foundProduct, selectedInv, quantity);
+                emptyFields();
+                foundProduct = null;
+                txtId.requestFocus();
+            }
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        if(readValues()==true){
-        JOptionPane.showMessageDialog(rootPane, "Producto eliminado de la lista");
-        emptyFields();
-        }
+        this.dispose();
     }//GEN-LAST:event_btnDeleteActionPerformed
-    private void emptyFields(){
+    private void emptyFields() {
         txtId.setText("");
         txtBarCode.setText("");
         txtQuantity.setText("");
-    }
-    
-    private boolean readValues(){
-        //TODO Read the other values
-        try {
-            int quantity = Integer.parseInt(txtQuantity.getText());
-            return true;
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Error: Debe ingresar un número entero.", "Dato Incorrecto", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
     }
     /**
      * @param args the command line arguments
@@ -200,11 +268,12 @@ public class FrmEditProductListOnInvoice extends JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnFind;
+    private javax.swing.JComboBox<String> cmbInventory;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtBarCode;
     private javax.swing.JTextField txtId;
