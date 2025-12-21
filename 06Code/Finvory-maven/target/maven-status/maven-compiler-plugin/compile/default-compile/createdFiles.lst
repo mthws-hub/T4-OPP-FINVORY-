@@ -11,6 +11,7 @@ ec\edu\espe\finvory\view\FrmPrices$3.class
 ec\edu\espe\finvory\view\FrmFinvorySplash$2.class
 ec\edu\espe\finvory\view\FrmInventorySelector$1.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$2.class
+ec\edu\espe\finvory\view\FrmCustomers$6.class
 ec\edu\espe\finvory\view\FrmCustomers.class
 ec\edu\espe\finvory\model\AdminDetail.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$1.class
@@ -62,6 +63,7 @@ ec\edu\espe\finvory\view\FrmNewAccount$6.class
 ec\edu\espe\finvory\view\FrmMainMenu$2.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$6.class
 ec\edu\espe\finvory\mongo\MongoDataExporter.class
+ec\edu\espe\finvory\view\FrmMainMenu$9.class
 ec\edu\espe\finvory\view\FrmProducts$1.class
 ec\edu\espe\finvory\view\FrmProductReturns$3.class
 ec\edu\espe\finvory\view\FrmCustomers$4.class
@@ -78,6 +80,7 @@ ec\edu\espe\finvory\model\Supplier.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$5.class
 ec\edu\espe\finvory\view\FrmProducts$2.class
 ec\edu\espe\finvory\model\InventoryOfObsolete.class
+ec\edu\espe\finvory\view\FrmMainMenu$8.class
 ec\edu\espe\finvory\view\FrmProducts.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$6.class
 ec\edu\espe\finvory\view\FrmNewAccount$3.class
@@ -85,6 +88,7 @@ ec\edu\espe\finvory\view\FrmProductReturns$2.class
 ec\edu\espe\finvory\view\FrmMainMenu$5.class
 ec\edu\espe\finvory\view\FrmProductReturns.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$2.class
+ec\edu\espe\finvory\view\FrmAddNewCustomer$5.class
 ec\edu\espe\finvory\view\FrmInventories$6.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$2.class
 ec\edu\espe\finvory\model\Database$1.class
@@ -95,6 +99,7 @@ ec\edu\espe\finvory\view\FrmInventories$3.class
 ec\edu\espe\finvory\view\FrmInventorySelector$3.class
 ec\edu\espe\finvory\model\CompanyAccount.class
 ec\edu\espe\finvory\view\FrmSuppliers$1.class
+ec\edu\espe\finvory\view\FrmCustomers$5.class
 ec\edu\espe\finvory\view\FrmCustomers$2.class
 ec\edu\espe\finvory\view\FrmLogin$1.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$1.class

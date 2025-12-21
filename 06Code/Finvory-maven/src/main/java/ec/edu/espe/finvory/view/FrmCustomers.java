@@ -1,61 +1,58 @@
 package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
-import ec.edu.espe.finvory.model.Customer;
-import javax.swing.table.DefaultTableModel;
+import ec.edu.espe.finvory.model.Supplier;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Maryuri Quiña, @ESPE
+ * @author Arelys Otavalo
  */
 public class FrmCustomers extends javax.swing.JFrame {
-    
-    private FinvoryController controller;
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmCustomers.class.getName());
+
+    FinvoryController controller;
 
     /**
-     * Creates new form Customers
-     */
-    public FrmCustomers() {
-        initComponents();
-        this.setLocationRelativeTo(null);
-    }
-    
-    /**
-     * Creates new form Customers 
-     * @param controller
+     * Creates new form FrmSuppliers
      */
     public FrmCustomers(FinvoryController controller) {
-        this(); // Llama a initComponents()
         this.controller = controller;
+        initComponents();
+        this.setLocationRelativeTo(null);
+        setupTableSelection();
         loadCustomerTable();
     }
-    
-    private void loadCustomerTable() {
-        DefaultTableModel model = (DefaultTableModel) jTableCustomer.getModel();
+
+    private void setupTableSelection() {
+        btnEdit.setEnabled(false);
+        btnDelete.setEnabled(false);
+        tblCustomers.getSelectionModel().addListSelectionListener(e -> {
+            boolean rowSelected = tblCustomers.getSelectedRow() != -1;
+            btnEdit.setEnabled(rowSelected);
+            btnDelete.setEnabled(rowSelected);
+        });
+    }
+
+    public void loadCustomerTable() {
+        DefaultTableModel model = (DefaultTableModel) tblCustomers.getModel();
         model.setRowCount(0);
-        
-        if (controller == null || controller.getData() == null) {
-            JOptionPane.showMessageDialog(this, "Error: El controlador o los datos no están inicializados.", "Error de Sistema", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        try {
-            for (Customer customer : controller.getData().getCustomers()) {
+
+        if (controller != null && controller.getData() != null) {
+
+            for (ec.edu.espe.finvory.model.Customer customer : controller.getData().getCustomers()) {
                 model.addRow(new Object[]{
                     customer.getIdentification(),
                     customer.getName(),
                     customer.getEmail(),
+                    customer.getPhone(),
                     customer.getClientType()
                 });
             }
-        } catch (Exception e) {
-             JOptionPane.showMessageDialog(this, "Error al cargar la tabla de clientes: " + e.getMessage(), "Error de Datos", JOptionPane.ERROR_MESSAGE);
-             logger.log(java.util.logging.Level.SEVERE, "Error al cargar clientes", e);
         }
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -67,45 +64,57 @@ public class FrmCustomers extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTableCustomer = new javax.swing.JTable();
+        lblListCustomers = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblCustomers = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        btnEdit = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
-        btnReturn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblCustomersRegistred = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 13)); // NOI18N
-        jLabel2.setText("Lista de clientes");
+        lblListCustomers.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblListCustomers.setText("Lista de Clientes");
 
-        jTableCustomer.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        jTableCustomer.setModel(new javax.swing.table.DefaultTableModel(
+        tblCustomers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID (RUC/CI)", "Nombre", "Email", "Tipo"
+                "ID 1 (RUC)", "Nombre Completo", "Telefono", "Email", "Type"
             }
         ));
-        jScrollPane2.setViewportView(jTableCustomer);
+        jScrollPane1.setViewportView(tblCustomers);
 
-        btnEdit.setBackground(new java.awt.Color(0, 123, 0));
-        btnEdit.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        btnEdit.setForeground(new java.awt.Color(255, 255, 255));
-        btnEdit.setText("Editar");
-        btnEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblListCustomers)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblListCustomers)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         btnAdd.setBackground(new java.awt.Color(0, 123, 0));
         btnAdd.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
@@ -114,6 +123,16 @@ public class FrmCustomers extends javax.swing.JFrame {
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
+            }
+        });
+
+        btnEdit.setBackground(new java.awt.Color(0, 123, 0));
+        btnEdit.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        btnEdit.setForeground(new java.awt.Color(255, 255, 255));
+        btnEdit.setText("Editar");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
             }
         });
 
@@ -127,112 +146,90 @@ public class FrmCustomers extends javax.swing.JFrame {
             }
         });
 
-        btnReturn.setBackground(new java.awt.Color(0, 123, 0));
-        btnReturn.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        btnReturn.setForeground(new java.awt.Color(255, 255, 255));
-        btnReturn.setText("Volver");
-        btnReturn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReturnActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addGap(61, 61, 61)
                 .addComponent(btnEdit)
-                .addGap(98, 98, 98)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnReturn)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnAdd)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnDelete)
-                        .addGap(42, 42, 42))))
+                .addGap(18, 18, 18)
+                .addComponent(btnDelete)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+                .addComponent(btnAdd)
+                .addGap(77, 77, 77))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDelete)
                     .addComponent(btnEdit)
-                    .addComponent(btnAdd)
-                    .addComponent(btnDelete))
-                .addGap(28, 28, 28)
-                .addComponent(btnReturn)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnAdd))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
-        jLabel1.setText("CLIENTES REGISTRADOS");
+        lblCustomersRegistred.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
+        lblCustomersRegistred.setText("Clientes Registrados");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(124, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(108, 108, 108))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(97, 97, 97)
+                .addComponent(lblCustomersRegistred)
+                .addContainerGap(110, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel1)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addComponent(lblCustomersRegistred)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jMenu1.setText("Finvory");
+
+        jMenuItem1.setText("Menu Principal");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -240,86 +237,83 @@ public class FrmCustomers extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        int selectedRow = jTableCustomer.getSelectedRow();
-    
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un cliente de la lista para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
+        int selectedRow = tblCustomers.getSelectedRow();
+        if (selectedRow != -1) {
+            String id = tblCustomers.getValueAt(selectedRow, 0).toString();
+
+            FrmAddNewCustomer win = new FrmAddNewCustomer(this.controller, id);
+            win.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    loadCustomerTable();
+                    setVisible(true);
+                }
+            });
+            this.setVisible(false);
+            win.setVisible(true);
         }
-    
-        String customerId = jTableCustomer.getValueAt(selectedRow, 0).toString();
-        FrmAddNewCustomer editCustomerWindow = new FrmAddNewCustomer(this.controller, customerId);
-        JOptionPane.showMessageDialog(editCustomerWindow, 
-            "Cargando datos para el ID: " + customerId, 
-            "Modo Edición", JOptionPane.INFORMATION_MESSAGE
-        );
-        editCustomerWindow.setVisible(true);
-        loadCustomerTable();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        FrmAddNewCustomer newCustomerWindow = new FrmAddNewCustomer();
-        newCustomerWindow.setVisible(true);
-        loadCustomerTable();
+        FrmAddNewCustomer win = new FrmAddNewCustomer(this.controller);
+        win.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                loadCustomerTable();
+                setVisible(true);
+            }
+        });
+        this.setVisible(false);
+        win.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        int selectedRow = jTableCustomer.getSelectedRow();
-    
+
+        int selectedRow = tblCustomers.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un cliente de la lista para borrar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un cliente de la tabla para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
-        String customerId = jTableCustomer.getValueAt(selectedRow, 0).toString();
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "¿Está seguro de que desea eliminar el cliente con ID: " + customerId + "?", 
-            "Confirmar Eliminación", 
-            JOptionPane.YES_NO_OPTION
+
+        String id = tblCustomers.getValueAt(selectedRow, 0).toString();
+        String nombre = tblCustomers.getValueAt(selectedRow, 1).toString();
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar al cliente: " + nombre + "?\nEsta acción no se puede deshacer.",
+                "Confirmar Eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
         );
-        
+
         if (confirm == JOptionPane.YES_OPTION) {
-            if (controller.handleDeleteCustomerGUI(customerId)) {
-                JOptionPane.showMessageDialog(this, "Cliente eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            boolean eliminado = controller.handleDeleteCustomerGUI(id);
+            if (eliminado) {
+                JOptionPane.showMessageDialog(this, "Cliente eliminado exitosamente.");
+                loadCustomerTable(); 
             } else {
-                 JOptionPane.showMessageDialog(this, "No se pudo eliminar. El cliente tiene facturas pendientes o no fue encontrado.", "Error de Eliminación", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error: No se pudo eliminar el cliente.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-        loadCustomerTable();
+
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnReturnActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> new FrmCustomers().setVisible(true));
-    }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
-    private javax.swing.JButton btnReturn;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTableCustomer;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCustomersRegistred;
+    private javax.swing.JLabel lblListCustomers;
+    private javax.swing.JTable tblCustomers;
     // End of variables declaration//GEN-END:variables
 }

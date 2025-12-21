@@ -1,10 +1,41 @@
 {
-  "customers": [],
+  "companyInfo": {
+    "name": "McDonalds",
+    "address": {
+      "country": "Ecuador",
+      "city": "QUITO",
+      "street": "Solanda",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "ruc": "0011751774793",
+    "phone": "0963514785",
+    "email": "joseph3elcrac@gmail.com",
+    "username": "Joseph",
+    "password": "123"
+  },
+  "customers": [
+    {
+      "name": "Sebastian",
+      "identification": "0018988987887",
+      "phone": "0976789870",
+      "email": "sebas@gmail.com",
+      "clientType": "STANDARD"
+    },
+    {
+      "name": "Olga",
+      "identification": "0017654542312",
+      "phone": "0976787769",
+      "email": "olga@gmail.com",
+      "clientType": "PREMIUM"
+    }
+  ],
   "products": [
     {
       "id": "ARM-001",
       "name": "AK-47",
-      "description": "Balas de alto calibre",
+      "description": "Balas de alto calibre las favoritas de yussepe",
       "barcode": "1452369874521",
       "baseCostPrice": 150.00,
       "supplierId": "1254784513"
@@ -18,11 +49,11 @@
       "supplierId": "1254784513"
     },
     {
-      "id": "MP14",
-      "name": "Arma de corto alcance",
-      "description": "Buen rendimiento",
-      "barcode": "1234983910",
-      "baseCostPrice": 235.60,
+      "id": "P004",
+      "name": "Skar",
+      "description": "No description",
+      "barcode": "12121212221",
+      "baseCostPrice": 12.00,
       "supplierId": "1254784513"
     }
   ],
@@ -30,26 +61,10 @@
     {
       "fullName": "Cristiano Ronaldo dos Santos Aveiro",
       "id1": "1254784513",
-      "id2": "",
-      "phone": "099998844552",
+      "id2": "2855",
+      "phone": "0963514785",
       "email": "elbicho@gmail.com",
-      "description": "SIUUU"
-    },
-    {
-      "fullName": "Lionel Andrés Messi Cuccitini",
-      "id1": "0014587459874",
-      "id2": "",
-      "phone": "0987451236",
-      "email": "lamc@gmail.com",
-      "description": "La pulga"
-    },
-    {
-      "fullName": "Lucas Bastidas",
-      "id1": "0012458796541",
-      "id2": "",
-      "phone": "0998745120",
-      "email": "ldl@gmail.com",
-      "description": "545454"
+      "description": "Noooo"
     }
   ],
   "inventories": [
@@ -67,6 +82,20 @@
         "MP14": 45,
         "ARM-001": 15,
         "ARM-002": 10
+      }
+    },
+    {
+      "name": "Bombas",
+      "address": {
+        "country": "Colombia",
+        "city": "Medellin",
+        "street": "Julio",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {
+        "P004": 45
       }
     }
   ],

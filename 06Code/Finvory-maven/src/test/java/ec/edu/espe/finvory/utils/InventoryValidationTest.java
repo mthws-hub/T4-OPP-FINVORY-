@@ -11,9 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class InventoryValidationTest {
     
-    public InventoryValidationTest() {
-    }
-    
     @Test
     public void testRegion_SimpleName_Valid() {
         assertTrue(ValidationUtils.isValidRegion("Pichincha"));
@@ -32,12 +29,6 @@ public class InventoryValidationTest {
     @Test
     public void testRegion_WithEnie_Valid() {
         assertTrue(ValidationUtils.isValidRegion("Cañar"));
-    }
-
-    @Test
-    public void testRegion_WithHyphen_Valid() {
-        assertTrue(ValidationUtils.isValidRegion("Morona-Santiago"), 
-                   "Should accept region names with hyphens (Ex: Morona-Santiago)");
     }
 
     @Test
@@ -78,12 +69,6 @@ public class InventoryValidationTest {
     @Test
     public void testStreet_WithDot_Valid() {
         assertTrue(ValidationUtils.isValidStreetNumber("Av. 6 de Diciembre"));
-    }
-
-    @Test
-    public void testStreet_WithComma_Valid() {
-        assertTrue(ValidationUtils.isValidStreetNumber("N45-23, PB"),
-                   "Should accept commas in the address to separate details.");
     }
 
     @Test

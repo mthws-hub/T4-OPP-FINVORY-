@@ -3,9 +3,8 @@ package ec.edu.espe.finvory.view;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.utils.ValidationUtils;
 import ec.edu.espe.finvory.model.Customer;
-import static ec.edu.espe.finvory.utils.ValidationUtils.validateCustomerFields;
-import java.util.HashMap;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,6 +15,9 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
     private FinvoryController controller;
     private String customerIdToEdit = null;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmAddNewCustomer.class.getName());
+
+    private final java.awt.Color ERROR_COLOR = java.awt.Color.RED;
+    private final java.awt.Color DEFAULT_COLOR = java.awt.Color.BLACK;
 
     /**
      * Creates new form FrmCustomer
@@ -58,22 +60,36 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
         cmbTypeOfCustomer.setSelectedItem(customer.getClientType());
     }
 
-    private boolean validateData(String id, String phone, String email) {
+    private boolean validateCustomerData() {
+        boolean isValid = true;
+
+        lblName.setForeground(DEFAULT_COLOR);
+        lblId.setForeground(DEFAULT_COLOR);
+        lblPhone.setForeground(DEFAULT_COLOR);
+        lblEmail.setForeground(DEFAULT_COLOR);
+
+        if (txtName.getText().trim().isEmpty() || !ValidationUtils.isTextOnly(txtName.getText().trim())) {
+            lblName.setForeground(ERROR_COLOR);
+            isValid = false;
+        }
+
+        String id = txtID.getText().trim();
         if (id.length() != 10 && id.length() != 13) {
-            JOptionPane.showMessageDialog(this, "Error: El ID (RUC/CI) debe tener 10 o 13 dígitos.", "Validación", JOptionPane.ERROR_MESSAGE);
-            return false;
+            lblId.setForeground(ERROR_COLOR);
+            isValid = false;
         }
 
-        if (!phone.matches("^\\+?[0-9\\s]{7,15}$")) {
-            JOptionPane.showMessageDialog(this, "Error: Ingrese un formato de teléfono válido.", "Validación", JOptionPane.ERROR_MESSAGE);
-            return false;
+        if (!ValidationUtils.REGEX_PHONE_GENERAL.matcher(txtPhone.getText().trim()).matches()) {
+            lblPhone.setForeground(ERROR_COLOR);
+            isValid = false;
         }
 
-        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            JOptionPane.showMessageDialog(this, "Error: Ingrese un formato de email válido.", "Validación", JOptionPane.ERROR_MESSAGE);
-            return false;
+        if (!ValidationUtils.REGEX_EMAIL.matcher(txtEmail.getText().trim()).matches()) {
+            lblEmail.setForeground(ERROR_COLOR);
+            isValid = false;
         }
-        return true;
+
+        return isValid;
     }
 
     private void emptyFields() {
@@ -97,11 +113,11 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
+        lblId = new javax.swing.JLabel();
+        lblPhone = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
+        lblType = new javax.swing.JLabel();
         cmbTypeOfCustomer = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         btnAdd = new javax.swing.JButton();
@@ -117,20 +133,20 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
         jLabel1.setText("Registro CLIENTE");
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel2.setText("Nombre Completo:");
+        lblName.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblName.setText("Nombre Completo:");
 
-        jLabel3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel3.setText("ID (RUC/CI):");
+        lblId.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblId.setText("ID (RUC/CI):");
 
-        jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel4.setText("Teléfono:");
+        lblPhone.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblPhone.setText("Teléfono:");
 
-        jLabel5.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel5.setText("Email:");
+        lblEmail.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblEmail.setText("Email:");
 
-        jLabel6.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel6.setText("Tipo:");
+        lblType.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblType.setText("Tipo:");
 
         cmbTypeOfCustomer.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
         cmbTypeOfCustomer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "STANDARD", "PREMIUM", "VIP" }));
@@ -193,6 +209,12 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        txtName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNameActionPerformed(evt);
+            }
+        });
+
         txtID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIDActionPerformed(evt);
@@ -208,11 +230,11 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
+                            .addComponent(lblName)
+                            .addComponent(lblId)
+                            .addComponent(lblPhone)
+                            .addComponent(lblEmail)
+                            .addComponent(lblType))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cmbTypeOfCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -234,31 +256,31 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblName, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(lblId)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel4))
+                        .addComponent(lblPhone))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(13, 13, 13)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
+                    .addComponent(lblEmail)
                     .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
+                    .addComponent(lblType)
                     .addComponent(cmbTypeOfCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -268,7 +290,7 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,30 +305,63 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
 
+        txtID.setForeground(java.awt.Color.BLACK);
+        txtName.setForeground(java.awt.Color.BLACK);
+        txtEmail.setForeground(java.awt.Color.BLACK);
+        txtPhone.setForeground(java.awt.Color.BLACK);
+
+        String id = txtID.getText().trim();
         String name = txtName.getText().trim();
-        String identification = txtID.getText().trim();
-        String phone = txtPhone.getText().trim();
         String email = txtEmail.getText().trim();
-        String clientType = (String) cmbTypeOfCustomer.getSelectedItem();
+        String phone = txtPhone.getText().trim();
+        String type = cmbTypeOfCustomer.getSelectedItem().toString();
 
-        String errorMessage = ValidationUtils.validateCustomerFields(name, identification, phone, email, clientType);
+        StringBuilder errors = new StringBuilder();
 
-        if (errorMessage != null) {
-            JOptionPane.showMessageDialog(this, errorMessage, "Error de Validación", JOptionPane.ERROR_MESSAGE);
-            return; 
+        if (id.isEmpty() || !id.matches("\\d{10}|\\d{13}")) {
+            errors.append("- ID inválido (debe tener 10 o 13 dígitos).\n");
+            txtID.setForeground(java.awt.Color.RED);
         }
 
-        try {
-            
-            boolean success;
-
-   
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Ocurrió un error al procesar la solicitud.", "Error de Sistema", JOptionPane.ERROR_MESSAGE);
+        if (name.isEmpty() || !name.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+            errors.append("- Nombre inválido (solo letras).\n");
+            txtName.setForeground(java.awt.Color.RED);
         }
+
+        if (email.isEmpty() || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+            errors.append("- Correo electrónico inválido.\n");
+            txtEmail.setForeground(java.awt.Color.RED);
+        }
+
+        if (phone.isEmpty() || !phone.matches("^\\d{7,15}$")) {
+            errors.append("- Teléfono inválido (7 a 15 dígitos).\n");
+            txtPhone.setForeground(java.awt.Color.RED);
+        }
+
+        if (errors.length() > 0) {
+            JOptionPane.showMessageDialog(this, "Por favor corrija los siguientes campos:\n" + errors.toString(),
+                    "Error de Validación", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        boolean success;
+        if (customerIdToEdit == null) {
+            success = controller.handleAddCustomer(name, id, phone, email, type);
+        } else {
+            success = controller.handleUpdateCustomerGUI(customerIdToEdit, name, phone, email, type);
+        }
+
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Cliente guardado exitosamente.");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: El ID ya existe o hubo un problema al guardar.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
 
     }//GEN-LAST:event_btnAddActionPerformed
+
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
         this.dispose();
@@ -314,7 +369,7 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         int option = JOptionPane.showConfirmDialog(this, "¿Está seguro de cancelar el registro y borrar los datos?", "Confirmación", JOptionPane.YES_NO_OPTION);
-       
+
         if (option == JOptionPane.YES_OPTION) {
             emptyFields();
         }
@@ -324,19 +379,23 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIDActionPerformed
 
+    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNameActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnReturn;
     private javax.swing.JComboBox<String> cmbTypeOfCustomer;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblId;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblPhone;
+    private javax.swing.JLabel lblType;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtName;

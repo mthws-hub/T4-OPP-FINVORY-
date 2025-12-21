@@ -346,6 +346,68 @@ public class FinvoryController {
         frmPrices.setVisible(true);
     }
 
+    public boolean handleAddCustomer(String name, String id, String phone, String email, String type) {
+        if (findCustomer(id) != null) {
+            return false;
+        }
+
+        Customer newCustomer = new Customer(name, id, phone, email, type);
+
+        // Obtenemos la lista actual de clientes
+        List<Customer> currentList = data.getCustomers();
+
+        try {
+            // Intentamos añadir. Si la lista viene de Mongo y está bloqueada, saltará al catch
+            currentList.add(newCustomer);
+        } catch (UnsupportedOperationException e) {
+            // SI ESTÁ BLOQUEADA:
+            // 1. Creamos una nueva lista que SÍ se puede editar
+            List<Customer> mutableList = new ArrayList<>(currentList);
+            mutableList.add(newCustomer);
+
+            // 2. Como NO tienes data.setCustomers, lo que haremos es vaciar la lista original 
+            // y pasarle los elementos de la nueva.
+            // Nota: Si currentList es totalmente inmutable (List.of), esto también fallará
+            // y la única solución es agregar el setter en FinvoryData.
+            try {
+                currentList.clear();
+                currentList.addAll(mutableList);
+            } catch (Exception ex) {
+                System.err.println("Error crítico: La lista en FinvoryData es inmutable y no tiene setter.");
+                return false;
+            }
+        }
+
+        saveData();
+        return true;
+    }
+
+    public boolean handleUpdateCustomerGUI(String originalId, String name, String phone, String email, String type) {
+        Customer customer = findCustomer(originalId);
+        if (customer == null) {
+            return false;
+        }
+        try {
+            customer.setName(name);
+            customer.setPhone(phone);
+            customer.setEmail(email);
+            customer.setClientType(type);
+            saveData();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Customer findCustomer(String id) {
+        for (Customer customer : data.getCustomers()) {
+            if (customer.getIdentification().equals(id)) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
     public boolean handleNewSale(Customer customer, HashMap<Product, HashMap<Inventory, Integer>> cart, String payment) {
         if (cart.isEmpty() || customer == null) {
             return false;
@@ -445,19 +507,6 @@ public class FinvoryController {
         for (Product product : data.getProducts()) {
             if (barcode.equals(product.getBarcode())) {
                 return product;
-            }
-        }
-        return null;
-    }
-
-    public Customer findCustomer(String format) {
-        if (format == null) {
-            return null;
-        }
-        format = format.toLowerCase();
-        for (Customer customer : data.getCustomers()) {
-            if (format.equals(customer.getIdentification()) || (customer.getName() != null && customer.getName().toLowerCase().contains(format))) {
-                return customer;
             }
         }
         return null;
@@ -736,6 +785,7 @@ public class FinvoryController {
 
         return true;
     }
+
     public boolean handleUpdateSupplierGUI(String originalId, String name, String phone, String email, String desc, String id2) {
         Supplier supplier = findSupplier(originalId);
         if (supplier == null) {
@@ -754,4 +804,5 @@ public class FinvoryController {
             return false;
         }
     }
+
 }

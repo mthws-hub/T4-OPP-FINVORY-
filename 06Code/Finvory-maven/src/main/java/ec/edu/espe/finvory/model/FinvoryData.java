@@ -98,7 +98,7 @@ public class FinvoryData {
     }
 
     public List<Customer> getCustomers() {
-        return Collections.unmodifiableList(customers);
+        return this.customers;
     }
 
     public List<Product> getProducts() {

@@ -1,28 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: ec.edu.espe.finvory.utils.InventoryValidationTest
 -------------------------------------------------------------------------------
-Tests run: 21, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.425 s <<< FAILURE! -- in ec.edu.espe.finvory.utils.InventoryValidationTest
-ec.edu.espe.finvory.utils.InventoryValidationTest.testRegion_WithHyphen_Valid -- Time elapsed: 0.099 s <<< FAILURE!
-org.opentest4j.AssertionFailedError: Should accept region names with hyphens (Ex: Morona-Santiago) ==> expected: <true> but was: <false>
-	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
-	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
-	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
-	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
-	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
-	at ec.edu.espe.finvory.utils.InventoryValidationTest.testRegion_WithHyphen_Valid(InventoryValidationTest.java:40)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
-
-ec.edu.espe.finvory.utils.InventoryValidationTest.testStreet_WithComma_Valid -- Time elapsed: 0.003 s <<< FAILURE!
-org.opentest4j.AssertionFailedError: Should accept commas in the address to separate details. ==> expected: <true> but was: <false>
-	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
-	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
-	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
-	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
-	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
-	at ec.edu.espe.finvory.utils.InventoryValidationTest.testStreet_WithComma_Valid(InventoryValidationTest.java:86)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
-
+Tests run: 29, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.039 s -- in ec.edu.espe.finvory.utils.InventoryValidationTest

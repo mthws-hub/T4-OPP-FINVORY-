@@ -33,7 +33,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
         jMenuItem7 = new javax.swing.JMenuItem();
         itemQuit = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        MnuCustomer = new javax.swing.JMenuItem();
         itemInventories = new javax.swing.JMenuItem();
         itemSuppliers = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -41,6 +41,8 @@ public class FrmMainMenu extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
+        MnuAbout = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -61,8 +63,13 @@ public class FrmMainMenu extends javax.swing.JFrame {
 
         jMenu1.setText("Gestion");
 
-        jMenuItem1.setText("Clientes");
-        jMenu1.add(jMenuItem1);
+        MnuCustomer.setText("Clientes");
+        MnuCustomer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MnuCustomerActionPerformed(evt);
+            }
+        });
+        jMenu1.add(MnuCustomer);
 
         itemInventories.setText("Inventarios");
         itemInventories.addActionListener(new java.awt.event.ActionListener() {
@@ -103,6 +110,13 @@ public class FrmMainMenu extends javax.swing.JFrame {
         jMenu3.add(jMenuItem6);
 
         jMenuBar1.add(jMenu3);
+
+        MnuAbout.setText("Acerca de");
+
+        jMenuItem1.setText("Finvory");
+        MnuAbout.add(jMenuItem1);
+
+        jMenuBar1.add(MnuAbout);
 
         setJMenuBar(jMenuBar1);
 
@@ -159,7 +173,30 @@ public class FrmMainMenu extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
+    private void MnuCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnuCustomerActionPerformed
+        if (this.controller == null) {
+            System.out.println("Error: El controlador en MainMenu es null");
+            return;
+        }
+
+        // 2. Pasamos el controlador a la tabla de clientes
+        FrmCustomers customersFrame = new FrmCustomers(this.controller);
+
+        // 3. Listener para que el menú regrese al cerrar la tabla
+        customersFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                FrmMainMenu.this.setVisible(true);
+            }
+        });
+
+        customersFrame.setVisible(true);
+        this.setVisible(false); // Oculta el menú
+    }//GEN-LAST:event_MnuCustomerActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu MnuAbout;
+    private javax.swing.JMenuItem MnuCustomer;
     private javax.swing.JMenuItem itemInventories;
     private javax.swing.JMenuItem itemQuit;
     private javax.swing.JMenuItem itemSuppliers;
