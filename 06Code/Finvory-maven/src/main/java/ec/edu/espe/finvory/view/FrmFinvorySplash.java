@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.utils.ValidationUtils;
 import java.awt.Color;
@@ -34,6 +35,7 @@ public class FrmFinvorySplash extends javax.swing.JFrame {
         setupLogo();
         setupProgressBarDesign();
         startAnimation();
+        FinvoryApp.setIcon(this);
     }
 
     /**

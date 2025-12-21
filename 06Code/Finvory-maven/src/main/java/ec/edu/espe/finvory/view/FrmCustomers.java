@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Supplier;
 import java.awt.event.WindowAdapter;
@@ -24,6 +25,7 @@ public class FrmCustomers extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         setupTableSelection();
         loadCustomerTable();
+        FinvoryApp.setIcon(this);
     }
 
     private void setupTableSelection() {

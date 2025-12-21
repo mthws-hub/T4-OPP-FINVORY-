@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.model.Product;
@@ -27,10 +28,12 @@ public class FrmInventories extends javax.swing.JFrame {
         this.controller = controller;
         this.setLocationRelativeTo(null);
         setupTableNonEditable();
+        FinvoryApp.setIcon(this);
     }
 
     public FrmInventories() {
         initComponents();
+        FinvoryApp.setIcon(this);
     }
 
     private void setupTableNonEditable() {

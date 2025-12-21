@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +28,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         loadSalesTable();
+        FinvoryApp.setIcon(this);
     }
 
     private void loadSalesTable() {

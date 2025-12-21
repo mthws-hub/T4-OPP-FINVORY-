@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Supplier;
 import ec.edu.espe.finvory.utils.ValidationUtils;
@@ -20,6 +21,7 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
 
     public FrmAddNewSupplier(FinvoryController controller) {
         this(controller, null);
+        FinvoryApp.setIcon(this);
     }
     
     public FrmAddNewSupplier(FinvoryController controller, String supplierId) {
@@ -28,6 +30,7 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         setupFormMode();
+        FinvoryApp.setIcon(this);
     }
 
     private void setupFormMode() {

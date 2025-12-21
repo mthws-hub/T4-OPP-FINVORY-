@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.model.Product;
@@ -21,6 +22,7 @@ public class FrmProducts extends javax.swing.JFrame {
 
     public FrmProducts(FinvoryController controller) {
         this(controller, null);
+        FinvoryApp.setIcon(this);
     }
 
     public FrmProducts(FinvoryController controller, Inventory inventory) {
@@ -33,6 +35,7 @@ public class FrmProducts extends javax.swing.JFrame {
         loadProductTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        FinvoryApp.setIcon(this);
     }
 
     private void updateTitle() {

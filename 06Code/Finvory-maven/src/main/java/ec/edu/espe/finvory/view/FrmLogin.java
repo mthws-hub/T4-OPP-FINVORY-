@@ -19,6 +19,8 @@ public class FrmLogin extends javax.swing.JFrame {
         this.controller = controller;
         initComponents();
         this.setLocationRelativeTo(null);
+        this.getRootPane().setDefaultButton(btnLogIn);
+        setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage(getClass().getResource("/FinvoryCorner.jpeg")));
     }
 
     /**
@@ -42,6 +44,7 @@ public class FrmLogin extends javax.swing.JFrame {
         btnLogIn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         btnSignUp = new javax.swing.JButton();
+        btnAboutTo1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -121,19 +124,23 @@ public class FrmLogin extends javax.swing.JFrame {
             }
         });
 
+        btnAboutTo1.setBackground(new java.awt.Color(0, 123, 0));
+        btnAboutTo1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnAboutTo1.setForeground(new java.awt.Color(242, 242, 242));
+        btnAboutTo1.setText("About to");
+        btnAboutTo1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAboutTo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAboutTo1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblUser)
-                            .addComponent(lblPassword)
-                            .addComponent(txtUserName)
-                            .addComponent(passPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                             .addGap(57, 57, 57)
@@ -142,7 +149,17 @@ public class FrmLogin extends javax.swing.JFrame {
                             .addComponent(btnSignUp))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                             .addGap(131, 131, 131)
-                            .addComponent(btnLogIn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnLogIn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblUser)
+                            .addComponent(lblPassword)
+                            .addComponent(txtUserName)
+                            .addComponent(passPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(btnAboutTo1)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -162,7 +179,9 @@ public class FrmLogin extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSignUp))
-                .addContainerGap(137, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
+                .addComponent(btnAboutTo1)
+                .addGap(19, 19, 19))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -223,7 +242,12 @@ String user = txtUserName.getText();
         newAccount.setVisible(true);
     }//GEN-LAST:event_btnSignUpActionPerformed
 
+    private void btnAboutTo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutTo1ActionPerformed
+        new FrmAbout(this, true).setVisible(true);
+    }//GEN-LAST:event_btnAboutTo1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAboutTo1;
     private javax.swing.JButton btnLogIn;
     private javax.swing.JButton btnSignUp;
     private javax.swing.JLabel jLabel1;

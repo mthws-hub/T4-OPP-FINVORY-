@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Address;
 import ec.edu.espe.finvory.utils.ValidationUtils;
@@ -25,6 +26,7 @@ public class FrmNewAccount extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        FinvoryApp.setIcon(this);
     }
 
     /**

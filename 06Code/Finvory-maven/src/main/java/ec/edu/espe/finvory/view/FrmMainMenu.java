@@ -17,6 +17,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
         initComponents();
         this.controller = controller;
         this.setLocationRelativeTo(null);
+        setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage(getClass().getResource("/FinvoryCorner.jpeg")));
     }
 
     /**

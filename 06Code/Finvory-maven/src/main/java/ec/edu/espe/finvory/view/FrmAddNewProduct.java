@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Supplier;
 import ec.edu.espe.finvory.model.Product;
@@ -25,6 +26,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
 
     public FrmAddNewProduct(FinvoryController controller) {
         this(controller, null, null);
+        FinvoryApp.setIcon(this);
     }
 
     public FrmAddNewProduct(FinvoryController controller, String productId) {

@@ -22,6 +22,7 @@ public class FrmInventorySelector extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(parent);
         loadTable();
+        
     }
 
     public Inventory getSelectedInventory() {

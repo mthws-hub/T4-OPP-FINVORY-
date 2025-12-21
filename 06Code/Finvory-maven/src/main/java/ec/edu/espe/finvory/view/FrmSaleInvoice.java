@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Customer;
 import ec.edu.espe.finvory.model.Inventory;
@@ -27,6 +28,8 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
 
     public FrmSaleInvoice() {
         initComponents();
+        FinvoryApp.setIcon(this);
+        
     }
 
     public FrmSaleInvoice(FinvoryController controller) {
@@ -35,6 +38,8 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         initializeInvoiceData();
         setupFieldsState();
+        FinvoryApp.setIcon(this);
+        
     }
 
     private void initializeInvoiceData() {

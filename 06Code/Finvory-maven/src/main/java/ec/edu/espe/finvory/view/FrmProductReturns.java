@@ -20,6 +20,7 @@ public class FrmProductReturns extends JDialog {
         this.controller = controller;
         initComponents();
         this.setLocationRelativeTo(parent);
+        
     }
     
 

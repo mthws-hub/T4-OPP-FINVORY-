@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.FinvoryData;
 import ec.edu.espe.finvory.utils.ValidationUtils;
@@ -19,6 +20,7 @@ public class FrmPrices extends javax.swing.JFrame {
         loadCurrentValues();
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        FinvoryApp.setIcon(this);
     }
 
     public FrmPrices() {

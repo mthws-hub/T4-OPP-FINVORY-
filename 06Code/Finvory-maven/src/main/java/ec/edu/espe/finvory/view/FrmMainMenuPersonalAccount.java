@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.utils.ValidationUtils;
 import java.util.List;
@@ -16,6 +17,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
 
     public FrmMainMenuPersonalAccount() {
         initComponents();
+        FinvoryApp.setIcon(this);
     }
 
     public FrmMainMenuPersonalAccount(FinvoryController controller) {

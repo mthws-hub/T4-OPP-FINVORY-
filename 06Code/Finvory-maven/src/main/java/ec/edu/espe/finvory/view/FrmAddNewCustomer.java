@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.utils.ValidationUtils;
 import ec.edu.espe.finvory.model.Customer;
@@ -25,6 +26,7 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
     public FrmAddNewCustomer() {
         initComponents();
         this.setLocationRelativeTo(null);
+        FinvoryApp.setIcon(this);
     }
 
     /**

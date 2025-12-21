@@ -21,6 +21,7 @@ public class FrmObsoleteInventories extends JDialog {
         this.controller = controller;
         initComponents();
         this.setLocationRelativeTo(null);
+        
     }
     
     private FrmProductReturns searchProductReturnsWindows;
