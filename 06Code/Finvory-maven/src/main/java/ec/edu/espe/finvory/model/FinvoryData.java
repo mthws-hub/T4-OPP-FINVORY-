@@ -102,19 +102,19 @@ public class FinvoryData {
     }
 
     public List<Product> getProducts() {
-        return Collections.unmodifiableList(products);
+        return this.products;
     }
 
     public List<Supplier> getSuppliers() {
-        return Collections.unmodifiableList(suppliers);
+        return this.suppliers;
     }
 
     public List<Inventory> getInventories() {
-        return Collections.unmodifiableList(inventories);
+        return this.inventories;
     }
 
     public List<InvoiceSim> getInvoices() {
-        return Collections.unmodifiableList(invoices);
+        return this.invoices;
     }
 
     public List<ReturnedProduct> getReturns() {

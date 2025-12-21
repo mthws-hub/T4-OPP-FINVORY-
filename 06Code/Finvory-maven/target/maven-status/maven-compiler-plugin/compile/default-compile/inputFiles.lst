@@ -1,43 +1,44 @@
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\controller\FinvoryController.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\FinvoryApp.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Address.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\AdminDetail.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\CompanyAccount.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Customer.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Database.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\FinvoryData.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Inventory.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\InventoryOfObsolete.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\InvoiceLineSim.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\InvoiceSim.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\PersonalAccount.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Product.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\ProductSold.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Report.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\ReturnedProduct.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Supplier.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\SystemUsers.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\mongo\MongoDataExporter.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\mongo\MongoDBConnection.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\utils\ValidationUtils.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmAddNewCustomer.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmAddNewInventory.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmAddNewProduct.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmAddNewSupplier.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmCustomers.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmCustomerSelector.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmEditProductListOnInvoice.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmFinvorySplash.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmInventories.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmInventorySelector.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmLogin.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmMainMenu.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmNewAccount.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmObsoleteInventories.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmPrices.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmProductReturns.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmProducts.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmReassignedProduct.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmSaleInvoice.java
-C:\Users\USER\OneDrive\Desktop\Second Semester 2025-2026\OPP\Repositorios\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmSuppliers.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\controller\FinvoryController.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\FinvoryApp.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Address.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\AdminDetail.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\CompanyAccount.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Customer.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Database.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\FinvoryData.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Inventory.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\InventoryOfObsolete.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\InvoiceLineSim.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\InvoiceSim.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\PersonalAccount.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Product.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\ProductSold.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Report.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\ReturnedProduct.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\Supplier.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\model\SystemUsers.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\mongo\MongoDataExporter.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\mongo\MongoDBConnection.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\utils\ValidationUtils.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmAddNewCustomer.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmAddNewInventory.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmAddNewProduct.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmAddNewSupplier.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmCustomers.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmCustomerSelector.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmEditProductListOnInvoice.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmFinvorySplash.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmInventories.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmInventorySelector.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmLogin.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmMainMenu.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmNewAccount.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmObsoleteInventories.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmPrices.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmProductReturns.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmProducts.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmReassignedProduct.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmSaleInvoice.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmSalesReport.java
+C:\Users\USUARIO\T4-OPP-FINVORY-\06Code\Finvory-maven\src\main\java\ec\edu\espe\finvory\view\FrmSuppliers.java

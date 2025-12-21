@@ -34,6 +34,7 @@ public class Database {
                 public void write(JsonWriter jsonWriter, LocalDate localDate) throws IOException {
                     jsonWriter.value(localDate == null ? null : localDate.toString());
                 }
+
                 @Override
                 public LocalDate read(JsonReader jsonReader) throws IOException {
                     String string = jsonReader.nextString();
@@ -52,11 +53,13 @@ public class Database {
             System.out.println("Datos descargados de MongoDB Atlas.");
             System.out.println("    -> Inventarios: " + cloudData.getInventories().size());
             System.out.println("    -> Productos: " + cloudData.getProducts().size());
+            System.out.println("    -> Facturas: " + cloudData.getInvoices().size());
+
             saveCompanyData(cloudData, companyUsername);
             return cloudData;
         }
 
-        System.out.println("No se pudo cargar de la nube (o está vacía). Usando datos locales.");
+        System.out.println("No se pudo cargar de la nube. Usando datos locales.");
         String folder = ROOT_DATA_FOLDER + File.separator + companyUsername;
         FinvoryData localData = loadJson(folder);
 
@@ -72,126 +75,61 @@ public class Database {
 
     private FinvoryData loadDataFromCloud(String username) {
         try {
-            if (MongoDBConnection.getCollection("products") == null) {
-                return null;
-            }
-
             FinvoryData data = new FinvoryData();
+
             MongoCollection<Document> prodCol = MongoDBConnection.getCollection("products");
-            for (Document document : prodCol.find(Filters.eq("companyUsername", username))) {
-
-                Double baseCostPriceDouble = document.getDouble("baseCostPrice");
-                BigDecimal baseCostPrice = (baseCostPriceDouble != null)
-                        ? BigDecimal.valueOf(baseCostPriceDouble)
-                        : BigDecimal.ZERO;
-
-                Product product = new Product(
-                        document.getString("productId"),
-                        document.getString("name"),
-                        document.getString("description"),
-                        document.getString("barcode"),
-                        baseCostPrice,
-                        document.getString("supplierId")
-                );
-                if (product.getId() == null) {
-                    product = new Product(document.getString("id"), document.getString("name"), document.getString("description"), document.getString("barcode"), baseCostPrice, document.getString("supplierId"));
+            if (prodCol != null) {
+                for (Document doc : prodCol.find(Filters.eq("companyUsername", username))) {
+                    BigDecimal cost = BigDecimal.valueOf(doc.get("baseCostPrice") != null ? doc.getDouble("baseCostPrice") : 0.0);
+                    data.addProduct(new Product(doc.getString("productId"), doc.getString("name"), doc.getString("description"), doc.getString("barcode"), cost, doc.getString("supplierId")));
                 }
-
-                data.addProduct(product);
-            }
-
-            MongoCollection<Document> invoiceCollection = MongoDBConnection.getCollection("inventories");
-            for (Document document : invoiceCollection.find(Filters.eq("companyUsername", username))) {
-                Document addressDocument = (Document) document.get("address");
-                Address address = null;
-                if (addressDocument != null) {
-                    address = new Address(
-                            addressDocument.getString("country"),
-                            addressDocument.getString("city"),
-                            addressDocument.getString("street")
-                    );
-                }
-
-                Inventory inv = new Inventory(document.getString("name"), address);
-
-                Document stockDoc = (Document) document.get("productStock");
-                if (stockDoc != null) {
-                    for (String key : stockDoc.keySet()) {
-                        Number quantity = (Number) stockDoc.get(key);
-                        inv.setStock(key, quantity.intValue());
-                    }
-                }
-                data.addInventory(inv);
             }
 
             MongoCollection<Document> cliCol = MongoDBConnection.getCollection("customers");
             if (cliCol != null) {
-                for (Document document : cliCol.find(Filters.eq("companyUsername", username))) {
-                    Customer customer = new Customer(
-                            document.getString("name"),
-                            document.getString("identification"),
-                            document.getString("phone"),
-                            document.getString("email"),
-                            document.getString("clientType")
-                    );
-                    data.addCustomer(customer);
+                for (Document doc : cliCol.find(Filters.eq("companyUsername", username))) {
+                    data.addCustomer(new Customer(doc.getString("name"), doc.getString("identification"), doc.getString("phone"), doc.getString("email"), doc.getString("clientType")));
                 }
             }
 
-            MongoCollection<Document> supCollection = MongoDBConnection.getCollection("suppliers");
-            if (supCollection != null) {
-                for (Document document : supCollection.find(Filters.eq("companyUsername", username))) {
-                    Supplier supplier = new Supplier(
-                            document.getString("fullName"),
-                            document.getString("id1"),
-                            document.getString("phone"),
-                            document.getString("email"),
-                            document.getString("description")
-                    );
-                    supplier.setId2(document.getString("id2"));
-                    data.addSupplier(supplier);
+            MongoCollection<Document> supCol = MongoDBConnection.getCollection("suppliers");
+            if (supCol != null) {
+                for (Document doc : supCol.find(Filters.eq("companyUsername", username))) {
+                    Supplier s = new Supplier(doc.getString("fullName"), doc.getString("id1"), doc.getString("phone"), doc.getString("email"), doc.getString("description"));
+                    s.setId2(doc.getString("id2"));
+                    data.addSupplier(s);
                 }
             }
 
+            MongoCollection<Document> invCol = MongoDBConnection.getCollection("invoices");
+            if (invCol != null) {
+                for (Document doc : invCol.find(Filters.eq("companyUsername", username))) {
+                    String id = doc.getString("invoiceId");
+
+                    java.util.Date dateRaw = doc.getDate("date");
+                    LocalDate date = (dateRaw != null) ? dateRaw.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate() : LocalDate.now();
+
+                    Document custDoc = (Document) doc.get("customer");
+                    Customer customer = new Customer(custDoc.getString("name"), custDoc.getString("identification"), custDoc.getString("phone"), custDoc.getString("email"), custDoc.getString("clientType"));
+
+                    ArrayList<InvoiceLineSim> lines = new ArrayList<>();
+                    List<Document> linesDoc = (List<Document>) doc.get("lines");
+                    if (linesDoc != null) {
+                        for (Document l : linesDoc) {
+                            lines.add(new InvoiceLineSim(l.getString("productId"), l.getString("productName"), l.getInteger("quantity"), BigDecimal.valueOf(l.getDouble("price"))));
+                        }
+                    }
+
+                    InvoiceSim invoice = new InvoiceSim(id, date, date, customer, lines, BigDecimal.valueOf(doc.getDouble("tax")), BigDecimal.ZERO);
+                    invoice.complete();
+                    data.addInvoice(invoice);
+                }
+            }
             return data;
-
         } catch (Exception e) {
-            System.err.println("Error descargando de MongoDB: " + e.getMessage());
+            System.err.println("Error en Database: " + e.getMessage());
             return null;
         }
-    }
-
-    public void saveCompanyData(FinvoryData data, String companyUsername) {
-        String folder = ROOT_DATA_FOLDER + File.separator + companyUsername;
-        new File(folder).mkdirs();
-
-        saveJson(data, folder);
-        saveCustomersCsv(data.getCustomers(), folder);
-        saveSuppliersCsv(data.getSuppliers(), folder);
-    }
-
-    public void saveUsers(SystemUsers users) {
-        try {
-            File file = new File(USERS_FILE);
-            new File(file.getParent()).mkdirs();
-            try (Writer writer = new FileWriter(file)) {
-                gson.toJson(users, writer);
-            }
-        } catch (IOException e) {
-            System.err.println("Error guardando usuarios: " + e.getMessage());
-        }
-    }
-
-    private FinvoryData loadJson(String folder) {
-        File file = new File(folder + File.separator + "finvory_database.json");
-        if (file.exists()) {
-            try (Reader reader = new FileReader(file)) {
-                return gson.fromJson(reader, FinvoryData.class);
-            } catch (IOException e) {
-                System.err.println("Error leyendo JSON: " + e.getMessage());
-            }
-        }
-        return new FinvoryData();
     }
 
     private void saveJson(FinvoryData data, String folder) {
@@ -306,4 +244,38 @@ public class Database {
             return false;
         }
     }
+
+    public void saveCompanyData(FinvoryData data, String companyUsername) {
+        String folder = ROOT_DATA_FOLDER + File.separator + companyUsername;
+        new File(folder).mkdirs();
+        saveJson(data, folder);
+        saveCustomersCsv(data.getCustomers(), folder);
+        saveSuppliersCsv(data.getSuppliers(), folder);
+    }
+
+    private FinvoryData loadJson(String folder) {
+        File file = new File(folder + File.separator + "finvory_database.json");
+        if (file.exists()) {
+            try (Reader reader = new FileReader(file)) {
+                FinvoryData data = gson.fromJson(reader, FinvoryData.class);
+                return (data != null) ? data : new FinvoryData();
+            } catch (IOException e) {
+                System.err.println("Error leyendo JSON local: " + e.getMessage());
+            }
+        }
+        return new FinvoryData();
+    }
+
+    public void saveUsers(SystemUsers users) {
+        File folder = new File(UTILS_FOLDER);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        try (Writer writer = new FileWriter(USERS_FILE)) {
+            gson.toJson(users, writer);
+        } catch (IOException e) {
+            System.err.println("Error al guardar usuarios en JSON: " + e.getMessage());
+        }
+    }
+
 }

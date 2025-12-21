@@ -29,6 +29,20 @@
       "phone": "0976787769",
       "email": "olga@gmail.com",
       "clientType": "PREMIUM"
+    },
+    {
+      "name": "Sebastian",
+      "identification": "0018988987887",
+      "phone": "0976789870",
+      "email": "sebas@gmail.com",
+      "clientType": "STANDARD"
+    },
+    {
+      "name": "Olga",
+      "identification": "0017654542312",
+      "phone": "0976787769",
+      "email": "olga@gmail.com",
+      "clientType": "PREMIUM"
     }
   ],
   "products": [
@@ -65,6 +79,14 @@
       "phone": "0963514785",
       "email": "elbicho@gmail.com",
       "description": "Noooo"
+    },
+    {
+      "fullName": "Cristiano Ronaldo dos Santos Aveiro",
+      "id1": "1254784513",
+      "id2": "2855",
+      "phone": "0963514785",
+      "email": "elbicho@gmail.com",
+      "description": "Noooo"
     }
   ],
   "inventories": [
@@ -80,8 +102,8 @@
       },
       "productStock": {
         "MP14": 45,
-        "ARM-001": 13,
-        "ARM-002": 7
+        "ARM-001": 9,
+        "ARM-002": 5
       }
     },
     {
@@ -116,6 +138,34 @@
       "date": "2025-12-21",
       "paymentDueDate": "2025-12-21",
       "customer": {
+        "name": "Olga",
+        "identification": "0017654542312",
+        "phone": "0976787769",
+        "email": "olga@gmail.com",
+        "clientType": "PREMIUM"
+      },
+      "lines": [
+        {
+          "productId": "ARM-001",
+          "productName": "AK-47",
+          "quantity": 1,
+          "priceApplied": 150.00,
+          "lineTotal": 150.00
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 150.00,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 22.50,
+      "total": 172.50
+    },
+    {
+      "invoiceNumber": "F-2",
+      "date": "2025-12-21",
+      "paymentDueDate": "2025-12-21",
+      "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
         "phone": "0976789870",
@@ -124,27 +174,27 @@
       },
       "lines": [
         {
+          "productId": "ARM-002",
+          "productName": "HK G36",
+          "quantity": 1,
+          "priceApplied": 200.00,
+          "lineTotal": 200.00
+        },
+        {
           "productId": "ARM-001",
           "productName": "AK-47",
           "quantity": 2,
           "priceApplied": 150.00,
           "lineTotal": 300.00
-        },
-        {
-          "productId": "ARM-002",
-          "productName": "HK G36",
-          "quantity": 3,
-          "priceApplied": 200.00,
-          "lineTotal": 600.00
         }
       ],
       "status": "COMPLETED",
-      "subtotal": 900.00,
+      "subtotal": 500.00,
       "discountRate": 0,
       "discountAmount": 0.00,
       "taxRate": 0.15,
-      "taxAmount": 135.00,
-      "total": 1035.00
+      "taxAmount": 75.00,
+      "total": 575.00
     }
   ],
   "returns": [],

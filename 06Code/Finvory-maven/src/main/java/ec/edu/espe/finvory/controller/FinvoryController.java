@@ -20,7 +20,9 @@ import java.time.LocalDate;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.bson.Document;
+import com.mongodb.client.model.Filters;
 
 /**
  *
@@ -122,12 +124,21 @@ public class FinvoryController {
         for (CompanyAccount company : users.getCompanyAccounts()) {
             if (company.getUsername().equals(username) && company.checkPassword(password)) {
                 this.currentCompanyUsername = username;
-                this.data = dataBase.loadCompanyData(currentCompanyUsername);
-                this.data.setCompanyInfo(company);
                 this.userType = "COMPANY";
+
+                FinvoryData loadedData = dataBase.loadCompanyData(username);
+
+                if (loadedData != null) {
+                    this.data = loadedData;
+                } else {
+                    this.data = new FinvoryData();
+                }
+
+                this.data.setCompanyInfo(company);
                 return true;
             }
         }
+
         for (PersonalAccount personal : users.getPersonalAccounts()) {
             if (personal.getUsername().equals(username) && personal.checkPassword(password)) {
                 this.currentCompanyUsername = null;
@@ -136,7 +147,6 @@ public class FinvoryController {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -813,6 +823,7 @@ public class FinvoryController {
         String companyName = data.getCompanyInfo().getName().toUpperCase();
         String prefix = companyName.length() >= 3 ? companyName.substring(0, 3) : companyName;
         prefix = prefix.replaceAll("[^A-Z0-9]", "");
+
         int nextSequence = data.getInvoices().size() + 1;
         return String.format("F%s-%03d", prefix, nextSequence);
     }
@@ -850,4 +861,42 @@ public class FinvoryController {
         return matches;
     }
 
+    public List<Object[]> getSalesTableData() {
+        List<Object[]> rows = new ArrayList<>();
+        if (data != null && data.getInvoices() != null) {
+            for (ec.edu.espe.finvory.model.InvoiceSim inv : data.getInvoices()) {
+                rows.add(new Object[]{
+                    inv.getId(),
+                    inv.getDate().toString(),
+                    inv.getCustomer().getName(),
+                    String.format("%.2f", inv.getSubtotal()),
+                    String.format("%.2f", inv.getTotal())
+                });
+            }
+        }
+        return rows;
+    }
+
+    public void exportSalesToCSV(String fileName) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+            writer.println("sep=,");
+            writer.println("ID Factura,Fecha,Cliente,Subtotal,Impuesto,Total");
+
+            for (InvoiceSim inv : data.getInvoices()) {
+                String subtotal = String.format("%.2f", inv.getSubtotal().doubleValue()).replace(",", ".");
+                String tax = String.format("%.2f", inv.getTaxAmount().doubleValue()).replace(",", ".");
+                String total = String.format("%.2f", inv.getTotal().doubleValue()).replace(",", ".");
+
+                writer.printf("%s,%s,%s,%s,%s,%s%n",
+                        inv.getId(),
+                        inv.getDate(),
+                        inv.getCustomer().getName(),
+                        subtotal,
+                        tax,
+                        total);
+            }
+        } catch (IOException e) {
+            System.err.println("Error al exportar CSV: " + e.getMessage());
+        }
+    }
 }

@@ -1,5 +1,42 @@
 {
+  "companyInfo": {
+    "name": "Frico Autopartes S.A.",
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Av. 10 de Agosto N45",
+      "zipCode": "170504",
+      "streetNumber": "N45-23",
+      "region": "Pichincha"
+    },
+    "ruc": "1790011223001",
+    "phone": "022445566",
+    "email": "admin@frico.com",
+    "username": "adminFrico",
+    "password": "123"
+  },
   "customers": [
+    {
+      "name": "Rodrigo Delgado",
+      "identification": "0012365478963",
+      "phone": "0983489630",
+      "email": "m@gmail.com",
+      "clientType": "STANDARD"
+    },
+    {
+      "name": "Pedro Paz",
+      "identification": "0014785236987",
+      "phone": "0994896354",
+      "email": "k@gmail.com",
+      "clientType": "STANDARD"
+    },
+    {
+      "name": "Pedro Martin",
+      "identification": "1245784512",
+      "phone": "0987451254",
+      "email": "pm@gmail.com",
+      "clientType": "PREMIUM"
+    },
     {
       "name": "Rodrigo Delgado",
       "identification": "0012365478963",
@@ -88,6 +125,14 @@
       "phone": "0927890399",
       "email": "maryuri@gmail.com",
       "description": "buenos productos"
+    },
+    {
+      "fullName": "Maryuri Salome Quina Molina",
+      "id1": "1234315652001",
+      "id2": "",
+      "phone": "0927890399",
+      "email": "maryuri@gmail.com",
+      "description": "buenos productos"
     }
   ],
   "inventories": [
@@ -131,7 +176,7 @@
         "region": ""
       },
       "productStock": {
-        "P00-5": 15,
+        "P00-5": 12,
         "P-004": 10
       }
     }
@@ -147,7 +192,64 @@
     },
     "productStock": {}
   },
-  "invoices": [],
+  "invoices": [
+    {
+      "invoiceNumber": "F-1",
+      "date": "2025-12-21",
+      "paymentDueDate": "2025-12-21",
+      "customer": {
+        "name": "Rodrigo Delgado",
+        "identification": "0012365478963",
+        "phone": "0983489630",
+        "email": "m@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "P00-5",
+          "productName": "Pastilla de Frenos",
+          "quantity": 2,
+          "priceApplied": 12.30,
+          "lineTotal": 24.60
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 24.60,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 3.69,
+      "total": 28.29
+    },
+    {
+      "invoiceNumber": "F-2",
+      "date": "2025-12-21",
+      "paymentDueDate": "2025-12-21",
+      "customer": {
+        "name": "Pedro Martin",
+        "identification": "1245784512",
+        "phone": "0987451254",
+        "email": "pm@gmail.com",
+        "clientType": "PREMIUM"
+      },
+      "lines": [
+        {
+          "productId": "P00-5",
+          "productName": "Pastilla de Frenos",
+          "quantity": 1,
+          "priceApplied": 12.30,
+          "lineTotal": 12.30
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 12.30,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 1.85,
+      "total": 14.15
+    }
+  ],
   "returns": [],
   "taxRate": 0.15,
   "profitPercentage": 0,
