@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.233" tests="29" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.191" tests="19" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="24"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -60,33 +60,23 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="68.0"/>
   </properties>
-  <testcase name="testStreetName_PositiveCase" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testAddress_NullObject_ReturnsError" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.002"/>
-  <testcase name="testAddress_InvalidStreet_ReturnsError" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.013"/>
-  <testcase name="testAddress_CompleteAndCorrect_ReturnsNull" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.014"/>
-  <testcase name="testRegion_WithAccents_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.011"/>
-  <testcase name="testRegion_SimpleName_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.002"/>
-  <testcase name="testStreet_Empty_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.002"/>
-  <testcase name="testIsNonNegativeInteger_InvalidWithLetters" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.031"/>
-  <testcase name="testStreet_WithDot_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.002"/>
-  <testcase name="testStreet_NoNumber_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.008"/>
-  <testcase name="testStreet_ForbiddenDollarChar_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testRegion_WithEnie_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testIsTextOnly_InvalidName" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testStreet_OnlyNumbers_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testIsTextOnly_PositiveCase" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.007"/>
-  <testcase name="testRegion_CompositeName_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testGetAddressFormError_EmptyFields" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
-  <testcase name="testStreetName_InvalidWithNumbers" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testRegion_SpecialCharacters_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testIsTextOnly_InvalidRegion" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testRegion_Empty_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.007"/>
-  <testcase name="testStreet_NomenclatureFormat_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testStreet_ForbiddenPercentChar_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testIsNonNegativeInteger_PositiveCase" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testIsTextOnly_InvalidCountry" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
-  <testcase name="testRegion_WithNumbers_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testIsNonNegativeInteger_InvalidDecimal" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.002"/>
-  <testcase name="testStreet_WithHashSymbol_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testAddress_InvalidRegion_ReturnsError" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testPrices_TaxZero_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.069"/>
+  <testcase name="testPrices_TaxOverHundredPercent_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.002"/>
+  <testcase name="testPrices_NonNumericInput_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.012"/>
+  <testcase name="testPrices_NegativeProfit_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.001"/>
+  <testcase name="testPrices_VipEqualsProfit_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.007"/>
+  <testcase name="testPrices_VipOverHundredPercent_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.001"/>
+  <testcase name="testPrices_PremiumOverHundredPercent_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.001"/>
+  <testcase name="testPrices_StdDiscountGreaterThenPremium_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.002"/>
+  <testcase name="testPrices_ProfitJustBelowLimit_Valid" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.001"/>
+  <testcase name="testPrices_ProfitTooHigh_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.006"/>
+  <testcase name="testPrices_EmptyInput_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.001"/>
+  <testcase name="testPrices_ProfitExactLimit_Valid" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.001"/>
+  <testcase name="testPrices_PremiumDiscountGreaterThenVip_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.002"/>
+  <testcase name="testPrices_ZeroDiscount_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.001"/>
+  <testcase name="testPrices_VipDiscountGreaterThenProfit_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.008"/>
+  <testcase name="testPrices_PremiumEqualsVip_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.001"/>
+  <testcase name="testPrices_StandardEqualsPremium_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.001"/>
+  <testcase name="testPrices_StandardNegative_ReturnsError" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.001"/>
+  <testcase name="testPrices_ValidConfig_ReturnsNull" classname="ec.edu.espe.finvory.utils.PriceValidationTest" time="0.008"/>
 </testsuite>

@@ -146,6 +146,11 @@ public class FrmMainMenu extends javax.swing.JFrame {
         MnuAbout.setText("Acerca de");
 
         jMenuItem1.setText("Finvory");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         MnuAbout.add(jMenuItem1);
 
         jMenuBar1.add(MnuAbout);
@@ -240,6 +245,10 @@ public class FrmMainMenu extends javax.swing.JFrame {
         FrmSalesReport frmSales = new FrmSalesReport(this.controller); 
         frmSales.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        new FrmAbout(this, true).setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu MnuAbout;

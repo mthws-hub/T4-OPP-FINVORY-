@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: ec.edu.espe.finvory.utils.CompanyAccountTest
 -------------------------------------------------------------------------------
-Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.130 s -- in ec.edu.espe.finvory.utils.CompanyAccountTest
+Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.599 s -- in ec.edu.espe.finvory.utils.CompanyAccountTest

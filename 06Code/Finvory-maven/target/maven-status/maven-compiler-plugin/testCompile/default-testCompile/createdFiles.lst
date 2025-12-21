@@ -3,3 +3,4 @@ ec\edu\espe\finvory\utils\SupplierTest.class
 ec\edu\espe\finvory\utils\InventoryValidationTest.class
 ec\edu\espe\finvory\utils\CompanyAccountTest.class
 ec\edu\espe\finvory\utils\PersonalAccountTest.class
+ec\edu\espe\finvory\utils\PriceValidationTest.class
