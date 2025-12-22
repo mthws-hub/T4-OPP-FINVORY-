@@ -45,32 +45,50 @@ public class Database {
             .create();
 
     public FinvoryData loadCompanyData(String companyUsername) {
-        System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
+System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
+    FinvoryData cloudData = loadDataFromCloud(companyUsername);
 
-        FinvoryData cloudData = loadDataFromCloud(companyUsername);
+    if (cloudData != null) {
+        System.out.println("Datos descargados de MongoDB Atlas.");
+        System.out.println("    -> Inventarios: " + cloudData.getInventories().size());
+        System.out.println("    -> Productos: " + cloudData.getProducts().size());
+        System.out.println("    -> Facturas: " + cloudData.getInvoices().size());
 
-        if (cloudData != null) {
-            System.out.println("Datos descargados de MongoDB Atlas.");
-            System.out.println("    -> Inventarios: " + cloudData.getInventories().size());
-            System.out.println("    -> Productos: " + cloudData.getProducts().size());
-            System.out.println("    -> Facturas: " + cloudData.getInvoices().size());
+        saveCompanyData(cloudData, companyUsername);
+        return cloudData;
+    }
 
-            saveCompanyData(cloudData, companyUsername);
-            return cloudData;
+    System.out.println("No se pudo cargar de la nube. Usando datos locales.");
+    String folder = ROOT_DATA_FOLDER + File.separator + companyUsername;
+    FinvoryData localData = loadJson(folder);
+
+    for (Customer customer : loadCustomersCsv(folder)) {
+        boolean exists = false;
+        for (Customer customerdata : localData.getCustomers()) {
+            if (customerdata.getIdentification().equals(customer.getIdentification())) {
+                exists = true;
+                break;
+            }
         }
-
-        System.out.println("No se pudo cargar de la nube. Usando datos locales.");
-        String folder = ROOT_DATA_FOLDER + File.separator + companyUsername;
-        FinvoryData localData = loadJson(folder);
-
-        for (Customer customer : loadCustomersCsv(folder)) {
+        if (!exists) {
             localData.addCustomer(customer);
         }
-        for (Supplier supplier : loadSuppliersCsv(folder)) {
+    }
+
+    for (Supplier supplier : loadSuppliersCsv(folder)) {
+        boolean exists = false;
+        for (Supplier supplierData : localData.getSuppliers()) {
+            if (supplierData.getId1().equals(supplier.getId1())) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
             localData.addSupplier(supplier);
         }
+    }
 
-        return localData;
+    return localData;
     }
 
     private FinvoryData loadDataFromCloud(String username) {
