@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 /**
  *
  *
- * * @author Arelys, Refactored by Assistant
+ * * @author Arelys, The POOwer Rangers Of Programming
  */
 public class ValidationUtils {
 

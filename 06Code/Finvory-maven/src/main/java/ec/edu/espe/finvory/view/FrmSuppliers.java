@@ -5,12 +5,13 @@ import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Supplier;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Maryuri Quiña, @ESPE
+ * @author Maryuri Quiña, The POOwer Rangers Of Programming
  */
 public class FrmSuppliers extends javax.swing.JFrame {
 
@@ -41,16 +42,18 @@ public class FrmSuppliers extends javax.swing.JFrame {
     public void loadSupplierTable() {
         DefaultTableModel model = (DefaultTableModel) jTableSuppliers.getModel();
         model.setRowCount(0);
-        if (controller == null || controller.getData() == null) {
-            return;
-        }
-        for (Supplier supplier : controller.getData().getSuppliers()) {
-            model.addRow(new Object[]{
-                supplier.getId1(),
-                supplier.getFullName(),
-                supplier.getPhone(),
-                supplier.getEmail()
-            });
+        if (controller != null && controller.getData() != null) {
+            HashSet<String> addedRucs = new HashSet<>();
+            for (Supplier supplier : controller.getData().getSuppliers()) {
+                if (addedRucs.add(supplier.getId1())) {
+                    model.addRow(new Object[]{
+                        supplier.getId1(),
+                        supplier.getFullName(),
+                        supplier.getPhone(),
+                        supplier.getEmail()
+                    });
+                }
+            }
         }
     }
 
@@ -248,7 +251,7 @@ public class FrmSuppliers extends javax.swing.JFrame {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 loadSupplierTable();
-                setVisible(true); 
+                setVisible(true);
             }
         });
 

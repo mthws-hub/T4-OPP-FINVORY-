@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -29,7 +30,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     public FrmSaleInvoice() {
         initComponents();
         FinvoryApp.setIcon(this);
-        
+
     }
 
     public FrmSaleInvoice(FinvoryController controller) {
@@ -39,7 +40,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         initializeInvoiceData();
         setupFieldsState();
         FinvoryApp.setIcon(this);
-        
+
     }
 
     private void initializeInvoiceData() {
@@ -98,8 +99,39 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         updateTotals(lineTotal);
     }
 
+    public boolean removeProductFromCart(String productId) {
+        DefaultTableModel model = (DefaultTableModel) tabProductList.getModel();
+        int rowToRemove = -1;
+        BigDecimal lineTotalToRemove = BigDecimal.ZERO;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            Object idVal = model.getValueAt(i, 0);
+            if (idVal != null && idVal.toString().equals(productId)) {
+                rowToRemove = i;
+                Double value = (Double) model.getValueAt(i, 3);
+                lineTotalToRemove = BigDecimal.valueOf(value);
+                break;
+            }
+        }
+        if (rowToRemove == -1) {
+            return false;
+        }
+        model.removeRow(rowToRemove);
+        Iterator<Product> iterator = currentCart.keySet().iterator();
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (product.getId().equals(productId)) {
+                iterator.remove();
+                break;
+            }
+        }
+        updateTotals(lineTotalToRemove.negate());
+
+        return true;
+    }
+
     private void updateTotals(BigDecimal lineAmountToAdd) {
         subtotalVal = subtotalVal.add(lineAmountToAdd);
+        if (subtotalVal.compareTo(BigDecimal.ZERO) < 0) subtotalVal = BigDecimal.ZERO;
         BigDecimal taxRate = controller.getData().getTaxRate();
         taxVal = subtotalVal.multiply(taxRate).setScale(2, RoundingMode.HALF_UP);
         totalVal = subtotalVal.add(taxVal).setScale(2, RoundingMode.HALF_UP);
@@ -587,7 +619,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         boolean success = controller.handleNewSale(selectedCustomer, currentCart, payment);
 
         if (success) {
-            JOptionPane.showMessageDialog(this, "¡Venta registrada y guardada en la nube exitosamente!");
+            JOptionPane.showMessageDialog(this, "Venta registrada exitosamente");
             emptyFields();
             this.dispose();
         } else {

@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.List;
 
 /**
- * * @author Joseph Medina
+ * * @author Joseph Medina, The POOwer Rangers Of Programming
  */
 public class Database {
 
@@ -45,50 +45,50 @@ public class Database {
             .create();
 
     public FinvoryData loadCompanyData(String companyUsername) {
-System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
-    FinvoryData cloudData = loadDataFromCloud(companyUsername);
+        System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
+        FinvoryData cloudData = loadDataFromCloud(companyUsername);
 
-    if (cloudData != null) {
-        System.out.println("Datos descargados de MongoDB Atlas.");
-        System.out.println("    -> Inventarios: " + cloudData.getInventories().size());
-        System.out.println("    -> Productos: " + cloudData.getProducts().size());
-        System.out.println("    -> Facturas: " + cloudData.getInvoices().size());
+        if (cloudData != null) {
+            System.out.println("Datos descargados de MongoDB Atlas.");
+            System.out.println("    -> Inventarios: " + cloudData.getInventories().size());
+            System.out.println("    -> Productos: " + cloudData.getProducts().size());
+            System.out.println("    -> Facturas: " + cloudData.getInvoices().size());
 
-        saveCompanyData(cloudData, companyUsername);
-        return cloudData;
-    }
+            saveCompanyData(cloudData, companyUsername);
+            return cloudData;
+        }
 
-    System.out.println("No se pudo cargar de la nube. Usando datos locales.");
-    String folder = ROOT_DATA_FOLDER + File.separator + companyUsername;
-    FinvoryData localData = loadJson(folder);
+        System.out.println("No se pudo cargar de la nube. Usando datos locales.");
+        String folder = ROOT_DATA_FOLDER + File.separator + companyUsername;
+        FinvoryData localData = loadJson(folder);
 
-    for (Customer customer : loadCustomersCsv(folder)) {
-        boolean exists = false;
-        for (Customer customerdata : localData.getCustomers()) {
-            if (customerdata.getIdentification().equals(customer.getIdentification())) {
-                exists = true;
-                break;
+        for (Customer customer : loadCustomersCsv(folder)) {
+            boolean exists = false;
+            for (Customer customerdata : localData.getCustomers()) {
+                if (customerdata.getIdentification().equals(customer.getIdentification())) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                localData.addCustomer(customer);
             }
         }
-        if (!exists) {
-            localData.addCustomer(customer);
-        }
-    }
 
-    for (Supplier supplier : loadSuppliersCsv(folder)) {
-        boolean exists = false;
-        for (Supplier supplierData : localData.getSuppliers()) {
-            if (supplierData.getId1().equals(supplier.getId1())) {
-                exists = true;
-                break;
+        for (Supplier supplier : loadSuppliersCsv(folder)) {
+            boolean exists = false;
+            for (Supplier supplierData : localData.getSuppliers()) {
+                if (supplierData.getId1().equals(supplier.getId1())) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                localData.addSupplier(supplier);
             }
         }
-        if (!exists) {
-            localData.addSupplier(supplier);
-        }
-    }
 
-    return localData;
+        return localData;
     }
 
     private FinvoryData loadDataFromCloud(String username) {
@@ -98,18 +98,16 @@ System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
             MongoCollection<Document> prodCol = MongoDBConnection.getCollection("products");
             if (prodCol != null) {
                 for (Document doc : prodCol.find(Filters.eq("companyUsername", username))) {
-                    BigDecimal cost = BigDecimal.valueOf(doc.get("baseCostPrice") != null ? doc.getDouble("baseCostPrice") : 0.0);
+                    BigDecimal cost = BigDecimal.valueOf(getSafeDouble(doc, "baseCostPrice"));
                     data.addProduct(new Product(doc.getString("productId"), doc.getString("name"), doc.getString("description"), doc.getString("barcode"), cost, doc.getString("supplierId")));
                 }
             }
-
             MongoCollection<Document> cliCol = MongoDBConnection.getCollection("customers");
             if (cliCol != null) {
                 for (Document doc : cliCol.find(Filters.eq("companyUsername", username))) {
                     data.addCustomer(new Customer(doc.getString("name"), doc.getString("identification"), doc.getString("phone"), doc.getString("email"), doc.getString("clientType")));
                 }
             }
-
             MongoCollection<Document> supCol = MongoDBConnection.getCollection("suppliers");
             if (supCol != null) {
                 for (Document doc : supCol.find(Filters.eq("companyUsername", username))) {
@@ -118,7 +116,6 @@ System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
                     data.addSupplier(s);
                 }
             }
-
             MongoCollection<Document> invCol = MongoDBConnection.getCollection("invoices");
             if (invCol != null) {
                 for (Document doc : invCol.find(Filters.eq("companyUsername", username))) {
@@ -134,11 +131,10 @@ System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
                     List<Document> linesDoc = (List<Document>) doc.get("lines");
                     if (linesDoc != null) {
                         for (Document l : linesDoc) {
-                            lines.add(new InvoiceLineSim(l.getString("productId"), l.getString("productName"), l.getInteger("quantity"), BigDecimal.valueOf(l.getDouble("price"))));
+                            lines.add(new InvoiceLineSim(l.getString("productId"), l.getString("productName"), l.getInteger("quantity"), BigDecimal.valueOf(getSafeDouble(l, "price"))));
                         }
                     }
-
-                    InvoiceSim invoice = new InvoiceSim(id, date, date, customer, lines, BigDecimal.valueOf(doc.getDouble("tax")), BigDecimal.ZERO);
+                    InvoiceSim invoice = new InvoiceSim(id, date, date, customer, lines, BigDecimal.valueOf(getSafeDouble(doc, "tax")), BigDecimal.ZERO);
                     invoice.complete();
                     data.addInvoice(invoice);
                 }
@@ -146,6 +142,7 @@ System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
             return data;
         } catch (Exception e) {
             System.err.println("Error en Database: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
@@ -296,4 +293,18 @@ System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
         }
     }
 
+    private double getSafeDouble(org.bson.Document doc, String key) {
+        if (doc == null || !doc.containsKey(key) || doc.get(key) == null) {
+            return 0.0;
+        }
+        Object value = doc.get(key);
+        if (value instanceof Number) {
+            return ((Number) value).doubleValue();
+        }
+        try {
+            return Double.parseDouble(value.toString());
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
 }

@@ -1,20 +1,4 @@
 {
-  "companyInfo": {
-    "name": "Frico Autopartes S.A.",
-    "address": {
-      "country": "Ecuador",
-      "city": "Quito",
-      "street": "Av. 10 de Agosto N45",
-      "zipCode": "170504",
-      "streetNumber": "N45-23",
-      "region": "Pichincha"
-    },
-    "ruc": "1790011223001",
-    "phone": "022445566",
-    "email": "admin@frico.com",
-    "username": "adminFrico",
-    "password": "123"
-  },
   "customers": [
     {
       "name": "Rodrigo Delgado",
@@ -135,52 +119,7 @@
       "description": "buenos productos"
     }
   ],
-  "inventories": [
-    {
-      "name": "Bodega Sur",
-      "address": {
-        "country": "Ecuador",
-        "city": "Quito",
-        "street": "Azcasubi",
-        "zipCode": "",
-        "streetNumber": "",
-        "region": ""
-      },
-      "productStock": {
-        "DSSA": 50,
-        "PkD 200": 4
-      }
-    },
-    {
-      "name": "Central",
-      "address": {
-        "country": "Colombia",
-        "city": "Cali",
-        "street": "Avenida Principal",
-        "zipCode": "",
-        "streetNumber": "",
-        "region": ""
-      },
-      "productStock": {
-        "P001-4": 5
-      }
-    },
-    {
-      "name": "Bodega Norte",
-      "address": {
-        "country": "Ecuador",
-        "city": "Quito",
-        "street": "Av Americas",
-        "zipCode": "",
-        "streetNumber": "",
-        "region": ""
-      },
-      "productStock": {
-        "P00-5": 12,
-        "P-004": 10
-      }
-    }
-  ],
+  "inventories": [],
   "obsoleteInventory": {
     "address": {
       "country": "Ecuador",
@@ -195,8 +134,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-12-21",
-      "paymentDueDate": "2025-12-21",
+      "date": "2025-12-20",
+      "paymentDueDate": "2025-12-20",
       "customer": {
         "name": "Rodrigo Delgado",
         "identification": "0012365478963",
@@ -209,22 +148,22 @@
           "productId": "P00-5",
           "productName": "Pastilla de Frenos",
           "quantity": 2,
-          "priceApplied": 12.30,
-          "lineTotal": 24.60
+          "priceApplied": 0.0,
+          "lineTotal": 0.00
         }
       ],
       "status": "COMPLETED",
-      "subtotal": 24.60,
+      "subtotal": 0.00,
       "discountRate": 0,
       "discountAmount": 0.00,
       "taxRate": 0.15,
-      "taxAmount": 3.69,
-      "total": 28.29
+      "taxAmount": 0.00,
+      "total": 0.00
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-12-21",
-      "paymentDueDate": "2025-12-21",
+      "date": "2025-12-20",
+      "paymentDueDate": "2025-12-20",
       "customer": {
         "name": "Pedro Martin",
         "identification": "1245784512",
@@ -237,17 +176,45 @@
           "productId": "P00-5",
           "productName": "Pastilla de Frenos",
           "quantity": 1,
-          "priceApplied": 12.30,
-          "lineTotal": 12.30
+          "priceApplied": 0.0,
+          "lineTotal": 0.00
         }
       ],
       "status": "COMPLETED",
-      "subtotal": 12.30,
+      "subtotal": 0.00,
       "discountRate": 0,
       "discountAmount": 0.00,
       "taxRate": 0.15,
-      "taxAmount": 1.85,
-      "total": 14.15
+      "taxAmount": 0.00,
+      "total": 0.00
+    },
+    {
+      "invoiceNumber": "FFRI-003",
+      "date": "2025-12-20",
+      "paymentDueDate": "2025-12-20",
+      "customer": {
+        "name": "Pedro Paz",
+        "identification": "0014785236987",
+        "phone": "0994896354",
+        "email": "k@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "P001-4",
+          "productName": "Producto Prueb",
+          "quantity": 2,
+          "priceApplied": 0.0,
+          "lineTotal": 0.00
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 0.00,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 0.00,
+      "total": 0.00
     }
   ],
   "returns": [],

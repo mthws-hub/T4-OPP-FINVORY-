@@ -360,25 +360,14 @@ public class FinvoryController {
         if (findCustomer(id) != null) {
             return false;
         }
-
         Customer newCustomer = new Customer(name, id, phone, email, type);
-
-        // Obtenemos la lista actual de clientes
         List<Customer> currentList = data.getCustomers();
 
         try {
-            // Intentamos añadir. Si la lista viene de Mongo y está bloqueada, saltará al catch
             currentList.add(newCustomer);
         } catch (UnsupportedOperationException e) {
-            // SI ESTÁ BLOQUEADA:
-            // 1. Creamos una nueva lista que SÍ se puede editar
             List<Customer> mutableList = new ArrayList<>(currentList);
             mutableList.add(newCustomer);
-
-            // 2. Como NO tienes data.setCustomers, lo que haremos es vaciar la lista original 
-            // y pasarle los elementos de la nueva.
-            // Nota: Si currentList es totalmente inmutable (List.of), esto también fallará
-            // y la única solución es agregar el setter en FinvoryData.
             try {
                 currentList.clear();
                 currentList.addAll(mutableList);
@@ -387,7 +376,6 @@ public class FinvoryController {
                 return false;
             }
         }
-
         saveData();
         return true;
     }
@@ -418,38 +406,59 @@ public class FinvoryController {
         return null;
     }
 
-    public boolean handleNewSale(Customer customer, HashMap<Product, HashMap<Inventory, Integer>> cart, String payment) {
-        if (cart.isEmpty() || customer == null) {
+    public boolean handleNewSale(Customer customer, HashMap<Product, HashMap<Inventory, Integer>> cart, String paymentMethod) {
+        if (cart == null || cart.isEmpty() || customer == null) {
             return false;
         }
 
-        BigDecimal profitPercentage = data.getProfitPercentage() != null ? data.getProfitPercentage() : BigDecimal.ZERO;
-        BigDecimal discountStandard = data.getDiscountStandard() != null ? data.getDiscountStandard() : BigDecimal.ZERO;
-        BigDecimal discountPremium = data.getDiscountPremium() != null ? data.getDiscountPremium() : BigDecimal.ZERO;
-        BigDecimal discountVip = data.getDiscountVip() != null ? data.getDiscountVip() : BigDecimal.ZERO;
-        BigDecimal taxRate = data.getTaxRate() != null ? data.getTaxRate() : DEFAULT_TAX_RATE;
-        BigDecimal discountRate = customer.getDiscountRate(discountStandard, discountPremium, discountVip);
-
-        ArrayList<InvoiceLineSim> lines = new ArrayList<>();
-        for (Map.Entry<Product, HashMap<Inventory, Integer>> entry : cart.entrySet()) {
-            Product product = entry.getKey();
-            for (Map.Entry<Inventory, Integer> stockEntry : entry.getValue().entrySet()) {
-                Inventory inventory = stockEntry.getKey();
-                int quantity = stockEntry.getValue();
-                inventory.removeStock(product.getId(), quantity);
-                BigDecimal price = product.getPrice(customer.getClientType(), profitPercentage, discountStandard, discountPremium, discountVip);
-                lines.add(new InvoiceLineSim(product.getId(), product.getName(), quantity, price));
+        try {
+            String invoiceId = generateNextInvoiceId();
+            LocalDate date = LocalDate.now();
+            BigDecimal taxRate = data.getTaxRate();
+            BigDecimal discountRate = BigDecimal.ZERO;
+            if ("VIP".equalsIgnoreCase(customer.getClientType())) {
+                discountRate = data.getDiscountVip();
+            } else if ("PREMIUM".equalsIgnoreCase(customer.getClientType())) {
+                discountRate = data.getDiscountPremium();
+            } else {
+                discountRate = data.getDiscountStandard();
             }
-        }
-        String invoiceId = "F-" + (data.getInvoices().size() + 1);
-        InvoiceSim invoice = new InvoiceSim(invoiceId, LocalDate.now(), LocalDate.now(), customer, lines, taxRate, discountRate);
-        if (!payment.equals("CHEQUE POSTFECHADO")) {
-            invoice.complete();
-        }
-        data.addInvoice(invoice);
+            ArrayList<InvoiceLineSim> lines = new ArrayList<>();
+            for (Map.Entry<Product, HashMap<Inventory, Integer>> entry : cart.entrySet()) {
+                Product product = entry.getKey();
+                HashMap<Inventory, Integer> inventoryMap = entry.getValue();
 
-        saveData();
-        return true;
+                for (Map.Entry<Inventory, Integer> invEntry : inventoryMap.entrySet()) {
+                    Inventory sourceInventory = invEntry.getKey();
+                    int quantityToSell = invEntry.getValue();
+                    int currentStock = sourceInventory.getStock(product.getId());
+                    if (currentStock < quantityToSell) {
+                        System.err.println("Error crítico: Stock insuficiente en " + sourceInventory.getName()
+                                + " al momento de guardar. Stock: " + currentStock + ", Solicitado: " + quantityToSell);
+                        return false;
+                    }
+                    int newStock = currentStock - quantityToSell;
+                    sourceInventory.setStock(product.getId(), newStock);
+                    BigDecimal unitPrice = product.getPrice(customer.getClientType(),
+                            data.getProfitPercentage(),
+                            data.getDiscountStandard(),
+                            data.getDiscountPremium(),
+                            data.getDiscountVip());
+                    InvoiceLineSim line = new InvoiceLineSim(product, quantityToSell, unitPrice);
+                    lines.add(line);
+                }
+            }
+            InvoiceSim newInvoice = new InvoiceSim(invoiceId, date, date, customer, lines, taxRate, discountRate);
+            newInvoice.complete();
+            data.getInvoices().add(newInvoice);
+            saveData();
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public float[] getDashboardData() {

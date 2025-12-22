@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Maryuri Quiña, @ESPE
+ * @author Maryuri Quiña, The POOwer Rangers Of Programming
  */
 public class FrmPrices extends javax.swing.JFrame {
 
