@@ -33,21 +33,21 @@ public class FrmMainMenu extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
         itemQuit = new javax.swing.JMenuItem();
-        itemExit = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         MnuCustomer = new javax.swing.JMenuItem();
         itemInventories = new javax.swing.JMenuItem();
         itemSuppliers = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        itemPrice = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         cmbSalesReport = new javax.swing.JMenu();
-        itemReportSale = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        itemNewSale = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         MnuAbout = new javax.swing.JMenu();
-        itemAbout = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -64,13 +64,13 @@ public class FrmMainMenu extends javax.swing.JFrame {
         });
         jMenu4.add(itemQuit);
 
-        itemExit.setText("Cerrar Programa");
-        itemExit.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem2.setText("Cerrar Programa");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemExitActionPerformed(evt);
+                jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu4.add(itemExit);
+        jMenu4.add(jMenuItem2);
 
         jMenuBar1.add(jMenu4);
 
@@ -104,23 +104,23 @@ public class FrmMainMenu extends javax.swing.JFrame {
 
         jMenu2.setText("Administracion");
 
-        itemPrice.setText("Precios");
-        itemPrice.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem5.setText("Precios");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemPriceActionPerformed(evt);
+                jMenuItem5ActionPerformed(evt);
             }
         });
-        jMenu2.add(itemPrice);
+        jMenu2.add(jMenuItem5);
 
         cmbSalesReport.setText("Reportes");
 
-        itemReportSale.setText("Reporte de Ventas");
-        itemReportSale.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem3.setText("Reporte de Ventas");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemReportSaleActionPerformed(evt);
+                jMenuItem3ActionPerformed(evt);
             }
         });
-        cmbSalesReport.add(itemReportSale);
+        cmbSalesReport.add(jMenuItem3);
 
         jMenuItem4.setText("Reporte de Clientes");
         cmbSalesReport.add(jMenuItem4);
@@ -134,25 +134,25 @@ public class FrmMainMenu extends javax.swing.JFrame {
 
         jMenu3.setText("Ventas");
 
-        itemNewSale.setText("Nueva Venta");
-        itemNewSale.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem6.setText("Nueva Venta");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemNewSaleActionPerformed(evt);
+                jMenuItem6ActionPerformed(evt);
             }
         });
-        jMenu3.add(itemNewSale);
+        jMenu3.add(jMenuItem6);
 
         jMenuBar1.add(jMenu3);
 
         MnuAbout.setText("Acerca de");
 
-        itemAbout.setText("Finvory");
-        itemAbout.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem1.setText("Finvory");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemAboutActionPerformed(evt);
+                jMenuItem1ActionPerformed(evt);
             }
         });
-        MnuAbout.add(itemAbout);
+        MnuAbout.add(jMenuItem1);
 
         jMenuBar1.add(MnuAbout);
 
@@ -200,7 +200,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_itemSuppliersActionPerformed
 
-    private void itemPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPriceActionPerformed
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         FrmPrices prices = new FrmPrices(this.controller);
         prices.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent e) {
@@ -209,7 +209,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
         });
         prices.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_itemPriceActionPerformed
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void MnuCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnuCustomerActionPerformed
         if (this.controller == null) {
@@ -227,7 +227,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_MnuCustomerActionPerformed
 
-    private void itemNewSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNewSaleActionPerformed
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         FrmSaleInvoice sale = new FrmSaleInvoice(controller);
         sale.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent e) {
@@ -236,45 +236,39 @@ public class FrmMainMenu extends javax.swing.JFrame {
         });
         sale.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_itemNewSaleActionPerformed
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
-    private void itemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemExitActionPerformed
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_itemExitActionPerformed
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void itemReportSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemReportSaleActionPerformed
-        FrmSalesReport report = new FrmSalesReport(controller);
-        report.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmMainMenu.this.setVisible(true);
-            }
-        });
-        report.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_itemReportSaleActionPerformed
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        FrmSalesReport frmSales = new FrmSalesReport(this.controller); 
+        frmSales.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void itemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAboutActionPerformed
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         new FrmAbout(this, true).setVisible(true);
-    }//GEN-LAST:event_itemAboutActionPerformed
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu MnuAbout;
     private javax.swing.JMenuItem MnuCustomer;
     private javax.swing.JMenu cmbSalesReport;
-    private javax.swing.JMenuItem itemAbout;
-    private javax.swing.JMenuItem itemExit;
     private javax.swing.JMenuItem itemInventories;
-    private javax.swing.JMenuItem itemNewSale;
-    private javax.swing.JMenuItem itemPrice;
     private javax.swing.JMenuItem itemQuit;
-    private javax.swing.JMenuItem itemReportSale;
     private javax.swing.JMenuItem itemSuppliers;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     // End of variables declaration//GEN-END:variables

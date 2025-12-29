@@ -255,31 +255,7 @@ public class FrmEditProductListOnInvoice extends JDialog {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        if (foundProduct == null) {
-            searchProduct();
-            if (foundProduct == null) {
-                return;
-            }
-        }
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de eliminar el producto '" + foundProduct.getName() + "' de la factura actual?",
-                "Confirmar Eliminación",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            if (parentInvoice != null) {
-                boolean removed = parentInvoice.removeProductFromCart(foundProduct.getId());
-                if (removed) {
-                    JOptionPane.showMessageDialog(this, "Producto eliminado exitosamente de la factura.");
-                    emptyFields();
-                    foundProduct = null;
-                    txtId.requestFocus();
-                } else {
-                    JOptionPane.showMessageDialog(this, "El producto no se encuentra en la lista de la factura.", "No Encontrado", JOptionPane.WARNING_MESSAGE);
-                }
-            }
-        }
+        this.dispose();
     }//GEN-LAST:event_btnDeleteActionPerformed
     private void emptyFields() {
         txtId.setText("");

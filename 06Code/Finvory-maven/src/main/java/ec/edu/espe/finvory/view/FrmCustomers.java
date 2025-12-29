@@ -5,13 +5,12 @@ import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Supplier;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.HashSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Arelys Otavalo, The POOwer Rangers Of Programming
+ * @author Arelys Otavalo
  */
 public class FrmCustomers extends javax.swing.JFrame {
 
@@ -44,17 +43,15 @@ public class FrmCustomers extends javax.swing.JFrame {
         model.setRowCount(0);
 
         if (controller != null && controller.getData() != null) {
-            HashSet<String> addedIds = new HashSet<>();
+
             for (ec.edu.espe.finvory.model.Customer customer : controller.getData().getCustomers()) {
-                if (addedIds.add(customer.getIdentification())) {
-                    model.addRow(new Object[]{
-                        customer.getIdentification(),
-                        customer.getName(),
-                        customer.getEmail(),
-                        customer.getPhone(),
-                        customer.getClientType()
-                    });
-                }
+                model.addRow(new Object[]{
+                    customer.getIdentification(),
+                    customer.getName(),
+                    customer.getEmail(),
+                    customer.getPhone(),
+                    customer.getClientType()
+                });
             }
         }
     }
@@ -294,7 +291,7 @@ public class FrmCustomers extends javax.swing.JFrame {
             boolean eliminado = controller.handleDeleteCustomerGUI(id);
             if (eliminado) {
                 JOptionPane.showMessageDialog(this, "Cliente eliminado exitosamente.");
-                loadCustomerTable();
+                loadCustomerTable(); 
             } else {
                 JOptionPane.showMessageDialog(this, "Error: No se pudo eliminar el cliente.", "Error", JOptionPane.ERROR_MESSAGE);
             }

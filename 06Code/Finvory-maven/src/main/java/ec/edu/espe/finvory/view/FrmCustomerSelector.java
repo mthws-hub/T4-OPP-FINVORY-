@@ -3,7 +3,6 @@ package ec.edu.espe.finvory.view;
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.model.Customer;
 import java.util.ArrayList;
-import java.util.HashSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -34,17 +33,14 @@ public class FrmCustomerSelector extends javax.swing.JDialog {
     private void loadTable() {
         DefaultTableModel model = (DefaultTableModel) tabCustomers.getModel();
         model.setRowCount(0);
-        HashSet<String> addedNames = new HashSet();
         for (Customer customer : customers) {
-            if (addedNames.add(customer.getIdentification())) {
-                model.addRow(new Object[]{
-                    customer.getName(),
-                    customer.getIdentification(),
-                    customer.getPhone(),
-                    customer.getEmail(),
-                    customer.getClientType()
-                });
-            }
+            model.addRow(new Object[]{
+                customer.getName(),
+                customer.getIdentification(),
+                customer.getPhone(),
+                customer.getEmail(),
+                customer.getClientType()
+            });
         }
     }
 

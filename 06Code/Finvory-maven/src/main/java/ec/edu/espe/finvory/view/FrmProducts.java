@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Maryuri Quiña, The POOwer Rangers Of Programming
+ * @author Maryuri Quiña, @ESPE
  */
 public class FrmProducts extends javax.swing.JFrame {
 

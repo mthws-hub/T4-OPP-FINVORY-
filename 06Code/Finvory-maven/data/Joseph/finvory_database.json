@@ -1,20 +1,4 @@
 {
-  "companyInfo": {
-    "name": "McDonalds",
-    "address": {
-      "country": "Ecuador",
-      "city": "QUITO",
-      "street": "Solanda",
-      "zipCode": "",
-      "streetNumber": "",
-      "region": ""
-    },
-    "ruc": "0011751774793",
-    "phone": "0963514785",
-    "email": "joseph3elcrac@gmail.com",
-    "username": "Joseph",
-    "password": "123"
-  },
   "customers": [
     {
       "name": "Sebastian",
@@ -31,18 +15,11 @@
       "clientType": "PREMIUM"
     },
     {
-      "name": "Sebastian",
-      "identification": "0018988987887",
-      "phone": "0976789870",
-      "email": "sebas@gmail.com",
-      "clientType": "STANDARD"
-    },
-    {
-      "name": "Olga",
-      "identification": "0017654542312",
-      "phone": "0976787769",
-      "email": "olga@gmail.com",
-      "clientType": "PREMIUM"
+      "name": "Jessenia Sánchez",
+      "identification": "0011311194383",
+      "phone": "0997393921",
+      "email": "jecka@gmail.com",
+      "clientType": "VIP"
     }
   ],
   "products": [
@@ -79,14 +56,6 @@
       "phone": "0963514785",
       "email": "elbicho@gmail.com",
       "description": "Noooo"
-    },
-    {
-      "fullName": "Cristiano Ronaldo dos Santos Aveiro",
-      "id1": "1254784513",
-      "id2": "2855",
-      "phone": "0963514785",
-      "email": "elbicho@gmail.com",
-      "description": "Noooo"
     }
   ],
   "inventories": [
@@ -102,8 +71,7 @@
       },
       "productStock": {
         "MP14": 45,
-        "ARM-001": 9,
-        "ARM-002": 5
+        "ARM-001": 7
       }
     },
     {
@@ -135,8 +103,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-12-21",
-      "paymentDueDate": "2025-12-21",
+      "date": "2025-12-19",
+      "paymentDueDate": "2025-12-19",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -149,7 +117,7 @@
           "productId": "ARM-001",
           "productName": "AK-47",
           "quantity": 1,
-          "priceApplied": 150.00,
+          "priceApplied": 150.0,
           "lineTotal": 150.00
         }
       ],
@@ -163,8 +131,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-12-21",
-      "paymentDueDate": "2025-12-21",
+      "date": "2025-12-19",
+      "paymentDueDate": "2025-12-19",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -177,14 +145,14 @@
           "productId": "ARM-002",
           "productName": "HK G36",
           "quantity": 1,
-          "priceApplied": 200.00,
+          "priceApplied": 200.0,
           "lineTotal": 200.00
         },
         {
           "productId": "ARM-001",
           "productName": "AK-47",
           "quantity": 2,
-          "priceApplied": 150.00,
+          "priceApplied": 150.0,
           "lineTotal": 300.00
         }
       ],
@@ -195,12 +163,47 @@
       "taxRate": 0.15,
       "taxAmount": 75.00,
       "total": 575.00
+    },
+    {
+      "invoiceNumber": "F-3",
+      "date": "2025-12-19",
+      "paymentDueDate": "2025-12-19",
+      "customer": {
+        "name": "Sebastian",
+        "identification": "0018988987887",
+        "phone": "0976789870",
+        "email": "sebas@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "ARM-002",
+          "productName": "HK G36",
+          "quantity": 5,
+          "priceApplied": 200.0,
+          "lineTotal": 1000.00
+        },
+        {
+          "productId": "ARM-001",
+          "productName": "AK-47",
+          "quantity": 2,
+          "priceApplied": 150.0,
+          "lineTotal": 300.00
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 1300.00,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 195.00,
+      "total": 1495.00
     }
   ],
   "returns": [],
   "taxRate": 0.15,
-  "profitPercentage": 0,
-  "discountStandard": 0,
-  "discountPremium": 0,
-  "discountVip": 0
+  "profitPercentage": 0.0,
+  "discountStandard": 0.0,
+  "discountPremium": 0.0,
+  "discountVip": 0.0
 }

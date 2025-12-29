@@ -12,6 +12,33 @@ import java.util.Map;
 
 public class MongoDataExporter {
 
+    /**
+     * Exporta TODOS los datos de una compañía a MongoDB (reemplazo total por companyUsername).
+     *
+     * Pensada para ser llamada desde {@code ec.edu.espe.finvory.model.Database}.
+     * No traga errores: si algo falla, lanza excepción para que Database marque "pendiente".
+     */
+    public static void exportCompanyData(String companyUsername, FinvoryData data, MongoDatabase mongoDatabase) {
+        if (mongoDatabase == null) {
+            throw new IllegalStateException("MongoDatabase es null");
+        }
+        if (!isDatabaseOnline(mongoDatabase)) {
+            throw new IllegalStateException("Sin conexión a MongoDB");
+        }
+
+        CompanyAccount account = (data != null) ? data.getCompanyInfo() : null;
+        exportCompanyInternal(companyUsername, account, data, mongoDatabase);
+    }
+
+    private static boolean isDatabaseOnline(MongoDatabase db) {
+        try {
+            db.runCommand(new Document("ping", 1));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private static final String ENV_URI_NAME = "MONGODB_URI";
     private static final String DATABASE_NAME = "FinvoryDB";
 
@@ -23,7 +50,7 @@ public class MongoDataExporter {
         }
 
         MongoDBConnection connection = new MongoDBConnection(connectionString, DATABASE_NAME);
-        MongoDatabase mongoDatabase = connection.getDatabase();
+        MongoDatabase mongoDatabase = connection.getDatabaseInstance();
 
         if (mongoDatabase == null) {
             System.err.println("Error: No se pudo obtener la base de datos después de la conexión.");
@@ -39,7 +66,7 @@ public class MongoDataExporter {
         for (CompanyAccount companyAccount : systemUsers.getCompanyAccounts()) {
             String companyUsername = companyAccount.getUsername();
             FinvoryData data = localDatabase.loadCompanyData(companyUsername);
-            exportCompanyInternal(companyAccount, data, mongoDatabase);
+            exportCompanyInternal(companyUsername, companyAccount, data, mongoDatabase);
         }
 
         connection.close();
@@ -76,12 +103,12 @@ public class MongoDataExporter {
     public static void exportCompanyData(String companyUsername, FinvoryData data, CompanyAccount companyAccount) {
         ec.edu.espe.finvory.mongo.MongoDBConnection conn = ec.edu.espe.finvory.FinvoryApp.getMongoDBConnection();
 
-        if (conn == null || conn.getDatabase() == null) {
+        if (conn == null || conn.getDatabaseInstance() == null) {
             System.err.println("ERROR: La conexión a MongoDB no está activa.");
             return;
         }
 
-        MongoDatabase mongoDatabase = conn.getDatabase();
+        MongoDatabase mongoDatabase = conn.getDatabaseInstance();
 
         exportCompanyInfo(companyUsername, companyAccount, data, mongoDatabase);
         exportCustomers(companyUsername, data.getCustomers(), mongoDatabase);
@@ -111,10 +138,10 @@ public class MongoDataExporter {
         }
     }
 
-    private static void exportCompanyInternal(CompanyAccount companyAccount, FinvoryData data, MongoDatabase mongoDatabase) {
-        String companyUsername = companyAccount.getUsername();
-
-        exportCompanyInfo(companyUsername, companyAccount, data, mongoDatabase);
+    private static void exportCompanyInternal(String companyUsername, CompanyAccount companyAccount, FinvoryData data, MongoDatabase mongoDatabase) {
+        if (companyAccount != null) {
+            exportCompanyInfo(companyUsername, companyAccount, data, mongoDatabase);
+        }
         exportCustomers(companyUsername, data.getCustomers(), mongoDatabase);
         exportSuppliers(companyUsername, data.getSuppliers(), mongoDatabase);
         exportProducts(companyUsername, data.getProducts(), mongoDatabase);

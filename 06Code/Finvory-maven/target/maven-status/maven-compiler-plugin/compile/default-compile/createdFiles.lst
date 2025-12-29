@@ -16,7 +16,6 @@ ec\edu\espe\finvory\view\FrmCustomers$6.class
 ec\edu\espe\finvory\view\FrmCustomers.class
 ec\edu\espe\finvory\model\AdminDetail.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$1.class
-ec\edu\espe\finvory\view\FrmAddNewProduct$4.class
 ec\edu\espe\finvory\view\FrmProducts$3.class
 ec\edu\espe\finvory\model\ProductSold.class
 ec\edu\espe\finvory\view\FrmAddNewSupplier$3.class
@@ -137,7 +136,6 @@ ec\edu\espe\finvory\view\FrmPrices$2.class
 ec\edu\espe\finvory\view\FrmPrices.class
 ec\edu\espe\finvory\model\FinvoryData.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$4.class
-ec\edu\espe\finvory\view\FrmMainMenu$15.class
 ec\edu\espe\finvory\model\SystemUsers.class
 ec\edu\espe\finvory\view\FrmInventories$1.class
 ec\edu\espe\finvory\view\FrmProducts$4.class

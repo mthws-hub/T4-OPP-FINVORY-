@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Maryuri Quiña, The POOwer Rangers Of Programming
+ * @author Maryuri Quiña, @ESPE
  */
 public class FrmAddNewProduct extends javax.swing.JFrame {
 
@@ -132,12 +132,6 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel9.setText("Seleccione el inventario para el stock inicial:");
-
-        cmbProductSupplier.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbProductSupplierActionPerformed(evt);
-            }
-        });
 
         jScrollPane5.setViewportView(txtDescription);
 
@@ -422,10 +416,6 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
     private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIDActionPerformed
-
-    private void cmbProductSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProductSupplierActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbProductSupplierActionPerformed
     private void setupFormMode() {
         if (productIdToEdit != null) {
             jLabel1.setText("EDITAR PRODUCTO");
@@ -445,7 +435,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         cmbProductSupplier.removeAllItems();
         cmbProductSupplier.addItem("Seleccione Proveedor...");
         if (controller.getData() != null) {
-            HashSet<String> added = new HashSet<>(); //this is for not duplicate data (HashSet)
+            HashSet<String> added = new HashSet<>();
             for (Supplier s : controller.getSuppliers()) {
                 if (added.add(s.getId1())) {
                     cmbProductSupplier.addItem(s.getFullName() + " (ID: " + s.getId1() + ")");
