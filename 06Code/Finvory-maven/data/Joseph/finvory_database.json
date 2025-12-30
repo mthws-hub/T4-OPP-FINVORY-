@@ -1,4 +1,20 @@
 {
+  "companyInfo": {
+    "name": "McDonalds",
+    "address": {
+      "country": "Ecuador",
+      "city": "QUITO",
+      "street": "Solanda",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "ruc": "0011751774793",
+    "phone": "0963514785",
+    "email": "joseph3elcrac@gmail.com",
+    "username": "Joseph",
+    "password": "123"
+  },
   "customers": [
     {
       "name": "Sebastian",
@@ -71,7 +87,8 @@
       },
       "productStock": {
         "MP14": 45,
-        "ARM-001": 7
+        "ARM-001": 9,
+        "ARM-002": 3
       }
     },
     {
@@ -85,7 +102,7 @@
         "region": ""
       },
       "productStock": {
-        "P004": 45
+        "P004": 49
       }
     }
   ],
@@ -98,13 +115,17 @@
       "streetNumber": "",
       "region": ""
     },
-    "productStock": {}
+    "productStock": {
+      "P004": 10,
+      "ARM-001": 13,
+      "ARM-002": 12
+    }
   },
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-12-19",
-      "paymentDueDate": "2025-12-19",
+      "date": "2025-12-06",
+      "paymentDueDate": "2025-12-06",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -131,8 +152,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-12-19",
-      "paymentDueDate": "2025-12-19",
+      "date": "2025-12-06",
+      "paymentDueDate": "2025-12-06",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -166,8 +187,8 @@
     },
     {
       "invoiceNumber": "F-3",
-      "date": "2025-12-19",
-      "paymentDueDate": "2025-12-19",
+      "date": "2025-12-06",
+      "paymentDueDate": "2025-12-06",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -200,7 +221,60 @@
       "total": 1495.00
     }
   ],
-  "returns": [],
+  "returns": [
+    {
+      "product": {
+        "id": "ARM-001",
+        "name": "AK-47",
+        "description": "Balas de alto calibre las favoritas de yussepe",
+        "barcode": "1452369874521",
+        "baseCostPrice": 150.00,
+        "supplierId": "1254784513"
+      },
+      "quantity": 1,
+      "reason": "Defectuoso",
+      "returnDate": "2025-12-30"
+    },
+    {
+      "product": {
+        "id": "ARM-002",
+        "name": "HK G36",
+        "description": "5.56x45mm",
+        "barcode": "1269754126984",
+        "baseCostPrice": 200.00,
+        "supplierId": "1254784513"
+      },
+      "quantity": 1,
+      "reason": "Defectuoso",
+      "returnDate": "2025-12-30"
+    },
+    {
+      "product": {
+        "id": "ARM-002",
+        "name": "HK G36",
+        "description": "5.56x45mm",
+        "barcode": "1269754126984",
+        "baseCostPrice": 200.00,
+        "supplierId": "1254784513"
+      },
+      "quantity": 4,
+      "reason": "Compra Incorrecta",
+      "returnDate": "2025-12-30"
+    },
+    {
+      "product": {
+        "id": "P004",
+        "name": "Skar",
+        "description": "No description",
+        "barcode": "12121212221",
+        "baseCostPrice": 12.00,
+        "supplierId": "1254784513"
+      },
+      "quantity": 4,
+      "reason": "Compra Incorrecta",
+      "returnDate": "2025-12-30"
+    }
+  ],
   "taxRate": 0.15,
   "profitPercentage": 0.0,
   "discountStandard": 0.0,

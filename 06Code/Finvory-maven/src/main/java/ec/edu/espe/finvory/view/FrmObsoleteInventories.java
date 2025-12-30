@@ -4,26 +4,28 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Inventory;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
 public class FrmObsoleteInventories extends JDialog {
-    
+
     private FinvoryController controller;
     private Inventory specificInventory;
-    
-    /**
-     * Creates new form FrmObsoleteInventories
-     */
+
     public FrmObsoleteInventories(java.awt.Frame parent, boolean modal, FinvoryController controller) {
-        super(parent,modal);
+        super(parent, modal);
         this.controller = controller;
         initComponents();
         this.setLocationRelativeTo(null);
-        
+
+        loadObsoleteTable();
+
     }
-    
+
     private FrmProductReturns searchProductReturnsWindows;
     private FrmReassignedProduct searchReassignedProductWindows;
 
@@ -42,19 +44,19 @@ public class FrmObsoleteInventories extends JDialog {
         jLabel2 = new javax.swing.JLabel();
         txtProductAddress = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabProduct = new javax.swing.JTable();
+        tabObsoleteProduct = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtObsoleteStock = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnFindProduct = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        mnuInventories = new javax.swing.JMenu();
         itemInventories = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        mnuReturnsRecord = new javax.swing.JMenu();
         mnuProducts = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        itmDelete = new javax.swing.JMenuItem();
+        itmReassign = new javax.swing.JMenuItem();
+        itmReturns = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -66,26 +68,18 @@ public class FrmObsoleteInventories extends JDialog {
         jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel2.setText("Ubicación:");
 
-        tabProduct.setModel(new javax.swing.table.DefaultTableModel(
+        tabObsoleteProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "NOMBRE", "BARCODE", "COSTO", "P.Std", "P.Prm", "P.Vip"
+                "ID", "NOMBRE", "MOTIVO", "FECHA", "CANTIDAD"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tabProduct);
+        ));
+        jScrollPane1.setViewportView(tabObsoleteProduct);
 
         jLabel3.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
         jLabel3.setText("INVENTARIO DE OBSOLETOS");
@@ -93,11 +87,16 @@ public class FrmObsoleteInventories extends JDialog {
         jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         jLabel4.setText("Cantidad:");
 
-        jButton1.setBackground(new java.awt.Color(0, 123, 0));
-        jButton1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("BUSCAR");
-        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnFindProduct.setBackground(new java.awt.Color(0, 123, 0));
+        btnFindProduct.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        btnFindProduct.setForeground(new java.awt.Color(255, 255, 255));
+        btnFindProduct.setText("BUSCAR");
+        btnFindProduct.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnFindProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFindProductActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -125,7 +124,7 @@ public class FrmObsoleteInventories extends JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtObsoleteStock, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                        .addComponent(btnFindProduct)
                         .addGap(75, 75, 75))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -143,7 +142,7 @@ public class FrmObsoleteInventories extends JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtIdProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(btnFindProduct))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -154,7 +153,7 @@ public class FrmObsoleteInventories extends JDialog {
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
-        jMenu1.setText("Finvory");
+        mnuInventories.setText("Finvory");
 
         itemInventories.setText("Inventarios");
         itemInventories.addActionListener(new java.awt.event.ActionListener() {
@@ -162,41 +161,41 @@ public class FrmObsoleteInventories extends JDialog {
                 itemInventoriesActionPerformed(evt);
             }
         });
-        jMenu1.add(itemInventories);
+        mnuInventories.add(itemInventories);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(mnuInventories);
 
-        jMenu2.setText("Gestión");
+        mnuReturnsRecord.setText("Gestión");
 
         mnuProducts.setText("Productos");
 
-        jMenuItem1.setText("Desechar");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        itmDelete.setText("Desechar");
+        itmDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                itmDeleteActionPerformed(evt);
             }
         });
-        mnuProducts.add(jMenuItem1);
+        mnuProducts.add(itmDelete);
 
-        jMenuItem2.setText("Reasignar");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        itmReassign.setText("Reasignar");
+        itmReassign.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                itmReassignActionPerformed(evt);
             }
         });
-        mnuProducts.add(jMenuItem2);
+        mnuProducts.add(itmReassign);
 
-        jMenu2.add(mnuProducts);
+        mnuReturnsRecord.add(mnuProducts);
 
-        jMenuItem3.setText("Registrar Devolución");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        itmReturns.setText("Registrar Devolución");
+        itmReturns.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                itmReturnsActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem3);
+        mnuReturnsRecord.add(itmReturns);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(mnuReturnsRecord);
 
         setJMenuBar(jMenuBar1);
 
@@ -222,62 +221,176 @@ public class FrmObsoleteInventories extends JDialog {
 
     private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
         this.dispose();
+
     }//GEN-LAST:event_itemInventoriesActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        int option = JOptionPane.showConfirmDialog(
-                this,
-                "¿Está seguro de desechar este producto?","", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        if(option == JOptionPane.YES_OPTION){
-            JOptionPane.showMessageDialog(rootPane, "El producto ha sido desechado de los inventarios","",JOptionPane.WARNING_MESSAGE);
+    private void itmDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmDeleteActionPerformed
+
+    int row = tabObsoleteProduct.getSelectedRow();
+    if (row == -1) return;
+
+    String id = tabObsoleteProduct.getValueAt(row, 0).toString();
+    String reason = tabObsoleteProduct.getValueAt(row, 2).toString();
+    int currentQty = Integer.parseInt(tabObsoleteProduct.getValueAt(row, 4).toString());
+
+    boolean validEntry = false;
+    while (!validEntry) {
+        String qtyStr = JOptionPane.showInputDialog(this, "Cantidad a desechar de la fila seleccionada:\n(Máximo: " + currentQty + ")");
+        
+        if (qtyStr == null) break; 
+
+        try {
+            int quantity = Integer.parseInt(qtyStr.trim());
+
+            if (quantity > 0 && quantity <= currentQty) {
+                if (controller.discardObsoleteProduct(id, quantity, reason)) {
+                    JOptionPane.showMessageDialog(this, "Producto desechado.");
+                    loadObsoleteTable();
+                    validEntry = true;
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Error: Debe ser un número entero positivo máximo hasta " + currentQty, 
+                    "Cantidad Incorrecta", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error: Debe ser un número entero positivo máximo hasta " + currentQty, 
+                "Entrada Inválida", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        FrmReassignedProduct reassignedProduct = new FrmReassignedProduct(this,true,controller);
-        reassignedProduct.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmObsoleteInventories.this.setVisible(true);
-            }
-        });
-        this.setVisible(false);
-        reassignedProduct.setVisible(true);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        FrmProductReturns productReturns = new FrmProductReturns(this,true,controller);
-        productReturns.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmObsoleteInventories.this.setVisible(true);
+    }//GEN-LAST:event_itmDeleteActionPerformed
+
+    private void itmReassignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmReassignActionPerformed
+
+      int row = tabObsoleteProduct.getSelectedRow();
+    if (row == -1) return;
+
+    String id = tabObsoleteProduct.getValueAt(row, 0).toString();
+    String name = tabObsoleteProduct.getValueAt(row, 1).toString();
+    String reason = tabObsoleteProduct.getValueAt(row, 2).toString();
+    int currentQuantity = Integer.parseInt(tabObsoleteProduct.getValueAt(row, 4).toString());
+
+    String[] inventories = controller.getData().getInventories().stream()
+            .map(Inventory::getName).toArray(String[]::new);
+
+    String selectedInventory = (String) JOptionPane.showInputDialog(this, "Destino:", "Reasignar",
+            JOptionPane.QUESTION_MESSAGE, null, inventories, inventories[0]);
+
+    if (selectedInventory == null) return;
+
+    boolean validEntry = false;
+    while (!validEntry) {
+        String quantityString = JOptionPane.showInputDialog(this, "Ingrese cantidad para " + name + "\n(Máximo permitido: " + currentQuantity + "):");
+        
+        if (quantityString == null) break; 
+
+        try {
+            int quantity = Integer.parseInt(quantityString.trim());
+
+            if (quantity > 0 && quantity <= currentQuantity) {
+                if (controller.reassignObsoleteProduct(id, quantity, selectedInventory, reason)) {
+                    JOptionPane.showMessageDialog(this, "Reasignación exitosa.");
+                    loadObsoleteTable();
+                    validEntry = true; 
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Error: Debe ser un número entero positivo máximo hasta " + currentQuantity, 
+                    "Cantidad Incorrecta", JOptionPane.WARNING_MESSAGE);
             }
-        });
-        this.setVisible(false);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error: Debe ser un número entero positivo máximo hasta " + currentQuantity, 
+                "Entrada Inválida", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    }//GEN-LAST:event_itmReassignActionPerformed
+
+    private void itmReturnsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmReturnsActionPerformed
+        FrmProductReturns productReturns = new FrmProductReturns(this, true, controller);
         productReturns.setVisible(true);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+        loadObsoleteTable();
+        this.setVisible(true);
+    }//GEN-LAST:event_itmReturnsActionPerformed
+
+    private void btnFindProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindProductActionPerformed
+
+        String searchId = txtIdProduct.getText().trim();
+        DefaultTableModel model = (DefaultTableModel) tabObsoleteProduct.getModel();
+        model.setRowCount(0);
+
+        List<ec.edu.espe.finvory.model.ReturnedProduct> allReturns = controller.getData().getReturns();
+
+        if (allReturns == null || allReturns.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay registros de devoluciones.");
+            return;
+        }
+
+        boolean found = false;
+        for (ec.edu.espe.finvory.model.ReturnedProduct returnedProduct : allReturns) {
+            if (searchId.isEmpty() || returnedProduct.getProduct().getId().equalsIgnoreCase(searchId)) {
+                Object[] row = {
+                    returnedProduct.getProduct().getId(),
+                    returnedProduct.getProduct().getName(),
+                    returnedProduct.getReason(),
+                    returnedProduct.getReturnDate().toString(),
+                    String.valueOf(returnedProduct.getQuantity())
+                };
+                model.addRow(row);
+                found = true;
+            }
+        }
+
+        if (!found && !searchId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron devoluciones para el ID: " + searchId);
+        }
+
+    }//GEN-LAST:event_btnFindProductActionPerformed
+
+    public void loadObsoleteTable() {
+        DefaultTableModel model = (DefaultTableModel) tabObsoleteProduct.getModel();
+        model.setRowCount(0);
+        java.util.List<ec.edu.espe.finvory.model.ReturnedProduct> returnsList = controller.getData().getReturns();
+
+        if (returnsList != null) {
+            for (ec.edu.espe.finvory.model.ReturnedProduct returnedProduct : returnsList) {
+                if (returnedProduct.getProduct() != null) {
+                    Object[] row = {
+                        returnedProduct.getProduct().getId(),
+                        returnedProduct.getProduct().getName(),
+                        returnedProduct.getReason(),
+                        returnedProduct.getReturnDate().toString(),
+                        String.valueOf(returnedProduct.getQuantity())
+                    };
+                    model.addRow(row);
+                }
+            }
+        }
+
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFindProduct;
     private javax.swing.JMenuItem itemInventories;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JMenuItem itmDelete;
+    private javax.swing.JMenuItem itmReassign;
+    private javax.swing.JMenuItem itmReturns;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenu mnuInventories;
     private javax.swing.JMenu mnuProducts;
-    private javax.swing.JTable tabProduct;
+    private javax.swing.JMenu mnuReturnsRecord;
+    private javax.swing.JTable tabObsoleteProduct;
     private javax.swing.JTextField txtIdProduct;
     private javax.swing.JLabel txtObsoleteStock;
     private javax.swing.JLabel txtProductAddress;

@@ -10,19 +10,19 @@ import javax.swing.JOptionPane;
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
 public class FrmProductReturns extends JDialog {
+
     FinvoryController controller;
     ReturnedProduct product = new ReturnedProduct();
-    /**
-     * Creates new form FrmProductReturns
-     */
-    public FrmProductReturns(java.awt.Dialog parent, boolean modal, FinvoryController controller){
-        super(parent,modal);
+
+
+    public FrmProductReturns(java.awt.Dialog parent, boolean modal, FinvoryController controller) {
+        super(parent, modal);
         this.controller = controller;
         initComponents();
+        lblDateValue.setText(java.time.LocalDate.now().toString());
         this.setLocationRelativeTo(parent);
-        
+
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,6 +43,7 @@ public class FrmProductReturns extends JDialog {
         cmbReason = new javax.swing.JComboBox<>();
         btnReturn = new javax.swing.JButton();
         btnConfirm = new javax.swing.JButton();
+        lblDateValue = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -94,6 +95,9 @@ public class FrmProductReturns extends JDialog {
             }
         });
 
+        lblDateValue.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblDateValue.setText("00/00/0000");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -110,20 +114,21 @@ public class FrmProductReturns extends JDialog {
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(56, 56, 56)
-                                .addComponent(btnReturn)))
-                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnConfirm)
-                            .addComponent(cmbReason, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(17, Short.MAX_VALUE))
+                            .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+                            .addComponent(txtQuantity)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
+                        .addComponent(btnReturn)
+                        .addGap(83, 83, 83)
+                        .addComponent(btnConfirm))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbReason, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblDateValue))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,11 +143,13 @@ public class FrmProductReturns extends JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
+                .addGap(18, 18, 18)
+                .addComponent(lblDateValue)
+                .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(cmbReason, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnReturn)
                     .addComponent(btnConfirm))
@@ -167,43 +174,68 @@ public class FrmProductReturns extends JDialog {
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
         this.dispose();
+        
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void txtQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQuantityActionPerformed
 
+        
     }//GEN-LAST:event_txtQuantityActionPerformed
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-        ReturnedProduct product = readValues();
-        
-        if (product == null){
+
+        String id = txtId.getText().trim();
+        String quantityStr = txtQuantity.getText().trim();
+        String reason = cmbReason.getSelectedItem().toString();
+
+        if (!ec.edu.espe.finvory.utils.ValidationUtils.isValidQuantity(quantityStr)) {
+            JOptionPane.showMessageDialog(this, "Ingrese una número entero positivo.");
             return;
         }
-        
-        int option = JOptionPane.showConfirmDialog(rootPane, "Devolver Producto", "Confirmación", JOptionPane.YES_NO_OPTION);
+        int quantity = Integer.parseInt(quantityStr);
 
-        if(option == JOptionPane.YES_OPTION){
-
-            JOptionPane.showMessageDialog(rootPane, "Su producto ha sido asignado al inventario de obsoletos");
-            this.dispose(); 
-
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Su devolución fue cancelada", "Cancelado", JOptionPane.WARNING_MESSAGE);
-            emptyFields();
+        ec.edu.espe.finvory.model.Product foundProduct = null;
+        for (ec.edu.espe.finvory.model.Product product : controller.getData().getProducts()) {
+            if (product.getId().equalsIgnoreCase(id)) {
+                foundProduct = product;
+                break;
+            }
         }
+
+        if (foundProduct == null) {
+            JOptionPane.showMessageDialog(this, "El producto con ID " + id + " no existe.");
+            return;
+        }
+
+        int option = JOptionPane.showConfirmDialog(this, "¿Confirmar devolución?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        if (option == JOptionPane.YES_OPTION) {
+
+            ec.edu.espe.finvory.model.ReturnedProduct ret = new ec.edu.espe.finvory.model.ReturnedProduct(foundProduct, quantity, reason);
+        
+            controller.getData().addReturn(ret);
+       
+            controller.getData().getObsoleteInventory().addStock(id, quantity);
+
+            controller.saveData();
+
+            JOptionPane.showMessageDialog(this, "Devolución registrada con éxito.");
+            this.dispose();
+        }
+
+
     }//GEN-LAST:event_btnConfirmActionPerformed
-    
-    private void emptyFields(){
+
+    private void emptyFields() {
         txtId.setText("");
         txtQuantity.setText("");
         cmbReason.setSelectedIndex(0);
     }
-    
-    private ReturnedProduct readValues(){
+
+    private ReturnedProduct readValues() {
         String id;
         String reason;
         int quantity = 0;
-        
+
         id = txtId.getText();
         try {
             quantity = Integer.parseInt(txtQuantity.getText());
@@ -212,8 +244,8 @@ public class FrmProductReturns extends JDialog {
             return null;
         }
         reason = cmbReason.getSelectedItem().toString();
-        
-        product = new ReturnedProduct(null,quantity,reason);
+
+        product = new ReturnedProduct(null, quantity, reason);
         return product;
     }
     /**
@@ -229,6 +261,7 @@ public class FrmProductReturns extends JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblDateValue;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtQuantity;
     // End of variables declaration//GEN-END:variables

@@ -58,7 +58,6 @@ ec\edu\espe\finvory\model\ReturnedProduct.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$1.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$1.class
 ec\edu\espe\finvory\view\FrmCustomers$3.class
-ec\edu\espe\finvory\view\FrmObsoleteInventories$7.class
 ec\edu\espe\finvory\FinvoryApp$1.class
 ec\edu\espe\finvory\view\FrmEditProductListOnInvoice$2.class
 ec\edu\espe\finvory\model\InvoiceSim.class
@@ -68,7 +67,6 @@ ec\edu\espe\finvory\view\FrmReassignedProduct$2.class
 ec\edu\espe\finvory\view\FrmSuppliers$3.class
 ec\edu\espe\finvory\view\FrmNewAccount$6.class
 ec\edu\espe\finvory\view\FrmMainMenu$2.class
-ec\edu\espe\finvory\view\FrmObsoleteInventories$6.class
 ec\edu\espe\finvory\mongo\MongoDataExporter.class
 ec\edu\espe\finvory\view\FrmCustomerSelector$2.class
 ec\edu\espe\finvory\view\FrmMainMenu$12.class

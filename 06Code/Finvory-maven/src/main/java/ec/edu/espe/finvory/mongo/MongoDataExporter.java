@@ -12,12 +12,6 @@ import java.util.Map;
 
 public class MongoDataExporter {
 
-    /**
-     * Exporta TODOS los datos de una compañía a MongoDB (reemplazo total por companyUsername).
-     *
-     * Pensada para ser llamada desde {@code ec.edu.espe.finvory.model.Database}.
-     * No traga errores: si algo falla, lanza excepción para que Database marque "pendiente".
-     */
     public static void exportCompanyData(String companyUsername, FinvoryData data, MongoDatabase mongoDatabase) {
         if (mongoDatabase == null) {
             throw new IllegalStateException("MongoDatabase es null");
@@ -26,13 +20,19 @@ public class MongoDataExporter {
             throw new IllegalStateException("Sin conexión a MongoDB");
         }
 
-        CompanyAccount account = (data != null) ? data.getCompanyInfo() : null;
+        CompanyAccount account;
+        if (data != null) {
+            account = data.getCompanyInfo();
+        } else {
+            account = null;
+        }
+        
         exportCompanyInternal(companyUsername, account, data, mongoDatabase);
     }
 
-    private static boolean isDatabaseOnline(MongoDatabase db) {
+    private static boolean isDatabaseOnline(MongoDatabase dataBase) {
         try {
-            db.runCommand(new Document("ping", 1));
+            dataBase.runCommand(new Document("ping", 1));
             return true;
         } catch (Exception e) {
             return false;
@@ -121,9 +121,9 @@ public class MongoDataExporter {
         exportReturns(companyUsername, data.getReturns(), mongoDatabase);
 
         try {
-            MongoCollection<Document> configCol = mongoDatabase.getCollection("configurations");
-            if (configCol != null) {
-                configCol.deleteMany(Filters.eq("companyUsername", companyUsername));
+            MongoCollection<Document> configurateCollection = mongoDatabase.getCollection("configurations");
+            if (configurateCollection != null) {
+                configurateCollection.deleteMany(Filters.eq("companyUsername", companyUsername));
 
                 Document configDoc = new Document("companyUsername", companyUsername)
                         .append("taxRate", toDouble(data.getTaxRate()))
@@ -131,7 +131,7 @@ public class MongoDataExporter {
                         .append("discountStandard", toDouble(data.getDiscountStandard()))
                         .append("discountPremium", toDouble(data.getDiscountPremium()))
                         .append("discountVip", toDouble(data.getDiscountVip()));
-                configCol.insertOne(configDoc);
+                configurateCollection.insertOne(configDoc);
             }
         } catch (Exception e) {
             System.err.println("Error subiendo configuración: " + e.getMessage());
@@ -149,6 +149,7 @@ public class MongoDataExporter {
         exportObsoleteInventory(companyUsername, data.getObsoleteInventory(), mongoDatabase);
         exportInvoices(companyUsername, data.getInvoices(), mongoDatabase);
         exportReturns(companyUsername, data.getReturns(), mongoDatabase);
+
     }
 
     private static void exportCompanyInfo(String companyUsername, CompanyAccount companyAccount, FinvoryData data, MongoDatabase mongoDatabase) {
@@ -173,6 +174,7 @@ public class MongoDataExporter {
         document.append("discountVip", toDouble(data.getDiscountVip()));
 
         collection.insertOne(document);
+
     }
 
     private static void exportCustomers(String companyUsername, List<Customer> customers, MongoDatabase mongoDatabase) {
@@ -340,35 +342,6 @@ public class MongoDataExporter {
         }
     }
 
-    private static void exportReturns(String companyUsername, List<ReturnedProduct> returnedProducts, MongoDatabase mongoDatabase) {
-        MongoCollection<Document> collection = mongoDatabase.getCollection("returns");
-        collection.deleteMany(Filters.eq("companyUsername", companyUsername));
-
-        List<Document> documents = new ArrayList<>();
-        for (ReturnedProduct returnedProduct : returnedProducts) {
-            Document document = new Document();
-            document.append("companyUsername", companyUsername);
-            document.append("quantity", returnedProduct.getQuantity());
-            document.append("reason", returnedProduct.getReason());
-
-            Product product = returnedProduct.getProduct();
-            if (product != null) {
-                Document productDocument = new Document();
-                productDocument.append("productId", product.getId());
-                productDocument.append("name", product.getName());
-                productDocument.append("description", product.getDescription());
-                productDocument.append("barcode", product.getBarcode());
-                productDocument.append("baseCostPrice", toDouble(product.getBaseCostPrice()));
-                productDocument.append("supplierId", product.getSupplierId());
-                document.append("product", productDocument);
-            }
-            documents.add(document);
-        }
-        if (!documents.isEmpty()) {
-            collection.insertMany(documents);
-        }
-    }
-
     private static Document toAddressDocument(Address address) {
         if (address == null) {
             return null;
@@ -395,5 +368,29 @@ public class MongoDataExporter {
 
     private static Double toDouble(BigDecimal decimal) {
         return (decimal != null) ? decimal.doubleValue() : null;
+    }
+
+    private static void exportReturns(String companyUsername, List<ReturnedProduct> returnsList, MongoDatabase mongoDatabase) {
+        MongoCollection<Document> collection = mongoDatabase.getCollection("returns");
+
+        collection.deleteMany(Filters.eq("companyUsername", companyUsername));
+
+        List<Document> documents = new ArrayList<>();
+
+        for (ReturnedProduct ret : returnsList) {
+            if (ret.getProduct() != null) {
+                Document doc = new Document()
+                        .append("companyUsername", companyUsername)
+                        .append("productId", ret.getProduct().getId())
+                        .append("quantity", ret.getQuantity())
+                        .append("reason", ret.getReason())
+                        .append("returnDate", ret.getReturnDate().toString());
+                documents.add(doc);
+            }
+        }
+
+        if (!documents.isEmpty()) {
+            collection.insertMany(documents);
+        }
     }
 }

@@ -9,8 +9,11 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import ec.edu.espe.finvory.mongo.MongoDBConnection;
 import ec.edu.espe.finvory.mongo.MongoDataExporter;
+import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-
+import org.bson.Document;
+import java.util.HashSet;
+import java.util.Set;
 import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,11 +21,11 @@ import java.time.ZoneId;
 import java.util.*;
 
 /**
- * Estrategia de sincronización:
- * - Si hay conexión: la nube es la fuente de verdad. Se carga nube y se sobreescribe local.
- * - Si no hay conexión: se trabaja local y se marca "pendiente".
- * - Al reconectar (siguiente load con conexión): si hay pendiente, se publica local a nube
- *   (reemplazo total) y luego se recarga nube para garantizar consistencia.
+ * Estrategia de sincronización: - Si hay conexión: la nube es la fuente de
+ * verdad. Se carga nube y se sobreescribe local. - Si no hay conexión: se
+ * trabaja local y se marca "pendiente". - Al reconectar (siguiente load con
+ * conexión): si hay pendiente, se publica local a nube (reemplazo total) y
+ * luego se recarga nube para garantizar consistencia.
  */
 public class Database {
 
@@ -56,7 +59,6 @@ public class Database {
 
         boolean online = MongoDBConnection.isOnline();
         if (online) {
-            // Si hubo trabajo offline, primero publicamos local.
             if (hasPendingOffline(companyUsername)) {
                 System.out.println("Detectado pendiente offline. Publicando local a la nube...");
                 boolean published = publishLocalToCloud(companyUsername);
@@ -75,31 +77,21 @@ public class Database {
                 System.out.println("    -> Productos: " + safeSize(cloudData.getProducts()));
                 System.out.println("    -> Facturas: " + safeSize(cloudData.getInvoices()));
 
-                // Nube manda => sobreescribe local.
                 saveCompanyDataLocalOnly(cloudData, companyUsername);
                 return cloudData;
             }
 
-            // Si isOnline() dice true pero falló la carga (red inestable), degradar a local.
             System.out.println("No se pudo cargar de la nube. Usando datos locales.");
             return loadCompanyDataLocal(companyUsername);
         }
 
-        // Offline: trabajar local.
         System.out.println("Sin conexión. Usando datos locales.");
         return loadCompanyDataLocal(companyUsername);
     }
 
-    /**
-     * Guardado que usa la UI/controladores.
-     * Regla: siempre guardamos local. Si hay internet, intentamos publicar.
-     * Si no hay internet o falla publicación: marcamos pendiente.
-     */
     public void saveCompanyData(FinvoryData data, String companyUsername) {
-        // 1) Local siempre.
         saveCompanyDataLocalOnly(data, companyUsername);
 
-        // 2) Nube si se puede.
         if (!MongoDBConnection.isOnline()) {
             markPendingOffline(companyUsername);
             return;
@@ -115,7 +107,9 @@ public class Database {
 
     public SystemUsers loadUsers() {
         File file = new File(USERS_FILE);
-        if (!file.exists()) return new SystemUsers();
+        if (!file.exists()) {
+            return new SystemUsers();
+        }
 
         try (Reader reader = new FileReader(file)) {
             SystemUsers users = gson.fromJson(reader, SystemUsers.class);
@@ -128,7 +122,9 @@ public class Database {
 
     public void saveUsers(SystemUsers users) {
         File folder = new File(UTILS_FOLDER);
-        if (!folder.exists() && !folder.mkdirs()) return;
+        if (!folder.exists() && !folder.mkdirs()) {
+            return;
+        }
 
         try (Writer writer = new FileWriter(USERS_FILE)) {
             gson.toJson(users, writer);
@@ -155,8 +151,6 @@ public class Database {
         }
     }
 
-    // -------------------- Pending flag --------------------
-
     public void markPendingOffline(String companyUsername) {
         try {
             String folder = companyFolder(companyUsername);
@@ -177,16 +171,14 @@ public class Database {
     private void clearPendingOffline(String companyUsername) {
         File flag = new File(companyFolder(companyUsername) + File.separator + PENDING_FILE);
         if (flag.exists()) {
-            //noinspection ResultOfMethodCallIgnored
+
             flag.delete();
         }
     }
 
-    // -------------------- Cloud (read) --------------------
-
     private FinvoryData loadDataFromCloud(String username) {
+        FinvoryData data = new FinvoryData(); 
         try {
-            FinvoryData data = new FinvoryData();
 
             loadConfigurationsFromCloud(data, username);
             loadProductsFromCloud(data, username);
@@ -195,26 +187,35 @@ public class Database {
             loadInventoriesFromCloud(data, username);
             loadObsoleteInventoryFromCloud(data, username);
             loadInvoicesFromCloud(data, username);
-
-            dedupeCustomers(data);
-            dedupeSuppliers(data);
-            dedupeProducts(data);
-            dedupeInventories(data);
-            dedupeInvoices(data);
+            loadReturnsFromCloud(data, username);
+            
+            if (data != null) {
+                dedupeCustomers(data);
+                dedupeSuppliers(data);
+                dedupeProducts(data);
+                dedupeInventories(data);
+                dedupeInvoices(data);
+                dedupeReturns(data);
+            }
 
             return data;
         } catch (Exception e) {
-            System.err.println("Error en Database (cloud): " + e.getMessage());
+            e.printStackTrace();
+            System.err.println("Error crítico en sincronización: " + e.getMessage());
             return null;
         }
     }
 
     private void loadConfigurationsFromCloud(FinvoryData data, String username) {
         MongoCollection<Document> col = MongoDBConnection.getCollection("configurations");
-        if (col == null) return;
+        if (col == null) {
+            return;
+        }
 
         Document doc = col.find(Filters.eq("companyUsername", username)).first();
-        if (doc == null) return;
+        if (doc == null) {
+            return;
+        }
 
         data.setTaxRate(BigDecimal.valueOf(getDoubleSafe(doc, "taxRate",
                 data.getTaxRate() != null ? data.getTaxRate().doubleValue() : 0.0)));
@@ -230,7 +231,9 @@ public class Database {
 
     private void loadProductsFromCloud(FinvoryData data, String username) {
         MongoCollection<Document> col = MongoDBConnection.getCollection("products");
-        if (col == null) return;
+        if (col == null) {
+            return;
+        }
 
         for (Document doc : col.find(Filters.eq("companyUsername", username))) {
             String productId = doc.getString("productId");
@@ -246,7 +249,9 @@ public class Database {
 
     private void loadCustomersFromCloud(FinvoryData data, String username) {
         MongoCollection<Document> col = MongoDBConnection.getCollection("customers");
-        if (col == null) return;
+        if (col == null) {
+            return;
+        }
 
         for (Document doc : col.find(Filters.eq("companyUsername", username))) {
             data.addCustomer(new Customer(
@@ -261,7 +266,9 @@ public class Database {
 
     private void loadSuppliersFromCloud(FinvoryData data, String username) {
         MongoCollection<Document> col = MongoDBConnection.getCollection("suppliers");
-        if (col == null) return;
+        if (col == null) {
+            return;
+        }
 
         for (Document doc : col.find(Filters.eq("companyUsername", username))) {
             Supplier s = new Supplier(
@@ -278,11 +285,15 @@ public class Database {
 
     private void loadInventoriesFromCloud(FinvoryData data, String username) {
         MongoCollection<Document> col = MongoDBConnection.getCollection("inventories");
-        if (col == null) return;
+        if (col == null) {
+            return;
+        }
 
         for (Document doc : col.find(Filters.eq("companyUsername", username))) {
             String name = doc.getString("name");
-            if (norm(name).isEmpty()) continue;
+            if (norm(name).isEmpty()) {
+                continue;
+            }
 
             Address address = toAddress((Document) doc.get("address"));
             Inventory inventory = new Inventory(name, address);
@@ -291,7 +302,9 @@ public class Database {
             if (stockRaw instanceof Document stockDoc) {
                 for (Map.Entry<String, Object> entry : stockDoc.entrySet()) {
                     int qty = toInt(entry.getValue(), 0);
-                    if (qty > 0) inventory.setStock(entry.getKey(), qty);
+                    if (qty > 0) {
+                        inventory.setStock(entry.getKey(), qty);
+                    }
                 }
             }
 
@@ -300,18 +313,26 @@ public class Database {
     }
 
     private void loadObsoleteInventoryFromCloud(FinvoryData data, String username) {
-        if (data == null || data.getObsoleteInventory() == null) return;
+        if (data == null || data.getObsoleteInventory() == null) {
+            return;
+        }
 
         MongoCollection<Document> col = MongoDBConnection.getCollection("obsolete_inventory");
-        if (col == null) return;
+        if (col == null) {
+            return;
+        }
 
         Document doc = col.find(Filters.eq("companyUsername", username)).first();
-        if (doc == null) return;
+        if (doc == null) {
+            return;
+        }
 
         InventoryOfObsolete obs = data.getObsoleteInventory();
 
         Address address = toAddress((Document) doc.get("address"));
-        if (address != null) obs.setAddress(address);
+        if (address != null) {
+            obs.setAddress(address);
+        }
 
         Map<String, Integer> map = obs.getProductStock();
         map.clear();
@@ -320,7 +341,9 @@ public class Database {
         if (stockRaw instanceof Document stockDoc) {
             for (Map.Entry<String, Object> entry : stockDoc.entrySet()) {
                 int qty = toInt(entry.getValue(), 0);
-                if (qty > 0) obs.setStock(entry.getKey(), qty);
+                if (qty > 0) {
+                    obs.setStock(entry.getKey(), qty);
+                }
             }
         }
     }
@@ -328,7 +351,9 @@ public class Database {
     @SuppressWarnings("unchecked")
     private void loadInvoicesFromCloud(FinvoryData data, String username) {
         MongoCollection<Document> col = MongoDBConnection.getCollection("invoices");
-        if (col == null) return;
+        if (col == null) {
+            return;
+        }
 
         for (Document doc : col.find(Filters.eq("companyUsername", username))) {
             String invoiceId = doc.getString("invoiceId");
@@ -358,7 +383,6 @@ public class Database {
         }
     }
 
-    // -------------------- Local (read/write) --------------------
 
     private FinvoryData loadCompanyDataLocal(String companyUsername) {
         String folder = companyFolder(companyUsername);
@@ -390,10 +414,10 @@ public class Database {
         saveSuppliersCsv(data.getSuppliers(), folder);
     }
 
-    // -------------------- Offline publish --------------------
-
     private boolean publishLocalToCloud(String companyUsername) {
-        if (!MongoDBConnection.isOnline()) return false;
+        if (!MongoDBConnection.isOnline()) {
+            return false;
+        }
 
         try {
             FinvoryData local = loadCompanyDataLocal(companyUsername);
@@ -406,7 +430,9 @@ public class Database {
 
     private boolean exportCompanyToCloud(FinvoryData data, String companyUsername) {
         try {
-            if (MongoDBConnection.getDatabase() == null) return false;
+            if (MongoDBConnection.getDatabase() == null) {
+                return false;
+            }
             MongoDataExporter.exportCompanyData(companyUsername, data, MongoDBConnection.getDatabase());
             return true;
         } catch (Exception e) {
@@ -414,8 +440,6 @@ public class Database {
             return false;
         }
     }
-
-    // -------------------- Local JSON/CSV --------------------
 
     private void saveJson(FinvoryData data, String folder) {
         try (Writer writer = new FileWriter(folder + File.separator + "finvory_database.json")) {
@@ -427,7 +451,9 @@ public class Database {
 
     private FinvoryData loadJson(String folder) {
         File file = new File(folder + File.separator + "finvory_database.json");
-        if (!file.exists()) return new FinvoryData();
+        if (!file.exists()) {
+            return new FinvoryData();
+        }
 
         try (Reader reader = new FileReader(file)) {
             FinvoryData data = gson.fromJson(reader, FinvoryData.class);
@@ -441,7 +467,9 @@ public class Database {
     private ArrayList<Customer> loadCustomersCsv(String folder) {
         ArrayList<Customer> list = new ArrayList<>();
         File file = new File(folder + File.separator + "clients.csv");
-        if (!file.exists()) return list;
+        if (!file.exists()) {
+            return list;
+        }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             br.readLine();
@@ -467,15 +495,19 @@ public class Database {
     private void saveCustomersCsv(List<Customer> customers, String folder) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(folder + File.separator + "clients.csv"))) {
             pw.println("Identification" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "ClientType");
-            if (customers == null) return;
+            if (customers == null) {
+                return;
+            }
             for (Customer c : customers) {
-                if (c == null) continue;
+                if (c == null) {
+                    continue;
+                }
                 pw.println(
-                        safe(c.getIdentification()) + DELIMITER +
-                                safe(c.getName()) + DELIMITER +
-                                safe(c.getPhone()) + DELIMITER +
-                                safe(c.getEmail()) + DELIMITER +
-                                safe(c.getClientType())
+                        safe(c.getIdentification()) + DELIMITER
+                        + safe(c.getName()) + DELIMITER
+                        + safe(c.getPhone()) + DELIMITER
+                        + safe(c.getEmail()) + DELIMITER
+                        + safe(c.getClientType())
                 );
             }
         } catch (IOException e) {
@@ -486,7 +518,9 @@ public class Database {
     private ArrayList<Supplier> loadSuppliersCsv(String folder) {
         ArrayList<Supplier> list = new ArrayList<>();
         File file = new File(folder + File.separator + "suppliers.csv");
-        if (!file.exists()) return list;
+        if (!file.exists()) {
+            return list;
+        }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             br.readLine();
@@ -514,17 +548,21 @@ public class Database {
     private void saveSuppliersCsv(List<Supplier> suppliers, String folder) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(folder + File.separator + "suppliers.csv"))) {
             pw.println("ID1" + DELIMITER + "ID2" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "Description");
-            if (suppliers == null) return;
+            if (suppliers == null) {
+                return;
+            }
 
             for (Supplier s : suppliers) {
-                if (s == null) continue;
+                if (s == null) {
+                    continue;
+                }
                 pw.println(
-                        safe(s.getId1()) + DELIMITER +
-                                safe(s.getId2()) + DELIMITER +
-                                safe(s.getFullName()) + DELIMITER +
-                                safe(s.getPhone()) + DELIMITER +
-                                safe(s.getEmail()) + DELIMITER +
-                                safe(s.getDescription())
+                        safe(s.getId1()) + DELIMITER
+                        + safe(s.getId2()) + DELIMITER
+                        + safe(s.getFullName()) + DELIMITER
+                        + safe(s.getPhone()) + DELIMITER
+                        + safe(s.getEmail()) + DELIMITER
+                        + safe(s.getDescription())
                 );
             }
         } catch (IOException e) {
@@ -533,51 +571,65 @@ public class Database {
     }
 
     private void mergeCustomersFromCsv(FinvoryData localData, String folder) {
-        for (Customer c : loadCustomersCsv(folder)) {
-            if (!existsCustomer(localData.getCustomers(), c.getIdentification())) {
-                localData.addCustomer(c);
+        for (Customer customer : loadCustomersCsv(folder)) {
+            if (!existsCustomer(localData.getCustomers(), customer.getIdentification())) {
+                localData.addCustomer(customer);
             }
         }
     }
 
     private void mergeSuppliersFromCsv(FinvoryData localData, String folder) {
-        for (Supplier s : loadSuppliersCsv(folder)) {
-            if (!existsSupplier(localData.getSuppliers(), s.getId1())) {
-                localData.addSupplier(s);
+        for (Supplier supplier : loadSuppliersCsv(folder)) {
+            if (!existsSupplier(localData.getSuppliers(), supplier.getId1())) {
+                localData.addSupplier(supplier);
             }
         }
     }
 
     private boolean existsCustomer(List<Customer> customers, String identification) {
         String id = norm(identification);
-        if (id.isEmpty()) return false;
-        if (customers == null) return false;
-        for (Customer c : customers) {
-            if (c != null && norm(c.getIdentification()).equals(id)) return true;
+        if (id.isEmpty()) {
+            return false;
+        }
+        if (customers == null) {
+            return false;
+        }
+        for (Customer customer : customers) {
+            if (customer != null && norm(customer.getIdentification()).equals(id)) {
+                return true;
+            }
         }
         return false;
     }
 
     private boolean existsSupplier(List<Supplier> suppliers, String id1) {
         String id = norm(id1);
-        if (id.isEmpty()) return false;
-        if (suppliers == null) return false;
-        for (Supplier s : suppliers) {
-            if (s != null && norm(s.getId1()).equals(id)) return true;
+        if (id.isEmpty()) {
+            return false;
+        }
+        if (suppliers == null) {
+            return false;
+        }
+        for (Supplier supplier : suppliers) {
+            if (supplier != null && norm(supplier.getId1()).equals(id)) {
+                return true;
+            }
         }
         return false;
     }
 
-    // -------------------- Dedupe --------------------
-
     private void dedupeCustomers(FinvoryData data) {
-        if (data == null || data.getCustomers() == null) return;
+        if (data == null || data.getCustomers() == null) {
+            return;
+        }
 
         Map<String, Customer> byId = new LinkedHashMap<>();
-        for (Customer c : new ArrayList<>(data.getCustomers())) {
-            if (c == null) continue;
-            String id = norm(c.getIdentification());
-            byId.putIfAbsent(id.isEmpty() ? UUID.randomUUID().toString() : id, c);
+        for (Customer customer : new ArrayList<>(data.getCustomers())) {
+            if (customer == null) {
+                continue;
+            }
+            String id = norm(customer.getIdentification());
+            byId.putIfAbsent(id.isEmpty() ? UUID.randomUUID().toString() : id, customer);
         }
 
         data.getCustomers().clear();
@@ -585,13 +637,17 @@ public class Database {
     }
 
     private void dedupeSuppliers(FinvoryData data) {
-        if (data == null || data.getSuppliers() == null) return;
+        if (data == null || data.getSuppliers() == null) {
+            return;
+        }
 
         Map<String, Supplier> byId = new LinkedHashMap<>();
-        for (Supplier s : new ArrayList<>(data.getSuppliers())) {
-            if (s == null) continue;
-            String id = norm(s.getId1());
-            byId.putIfAbsent(id.isEmpty() ? UUID.randomUUID().toString() : id, s);
+        for (Supplier supplier : new ArrayList<>(data.getSuppliers())) {
+            if (supplier == null) {
+                continue;
+            }
+            String id = norm(supplier.getId1());
+            byId.putIfAbsent(id.isEmpty() ? UUID.randomUUID().toString() : id, supplier);
         }
 
         data.getSuppliers().clear();
@@ -599,13 +655,17 @@ public class Database {
     }
 
     private void dedupeProducts(FinvoryData data) {
-        if (data == null || data.getProducts() == null) return;
+        if (data == null || data.getProducts() == null) {
+            return;
+        }
 
         Map<String, Product> byId = new LinkedHashMap<>();
-        for (Product p : new ArrayList<>(data.getProducts())) {
-            if (p == null) continue;
-            String id = norm(p.getId());
-            byId.putIfAbsent(id.isEmpty() ? UUID.randomUUID().toString() : id, p);
+        for (Product product : new ArrayList<>(data.getProducts())) {
+            if (product == null) {
+                continue;
+            }
+            String id = norm(product.getId());
+            byId.putIfAbsent(id.isEmpty() ? UUID.randomUUID().toString() : id, product);
         }
 
         data.getProducts().clear();
@@ -613,13 +673,17 @@ public class Database {
     }
 
     private void dedupeInventories(FinvoryData data) {
-        if (data == null || data.getInventories() == null) return;
+        if (data == null || data.getInventories() == null) {
+            return;
+        }
 
         Map<String, Inventory> byName = new LinkedHashMap<>();
-        for (Inventory inv : new ArrayList<>(data.getInventories())) {
-            if (inv == null) continue;
-            String key = norm(inv.getName()).toLowerCase(Locale.ROOT);
-            byName.putIfAbsent(key.isEmpty() ? UUID.randomUUID().toString() : key, inv);
+        for (Inventory inventory : new ArrayList<>(data.getInventories())) {
+            if (inventory == null) {
+                continue;
+            }
+            String key = norm(inventory.getName()).toLowerCase(Locale.ROOT);
+            byName.putIfAbsent(key.isEmpty() ? UUID.randomUUID().toString() : key, inventory);
         }
 
         data.getInventories().clear();
@@ -627,20 +691,22 @@ public class Database {
     }
 
     private void dedupeInvoices(FinvoryData data) {
-        if (data == null || data.getInvoices() == null) return;
+        if (data == null || data.getInvoices() == null) {
+            return;
+        }
 
         Map<String, InvoiceSim> byId = new LinkedHashMap<>();
-        for (InvoiceSim inv : new ArrayList<>(data.getInvoices())) {
-            if (inv == null) continue;
-            String key = norm(inv.getId());
-            byId.putIfAbsent(key.isEmpty() ? UUID.randomUUID().toString() : key, inv);
+        for (InvoiceSim invoiceSim : new ArrayList<>(data.getInvoices())) {
+            if (invoiceSim == null) {
+                continue;
+            }
+            String key = norm(invoiceSim.getId());
+            byId.putIfAbsent(key.isEmpty() ? UUID.randomUUID().toString() : key, invoiceSim);
         }
 
         data.getInvoices().clear();
         data.getInvoices().addAll(byId.values());
     }
-
-    // -------------------- Helpers --------------------
 
     private Customer buildCustomerFromDoc(Document custDoc) {
         if (custDoc == null) {
@@ -655,33 +721,43 @@ public class Database {
         );
     }
 
-    private Address toAddress(Document doc) {
-        if (doc == null) return null;
+    private Address toAddress(Document document) {
+        if (document == null) {
+            return null;
+        }
         return new Address(
-                doc.getString("country"),
-                doc.getString("city"),
-                doc.getString("street")
+                document.getString("country"),
+                document.getString("city"),
+                document.getString("street")
         );
     }
 
     private static String formatValue(Object value) {
-        if (value == null) return "";
-        if (value instanceof BigDecimal bd) return String.format(Locale.US, "%.2f", bd);
-        if (value instanceof Float f) return String.format(Locale.US, "%.2f", f);
+        if (value == null) {
+            return "";
+        }
+        if (value instanceof BigDecimal bd) {
+            return String.format(Locale.US, "%.2f", bd);
+        }
+        if (value instanceof Float floatnumber) {
+            return String.format(Locale.US, "%.2f", floatnumber);
+        }
         return String.valueOf(value);
     }
 
     private static LocalDate toLocalDate(Date date) {
-        if (date == null) return LocalDate.now();
+        if (date == null) {
+            return LocalDate.now();
+        }
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
-    private static String norm(String s) {
-        return s == null ? "" : s.trim();
+    private static String norm(String string) {
+        return string == null ? "" : string.trim();
     }
 
-    private static String safe(String s) {
-        return s == null ? "" : s;
+    private static String safe(String string) {
+        return string == null ? "" : string;
     }
 
     private String companyFolder(String companyUsername) {
@@ -693,13 +769,19 @@ public class Database {
     }
 
     private static double getDoubleSafe(Document doc, String key, double def) {
-        if (doc == null) return def;
+        if (doc == null) {
+            return def;
+        }
         Object v = doc.get(key);
-        if (v == null) return def;
-        if (v instanceof Number n) return n.doubleValue();
-        if (v instanceof String s) {
+        if (v == null) {
+            return def;
+        }
+        if (v instanceof Number number) {
+            return number.doubleValue();
+        }
+        if (v instanceof String string) {
             try {
-                return Double.parseDouble(s.trim());
+                return Double.parseDouble(string.trim());
             } catch (Exception ignored) {
                 return def;
             }
@@ -707,18 +789,94 @@ public class Database {
         return def;
     }
 
-    private static int toInt(Object v, int def) {
-        if (v == null) return def;
-        if (v instanceof Number n) return n.intValue();
-        if (v instanceof String s) {
+    private static int toInt(Object value, int defaultValue) {
+        if (value == null) {
+            return defaultValue;
+        }
+        if (value instanceof Number number) {
+            return number.intValue();
+        }
+        if (value instanceof String string) {
             try {
-                String trimmed = s.trim();
-                if (trimmed.contains(".")) return (int) Math.round(Double.parseDouble(trimmed));
+                String trimmed = string.trim();
+                if (trimmed.contains(".")) {
+                    return (int) Math.round(Double.parseDouble(trimmed));
+                }
                 return Integer.parseInt(trimmed);
             } catch (Exception ignored) {
-                return def;
+                return defaultValue;
             }
         }
-        return def;
+        return defaultValue;
+    }
+
+    private void loadReturnsFromCloud(FinvoryData data, String username) {
+        try {
+            MongoDatabase db = MongoDBConnection.getDatabase();
+            if (db == null) {
+                return;
+            }
+
+            MongoCollection<Document> returnsCol = db.getCollection("returns");
+            if (returnsCol == null) {
+                return;
+            }
+
+            for (Document doc : returnsCol.find(com.mongodb.client.model.Filters.eq("companyUsername", username))) {
+                String productId = doc.getString("productId");
+                if (productId == null) {
+                    continue; 
+                }
+                Product product = null;
+                if (data.getProducts() != null) {
+                    for (Product products : data.getProducts()) {
+                        if (products != null && products.getId() != null && products.getId().equalsIgnoreCase(productId)) {
+                            product = products;
+                            break;
+                        }
+                    }
+                }
+
+                if (product != null) {
+                    int quantity = toInt(doc.get("quantity"), 0);
+                    String reason = doc.getString("reason");
+                    ReturnedProduct rp = new ReturnedProduct(product, quantity, reason);
+                    data.addReturn(rp);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error no crítico cargando devoluciones: " + e.getMessage());
+        }
+    }
+
+    private void dedupeReturns(FinvoryData data) {
+        if (data == null || data.getReturns() == null) {
+            return;
+        }
+
+        List<ReturnedProduct> currentReturns = data.getReturns();
+        if (currentReturns.isEmpty()) {
+            return;
+        }
+
+        List<ReturnedProduct> unique = new ArrayList<>();
+        Set<String> seen = new HashSet<>();
+
+        for (ReturnedProduct returnedProduct : currentReturns) {
+            if (returnedProduct != null && returnedProduct.getProduct() != null) {
+                String key = returnedProduct.getProduct().getId() + "-" + returnedProduct.getQuantity() + "-" + returnedProduct.getReason();
+                if (seen.add(key)) {
+                    unique.add(returnedProduct);
+                }
+            }
+        }
+
+        try {
+            currentReturns.clear();
+            currentReturns.addAll(unique);
+        } catch (UnsupportedOperationException e) {
+
+            System.err.println("Error: La lista de retornos es inmodificable.");
+        }
     }
 }

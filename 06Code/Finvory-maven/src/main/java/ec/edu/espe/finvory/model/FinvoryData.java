@@ -20,7 +20,7 @@ public class FinvoryData {
     private final ArrayList<Inventory> inventories;
     private InventoryOfObsolete obsoleteInventory;
     private final ArrayList<InvoiceSim> invoices;
-    private final ArrayList<ReturnedProduct> returns;
+    private ArrayList<ReturnedProduct> returns;
     private BigDecimal taxRate;
     private BigDecimal profitPercentage;
     private BigDecimal discountStandard;
@@ -118,7 +118,7 @@ public class FinvoryData {
     }
 
     public List<ReturnedProduct> getReturns() {
-        return Collections.unmodifiableList(returns);
+        return this.returns;
     }
 
     public void addCustomer(Customer customer) {

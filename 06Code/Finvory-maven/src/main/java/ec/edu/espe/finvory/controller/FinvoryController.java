@@ -363,22 +363,15 @@ public class FinvoryController {
 
         Customer newCustomer = new Customer(name, id, phone, email, type);
 
-        // Obtenemos la lista actual de clientes
         List<Customer> currentList = data.getCustomers();
 
         try {
-            // Intentamos añadir. Si la lista viene de Mongo y está bloqueada, saltará al catch
             currentList.add(newCustomer);
         } catch (UnsupportedOperationException e) {
-            // SI ESTÁ BLOQUEADA:
-            // 1. Creamos una nueva lista que SÍ se puede editar
+
             List<Customer> mutableList = new ArrayList<>(currentList);
             mutableList.add(newCustomer);
 
-            // 2. Como NO tienes data.setCustomers, lo que haremos es vaciar la lista original 
-            // y pasarle los elementos de la nueva.
-            // Nota: Si currentList es totalmente inmutable (List.of), esto también fallará
-            // y la única solución es agregar el setter en FinvoryData.
             try {
                 currentList.clear();
                 currentList.addAll(mutableList);
@@ -897,6 +890,96 @@ public class FinvoryController {
             }
         } catch (IOException e) {
             System.err.println("Error al exportar CSV: " + e.getMessage());
+        }
+    }
+
+    public boolean registerProductReturn(String productId, int quantity, String reason) {
+
+        Product product = findProductById(productId);
+
+        if (product == null) {
+            return false;
+        }
+
+        ReturnedProduct returnRecord = new ReturnedProduct(product, quantity, reason);
+
+        data.addReturn(returnRecord);
+
+        data.getObsoleteInventory().addStock(productId, quantity);
+
+        saveData();
+
+        return true;
+    }
+
+    public Product findProductById(String id) {
+        for (Product product : data.getProducts()) {
+            if (product.getId().equalsIgnoreCase(id)) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+    public boolean reassignObsoleteProduct(String productId, int quantity, String destinationInvName, String reason) {
+        if (quantity <= 0) {
+            return false;
+        }
+
+        InventoryOfObsolete obsolete = data.getObsoleteInventory();
+        List<ReturnedProduct> returnsList = data.getReturns();
+
+        Inventory destination = data.getInventories().stream()
+                .filter(inv -> inv.getName().equalsIgnoreCase(destinationInvName))
+                .findFirst()
+                .orElse(null);
+
+        if (destination == null || obsolete.getStock(productId) < quantity) {
+            return false;
+        }
+
+        obsolete.addStock(productId, -quantity);
+        destination.addStock(productId, quantity);
+
+        updateReturnsList(productId, quantity, reason);
+
+        saveData();
+        return true;
+    }
+
+    public boolean discardObsoleteProduct(String productId, int quantity, String reason) {
+        if (quantity <= 0) {
+            return false;
+        }
+
+        InventoryOfObsolete obsolete = data.getObsoleteInventory();
+
+        if (obsolete.getStock(productId) < quantity) {
+            return false;
+        }
+
+        obsolete.addStock(productId, -quantity);
+
+        updateReturnsList(productId, quantity, reason);
+
+        saveData();
+        return true;
+    }
+
+    private void updateReturnsList(String productId, int quantity, String reason) {
+        List<ReturnedProduct> returnsList = data.getReturns();
+        for (int i = 0; i < returnsList.size(); i++) {
+            ReturnedProduct ret = returnsList.get(i);
+
+            if (ret.getProduct().getId().equals(productId) && ret.getReason().equalsIgnoreCase(reason)) {
+                int newQuantity = ret.getQuantity() - quantity;
+                if (newQuantity <= 0) {
+                    returnsList.remove(i);
+                } else {
+                    ret.setQuantity(newQuantity);
+                }
+                break;
+            }
         }
     }
 }
