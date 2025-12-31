@@ -10,6 +10,7 @@ public class PersonalAccount {
     private String fullName;
     private String username; 
     private String password; 
+    private String profilePhotoPath;
     
     public PersonalAccount() {}
     
@@ -35,5 +36,20 @@ public class PersonalAccount {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+    
+    public String getProfilePhotoPath() {
+        return profilePhotoPath;
+    }
 
+    public void setProfilePhotoPath(String profilePhotoPath) {
+        this.profilePhotoPath = profilePhotoPath;
+    }
 }

@@ -2,6 +2,7 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.model.CompanyAccount;
 import ec.edu.espe.finvory.utils.ValidationUtils;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -55,13 +56,14 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
         btnFind = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabAllProducts = new javax.swing.JTable();
+        btnInfo = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         itemExit = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
         jLabel1.setText("Empresa:");
@@ -91,9 +93,25 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tabAllProducts);
 
+        btnInfo.setBackground(new java.awt.Color(0, 123, 0));
+        btnInfo.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        btnInfo.setForeground(new java.awt.Color(242, 242, 242));
+        btnInfo.setText("MÁS INFO");
+        btnInfo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInfoActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("Finvory");
 
         jMenuItem2.setText("Mi Perfil");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
 
         itemExit.setText("Salir");
@@ -125,9 +143,11 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(txtCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
                 .addComponent(btnFind, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(158, 158, 158))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnInfo)
+                .addGap(71, 71, 71))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1)
@@ -137,10 +157,12 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtCompany, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnFind, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(txtCompany, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnFind, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(26, Short.MAX_VALUE))
@@ -177,6 +199,36 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        FrmProfilePersonal profilePersonal = new FrmProfilePersonal(this, true, controller);
+        this.setVisible(false);
+        profilePersonal.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                FrmMainMenuPersonalAccount.this.setVisible(true);
+            }
+        });
+        profilePersonal.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void btnInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
+        String comanyName = txtCompany.getText().trim();
+        if (ValidationUtils.isEmpty(comanyName)) {
+            JOptionPane.showMessageDialog(this, "Escriba el nombre de una empresa primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        CompanyAccount targetCompany = controller.findCompanyByName(comanyName);
+        if (targetCompany != null) {
+            String phone = targetCompany.getPhone();
+            String email = targetCompany.getEmail();
+            String info = String.format("Datos de %s:\nCelular/Teléfono: %s\nCorreo: %s",
+                    targetCompany.getName(), phone, email);
+            JOptionPane.showMessageDialog(this, info, "Información de Contacto", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró información de contacto para esta empresa.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnInfoActionPerformed
     private void updateTable(List<Object[]> rows) {
         DefaultTableModel model = (DefaultTableModel) tabAllProducts.getModel();
         model.setRowCount(0);
@@ -190,6 +242,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFind;
+    private javax.swing.JButton btnInfo;
     private javax.swing.JMenuItem itemExit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;

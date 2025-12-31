@@ -30,7 +30,8 @@
       "phone": "0963514785",
       "email": "joseph3elcrac@gmail.com",
       "username": "Joseph",
-      "password": "123"
+      "password": "123",
+      "logoPath": "data\\profiles\\Joseph_profile.jpeg"
     },
     {
       "name": "TropiBurger",
@@ -95,6 +96,23 @@
       "email": "a@a.com",
       "username": "licas",
       "password": "123"
+    },
+    {
+      "name": "BlockBuster",
+      "address": {
+        "country": "Ecuador",
+        "city": "Cuenca",
+        "street": "Av. 6 de Diciembre",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0011751132869",
+      "phone": "0983249630",
+      "email": "blockbuster@gmail.com",
+      "username": "Mathews",
+      "password": "Mathews123",
+      "logoPath": "data\\profiles\\Mathews_profile.jpeg"
     }
   ],
   "personalAccounts": [
@@ -109,9 +127,10 @@
       "password": "1236"
     },
     {
-      "fullName": "Moises Caicedo",
+      "fullName": "Moisés Isaac Caicedo Corozo",
       "username": "niñoMoi",
-      "password": "123"
+      "password": "Moi123",
+      "profilePhotoPath": "data\\profiles\\niñoMoi_profile.png"
     },
     {
       "fullName": "Pepito",
@@ -132,6 +151,12 @@
       "fullName": "Said Pastor",
       "username": "21212",
       "password": "2112"
+    },
+    {
+      "fullName": "Kylian Mbappé Lottin",
+      "username": "Mbappe",
+      "password": "Lottin",
+      "profilePhotoPath": "data\\profiles\\Mbappe_profile.jpg"
     }
   ]
 }

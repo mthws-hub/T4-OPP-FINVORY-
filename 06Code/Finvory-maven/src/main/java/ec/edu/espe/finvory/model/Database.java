@@ -177,9 +177,10 @@ public class Database {
     }
 
     private FinvoryData loadDataFromCloud(String username) {
-        FinvoryData data = new FinvoryData(); 
+        FinvoryData data = new FinvoryData();
         try {
-
+            
+            loadCompanyInfoFromCloud(data, username);
             loadConfigurationsFromCloud(data, username);
             loadProductsFromCloud(data, username);
             loadCustomersFromCloud(data, username);
@@ -188,7 +189,7 @@ public class Database {
             loadObsoleteInventoryFromCloud(data, username);
             loadInvoicesFromCloud(data, username);
             loadReturnsFromCloud(data, username);
-            
+
             if (data != null) {
                 dedupeCustomers(data);
                 dedupeSuppliers(data);
@@ -382,7 +383,6 @@ public class Database {
             data.addInvoice(invoice);
         }
     }
-
 
     private FinvoryData loadCompanyDataLocal(String companyUsername) {
         String folder = companyFolder(companyUsername);
@@ -825,7 +825,7 @@ public class Database {
             for (Document doc : returnsCol.find(com.mongodb.client.model.Filters.eq("companyUsername", username))) {
                 String productId = doc.getString("productId");
                 if (productId == null) {
-                    continue; 
+                    continue;
                 }
                 Product product = null;
                 if (data.getProducts() != null) {
@@ -878,5 +878,28 @@ public class Database {
 
             System.err.println("Error: La lista de retornos es inmodificable.");
         }
+    }
+
+    private void loadCompanyInfoFromCloud(FinvoryData data, String username) {
+        MongoCollection<Document> col = MongoDBConnection.getCollection("companies");
+        if (col == null) {
+            return;
+        }
+
+        Document doc = col.find(Filters.eq("companyUsername", username)).first();
+        if (doc == null) {
+            return;
+        }
+
+        CompanyAccount company = data.getCompanyInfo();
+        if (company == null) {
+            company = new CompanyAccount();
+            data.setCompanyInfo(company);
+        }
+
+        company.setName(doc.getString("name"));
+        company.setPhone(doc.getString("phone"));
+        company.setEmail(doc.getString("email"));
+        company.setLogoPath(doc.getString("logoPath"));
     }
 }

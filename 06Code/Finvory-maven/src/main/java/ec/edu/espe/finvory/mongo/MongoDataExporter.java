@@ -80,17 +80,21 @@ public class MongoDataExporter {
         for (CompanyAccount companyAccount : systemUsers.getCompanyAccounts()) {
             Document document = new Document();
             document.append("username", companyAccount.getUsername());
+            document.append("password", companyAccount.getPassword());
             document.append("type", "COMPANY");
             document.append("companyUsername", companyAccount.getUsername());
             document.append("name", companyAccount.getName());
+            document.append("logoPath", companyAccount.getLogoPath());
             documents.add(document);
         }
 
         for (PersonalAccount personalAccount : systemUsers.getPersonalAccounts()) {
             Document document = new Document();
             document.append("username", personalAccount.getUsername());
+            document.append("password", personalAccount.getPassword());
             document.append("type", "PERSONAL");
             document.append("fullName", personalAccount.getFullName());
+            document.append("profilePhotoPath", personalAccount.getProfilePhotoPath());
             documents.add(document);
         }
 

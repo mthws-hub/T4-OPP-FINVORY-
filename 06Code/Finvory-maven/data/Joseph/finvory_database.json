@@ -1,19 +1,8 @@
 {
   "companyInfo": {
     "name": "McDonalds",
-    "address": {
-      "country": "Ecuador",
-      "city": "QUITO",
-      "street": "Solanda",
-      "zipCode": "",
-      "streetNumber": "",
-      "region": ""
-    },
-    "ruc": "0011751774793",
     "phone": "0963514785",
-    "email": "joseph3elcrac@gmail.com",
-    "username": "Joseph",
-    "password": "123"
+    "email": "yussepeelcrac@gmail.com"
   },
   "customers": [
     {
@@ -124,8 +113,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-12-06",
-      "paymentDueDate": "2025-12-06",
+      "date": "2025-11-28",
+      "paymentDueDate": "2025-11-28",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -152,8 +141,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-12-06",
-      "paymentDueDate": "2025-12-06",
+      "date": "2025-11-28",
+      "paymentDueDate": "2025-11-28",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -187,8 +176,8 @@
     },
     {
       "invoiceNumber": "F-3",
-      "date": "2025-12-06",
-      "paymentDueDate": "2025-12-06",
+      "date": "2025-11-28",
+      "paymentDueDate": "2025-11-28",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -270,7 +259,7 @@
         "baseCostPrice": 12.00,
         "supplierId": "1254784513"
       },
-      "quantity": 4,
+      "quantity": 3,
       "reason": "Compra Incorrecta",
       "returnDate": "2025-12-30"
     }

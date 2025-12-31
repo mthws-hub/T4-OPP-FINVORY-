@@ -66,10 +66,8 @@ public class FinvoryController {
     public void saveData() {
         if (currentCompanyUsername != null && data != null && data.getCompanyInfo() != null) {
             dataBase.saveCompanyData(data, currentCompanyUsername);
-            try {
-                MongoDataExporter.exportCompanyData(currentCompanyUsername, data, data.getCompanyInfo());
-            } catch (Exception e) {
-            }
+            dataBase.saveUsers(users);
+            syncUsersToCloud();
         }
     }
 
@@ -141,7 +139,7 @@ public class FinvoryController {
 
         for (PersonalAccount personal : users.getPersonalAccounts()) {
             if (personal.getUsername().equals(username) && personal.checkPassword(password)) {
-                this.currentCompanyUsername = null;
+                this.currentCompanyUsername = username;
                 this.data = null;
                 this.userType = "PERSONAL";
                 return true;
@@ -981,5 +979,65 @@ public class FinvoryController {
                 break;
             }
         }
+    }
+
+    public PersonalAccount getLoggedInPersonalAccount() {
+        if (currentCompanyUsername == null) {
+            return null;
+        }
+        for (PersonalAccount pa : users.getPersonalAccounts()) {
+            if (pa.getUsername().equals(currentCompanyUsername)) {
+                return pa;
+            }
+        }
+        return null;
+    }
+
+    public void handleUpdatePersonalProfile(String newFullName, String newPassword) {
+        PersonalAccount personalAccount = getLoggedInPersonalAccount();
+        if (personalAccount != null) {
+            personalAccount.setFullName(newFullName);
+            personalAccount.setPassword(newPassword);
+            dataBase.saveUsers(users);
+            syncUsersToCloud();
+            JOptionPane.showMessageDialog(null, "Perfil actualizado correctamente.");
+        }
+    }
+
+    public String handleUploadPhoto(java.io.File sourceFile, String username, String oldPath) {
+        try {
+            if (oldPath != null) {
+                java.io.File oldFile = new java.io.File(oldPath);
+                if (oldFile.exists()) {
+                    oldFile.delete();
+                }
+            }
+
+            java.io.File folder = new java.io.File("data/profiles");
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            String extension = sourceFile.getName().substring(sourceFile.getName().lastIndexOf("."));
+            java.io.File destFile = new java.io.File(folder, username + "_profile" + extension);
+
+            java.nio.file.Files.copy(sourceFile.toPath(), destFile.toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+            return destFile.getPath();
+        } catch (java.io.IOException e) {
+            System.err.println("Error al procesar la imagen: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public CompanyAccount findCompanyByName(String queryName) {
+        String query = queryName.toLowerCase().trim();
+        for (CompanyAccount company : users.getCompanyAccounts()) {
+            if (company.getName().toLowerCase().contains(query)) {
+                return company;
+            }
+        }
+        return null;
     }
 }

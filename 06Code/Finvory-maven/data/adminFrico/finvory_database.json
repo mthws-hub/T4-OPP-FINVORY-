@@ -35,28 +35,14 @@
       "identification": "1245784512",
       "phone": "0987451254",
       "email": "pm@gmail.com",
-      "clientType": "PREMIUM"
+      "clientType": "VIP"
     },
     {
-      "name": "Rodrigo Delgado",
-      "identification": "0012365478963",
-      "phone": "0983489630",
-      "email": "m@gmail.com",
-      "clientType": "STANDARD"
-    },
-    {
-      "name": "Pedro Paz",
-      "identification": "0014785236987",
-      "phone": "0994896354",
-      "email": "k@gmail.com",
-      "clientType": "STANDARD"
-    },
-    {
-      "name": "Pedro Martin",
-      "identification": "1245784512",
-      "phone": "0987451254",
-      "email": "pm@gmail.com",
-      "clientType": "PREMIUM"
+      "name": "Lucas",
+      "identification": "1751132869",
+      "phone": "0983249630",
+      "email": "l@gmail.com",
+      "clientType": "VIP"
     }
   ],
   "products": [
@@ -66,7 +52,7 @@
       "description": "sirven para los bmw",
       "barcode": "12434354231",
       "baseCostPrice": 70.60,
-      "supplierId": "1234315652001"
+      "supplierId": "0015547895623"
     },
     {
       "id": "DSSA",
@@ -115,69 +101,86 @@
       "barcode": "12121212",
       "baseCostPrice": 1.20,
       "supplierId": "1234315652001"
+    },
+    {
+      "id": "POO-123",
+      "name": "Teclado Inalémbrico",
+      "description": "buen teclado",
+      "barcode": "42342432423",
+      "baseCostPrice": 100.00,
+      "supplierId": "0011751774793"
+    },
+    {
+      "id": "DSSO",
+      "name": "Frenos Aveo",
+      "description": "Sirve para Aveo",
+      "barcode": "1025487888",
+      "baseCostPrice": 10.25,
+      "supplierId": "0011751774793"
     }
   ],
   "suppliers": [
     {
-      "fullName": "Maryuri Salome Quina Molina",
-      "id1": "1234315652001",
-      "id2": "",
-      "phone": "0927890399",
-      "email": "maryuri@gmail.com",
-      "description": "buenos productos"
+      "fullName": "Joseph Benjamín Medina Sánchez",
+      "id1": "0011751774793",
+      "id2": "123",
+      "phone": "0963514785",
+      "email": "joseph3elcrac@gmail.com",
+      "description": "bueno"
     },
     {
-      "fullName": "Maryuri Salome Quina Molina",
-      "id1": "1234315652001",
-      "id2": "",
-      "phone": "0927890399",
-      "email": "maryuri@gmail.com",
-      "description": "buenos productos"
+      "fullName": "María Gracia Martínez",
+      "id1": "0015547895623",
+      "id2": "001",
+      "phone": "0998745512",
+      "email": "q@gmail.com",
+      "description": "Precios baratos"
     }
   ],
   "inventories": [
     {
+      "name": "Central",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Rocafuerte",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {
+        "DLLA123": 9,
+        "P00-11": 20,
+        "POO-123": 20
+      }
+    },
+    {
       "name": "Bodega Sur",
       "address": {
         "country": "Ecuador",
-        "city": "Quito",
-        "street": "Azcasubi",
+        "city": "Cuenca",
+        "street": "Moran",
         "zipCode": "",
         "streetNumber": "",
         "region": ""
       },
       "productStock": {
-        "DSSA": 50,
-        "PkD 200": 4
+        "P00-5": 15,
+        "DSSO": 10
       }
     },
     {
-      "name": "Central",
-      "address": {
-        "country": "Colombia",
-        "city": "Cali",
-        "street": "Avenida Principal",
-        "zipCode": "",
-        "streetNumber": "",
-        "region": ""
-      },
-      "productStock": {
-        "P001-4": 5
-      }
-    },
-    {
-      "name": "Bodega Norte",
+      "name": "Local Solanda",
       "address": {
         "country": "Ecuador",
         "city": "Quito",
-        "street": "Av Americas",
+        "street": "Moran Valverde",
         "zipCode": "",
         "streetNumber": "",
         "region": ""
       },
       "productStock": {
-        "P00-5": 12,
-        "P-004": 10
+        "DSSA": 2
       }
     }
   ],
@@ -190,13 +193,16 @@
       "streetNumber": "",
       "region": ""
     },
-    "productStock": {}
+    "productStock": {
+      "P00-11": 1,
+      "DSSA": 2
+    }
   },
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-12-21",
-      "paymentDueDate": "2025-12-21",
+      "date": "2025-12-13",
+      "paymentDueDate": "2025-12-13",
       "customer": {
         "name": "Rodrigo Delgado",
         "identification": "0012365478963",
@@ -209,22 +215,22 @@
           "productId": "P00-5",
           "productName": "Pastilla de Frenos",
           "quantity": 2,
-          "priceApplied": 12.30,
-          "lineTotal": 24.60
+          "priceApplied": 0.0,
+          "lineTotal": 0.00
         }
       ],
       "status": "COMPLETED",
-      "subtotal": 24.60,
+      "subtotal": 0.00,
       "discountRate": 0,
       "discountAmount": 0.00,
       "taxRate": 0.15,
-      "taxAmount": 3.69,
-      "total": 28.29
+      "taxAmount": 0.00,
+      "total": 0.00
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-12-21",
-      "paymentDueDate": "2025-12-21",
+      "date": "2025-12-13",
+      "paymentDueDate": "2025-12-13",
       "customer": {
         "name": "Pedro Martin",
         "identification": "1245784512",
@@ -237,23 +243,121 @@
           "productId": "P00-5",
           "productName": "Pastilla de Frenos",
           "quantity": 1,
-          "priceApplied": 12.30,
-          "lineTotal": 12.30
+          "priceApplied": 0.0,
+          "lineTotal": 0.00
         }
       ],
       "status": "COMPLETED",
-      "subtotal": 12.30,
+      "subtotal": 0.00,
       "discountRate": 0,
       "discountAmount": 0.00,
       "taxRate": 0.15,
-      "taxAmount": 1.85,
-      "total": 14.15
+      "taxAmount": 0.00,
+      "total": 0.00
+    },
+    {
+      "invoiceNumber": "FFRI-003",
+      "date": "2025-12-13",
+      "paymentDueDate": "2025-12-13",
+      "customer": {
+        "name": "Pedro Paz",
+        "identification": "0014785236987",
+        "phone": "0994896354",
+        "email": "k@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "P001-4",
+          "productName": "Producto Prueb",
+          "quantity": 2,
+          "priceApplied": 0.0,
+          "lineTotal": 0.00
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 0.00,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 0.00,
+      "total": 0.00
+    },
+    {
+      "invoiceNumber": "F-4",
+      "date": "2025-12-23",
+      "paymentDueDate": "2025-12-23",
+      "customer": {
+        "name": "Pedro Martin",
+        "identification": "1245784512",
+        "phone": "0987451254",
+        "email": "pm@gmail.com",
+        "clientType": "VIP"
+      },
+      "lines": [
+        {
+          "productId": "DLLA123",
+          "productName": "Frenos BMW",
+          "quantity": 2,
+          "priceApplied": 98.84,
+          "lineTotal": 197.68
+        },
+        {
+          "productId": "DSSO",
+          "productName": "Frenos Aveo",
+          "quantity": 1,
+          "priceApplied": 14.35,
+          "lineTotal": 14.35
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 212.03,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 31.80,
+      "total": 243.83
+    },
+    {
+      "invoiceNumber": "F-5",
+      "date": "2025-12-23",
+      "paymentDueDate": "2025-12-23",
+      "customer": {
+        "name": "Pedro Paz",
+        "identification": "0014785236987",
+        "phone": "0994896354",
+        "email": "k@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "DLLA123",
+          "productName": "Frenos BMW",
+          "quantity": 1,
+          "priceApplied": 127.08,
+          "lineTotal": 127.08
+        },
+        {
+          "productId": "DSSO",
+          "productName": "Frenos Aveo",
+          "quantity": 1,
+          "priceApplied": 18.45,
+          "lineTotal": 18.45
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 145.53,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 21.83,
+      "total": 167.36
     }
   ],
   "returns": [],
   "taxRate": 0.15,
-  "profitPercentage": 0,
-  "discountStandard": 0,
-  "discountPremium": 0,
-  "discountVip": 0
+  "profitPercentage": 1.0,
+  "discountStandard": 0.1,
+  "discountPremium": 0.2,
+  "discountVip": 0.3
 }

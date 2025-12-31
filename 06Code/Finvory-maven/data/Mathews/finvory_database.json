@@ -1,0 +1,91 @@
+{
+  "companyInfo": {
+    "name": "BlockBuster",
+    "address": {
+      "country": "Ecuador",
+      "city": "Cuenca",
+      "street": "Av. 6 de Diciembre",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "ruc": "0011751132869",
+    "phone": "0983249630",
+    "email": "blockbuster@gmail.com",
+    "username": "Mathews",
+    "password": "Mathews123",
+    "logoPath": "data\\profiles\\Mathews_profile.jpeg"
+  },
+  "customers": [],
+  "products": [
+    {
+      "id": "BB-001",
+      "name": "Frankenstein",
+      "description": "A brilliant but egotistical scientist brings a monstrous creature to life in a daring experiment that ultimately leads to the undoing of both the creator and his tragic creation.",
+      "barcode": "1222121212",
+      "baseCostPrice": 4.50,
+      "supplierId": "0011452487541"
+    },
+    {
+      "id": "BB-002",
+      "name": "Pulp Fiction",
+      "description": "In the realm of underworld, a series of incidents intertwines the lives of two Los Angeles mobsters, a gangster\u0027s wife, a boxer and two small-time criminals.",
+      "barcode": "548754122",
+      "baseCostPrice": 5.00,
+      "supplierId": "0014578412547"
+    }
+  ],
+  "suppliers": [
+    {
+      "fullName": "Guillermo del Toro Gómez",
+      "id1": "0011452487541",
+      "id2": "",
+      "phone": "0987451478",
+      "email": "guillermo@yahoo.com",
+      "description": "Que buen director"
+    },
+    {
+      "fullName": "Quentin Jerome Tarantino",
+      "id1": "0014578412547",
+      "id2": "",
+      "phone": "0998745124",
+      "email": "jerome@hotmail.com",
+      "description": ""
+    }
+  ],
+  "inventories": [
+    {
+      "name": "Central",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Av seis de Diciembre",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {
+        "BB-002": 14,
+        "BB-001": 12
+      }
+    }
+  ],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Bodega Obsoletos",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "productStock": {}
+  },
+  "invoices": [],
+  "returns": [],
+  "taxRate": 0.15,
+  "profitPercentage": 0.5,
+  "discountStandard": 0.1,
+  "discountPremium": 0.2,
+  "discountVip": 0.3
+}
