@@ -222,7 +222,7 @@
       },
       "quantity": 1,
       "reason": "Defectuoso",
-      "returnDate": "2025-12-30"
+      "returnDate": "2026-01-01"
     },
     {
       "product": {
@@ -235,7 +235,7 @@
       },
       "quantity": 1,
       "reason": "Defectuoso",
-      "returnDate": "2025-12-30"
+      "returnDate": "2026-01-01"
     },
     {
       "product": {
@@ -248,7 +248,7 @@
       },
       "quantity": 4,
       "reason": "Compra Incorrecta",
-      "returnDate": "2025-12-30"
+      "returnDate": "2026-01-01"
     },
     {
       "product": {
@@ -261,7 +261,7 @@
       },
       "quantity": 3,
       "reason": "Compra Incorrecta",
-      "returnDate": "2025-12-30"
+      "returnDate": "2026-01-01"
     }
   ],
   "taxRate": 0.15,

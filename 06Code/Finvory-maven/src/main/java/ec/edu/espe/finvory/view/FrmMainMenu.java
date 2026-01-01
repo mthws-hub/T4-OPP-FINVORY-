@@ -12,6 +12,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
 
     /**
      * Creates new form FrmMainMenu
+     * @param controller
      */
     public FrmMainMenu(FinvoryController controller) {
         initComponents();
@@ -180,6 +181,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
     private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
         FrmInventories frmInventories = new FrmInventories(this.controller);
         frmInventories.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmMainMenu.this.setVisible(true);
             }
@@ -197,6 +199,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
     private void itemSuppliersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSuppliersActionPerformed
         FrmSuppliers suppliers = new FrmSuppliers(this.controller);
         suppliers.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmMainMenu.this.setVisible(true);
             }
@@ -208,6 +211,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         FrmPrices prices = new FrmPrices(this.controller);
         prices.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmMainMenu.this.setVisible(true);
             }
@@ -235,6 +239,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         FrmSaleInvoice sale = new FrmSaleInvoice(controller);
         sale.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmMainMenu.this.setVisible(true);
             }
@@ -249,7 +254,16 @@ public class FrmMainMenu extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         FrmSalesReport frmSales = new FrmSalesReport(this.controller);
+        frmSales.addWindowListener(new java.awt.event.WindowAdapter() {
+            
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                FrmMainMenu.this.setVisible(true);
+            }
+        });
+        
         frmSales.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -259,6 +273,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         FrmProfileCompany profileCompany = new FrmProfileCompany(controller);
         profileCompany.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmMainMenu.this.setVisible(true);
             }

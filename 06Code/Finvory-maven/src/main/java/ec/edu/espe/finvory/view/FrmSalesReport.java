@@ -17,15 +17,11 @@ public class FrmSalesReport extends javax.swing.JFrame {
     /**
      * Creates new form FrmSalesReport
      */
-    public FrmSalesReport() {
-        this.controller = controller;
-        initComponents();
-        this.setLocationRelativeTo(null);
-    }
-
+    
     public FrmSalesReport(FinvoryController controller) {
         this.controller = controller;
         initComponents();
+       
         this.setLocationRelativeTo(null);
         loadSalesTable();
         FinvoryApp.setIcon(this);
@@ -73,6 +69,8 @@ public class FrmSalesReport extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        mnuGrossReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -241,6 +239,18 @@ public class FrmSalesReport extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu2.setText("Reporte");
+
+        mnuGrossReport.setText("Ventas Brutas");
+        mnuGrossReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuGrossReportActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnuGrossReport);
+
+        jMenuBar1.add(jMenu2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -325,30 +335,20 @@ public class FrmSalesReport extends javax.swing.JFrame {
         lblTotalVentas.setText("Total Ventas: $" + String.format("%.2f", totalSum));
     }//GEN-LAST:event_btnFilterActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+    private void mnuGrossReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGrossReportActionPerformed
+            FrmGrossReport gross = new FrmGrossReport(this.controller);
+            
+            gross.addWindowListener(new java.awt.event.WindowAdapter() {
+                
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                FrmSalesReport.this.setVisible(true);
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+        });
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmSalesReport().setVisible(true));
-    }
+        gross.setVisible(true);
+        FrmSalesReport.this.setVisible(false);
+    }//GEN-LAST:event_mnuGrossReportActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;
@@ -358,6 +358,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
@@ -368,6 +369,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser jdEnd;
     private com.toedter.calendar.JDateChooser jdStart;
     private javax.swing.JLabel lblTotalVentas;
+    private javax.swing.JMenuItem mnuGrossReport;
     private javax.swing.JTable tblSales;
     // End of variables declaration//GEN-END:variables
 }
