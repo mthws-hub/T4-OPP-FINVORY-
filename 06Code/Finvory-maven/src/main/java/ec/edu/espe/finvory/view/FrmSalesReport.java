@@ -2,26 +2,28 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Maryuri Quiña, @ESPE
+ * @author Maryuri Quiña, The POOwer Rangers Of Programming
  */
 public class FrmSalesReport extends javax.swing.JFrame {
 
+    private String currentView = "SALES";
+    private String currentReportType = "SALES_LIST";
     private FinvoryController controller;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmSalesReport.class.getName());
 
     /**
      * Creates new form FrmSalesReport
      */
-    
     public FrmSalesReport(FinvoryController controller) {
         this.controller = controller;
         initComponents();
-       
+
         this.setLocationRelativeTo(null);
         loadSalesTable();
         FinvoryApp.setIcon(this);
@@ -40,6 +42,30 @@ public class FrmSalesReport extends javax.swing.JFrame {
             }
         }
         lblTotalVentas.setText("Total Ventas: $" + String.format("%.2f", totalSum));
+    }
+
+    private void loadPopularProductsTable() {
+        DefaultTableModel tableModel = (DefaultTableModel) tblSales.getModel();
+        String[] headers = {"Producto", "Cantidad vendida"};
+        tableModel.setColumnIdentifiers(headers);
+        tableModel.setRowCount(0);
+
+        List<Object[]> data = controller.getPopularProductsReportData();
+        for (Object[] row : data) {
+            tableModel.addRow(row);
+        }
+    }
+
+    private void showPopularProducts() {
+        currentReportType = "POPULAR_PRODUCTS";
+        DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
+        model.setColumnIdentifiers(new String[]{"Producto", "Cantidad vendida"});
+        model.setRowCount(0);
+
+        List<Object[]> data = controller.getPopularProductsReportData();
+        for (Object[] row : data) {
+            model.addRow(row);
+        }
     }
 
     /**
@@ -71,6 +97,8 @@ public class FrmSalesReport extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         mnuGrossReport = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        mnuPopularProducts = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -121,7 +149,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnRefresh)
-                .addGap(42, 42, 42)
+                .addGap(18, 18, 18)
                 .addComponent(btnExportCSV)
                 .addGap(47, 47, 47))
         );
@@ -166,7 +194,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
                     .addComponent(jdStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(99, 99, 99)
                 .addComponent(btnFilter)
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,7 +243,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,6 +278,18 @@ public class FrmSalesReport extends javax.swing.JFrame {
         jMenu2.add(mnuGrossReport);
 
         jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Productos");
+
+        mnuPopularProducts.setText("Productos Demandados");
+        mnuPopularProducts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuPopularProductsActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mnuPopularProducts);
+
+        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -293,53 +333,75 @@ public class FrmSalesReport extends javax.swing.JFrame {
             if (!path.toLowerCase().endsWith(".csv")) {
                 path += ".csv";
             }
-            controller.exportSalesToCSV(path);
+
+            DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
+            String[] headers = new String[model.getColumnCount()];
+            for (int i = 0; i < model.getColumnCount(); i++) {
+                headers[i] = model.getColumnName(i);
+            }
+
+            List<Object[]> data = new ArrayList<>();
+            for (int i = 0; i < model.getRowCount(); i++) {
+                Object[] row = new Object[model.getColumnCount()];
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    row[j] = model.getValueAt(i, j);
+                }
+                data.add(row);
+            }
+            controller.exportTableToCSV(path, headers, data);
         }
     }//GEN-LAST:event_btnExportCSVActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        loadSalesTable();
+        if (currentReportType.equals("POPULAR_PRODUCTS")) {
+            showPopularProducts();
+        } else {
+            currentReportType = "SALES_LIST";
+            DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
+            model.setColumnIdentifiers(new String[]{"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"});
+            loadSalesTable();
+        }
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
-        java.util.Date start = jdStart.getDate();
-        java.util.Date end = jdEnd.getDate();
-
-        if (start == null || end == null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione ambas fechas.");
+        if (jdStart.getDate() == null || jdEnd.getDate() == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione ambas fechas.");
             return;
         }
 
-        if (start.after(end)) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Error: La fecha de inicio no puede ser posterior a la fecha de fin.", "Rango Inválido", javax.swing.JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        currentReportType = "SALES_LIST";
 
-        DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSales.getModel();
+        String[] headers = {"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"};
+        model.setColumnIdentifiers(headers);
         model.setRowCount(0);
+
+        java.time.LocalDate start = jdStart.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+        java.time.LocalDate end = jdEnd.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+
         double totalSum = 0;
-
-        for (Object[] row : controller.getSalesTableData()) {
-            try {
-                java.time.LocalDate localDate = java.time.LocalDate.parse(row[1].toString());
-                java.util.Date saleDate = java.util.Date.from(localDate.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());
-
-                if (!saleDate.before(start) && !saleDate.after(end)) {
-                    model.addRow(row);
-                    totalSum += Double.parseDouble(row[4].toString().replace(",", "."));
-                }
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
+        for (ec.edu.espe.finvory.model.InvoiceSim inv : controller.getData().getInvoices()) {
+            java.time.LocalDate date = inv.getDate();
+            if (!date.isBefore(start) && !date.isAfter(end)) {
+                model.addRow(new Object[]{
+                    inv.getId(),
+                    inv.getDate().toString(),
+                    inv.getCustomer().getName(),
+                    String.format("%.2f", inv.getSubtotal()),
+                    String.format("%.2f", inv.getTotal())
+                });
+                totalSum += inv.getTotal().doubleValue();
             }
         }
-        lblTotalVentas.setText("Total Ventas: $" + String.format("%.2f", totalSum));
+
+        lblTotalVentas.setText("TOTAL VENTAS: $" + String.format("%.2f", totalSum));
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void mnuGrossReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGrossReportActionPerformed
-            FrmGrossReport gross = new FrmGrossReport(this.controller);
-            
-            gross.addWindowListener(new java.awt.event.WindowAdapter() {
-                
+        FrmGrossReport gross = new FrmGrossReport(this.controller);
+
+        gross.addWindowListener(new java.awt.event.WindowAdapter() {
+
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmSalesReport.this.setVisible(true);
@@ -350,6 +412,19 @@ public class FrmSalesReport extends javax.swing.JFrame {
         FrmSalesReport.this.setVisible(false);
     }//GEN-LAST:event_mnuGrossReportActionPerformed
 
+    private void mnuPopularProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPopularProductsActionPerformed
+        currentReportType = "POPULAR_PRODUCTS";
+        DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
+        model.setColumnIdentifiers(new String[]{"Producto", "Cantidad vendida"});
+        model.setRowCount(0);
+
+        List<Object[]> data = controller.getPopularProductsReportData();
+        for (Object[] row : data) {
+            model.addRow(row);
+        }
+        lblTotalVentas.setText("Productos Demandados");
+    }//GEN-LAST:event_mnuPopularProductsActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;
     private javax.swing.JButton btnFilter;
@@ -359,6 +434,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
@@ -370,6 +446,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser jdStart;
     private javax.swing.JLabel lblTotalVentas;
     private javax.swing.JMenuItem mnuGrossReport;
+    private javax.swing.JMenuItem mnuPopularProducts;
     private javax.swing.JTable tblSales;
     // End of variables declaration//GEN-END:variables
 }

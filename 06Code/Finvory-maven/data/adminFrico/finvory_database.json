@@ -1,19 +1,8 @@
 {
   "companyInfo": {
     "name": "Frico Autopartes S.A.",
-    "address": {
-      "country": "Ecuador",
-      "city": "Quito",
-      "street": "Av. 10 de Agosto N45",
-      "zipCode": "170504",
-      "streetNumber": "N45-23",
-      "region": "Pichincha"
-    },
-    "ruc": "1790011223001",
     "phone": "022445566",
-    "email": "admin@frico.com",
-    "username": "adminFrico",
-    "password": "123"
+    "email": "admin@frico.com"
   },
   "customers": [
     {
@@ -201,8 +190,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-12-13",
-      "paymentDueDate": "2025-12-13",
+      "date": "2025-12-12",
+      "paymentDueDate": "2025-12-12",
       "customer": {
         "name": "Rodrigo Delgado",
         "identification": "0012365478963",
@@ -229,8 +218,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-12-13",
-      "paymentDueDate": "2025-12-13",
+      "date": "2025-12-12",
+      "paymentDueDate": "2025-12-12",
       "customer": {
         "name": "Pedro Martin",
         "identification": "1245784512",
@@ -257,8 +246,8 @@
     },
     {
       "invoiceNumber": "FFRI-003",
-      "date": "2025-12-13",
-      "paymentDueDate": "2025-12-13",
+      "date": "2025-12-12",
+      "paymentDueDate": "2025-12-12",
       "customer": {
         "name": "Pedro Paz",
         "identification": "0014785236987",
@@ -285,8 +274,8 @@
     },
     {
       "invoiceNumber": "F-4",
-      "date": "2025-12-23",
-      "paymentDueDate": "2025-12-23",
+      "date": "2025-12-22",
+      "paymentDueDate": "2025-12-22",
       "customer": {
         "name": "Pedro Martin",
         "identification": "1245784512",
@@ -320,8 +309,8 @@
     },
     {
       "invoiceNumber": "F-5",
-      "date": "2025-12-23",
-      "paymentDueDate": "2025-12-23",
+      "date": "2025-12-22",
+      "paymentDueDate": "2025-12-22",
       "customer": {
         "name": "Pedro Paz",
         "identification": "0014785236987",

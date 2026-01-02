@@ -23,6 +23,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import org.bson.Document;
 import com.mongodb.client.model.Filters;
+import java.util.Collections;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.TreeSet;
 
 /**
  *
@@ -868,26 +872,20 @@ public class FinvoryController {
         return rows;
     }
 
-    public void exportSalesToCSV(String fileName) {
+    public void exportTableToCSV(String fileName, String[] headers, List<Object[]> dataRows) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             writer.println("sep=,");
-            writer.println("ID Factura,Fecha,Cliente,Subtotal,Impuesto,Total");
+            writer.println(String.join(",", headers));
 
-            for (InvoiceSim inv : data.getInvoices()) {
-                String subtotal = String.format("%.2f", inv.getSubtotal().doubleValue()).replace(",", ".");
-                String tax = String.format("%.2f", inv.getTaxAmount().doubleValue()).replace(",", ".");
-                String total = String.format("%.2f", inv.getTotal().doubleValue()).replace(",", ".");
-
-                writer.printf("%s,%s,%s,%s,%s,%s%n",
-                        inv.getId(),
-                        inv.getDate(),
-                        inv.getCustomer().getName(),
-                        subtotal,
-                        tax,
-                        total);
+            for (Object[] row : dataRows) {
+                StringJoiner joiner = new StringJoiner(",");
+                for (Object cell : row) {
+                    joiner.add(cell.toString().replace(",", "."));
+                }
+                writer.println(joiner.toString());
             }
         } catch (IOException e) {
-            System.err.println("Error al exportar CSV: " + e.getMessage());
+            System.err.println("Error al exportar a CSV: " + e.getMessage());
         }
     }
 
@@ -1040,4 +1038,124 @@ public class FinvoryController {
         }
         return null;
     }
+
+    public List<Object[]> getPopularProductsReportData() {
+        List<Object[]> rows = new ArrayList<>();
+        HashMap<String, Integer> popularityMap = getSalesOrDemandReport();
+
+        popularityMap.forEach((productName, quantity) -> {
+            rows.add(new Object[]{productName, quantity});
+        });
+
+        rows.sort((rowA, rowB) -> ((Integer) rowB[1]).compareTo((Integer) rowA[1]));
+
+        return rows;
+    }
+
+    public List<String> getAvailableInvoiceYears() {
+        List<String> years = new ArrayList<>();
+        Set<Integer> uniqueYears = new TreeSet<>(Collections.reverseOrder());
+
+        for (InvoiceSim invoice : data.getInvoices()) {
+            uniqueYears.add(invoice.getDate().getYear());
+        }
+
+        if (uniqueYears.isEmpty()) {
+            uniqueYears.add(LocalDate.now().getYear());
+        }
+
+        for (Integer year : uniqueYears) {
+            years.add(String.valueOf(year));
+        }
+        return years;
+    }
+
+    public List<Object[]> getCustomerActivityFlexibleData(int year, int month) {
+        List<Object[]> rows = new ArrayList<>();
+        Map<String, Integer> frequencyMap = new HashMap<>();
+        Map<String, BigDecimal> totalAmountMap = new HashMap<>();
+
+        for (InvoiceSim invoice : data.getInvoices()) {
+            LocalDate invoiceDate = invoice.getDate();
+
+            boolean yearMatches = (invoiceDate.getYear() == year);
+            boolean monthMatches = (month == 0 || invoiceDate.getMonthValue() == month);
+
+            if ("COMPLETED".equals(invoice.getStatus()) && yearMatches && monthMatches) {
+                String name = invoice.getCustomer().getName();
+
+                frequencyMap.put(name, frequencyMap.getOrDefault(name, 0) + 1);
+
+                BigDecimal currentTotal = totalAmountMap.getOrDefault(name, BigDecimal.ZERO);
+                totalAmountMap.put(name, currentTotal.add(invoice.getTotal()));
+            }
+        }
+
+        frequencyMap.forEach((name, frequency) -> {
+            rows.add(new Object[]{
+                name,
+                frequency,
+                String.format("%.2f", totalAmountMap.get(name))
+            });
+        });
+
+        rows.sort((rowA, rowB) -> ((Integer) rowB[1]).compareTo((Integer) rowA[1]));
+
+        return rows;
+    }
+
+    public void exportTableWithDateToCSV(String fileName, String reportTitle, String[] headers, List<Object[]> dataRows) {
+        try (java.io.FileOutputStream fos = new java.io.FileOutputStream(fileName); java.io.OutputStreamWriter osw = new java.io.OutputStreamWriter(fos, "Windows-1252"); java.io.PrintWriter writer = new java.io.PrintWriter(osw)) {
+
+            writer.println("sep=,");
+            writer.println(reportTitle);
+            writer.println("");
+            writer.println(String.join(",", headers));
+
+            for (Object[] row : dataRows) {
+                java.util.StringJoiner joiner = new java.util.StringJoiner(",");
+                for (Object cell : row) {
+                    String value = (cell == null) ? "" : cell.toString().replace(",", ".");
+                    joiner.add(value);
+                }
+                writer.println(joiner.toString());
+            }
+
+        } catch (java.io.IOException e) {
+            System.err.println("Error al exportar a CSV: " + e.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(null, "Error al guardar: " + e.getMessage());
+        }
+    }
+
+    public List<Object[]> getSupplierPerformanceFlexibleData(int year, int month) {
+        List<Object[]> rows = new ArrayList<>();
+        Map<String, Integer> supplyMap = new HashMap<>();
+
+        for (InvoiceSim invoice : data.getInvoices()) {
+            LocalDate invoiceDate = invoice.getDate();
+            boolean yearMatches = (invoiceDate.getYear() == year);
+            boolean monthMatches = (month == 0 || invoiceDate.getMonthValue() == month);
+
+            if ("COMPLETED".equals(invoice.getStatus()) && yearMatches && monthMatches) {
+                for (InvoiceLineSim line : invoice.getLines()) {
+                    Product product = findProduct(line.getProductId());
+                    if (product != null) {
+                        Supplier supplier = findSupplier(product.getSupplierId());
+                        if (supplier != null) {
+                            String name = supplier.getFullName();
+                            supplyMap.put(name, supplyMap.getOrDefault(name, 0) + line.getQuantity());
+                        }
+                    }
+                }
+            }
+        }
+
+        supplyMap.forEach((name, quantity) -> {
+            rows.add(new Object[]{name, quantity});
+        });
+
+        rows.sort((rowA, rowB) -> ((Integer) rowB[1]).compareTo((Integer) rowA[1]));
+        return rows;
+    }
+
 }

@@ -12,6 +12,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
 
     /**
      * Creates new form FrmMainMenu
+     *
      * @param controller
      */
     public FrmMainMenu(FinvoryController controller) {
@@ -43,8 +44,8 @@ public class FrmMainMenu extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         cmbSalesReport = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
+        cmbCustomersReport = new javax.swing.JMenuItem();
+        cmbSuppliersReport = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         MnuAbout = new javax.swing.JMenu();
@@ -128,11 +129,21 @@ public class FrmMainMenu extends javax.swing.JFrame {
         });
         cmbSalesReport.add(jMenuItem3);
 
-        jMenuItem4.setText("Reporte de Clientes");
-        cmbSalesReport.add(jMenuItem4);
+        cmbCustomersReport.setText("Reporte de Clientes");
+        cmbCustomersReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCustomersReportActionPerformed(evt);
+            }
+        });
+        cmbSalesReport.add(cmbCustomersReport);
 
-        jMenuItem8.setText("Reporte de Proveedores");
-        cmbSalesReport.add(jMenuItem8);
+        cmbSuppliersReport.setText("Reporte de Proveedores");
+        cmbSuppliersReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSuppliersReportActionPerformed(evt);
+            }
+        });
+        cmbSalesReport.add(cmbSuppliersReport);
 
         jMenu2.add(cmbSalesReport);
 
@@ -255,13 +266,13 @@ public class FrmMainMenu extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         FrmSalesReport frmSales = new FrmSalesReport(this.controller);
         frmSales.addWindowListener(new java.awt.event.WindowAdapter() {
-            
+
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmMainMenu.this.setVisible(true);
             }
         });
-        
+
         frmSales.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
@@ -282,10 +293,38 @@ public class FrmMainMenu extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
+    private void cmbCustomersReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCustomersReportActionPerformed
+        FrmCustomersReport frmCustReport = new FrmCustomersReport(this.controller);
+
+        frmCustReport.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                FrmMainMenu.this.setVisible(true);
+            }
+        });
+
+        frmCustReport.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_cmbCustomersReportActionPerformed
+
+    private void cmbSuppliersReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSuppliersReportActionPerformed
+        FrmSuppliersReport frmSuppReport = new FrmSuppliersReport(this.controller);
+        frmSuppReport.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                FrmMainMenu.this.setVisible(true);
+            }
+        });
+        frmSuppReport.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_cmbSuppliersReportActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu MnuAbout;
     private javax.swing.JMenuItem MnuCustomer;
+    private javax.swing.JMenuItem cmbCustomersReport;
     private javax.swing.JMenu cmbSalesReport;
+    private javax.swing.JMenuItem cmbSuppliersReport;
     private javax.swing.JMenuItem itemInventories;
     private javax.swing.JMenuItem itemQuit;
     private javax.swing.JMenuItem itemSuppliers;
@@ -297,10 +336,8 @@ public class FrmMainMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
     // End of variables declaration//GEN-END:variables
 }

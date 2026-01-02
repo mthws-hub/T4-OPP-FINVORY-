@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Maryuri Quiña, @ESPE
+ * @author Maryuri Quiña, The POOwer Rangers Of Programming
  */
 public class FrmAddNewCustomer extends javax.swing.JFrame {
 
