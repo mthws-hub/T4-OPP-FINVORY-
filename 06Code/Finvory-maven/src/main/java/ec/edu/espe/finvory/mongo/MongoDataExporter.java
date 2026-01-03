@@ -381,15 +381,15 @@ public class MongoDataExporter {
 
         List<Document> documents = new ArrayList<>();
 
-        for (ReturnedProduct ret : returnsList) {
-            if (ret.getProduct() != null) {
-                Document doc = new Document()
+        for (ReturnedProduct returnedProduct : returnsList) {
+            if (returnedProduct.getProduct() != null) {
+                Document document = new Document()
                         .append("companyUsername", companyUsername)
-                        .append("productId", ret.getProduct().getId())
-                        .append("quantity", ret.getQuantity())
-                        .append("reason", ret.getReason())
-                        .append("returnDate", ret.getReturnDate().toString());
-                documents.add(doc);
+                        .append("productId", returnedProduct.getProduct().getId())
+                        .append("quantity", returnedProduct.getQuantity())
+                        .append("reason", returnedProduct.getReason())
+                        .append("returnDate", returnedProduct.getReturnDate().toString());
+                documents.add(document);
             }
         }
 

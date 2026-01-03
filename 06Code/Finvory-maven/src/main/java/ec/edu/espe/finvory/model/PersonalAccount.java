@@ -52,4 +52,9 @@ public class PersonalAccount {
     public void setProfilePhotoPath(String profilePhotoPath) {
         this.profilePhotoPath = profilePhotoPath;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
 }

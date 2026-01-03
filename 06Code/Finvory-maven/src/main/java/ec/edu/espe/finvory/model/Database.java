@@ -20,13 +20,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
-/**
- * Estrategia de sincronización: - Si hay conexión: la nube es la fuente de
- * verdad. Se carga nube y se sobreescribe local. - Si no hay conexión: se
- * trabaja local y se marca "pendiente". - Al reconectar (siguiente load con
- * conexión): si hay pendiente, se publica local a nube (reemplazo total) y
- * luego se recarga nube para garantizar consistencia.
- */
 public class Database {
 
     private static final String ROOT_DATA_FOLDER = "data";
@@ -44,16 +37,13 @@ public class Database {
 
                 @Override
                 public LocalDate read(JsonReader in) throws IOException {
-                    String s = in.nextString();
-                    return (s == null || s.isBlank()) ? null : LocalDate.parse(s.trim());
+                    String string = in.nextString();
+                    return (string == null || string.isBlank()) ? null : LocalDate.parse(string.trim());
                 }
             })
             .setPrettyPrinting()
             .create();
 
-    /**
-     * Punto único de entrada para UI/controladores.
-     */
     public FinvoryData loadCompanyData(String companyUsername) {
         System.out.println("--- SINCRONIZACIÓN DE DATOS ---");
 
@@ -139,10 +129,10 @@ public class Database {
             File file = new File(fileName);
             new File(file.getParent()).mkdirs();
 
-            try (PrintWriter pw = new PrintWriter(new FileWriter(file))) {
-                pw.println("Key" + DELIMITER + "Value");
+            try (PrintWriter printWriter = new PrintWriter(new FileWriter(file))) {
+                printWriter.println("Key" + DELIMITER + "Value");
                 for (Map.Entry<String, ? extends Object> e : data.entrySet()) {
-                    pw.println(e.getKey() + DELIMITER + formatValue(e.getValue()));
+                    printWriter.println(e.getKey() + DELIMITER + formatValue(e.getValue()));
                 }
             }
             return true;
@@ -156,8 +146,8 @@ public class Database {
             String folder = companyFolder(companyUsername);
             new File(folder).mkdirs();
             File flag = new File(folder + File.separator + PENDING_FILE);
-            try (Writer w = new FileWriter(flag)) {
-                w.write("pending");
+            try (Writer writer = new FileWriter(flag)) {
+                writer.write("pending");
             }
         } catch (IOException ignored) {
         }
@@ -208,12 +198,12 @@ public class Database {
     }
 
     private void loadConfigurationsFromCloud(FinvoryData data, String username) {
-        MongoCollection<Document> col = MongoDBConnection.getCollection("configurations");
-        if (col == null) {
+        MongoCollection<Document> collection = MongoDBConnection.getCollection("configurations");
+        if (collection == null) {
             return;
         }
 
-        Document doc = col.find(Filters.eq("companyUsername", username)).first();
+        Document doc = collection.find(Filters.eq("companyUsername", username)).first();
         if (doc == null) {
             return;
         }
@@ -231,12 +221,12 @@ public class Database {
     }
 
     private void loadProductsFromCloud(FinvoryData data, String username) {
-        MongoCollection<Document> col = MongoDBConnection.getCollection("products");
-        if (col == null) {
+        MongoCollection<Document> collection = MongoDBConnection.getCollection("products");
+        if (collection == null) {
             return;
         }
 
-        for (Document doc : col.find(Filters.eq("companyUsername", username))) {
+        for (Document doc : collection.find(Filters.eq("companyUsername", username))) {
             String productId = doc.getString("productId");
             String name = doc.getString("name");
             String description = doc.getString("description");
@@ -249,12 +239,12 @@ public class Database {
     }
 
     private void loadCustomersFromCloud(FinvoryData data, String username) {
-        MongoCollection<Document> col = MongoDBConnection.getCollection("customers");
-        if (col == null) {
+        MongoCollection<Document> collection = MongoDBConnection.getCollection("customers");
+        if (collection == null) {
             return;
         }
 
-        for (Document doc : col.find(Filters.eq("companyUsername", username))) {
+        for (Document doc : collection.find(Filters.eq("companyUsername", username))) {
             data.addCustomer(new Customer(
                     doc.getString("name"),
                     doc.getString("identification"),
@@ -266,45 +256,45 @@ public class Database {
     }
 
     private void loadSuppliersFromCloud(FinvoryData data, String username) {
-        MongoCollection<Document> col = MongoDBConnection.getCollection("suppliers");
-        if (col == null) {
+        MongoCollection<Document> collection = MongoDBConnection.getCollection("suppliers");
+        if (collection == null) {
             return;
         }
 
-        for (Document doc : col.find(Filters.eq("companyUsername", username))) {
-            Supplier s = new Supplier(
-                    doc.getString("fullName"),
-                    doc.getString("id1"),
-                    doc.getString("phone"),
-                    doc.getString("email"),
-                    doc.getString("description")
+        for (Document document : collection.find(Filters.eq("companyUsername", username))) {
+            Supplier supplier = new Supplier(
+                    document.getString("fullName"),
+                    document.getString("id1"),
+                    document.getString("phone"),
+                    document.getString("email"),
+                    document.getString("description")
             );
-            s.setId2(doc.getString("id2"));
-            data.addSupplier(s);
+            supplier.setId2(document.getString("id2"));
+            data.addSupplier(supplier);
         }
     }
 
     private void loadInventoriesFromCloud(FinvoryData data, String username) {
-        MongoCollection<Document> col = MongoDBConnection.getCollection("inventories");
-        if (col == null) {
+        MongoCollection<Document> collection = MongoDBConnection.getCollection("inventories");
+        if (collection == null) {
             return;
         }
 
-        for (Document doc : col.find(Filters.eq("companyUsername", username))) {
-            String name = doc.getString("name");
+        for (Document document : collection.find(Filters.eq("companyUsername", username))) {
+            String name = document.getString("name");
             if (norm(name).isEmpty()) {
                 continue;
             }
 
-            Address address = toAddress((Document) doc.get("address"));
+            Address address = toAddress((Document) document.get("address"));
             Inventory inventory = new Inventory(name, address);
 
-            Object stockRaw = doc.get("productStock");
+            Object stockRaw = document.get("productStock");
             if (stockRaw instanceof Document stockDoc) {
                 for (Map.Entry<String, Object> entry : stockDoc.entrySet()) {
-                    int qty = toInt(entry.getValue(), 0);
-                    if (qty > 0) {
-                        inventory.setStock(entry.getKey(), qty);
+                    int quantity = toInt(entry.getValue(), 0);
+                    if (quantity > 0) {
+                        inventory.setStock(entry.getKey(), quantity);
                     }
                 }
             }
@@ -318,32 +308,32 @@ public class Database {
             return;
         }
 
-        MongoCollection<Document> col = MongoDBConnection.getCollection("obsolete_inventory");
-        if (col == null) {
+        MongoCollection<Document> collection = MongoDBConnection.getCollection("obsolete_inventory");
+        if (collection == null) {
             return;
         }
 
-        Document doc = col.find(Filters.eq("companyUsername", username)).first();
-        if (doc == null) {
+        Document document = collection.find(Filters.eq("companyUsername", username)).first();
+        if (document == null) {
             return;
         }
 
-        InventoryOfObsolete obs = data.getObsoleteInventory();
+        InventoryOfObsolete obsolete = data.getObsoleteInventory();
 
-        Address address = toAddress((Document) doc.get("address"));
+        Address address = toAddress((Document) document.get("address"));
         if (address != null) {
-            obs.setAddress(address);
+            obsolete.setAddress(address);
         }
 
-        Map<String, Integer> map = obs.getProductStock();
+        Map<String, Integer> map = obsolete.getProductStock();
         map.clear();
 
-        Object stockRaw = doc.get("productStock");
+        Object stockRaw = document.get("productStock");
         if (stockRaw instanceof Document stockDoc) {
             for (Map.Entry<String, Object> entry : stockDoc.entrySet()) {
-                int qty = toInt(entry.getValue(), 0);
-                if (qty > 0) {
-                    obs.setStock(entry.getKey(), qty);
+                int quantity = toInt(entry.getValue(), 0);
+                if (quantity > 0) {
+                    obsolete.setStock(entry.getKey(), quantity);
                 }
             }
         }
@@ -351,19 +341,19 @@ public class Database {
 
     @SuppressWarnings("unchecked")
     private void loadInvoicesFromCloud(FinvoryData data, String username) {
-        MongoCollection<Document> col = MongoDBConnection.getCollection("invoices");
-        if (col == null) {
+        MongoCollection<Document> collection = MongoDBConnection.getCollection("invoices");
+        if (collection == null) {
             return;
         }
 
-        for (Document doc : col.find(Filters.eq("companyUsername", username))) {
-            String invoiceId = doc.getString("invoiceId");
-            LocalDate date = toLocalDate(doc.getDate("date"));
+        for (Document document : collection.find(Filters.eq("companyUsername", username))) {
+            String invoiceId = document.getString("invoiceId");
+            LocalDate date = toLocalDate(document.getDate("date"));
 
-            Customer customer = buildCustomerFromDoc((Document) doc.get("customer"));
+            Customer customer = buildCustomerFromDoc((Document) document.get("customer"));
 
             ArrayList<InvoiceLineSim> lines = new ArrayList<>();
-            List<Document> linesDoc = (List<Document>) doc.get("lines");
+            List<Document> linesDoc = (List<Document>) document.get("lines");
             if (linesDoc != null) {
                 for (Document l : linesDoc) {
                     int qty = toInt(l.get("quantity"), 0);
@@ -377,7 +367,7 @@ public class Database {
                 }
             }
 
-            BigDecimal taxRate = BigDecimal.valueOf(getDoubleSafe(doc, "tax", getDoubleSafe(doc, "taxRate", 0.0)));
+            BigDecimal taxRate = BigDecimal.valueOf(getDoubleSafe(document, "tax", getDoubleSafe(document, "taxRate", 0.0)));
             InvoiceSim invoice = new InvoiceSim(invoiceId, date, date, customer, lines, taxRate, BigDecimal.ZERO);
             invoice.complete();
             data.addInvoice(invoice);

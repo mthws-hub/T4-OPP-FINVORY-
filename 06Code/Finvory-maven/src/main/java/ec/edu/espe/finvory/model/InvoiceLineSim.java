@@ -59,4 +59,30 @@ public class InvoiceLineSim {
     public BigDecimal getPriceApplied() { 
         return priceApplied;
     }
+
+    public static int getFINAL_PRICE_SCALE() {
+        return FINAL_PRICE_SCALE;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPriceApplied(BigDecimal priceApplied) {
+        this.priceApplied = priceApplied;
+    }
+
+    public void setLineTotal(BigDecimal lineTotal) {
+        this.lineTotal = lineTotal;
+    }
+    
+    
 }

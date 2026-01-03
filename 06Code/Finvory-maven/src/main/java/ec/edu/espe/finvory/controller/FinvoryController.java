@@ -205,14 +205,33 @@ public class FinvoryController {
     }
 
     public ProductDisplayData getProductDisplayData() {
+
+        float profit = 0.0f;
+        float dStd = 0.0f;
+        float dPrm = 0.0f;
+        float dVip = 0.0f;
+
+        if (data.getProfitPercentage() != null) {
+            profit = data.getProfitPercentage().floatValue();
+        }
+        if (data.getDiscountStandard() != null) {
+            dStd = data.getDiscountStandard().floatValue();
+        }
+        if (data.getDiscountPremium() != null) {
+            dPrm = data.getDiscountPremium().floatValue();
+        }
+        if (data.getDiscountVip() != null) {
+            dVip = data.getDiscountVip().floatValue();
+        }
+
         return new ProductDisplayData(
                 new ArrayList<>(data.getProducts()),
                 new ArrayList<>(data.getInventories()),
                 data.getObsoleteInventory(),
-                data.getProfitPercentage() != null ? data.getProfitPercentage().floatValue() : 0.0f,
-                data.getDiscountStandard() != null ? data.getDiscountStandard().floatValue() : 0.0f,
-                data.getDiscountPremium() != null ? data.getDiscountPremium().floatValue() : 0.0f,
-                data.getDiscountVip() != null ? data.getDiscountVip().floatValue() : 0.0f
+                profit,
+                dStd,
+                dPrm,
+                dVip
         );
     }
 
@@ -924,7 +943,6 @@ public class FinvoryController {
         saveData();
         return true;
     }
-    
 
     private void updateReturnsList(String productId, int quantity, String reason) {
         List<ReturnedProduct> returnsList = data.getReturns();
@@ -964,7 +982,6 @@ public class FinvoryController {
             }
         }
     }
-    
 
     public PersonalAccount getLoggedInPersonalAccount() {
         if (currentCompanyUsername == null) {
@@ -1145,7 +1162,7 @@ public class FinvoryController {
         return rows;
     }
 
-     public int getObsoleteStock(String productId) {
+    public int getObsoleteStock(String productId) {
         int total = 0;
         for (ReturnedProduct ret : data.getReturns()) {
             if (ret.getProduct().getId().equals(productId)) {
@@ -1154,7 +1171,6 @@ public class FinvoryController {
         }
         return total;
     }
-
 
     public List<Object[]> getProductTableData(Inventory specificInventory) {
         List<Object[]> rows = new ArrayList<>();

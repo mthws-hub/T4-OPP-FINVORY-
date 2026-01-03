@@ -27,8 +27,8 @@ public class ValidationUtils {
         return regex.matcher(value.trim()).matches();
     }
 
-    public static boolean isEmpty(String str) {
-        return str == null || str.trim().isEmpty();
+    public static boolean isEmpty(String string) {
+        return string == null || string.trim().isEmpty();
     }
 
     public static boolean isValidEmail(String email) {
@@ -67,8 +67,8 @@ public class ValidationUtils {
         if (isEmpty(text)) {
             return false;
         }
-        String t = text.trim();
-        return t.indexOf(" ") > 0 && t.indexOf(" ") < t.length() - 1 && isTextOnly(t);
+        String cleanedText = text.trim();
+        return cleanedText.indexOf(" ") > 0 && cleanedText.indexOf(" ") < cleanedText.length() - 1 && isTextOnly(cleanedText);
     }
 
     public static boolean isPositiveDecimal(String value) {

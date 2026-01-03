@@ -115,4 +115,14 @@ public class InvoiceSim {
     public BigDecimal getDiscountRate() {
         return discountRate;
     }
+
+    public String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+    
+    
 }

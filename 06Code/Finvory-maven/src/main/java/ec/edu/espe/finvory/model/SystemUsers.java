@@ -34,4 +34,14 @@ public class SystemUsers {
     public ArrayList<PersonalAccount> getPersonalAccounts() { 
         return personalAccounts; 
     }
+
+    public void setCompanyAccounts(ArrayList<CompanyAccount> companyAccounts) {
+        this.companyAccounts = companyAccounts;
+    }
+
+    public void setPersonalAccounts(ArrayList<PersonalAccount> personalAccounts) {
+        this.personalAccounts = personalAccounts;
+    }
+    
+    
 }

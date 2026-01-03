@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.031" tests="29" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.092" tests="31" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="24"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,8 +15,9 @@
     <property name="user.country" value="EC"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Apache NetBeans\jdk\bin"/>
-    <property name="sun.java.command" value="C:\Users\Arelys\AppData\Local\Temp\surefire12760015420191513569\surefirebooter-20260102210804909_3.jar C:\Users\Arelys\AppData\Local\Temp\surefire12760015420191513569 2026-01-02T21-08-04_687-jvmRun1 surefire-20260102210804909_1tmp surefire_0-20260102210804909_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\Arelys\AppData\Local\Temp\surefire17365009653352797020\surefirebooter-20260102223757830_3.jar C:\Users\Arelys\AppData\Local\Temp\surefire17365009653352797020 2026-01-02T22-37-57_724-jvmRun1 surefire-20260102223757830_1tmp surefire_0-20260102223757830_2tmp"/>
     <property name="jdk.debug" value="release"/>
+    <property name="test" value="ec.edu.espe.finvory.utils.InventoryValidationTest"/>
     <property name="surefire.test.class.path" value="C:\Users\Arelys\T4-OPP-FINVORY-\06Code\Finvory-maven\target\test-classes;C:\Users\Arelys\T4-OPP-FINVORY-\06Code\Finvory-maven\target\classes;C:\Users\Arelys\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar;C:\Users\Arelys\.m2\repository\org\netbeans\external\AbsoluteLayout\RELEASE140\AbsoluteLayout-RELEASE140.jar;C:\Users\Arelys\.m2\repository\org\mongodb\mongodb-driver-sync\5.2.1\mongodb-driver-sync-5.2.1.jar;C:\Users\Arelys\.m2\repository\org\mongodb\bson\5.2.1\bson-5.2.1.jar;C:\Users\Arelys\.m2\repository\org\mongodb\mongodb-driver-core\5.2.1\mongodb-driver-core-5.2.1.jar;C:\Users\Arelys\.m2\repository\org\mongodb\bson-record-codec\5.2.1\bson-record-codec-5.2.1.jar;C:\Users\Arelys\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.3\junit-jupiter-api-5.10.3.jar;C:\Users\Arelys\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Arelys\.m2\repository\org\junit\platform\junit-platform-commons\1.10.3\junit-platform-commons-1.10.3.jar;C:\Users\Arelys\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Arelys\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.3\junit-jupiter-params-5.10.3.jar;C:\Users\Arelys\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.3\junit-jupiter-engine-5.10.3.jar;C:\Users\Arelys\.m2\repository\org\junit\platform\junit-platform-engine\1.10.3\junit-platform-engine-1.10.3.jar;C:\Users\Arelys\.m2\repository\com\toedter\jcalendar\1.4\jcalendar-1.4.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\Arelys"/>
@@ -30,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\Arelys\AppData\Local\Temp\surefire12760015420191513569\surefirebooter-20260102210804909_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\Arelys\AppData\Local\Temp\surefire17365009653352797020\surefirebooter-20260102223757830_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="24.0.2+12"/>
@@ -60,33 +61,35 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="68.0"/>
   </properties>
-  <testcase name="testStreetName_PositiveCase" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testAddress_NullObject_ReturnsError" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
-  <testcase name="testAddress_InvalidStreet_ReturnsError" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testAddress_NullObject_ReturnsError" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.024"/>
+  <testcase name="testIsTextOnly_WithInvalidCountryName" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testAddress_InvalidStreet_ReturnsError" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.002"/>
+  <testcase name="testIsTextOnly_WithNumericStreetName" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
   <testcase name="testAddress_CompleteAndCorrect_ReturnsNull" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
   <testcase name="testRegion_WithAccents_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
   <testcase name="testRegion_SimpleName_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
   <testcase name="testStreet_Empty_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testIsNonNegativeInteger_InvalidWithLetters" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
+  <testcase name="testIsNonNegativeInteger_WithAlphabeticInput" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
   <testcase name="testStreet_WithDot_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.002"/>
   <testcase name="testStreet_NoNumber_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testStreet_ForbiddenDollarChar_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
-  <testcase name="testRegion_WithEnie_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
-  <testcase name="testIsTextOnly_InvalidName" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testStreet_OnlyNumbers_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testIsTextOnly_PositiveCase" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
-  <testcase name="testRegion_CompositeName_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
-  <testcase name="testGetAddressFormError_EmptyFields" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testStreetName_InvalidWithNumbers" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
+  <testcase name="testStreet_ForbiddenDollarChar_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testIsNonNegativeInteger_WithDecimalInput" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testRegion_WithEnie_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testIsTextOnly_WithAlphanumericInput" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testGetAddressFormError_WithMissingRequiredFields" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.007"/>
+  <testcase name="testStreet_OnlyNumbers_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.002"/>
+  <testcase name="testIsTextOnly_WithSpecialCharactersInRegion" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
+  <testcase name="testRegion_CompositeName_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testIsTextOnly_WithEmptyString" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testIsTextOnly_WithValidStreetName" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
   <testcase name="testRegion_SpecialCharacters_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
-  <testcase name="testIsTextOnly_InvalidRegion" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
-  <testcase name="testRegion_Empty_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testRegion_Empty_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
   <testcase name="testStreet_NomenclatureFormat_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testStreet_ForbiddenPercentChar_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testIsNonNegativeInteger_PositiveCase" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testIsTextOnly_InvalidCountry" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
-  <testcase name="testRegion_WithNumbers_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testIsNonNegativeInteger_InvalidDecimal" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testStreet_WithHashSymbol_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
-  <testcase name="testAddress_InvalidRegion_ReturnsError" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testStreet_ForbiddenPercentChar_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
+  <testcase name="testIsNonNegativeInteger_WithValidInput" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testRegion_WithNumbers_Invalid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
+  <testcase name="testIsNonNegativeInteger_WithNegativeValue" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
+  <testcase name="testIsTextOnly_WithValidName" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.001"/>
+  <testcase name="testStreet_WithHashSymbol_Valid" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
+  <testcase name="testAddress_InvalidRegion_ReturnsError" classname="ec.edu.espe.finvory.utils.InventoryValidationTest" time="0.0"/>
 </testsuite>

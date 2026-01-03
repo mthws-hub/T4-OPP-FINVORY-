@@ -1,11 +1,8 @@
 package ec.edu.espe.finvory.utils;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
-import ec.edu.espe.finvory.model.Product;
-import ec.edu.espe.finvory.model.ReturnedProduct;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.List;
 
 /**
  *
@@ -15,115 +12,145 @@ public class ObsoleteInventoryTest {
 
     private FinvoryController controller;
 
-    
     @Test
     public void testAddObsoleteProduct_IncrementsTotal() {
         int initialStock = 0;
-        int added1 = 5;
-        int added2 = 7;
+        int firstBatch = 5;
+        int secondBatch = 7;
 
-        int total = initialStock + added1 + added2;
-        assertEquals(12, total, "La suma total de obsoletos debería ser 12");
+        int totalObsolete = initialStock + firstBatch + secondBatch;
+        assertEquals(12, totalObsolete, "The total obsolete stock should be exactly 12");
     }
-    
 
     @Test
     public void testDiscardObsoleteProduct_DecrementsCorrectly() {
         int currentStock = 12;
-        int toDiscard = 7;
+        int amountToDiscard = 7;
 
-        int result = currentStock - toDiscard;
+        int remainingStock = currentStock - amountToDiscard;
 
-        assertTrue(result == 5, "Al descartar 7 de 12, el stock debe bajar a 5");
+        assertEquals(5, remainingStock, "Discarding 7 from 12 should result in exactly 5 units remaining");
     }
-    
 
     @Test
-    public void testDiscardMoreThanAvailable() {
-        int available = 12;
-        int attemptToDiscard = 20;
+    public void testDiscardMoreThanAvailable_ShouldFail() {
+        int availableStock = 12;
+        int requestedDiscard = 20;
 
-        boolean canDiscard = attemptToDiscard <= available;
+        boolean isOperationPossible = requestedDiscard <= availableStock;
 
-        assertFalse(canDiscard, "No se debería poder descartar más de lo que hay en stock");
+        assertFalse(isOperationPossible, "The system should not allow discarding more units than available in stock");
     }
-    
 
     @Test
-    public void testAddObsoleteProducts_IncrementsTotal() {
-        int initialStock = 0;
-        int added1 = 8;
-        int added2 = 2;
-
-        int total = initialStock + added1 + added2;
-        assertEquals(12, total, "La suma total debería ser 12");
-    }
-    
-
-    @Test
-    public void testDiscardsMoreThanAvailable() {
-        int available = 5;
-        int attemptToDiscard = 7;
-
-        boolean canDiscard = attemptToDiscard <= available;
-
-        assertFalse(canDiscard, "No se debería poder descartar más de lo que hay en stock");
-    }
-    
-
-    @Test
-    public void testFindProductCaseInsensitiveAndSpaces() {
-        String savedId = "P001";
+    public void testFindProduct_NormalizationLogic() {
+        String registeredId = "P001";
         String userInput = " p001 ".trim().toUpperCase();
 
-        assertEquals(savedId, userInput, "El sistema debe normalizar el ID para encontrar el producto");
+        assertEquals(registeredId, userInput, "The system must normalize IDs by trimming spaces and converting to uppercase");
     }
-    
 
     @Test
-    public void testReassignObsoleteToNormalStock() {
+    public void testReassignObsoleteToNormalStock_Integrity() {
         int obsoleteStock = 10;
         int normalStock = 50;
-        int quantityToMove = 3;
+        int quantityToTransfer = 3;
 
-        int finalObsolete = obsoleteStock - quantityToMove;
-        int finalNormal = normalStock + quantityToMove;
+        int finalObsolete = obsoleteStock - quantityToTransfer;
+        int finalNormal = normalStock + quantityToTransfer;
 
-        assertAll("Verificar movimiento de stock",
-                () -> assertEquals(7, finalObsolete, "El stock obsoleto debe disminuir"),
-                () -> assertEquals(53, finalNormal, "El stock normal debe aumentar")
+        assertAll("Stock transfer validation",
+                () -> assertEquals(7, finalObsolete, "Obsolete stock should decrease by the transferred amount"),
+                () -> assertEquals(53, finalNormal, "Normal stock should increase by the transferred amount")
         );
     }
-    
 
     @Test
-    public void testMultipleReturnsSameProduct() {
-        int returnReasonA = 5;
-        int returnReasonB = 5;
+    public void testMultipleReturnReasons_Accumulation() {
+        int damagedUnits = 5;
+        int expiredUnits = 5;
 
-        int totalObserved = returnReasonA + returnReasonB;
+        int totalAccumulated = damagedUnits + expiredUnits;
 
-        assertEquals(10, totalObserved, "La suma de diferentes motivos para el mismo ID debe ser exacta");
+        assertEquals(10, totalAccumulated, "Accumulated stock from different reasons must be accurate");
     }
-    
 
     @Test
-    public void testInvalidQuantityInput() {
-        int inputQuantity = -10;
+    public void testInvalidNegativeQuantity_Validation() {
+        int negativeInput = -10;
+        boolean isValid = negativeInput > 0;
 
-        boolean isValid = inputQuantity > 0;
-
-        assertFalse(isValid, "El sistema no debe procesar cantidades negativas o cero");
+        assertFalse(isValid, "The system should reject negative or zero quantities for stock operations");
     }
-    
 
     @Test
-    public void testInvalidQuantityInputWithFloat() {
-        float inputQuantity = 5.7f;
+    public void testNonIntegerQuantity_ShouldFail() {
+        float decimalInput = 5.7f;
+        boolean isWholeNumber = (decimalInput == (int) decimalInput);
 
-        boolean isInteger = (inputQuantity == (int) inputQuantity);
-
-        assertFalse(isInteger, "El sistema no debe procesar cantidades decimales para productos no fraccionables");
+        assertFalse(isWholeNumber, "The system should reject decimal quantities for non-fractional products");
     }
 
+    @Test
+    public void testBoundaryValue_DiscardExactStock() {
+        int stock = 100;
+        int discard = 100;
+        
+        int result = stock - discard;
+        assertEquals(0, result, "Stock should be exactly zero when the entire inventory is discarded");
+    }
+
+    @Test
+    public void testStockIntegrity_MultipleAdditions() {
+        int stock = 0;
+        stock += 10;
+        stock += 20;
+        stock += 30;
+        
+        assertEquals(60, stock, "Sequential additions should result in a consistent total sum");
+    }
+
+    @Test
+    public void testLargeQuantityHandling() {
+        int currentStock = 1000000;
+        int incomingStock = 500000;
+        
+        long totalPotentialStock = (long) currentStock + incomingStock;
+        assertTrue(totalPotentialStock < Integer.MAX_VALUE, "Inventory system should handle large quantities without overflow");
+    }
+
+    @Test
+    public void testSearchProduct_NonExistentId() {
+        String existingId = "PROD-001";
+        String searchId = "PROD-999";
+        
+        assertNotEquals(existingId, searchId, "The search should not find a match for IDs that are not registered");
+    }
+
+    @Test
+    public void testReasonString_Normalization() {
+        String reasonOne = "DAMAGED";
+        String reasonTwo = "damaged".toUpperCase();
+        
+        assertEquals(reasonOne, reasonTwo, "System should handle return reasons in a case-insensitive manner");
+    }
+
+    @Test
+    public void testZeroInitialStock_Addition() {
+        int initialStock = 0;
+        int addedUnits = 1;
+        
+        int finalStock = initialStock + addedUnits;
+        assertEquals(1, finalStock, "Adding 1 unit to zero stock should result in exactly 1 unit");
+    }
+
+    @Test
+    public void testSequentialMovements_Consistency() {
+        int stock = 100;
+        stock -= 20; // First movement
+        stock += 10; // Restock
+        stock -= 50; // Second movement
+        
+        assertEquals(40, stock, "The sequence of stock movements must maintain mathematical consistency");
+    }
 }

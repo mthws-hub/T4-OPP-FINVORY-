@@ -70,4 +70,9 @@ public class Supplier {
     public void setDescription(String description) { 
         this.description = description; 
     }
+
+    public void setId1(String id1) {
+        this.id1 = id1;
+    }
+      
 }

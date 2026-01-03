@@ -85,6 +85,7 @@ public class Customer {
     public String getClientType() {
         return this.clientType; 
     }
+    
 
     @Override
     public String toString() {
@@ -97,4 +98,5 @@ public class Customer {
                 + '}';
     }
 
+    
 }

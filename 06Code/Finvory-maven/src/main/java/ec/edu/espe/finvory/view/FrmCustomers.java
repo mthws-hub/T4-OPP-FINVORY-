@@ -74,10 +74,10 @@ public class FrmCustomers extends javax.swing.JFrame {
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        lblCustomersRegistred = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        MnuFinvory = new javax.swing.JMenu();
+        ItemPrincipalMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -172,8 +172,8 @@ public class FrmCustomers extends javax.swing.JFrame {
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
-        lblCustomersRegistred.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
-        lblCustomersRegistred.setText("Clientes Registrados");
+        lblTitle.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
+        lblTitle.setText("Clientes Registrados");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -181,28 +181,28 @@ public class FrmCustomers extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(97, 97, 97)
-                .addComponent(lblCustomersRegistred)
+                .addComponent(lblTitle)
                 .addContainerGap(110, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(lblCustomersRegistred)
+                .addComponent(lblTitle)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jMenu1.setText("Finvory");
+        MnuFinvory.setText("Finvory");
 
-        jMenuItem1.setText("Menu Principal");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        ItemPrincipalMenu.setText("Menu Principal");
+        ItemPrincipalMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                ItemPrincipalMenuActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        MnuFinvory.add(ItemPrincipalMenu);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(MnuFinvory);
 
         setJMenuBar(jMenuBar1);
 
@@ -299,23 +299,23 @@ public class FrmCustomers extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void ItemPrincipalMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemPrincipalMenuActionPerformed
         this.dispose();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_ItemPrincipalMenuActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem ItemPrincipalMenu;
+    private javax.swing.JMenu MnuFinvory;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblCustomersRegistred;
     private javax.swing.JLabel lblListCustomers;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JTable tblCustomers;
     // End of variables declaration//GEN-END:variables
 }

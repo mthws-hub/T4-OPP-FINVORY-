@@ -11,10 +11,8 @@ public class CompanyAccount {
     private String ruc;
     private String phone;
     private String email;
-
     private String username;
     private String password;
-
     private String logoPath;
 
     public CompanyAccount() {
@@ -89,4 +87,13 @@ public class CompanyAccount {
     public void setLogoPath(String logoPath) {
         this.logoPath = logoPath;
     }
+
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
 }

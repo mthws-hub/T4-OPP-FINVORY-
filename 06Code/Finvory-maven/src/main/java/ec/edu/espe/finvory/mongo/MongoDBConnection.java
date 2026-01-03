@@ -41,10 +41,6 @@ public class MongoDBConnection {
         }
     }
 
-    /**
-     * Asegura que exista un cliente y una base conectada.
-     * No lanza excepción: si falla, deja database en null.
-     */
     private static void ensureConnected() {
         if (database != null) {
             return;
@@ -67,18 +63,10 @@ public class MongoDBConnection {
         return database;
     }
 
-    /**
-     * API esperada por el resto del proyecto: MongoDBConnection.getDatabase().
-     * (No puede coexistir con un método de instancia del mismo nombre, por eso
-     * el de instancia se llama getDatabaseInstance()).
-     */
     public static MongoDatabase getDatabase() {
         return getDatabaseStatic();
     }
 
-    /**
-     * Acceso estático (útil para clases que no tienen referencia al objeto conexión).
-     */
     public static MongoDatabase getDatabaseStatic() {
         ensureConnected();
         return database;
@@ -92,9 +80,6 @@ public class MongoDBConnection {
         return null;
     }
 
-    /**
-     * Ping real a MongoDB. Sirve para decidir si se puede trabajar online.
-     */
     public static boolean ping() {
         ensureConnected();
         if (database == null) {
@@ -108,9 +93,6 @@ public class MongoDBConnection {
         }
     }
 
-    /**
-     * Alias semántico.
-     */
     public static boolean isOnline() {
         return ping();
     }

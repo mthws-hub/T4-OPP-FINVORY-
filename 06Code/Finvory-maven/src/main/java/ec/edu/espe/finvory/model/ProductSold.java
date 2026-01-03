@@ -32,4 +32,21 @@ public class ProductSold {
     public float getTotalSold() { 
         return totalSold; 
     }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setTotalSold(float totalSold) {
+        this.totalSold = totalSold;
+    }
+    
 }

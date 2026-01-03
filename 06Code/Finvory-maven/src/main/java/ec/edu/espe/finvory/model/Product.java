@@ -93,4 +93,22 @@ public class Product {
     public void setBaseCostPrice(BigDecimal baseCostPrice) {
         this.baseCostPrice = baseCostPrice.setScale(FINAL_PRICE_SCALE, ROUNDING_MODE);
     }
+
+    public static int getFINAL_PRICE_SCALE() {
+        return FINAL_PRICE_SCALE;
+    }
+
+    public static RoundingMode getROUNDING_MODE() {
+        return ROUNDING_MODE;
+    }
+
+    public static BigDecimal getONE() {
+        return ONE;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    
 }

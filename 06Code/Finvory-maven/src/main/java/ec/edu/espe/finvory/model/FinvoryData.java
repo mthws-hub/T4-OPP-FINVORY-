@@ -28,7 +28,7 @@ public class FinvoryData {
     private BigDecimal discountVip;
 
     public FinvoryData() {
-        
+
         customers = new ArrayList<>();
         suppliers = new ArrayList<>();
         products = new ArrayList<>();
@@ -157,18 +157,18 @@ public class FinvoryData {
         }
     }
 
-    public void removeProduct(Product p) {
-        this.products.remove(p);
+    public void removeProduct(Product product) {
+        this.products.remove(product);
     }
 
-    public void removeCustomer(Customer c) {
-        this.customers.remove(c);
+    public void removeCustomer(Customer customer) {
+        this.customers.remove(customer);
     }
 
-    public void removeSupplier(Supplier s) {
-        this.suppliers.remove(s);
+    public void removeSupplier(Supplier supplier) {
+        this.suppliers.remove(supplier);
     }
-    
+
     public BigDecimal getTodaySales() {
         BigDecimal total = BigDecimal.ZERO;
         LocalDate today = LocalDate.now();
@@ -187,5 +187,13 @@ public class FinvoryData {
     public BigDecimal getTotalGrossProfile() {
         return getTodaySales();
     }
-   
+
+    public void setObsoleteInventory(InventoryOfObsolete obsoleteInventory) {
+        this.obsoleteInventory = obsoleteInventory;
+    }
+
+    public void setReturns(ArrayList<ReturnedProduct> returns) {
+        this.returns = returns;
+    }
+
 }
