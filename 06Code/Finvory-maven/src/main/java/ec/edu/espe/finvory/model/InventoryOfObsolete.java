@@ -1,7 +1,7 @@
 package ec.edu.espe.finvory.model;
 
 import java.util.HashMap;
-import java.util.Map; 
+import java.util.Map;
 
 /**
  *
@@ -36,6 +36,7 @@ public class InventoryOfObsolete {
     public void setAddress(Address address) {
         this.address = address;
     }
+
     public void setStock(String productId, int quantity) {
         if (quantity < 0) {
             System.err.println("Advertencia: No se puede establecer stock obsoleto negativo.");
@@ -59,7 +60,7 @@ public class InventoryOfObsolete {
             System.err.println("Advertencia: La cantidad a remover debe ser positiva.");
             return false;
         }
-        
+
         int currentStock = getStock(productId);
         if (currentStock >= quantity) {
             productStock.put(productId, currentStock - quantity);
@@ -69,4 +70,5 @@ public class InventoryOfObsolete {
             return false;
         }
     }
+
 }

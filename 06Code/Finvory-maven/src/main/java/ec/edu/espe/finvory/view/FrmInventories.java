@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
+
 public class FrmInventories extends javax.swing.JFrame {
 
     private FinvoryController controller;
@@ -305,6 +306,7 @@ public class FrmInventories extends javax.swing.JFrame {
     private void itemObsoleteProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemObsoleteProductsActionPerformed
         FrmObsoleteInventories obsoleteInventorie = new FrmObsoleteInventories(this, true, controller);
         this.setVisible(false);
+        
         obsoleteInventorie.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
@@ -324,6 +326,8 @@ public class FrmInventories extends javax.swing.JFrame {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmInventories.this.setVisible(true);
+
+                FrmInventories.this.populateTable();
             }
         });
         addNewInventory.setVisible(true);
@@ -370,6 +374,7 @@ public class FrmInventories extends javax.swing.JFrame {
         List<Object[]> rows = controller.getInventoryTableData(currentInventory);
         for (Object[] row : rows) {
             model.addRow(row);
+            
         }
     }
 
@@ -379,7 +384,9 @@ public class FrmInventories extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tabProducts.getModel();
         model.setRowCount(0);
         this.currentInventory = null;
-    }
+    
+}
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFindInventory;

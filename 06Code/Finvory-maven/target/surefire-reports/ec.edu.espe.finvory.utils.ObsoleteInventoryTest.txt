@@ -1,0 +1,18 @@
+-------------------------------------------------------------------------------
+Test set: ec.edu.espe.finvory.utils.ObsoleteInventoryTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.072 s <<< FAILURE! -- in ec.edu.espe.finvory.utils.ObsoleteInventoryTest
+ec.edu.espe.finvory.utils.ObsoleteInventoryTest.testDiscardObsoleteProduct_Validation -- Time elapsed: 0.009 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "ec.edu.espe.finvory.controller.FinvoryController.getObsoleteStock(String)" because "this.controller" is null
+	at ec.edu.espe.finvory.utils.ObsoleteInventoryTest.testDiscardObsoleteProduct_Validation(ObsoleteInventoryTest.java:69)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+ec.edu.espe.finvory.utils.ObsoleteInventoryTest.testFindProductForObsolete_CaseInsensitive -- Time elapsed: 0.002 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "ec.edu.espe.finvory.controller.FinvoryController.findProduct(String)" because "this.controller" is null
+	at ec.edu.espe.finvory.utils.ObsoleteInventoryTest.testFindProductForObsolete_CaseInsensitive(ObsoleteInventoryTest.java:56)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+

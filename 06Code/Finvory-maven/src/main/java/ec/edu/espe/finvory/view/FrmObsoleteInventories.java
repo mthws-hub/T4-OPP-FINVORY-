@@ -7,6 +7,7 @@ import ec.edu.espe.finvory.model.Inventory;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
+
 /**
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
@@ -226,87 +227,97 @@ public class FrmObsoleteInventories extends JDialog {
 
     private void itmDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmDeleteActionPerformed
 
-    int row = tabObsoleteProduct.getSelectedRow();
-    if (row == -1) return;
-
-    String id = tabObsoleteProduct.getValueAt(row, 0).toString();
-    String reason = tabObsoleteProduct.getValueAt(row, 2).toString();
-    int currentQty = Integer.parseInt(tabObsoleteProduct.getValueAt(row, 4).toString());
-
-    boolean validEntry = false;
-    while (!validEntry) {
-        String qtyStr = JOptionPane.showInputDialog(this, "Cantidad a desechar de la fila seleccionada:\n(Máximo: " + currentQty + ")");
-        
-        if (qtyStr == null) break; 
-
-        try {
-            int quantity = Integer.parseInt(qtyStr.trim());
-
-            if (quantity > 0 && quantity <= currentQty) {
-                if (controller.discardObsoleteProduct(id, quantity, reason)) {
-                    JOptionPane.showMessageDialog(this, "Producto desechado.");
-                    loadObsoleteTable();
-                    validEntry = true;
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, 
-                    "Error: Debe ser un número entero positivo máximo hasta " + currentQty, 
-                    "Cantidad Incorrecta", JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error: Debe ser un número entero positivo máximo hasta " + currentQty, 
-                "Entrada Inválida", JOptionPane.ERROR_MESSAGE);
+        int row = tabObsoleteProduct.getSelectedRow();
+        if (row == -1) {
+            return;
         }
-    }
+
+        String id = tabObsoleteProduct.getValueAt(row, 0).toString();
+        String reason = tabObsoleteProduct.getValueAt(row, 2).toString();
+        int currentQty = Integer.parseInt(tabObsoleteProduct.getValueAt(row, 4).toString());
+
+        boolean validEntry = false;
+        while (!validEntry) {
+            String qtyStr = JOptionPane.showInputDialog(this, "Cantidad a desechar de la fila seleccionada:\n(Máximo: " + currentQty + ")");
+
+            if (qtyStr == null) {
+                break;
+            }
+
+            try {
+                int quantity = Integer.parseInt(qtyStr.trim());
+
+                if (quantity > 0 && quantity <= currentQty) {
+                    if (controller.discardObsoleteProduct(id, quantity, reason)) {
+                        JOptionPane.showMessageDialog(this, "Producto desechado.");
+                        loadObsoleteTable();
+                        validEntry = true;
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Error: Debe ser un número entero positivo máximo hasta " + currentQty,
+                            "Cantidad Incorrecta", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error: Debe ser un número entero positivo máximo hasta " + currentQty,
+                        "Entrada Inválida", JOptionPane.ERROR_MESSAGE);
+            }
+        }
 
 
     }//GEN-LAST:event_itmDeleteActionPerformed
 
     private void itmReassignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmReassignActionPerformed
 
-      int row = tabObsoleteProduct.getSelectedRow();
-    if (row == -1) return;
-
-    String id = tabObsoleteProduct.getValueAt(row, 0).toString();
-    String name = tabObsoleteProduct.getValueAt(row, 1).toString();
-    String reason = tabObsoleteProduct.getValueAt(row, 2).toString();
-    int currentQuantity = Integer.parseInt(tabObsoleteProduct.getValueAt(row, 4).toString());
-
-    String[] inventories = controller.getData().getInventories().stream()
-            .map(Inventory::getName).toArray(String[]::new);
-
-    String selectedInventory = (String) JOptionPane.showInputDialog(this, "Destino:", "Reasignar",
-            JOptionPane.QUESTION_MESSAGE, null, inventories, inventories[0]);
-
-    if (selectedInventory == null) return;
-
-    boolean validEntry = false;
-    while (!validEntry) {
-        String quantityString = JOptionPane.showInputDialog(this, "Ingrese cantidad para " + name + "\n(Máximo permitido: " + currentQuantity + "):");
-        
-        if (quantityString == null) break; 
-
-        try {
-            int quantity = Integer.parseInt(quantityString.trim());
-
-            if (quantity > 0 && quantity <= currentQuantity) {
-                if (controller.reassignObsoleteProduct(id, quantity, selectedInventory, reason)) {
-                    JOptionPane.showMessageDialog(this, "Reasignación exitosa.");
-                    loadObsoleteTable();
-                    validEntry = true; 
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, 
-                    "Error: Debe ser un número entero positivo máximo hasta " + currentQuantity, 
-                    "Cantidad Incorrecta", JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error: Debe ser un número entero positivo máximo hasta " + currentQuantity, 
-                "Entrada Inválida", JOptionPane.ERROR_MESSAGE);
+        int row = tabObsoleteProduct.getSelectedRow();
+        if (row == -1) {
+            return;
         }
-    }
+
+        String id = tabObsoleteProduct.getValueAt(row, 0).toString();
+        String name = tabObsoleteProduct.getValueAt(row, 1).toString();
+        String reason = tabObsoleteProduct.getValueAt(row, 2).toString();
+        int currentQuantity = Integer.parseInt(tabObsoleteProduct.getValueAt(row, 4).toString());
+
+        String[] inventories = controller.getData().getInventories().stream()
+                .map(Inventory::getName).toArray(String[]::new);
+
+        String selectedInventory = (String) JOptionPane.showInputDialog(this, "Destino:", "Reasignar",
+                JOptionPane.QUESTION_MESSAGE, null, inventories, inventories[0]);
+
+        if (selectedInventory == null) {
+            return;
+        }
+
+        boolean validEntry = false;
+        while (!validEntry) {
+            String quantityString = JOptionPane.showInputDialog(this, "Ingrese cantidad para " + name + "\n(Máximo permitido: " + currentQuantity + "):");
+
+            if (quantityString == null) {
+                break;
+            }
+
+            try {
+                int quantity = Integer.parseInt(quantityString.trim());
+
+                if (quantity > 0 && quantity <= currentQuantity) {
+                    if (controller.reassignObsoleteProduct(id, quantity, selectedInventory, reason)) {
+                        JOptionPane.showMessageDialog(this, "Reasignación exitosa.");
+                        loadObsoleteTable();
+                        validEntry = true;
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Error: Debe ser un número entero positivo máximo hasta " + currentQuantity,
+                            "Cantidad Incorrecta", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error: Debe ser un número entero positivo máximo hasta " + currentQuantity,
+                        "Entrada Inválida", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_itmReassignActionPerformed
 
     private void itmReturnsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmReturnsActionPerformed

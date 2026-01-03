@@ -132,7 +132,7 @@
                     <Column editable="true" title="P.Premium" type="java.lang.Object"/>
                     <Column editable="true" title="P.Vip" type="java.lang.Object"/>
                     <Column editable="true" title="Stock" type="java.lang.Object"/>
-                    <Column editable="true" title="Stock (Obs)" type="java.lang.Object"/>
+                    <Column editable="true" title="Stock (Obs)" type="java.lang.Integer"/>
                   </Table>
                 </Property>
               </Properties>

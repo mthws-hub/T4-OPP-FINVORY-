@@ -2,7 +2,7 @@
   "companyInfo": {
     "name": "McDonalds",
     "phone": "0963514785",
-    "email": "yussepeelcrac@gmail.com"
+    "email": "joseph3elcrac@gmail.com"
   },
   "customers": [
     {
@@ -51,6 +51,22 @@
       "barcode": "12121212221",
       "baseCostPrice": 12.00,
       "supplierId": "1254784513"
+    },
+    {
+      "id": "ARM-003",
+      "name": "M414",
+      "description": "Distancia media",
+      "barcode": "1241256789000",
+      "baseCostPrice": 348.76,
+      "supplierId": "1254784513"
+    },
+    {
+      "id": "ARM-004",
+      "name": "Famas",
+      "description": "Corta distancia",
+      "barcode": "344564365365",
+      "baseCostPrice": 145.00,
+      "supplierId": "1254784513"
     }
   ],
   "suppliers": [
@@ -77,7 +93,9 @@
       "productStock": {
         "MP14": 45,
         "ARM-001": 9,
-        "ARM-002": 3
+        "ARM-002": 3,
+        "ARM-003": 23,
+        "ARM-004": 45
       }
     },
     {
@@ -107,14 +125,16 @@
     "productStock": {
       "P004": 10,
       "ARM-001": 13,
-      "ARM-002": 12
+      "ARM-002": 12,
+      "ARM-003": 7,
+      "ARM-004": 15
     }
   },
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-11-28",
-      "paymentDueDate": "2025-11-28",
+      "date": "2025-11-25",
+      "paymentDueDate": "2025-11-25",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -141,8 +161,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-11-28",
-      "paymentDueDate": "2025-11-28",
+      "date": "2025-11-25",
+      "paymentDueDate": "2025-11-25",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -176,8 +196,8 @@
     },
     {
       "invoiceNumber": "F-3",
-      "date": "2025-11-28",
-      "paymentDueDate": "2025-11-28",
+      "date": "2025-11-25",
+      "paymentDueDate": "2025-11-25",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -222,7 +242,7 @@
       },
       "quantity": 1,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-01"
+      "returnDate": "2026-01-02"
     },
     {
       "product": {
@@ -235,7 +255,7 @@
       },
       "quantity": 1,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-01"
+      "returnDate": "2026-01-02"
     },
     {
       "product": {
@@ -248,7 +268,7 @@
       },
       "quantity": 4,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-01"
+      "returnDate": "2026-01-02"
     },
     {
       "product": {
@@ -261,7 +281,59 @@
       },
       "quantity": 3,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-01"
+      "returnDate": "2026-01-02"
+    },
+    {
+      "product": {
+        "id": "ARM-003",
+        "name": "M414",
+        "description": "Distancia media",
+        "barcode": "1241256789000",
+        "baseCostPrice": 348.76,
+        "supplierId": "1254784513"
+      },
+      "quantity": 2,
+      "reason": "Compra Incorrecta",
+      "returnDate": "2026-01-02"
+    },
+    {
+      "product": {
+        "id": "ARM-003",
+        "name": "M414",
+        "description": "Distancia media",
+        "barcode": "1241256789000",
+        "baseCostPrice": 348.76,
+        "supplierId": "1254784513"
+      },
+      "quantity": 1,
+      "reason": "Otro",
+      "returnDate": "2026-01-02"
+    },
+    {
+      "product": {
+        "id": "ARM-004",
+        "name": "Famas",
+        "description": "Corta distancia",
+        "barcode": "344564365365",
+        "baseCostPrice": 145.00,
+        "supplierId": "1254784513"
+      },
+      "quantity": 4,
+      "reason": "Defectuoso",
+      "returnDate": "2026-01-02"
+    },
+    {
+      "product": {
+        "id": "ARM-004",
+        "name": "Famas",
+        "description": "Corta distancia",
+        "barcode": "344564365365",
+        "baseCostPrice": 145.00,
+        "supplierId": "1254784513"
+      },
+      "quantity": 5,
+      "reason": "Compra Incorrecta",
+      "returnDate": "2026-01-02"
     }
   ],
   "taxRate": 0.15,

@@ -9,9 +9,7 @@ import java.awt.Image;
  */
 public class FrmAbout extends javax.swing.JDialog {
 
-    /**
-     * Creates new form FrmAbout
-     */
+
     public FrmAbout(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

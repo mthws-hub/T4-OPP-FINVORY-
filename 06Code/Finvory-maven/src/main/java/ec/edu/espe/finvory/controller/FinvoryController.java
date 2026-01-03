@@ -607,7 +607,8 @@ public class FinvoryController {
             if (stock == 0 && currentInventory.getStock(productId.trim()) > 0) {
                 stock = currentInventory.getStock(productId.trim());
             }
-            int obsoleteStock = data.getObsoleteInventory() != null ? data.getObsoleteInventory().getStock(productId) : 0;
+
+            int obsoleteStock = getObsoleteStock(productId);
 
             rows.add(new Object[]{
                 product.getId(), product.getName(), product.getBarcode(),
@@ -615,47 +616,9 @@ public class FinvoryController {
                 String.format("$%.2f", product.getPrice("STANDARD", new BigDecimal(profit), new BigDecimal(discountStandard), new BigDecimal(discountPremium), new BigDecimal(discountVip))),
                 String.format("$%.2f", product.getPrice("PREMIUM", new BigDecimal(profit), new BigDecimal(discountStandard), new BigDecimal(discountPremium), new BigDecimal(discountVip))),
                 String.format("$%.2f", product.getPrice("VIP", new BigDecimal(profit), new BigDecimal(discountStandard), new BigDecimal(discountPremium), new BigDecimal(discountVip))),
-                stock, (double) obsoleteStock
+                stock,
+                obsoleteStock
             });
-        }
-        return rows;
-    }
-
-    public List<Object[]> getProductTableData(Inventory specificInventory) {
-        List<Object[]> rows = new ArrayList<>();
-        List<Product> products = getProducts();
-        if (products == null || products.isEmpty()) {
-            return rows;
-        }
-
-        float profit = data.getProfitPercentage() != null ? data.getProfitPercentage().floatValue() : 0.0f;
-        float dStd = data.getDiscountStandard() != null ? data.getDiscountStandard().floatValue() : 0.0f;
-        float dPrm = data.getDiscountPremium() != null ? data.getDiscountPremium().floatValue() : 0.0f;
-        float dVip = data.getDiscountVip() != null ? data.getDiscountVip().floatValue() : 0.0f;
-
-        for (Product product : products) {
-            int stockToShow = 0;
-            boolean shouldAdd = false;
-            if (specificInventory != null) {
-                int stock = specificInventory.getStock(product.getId());
-                if (stock >= 0) {
-                    stockToShow = stock;
-                    shouldAdd = true;
-                }
-            } else {
-                shouldAdd = true;
-            }
-
-            if (shouldAdd) {
-                rows.add(new Object[]{
-                    product.getId(), product.getName(), product.getBarcode(),
-                    String.format("$%.2f", product.getBaseCostPrice()),
-                    String.format("$%.2f", product.getPrice("STANDARD", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
-                    String.format("$%.2f", product.getPrice("PREMIUM", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
-                    String.format("$%.2f", product.getPrice("VIP", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
-                    stockToShow, 0
-                });
-            }
         }
         return rows;
     }
@@ -961,23 +924,47 @@ public class FinvoryController {
         saveData();
         return true;
     }
+    
 
     private void updateReturnsList(String productId, int quantity, String reason) {
         List<ReturnedProduct> returnsList = data.getReturns();
+        int remainingToDiscard = quantity;
+
         for (int i = 0; i < returnsList.size(); i++) {
             ReturnedProduct ret = returnsList.get(i);
-
             if (ret.getProduct().getId().equals(productId) && ret.getReason().equalsIgnoreCase(reason)) {
-                int newQuantity = ret.getQuantity() - quantity;
-                if (newQuantity <= 0) {
+                int currentQty = ret.getQuantity();
+                if (currentQty <= remainingToDiscard) {
+                    remainingToDiscard -= currentQty;
                     returnsList.remove(i);
+                    i--;
                 } else {
-                    ret.setQuantity(newQuantity);
+                    ret.setQuantity(currentQty - remainingToDiscard);
+                    remainingToDiscard = 0;
+                    break;
                 }
-                break;
+            }
+        }
+
+        if (remainingToDiscard > 0) {
+            for (int i = 0; i < returnsList.size(); i++) {
+                ReturnedProduct ret = returnsList.get(i);
+                if (ret.getProduct().getId().equals(productId)) {
+                    int currentQty = ret.getQuantity();
+                    if (currentQty <= remainingToDiscard) {
+                        remainingToDiscard -= currentQty;
+                        returnsList.remove(i);
+                        i--;
+                    } else {
+                        ret.setQuantity(currentQty - remainingToDiscard);
+                        remainingToDiscard = 0;
+                        break;
+                    }
+                }
             }
         }
     }
+    
 
     public PersonalAccount getLoggedInPersonalAccount() {
         if (currentCompanyUsername == null) {
@@ -1155,6 +1142,63 @@ public class FinvoryController {
         });
 
         rows.sort((rowA, rowB) -> ((Integer) rowB[1]).compareTo((Integer) rowA[1]));
+        return rows;
+    }
+
+     public int getObsoleteStock(String productId) {
+        int total = 0;
+        for (ReturnedProduct ret : data.getReturns()) {
+            if (ret.getProduct().getId().equals(productId)) {
+                total += ret.getQuantity();
+            }
+        }
+        return total;
+    }
+
+
+    public List<Object[]> getProductTableData(Inventory specificInventory) {
+        List<Object[]> rows = new ArrayList<>();
+        List<Product> products = getProducts();
+
+        if (products == null || products.isEmpty()) {
+            return rows;
+        }
+
+        float profit = data.getProfitPercentage() != null ? data.getProfitPercentage().floatValue() : 0.0f;
+        float dStd = data.getDiscountStandard() != null ? data.getDiscountStandard().floatValue() : 0.0f;
+        float dPrm = data.getDiscountPremium() != null ? data.getDiscountPremium().floatValue() : 0.0f;
+        float dVip = data.getDiscountVip() != null ? data.getDiscountVip().floatValue() : 0.0f;
+
+        for (Product product : products) {
+            int stockToShow = 0;
+            boolean shouldAdd = false;
+
+            if (specificInventory != null) {
+                int stock = specificInventory.getStock(product.getId());
+                if (stock >= 0) {
+                    stockToShow = stock;
+                    shouldAdd = true;
+                }
+            } else {
+                shouldAdd = true;
+            }
+
+            if (shouldAdd) {
+                int obsoleteStock = getObsoleteStock(product.getId());
+
+                rows.add(new Object[]{
+                    product.getId(),
+                    product.getName(),
+                    product.getBarcode(),
+                    String.format("$%.2f", product.getBaseCostPrice()),
+                    String.format("$%.2f", product.getPrice("STANDARD", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                    String.format("$%.2f", product.getPrice("PREMIUM", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                    String.format("$%.2f", product.getPrice("VIP", new BigDecimal(profit), new BigDecimal(dStd), new BigDecimal(dPrm), new BigDecimal(dVip))),
+                    stockToShow,
+                    obsoleteStock
+                });
+            }
+        }
         return rows;
     }
 

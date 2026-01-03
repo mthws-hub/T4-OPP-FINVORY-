@@ -129,6 +129,7 @@ ec\edu\espe\finvory\FinvoryApp.class
 ec\edu\espe\finvory\view\FrmCustomersReport.class
 ec\edu\espe\finvory\view\FrmEditProductListOnInvoice.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$1.class
+ec\edu\espe\finvory\view\FrmProducts$7.class
 ec\edu\espe\finvory\view\FrmProfileCompany$6.class
 ec\edu\espe\finvory\view\FrmReassignedProduct$2.class
 ec\edu\espe\finvory\view\FrmNewAccount$6.class

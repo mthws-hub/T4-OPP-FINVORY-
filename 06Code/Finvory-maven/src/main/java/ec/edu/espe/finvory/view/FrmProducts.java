@@ -73,6 +73,7 @@ public class FrmProducts extends javax.swing.JFrame {
             model.addRow(row);
         }
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -113,7 +114,15 @@ public class FrmProducts extends javax.swing.JFrame {
             new String [] {
                 "ID", "Nombre", "Barcode", "Costo", "P.Standard", "P.Premium", "P.Vip", "Stock", "Stock (Obs)"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTableProducts);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

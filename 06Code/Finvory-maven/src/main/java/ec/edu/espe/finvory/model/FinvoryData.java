@@ -187,4 +187,5 @@ public class FinvoryData {
     public BigDecimal getTotalGrossProfile() {
         return getTodaySales();
     }
+   
 }

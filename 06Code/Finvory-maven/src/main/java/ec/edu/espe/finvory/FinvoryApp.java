@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
 public class FinvoryApp {
 
     private static MongoDBConnection mongoConnection;
-    // Cargamos la imagen UNA SOLA VEZ en memoria para que sea eficiente
+    
     private static final Image APP_ICON = Toolkit.getDefaultToolkit().getImage(FinvoryApp.class.getResource("/FinvoryCorner.jpeg"));
 
     public static void main(String[] args) {
