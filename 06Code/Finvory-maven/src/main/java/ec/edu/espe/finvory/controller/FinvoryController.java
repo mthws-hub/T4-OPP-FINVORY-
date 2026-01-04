@@ -207,21 +207,21 @@ public class FinvoryController {
     public ProductDisplayData getProductDisplayData() {
 
         float profit = 0.0f;
-        float dStd = 0.0f;
-        float dPrm = 0.0f;
-        float dVip = 0.0f;
+        float discountStandard = 0.0f;
+        float discountPremium = 0.0f;
+        float discountVip = 0.0f;
 
         if (data.getProfitPercentage() != null) {
             profit = data.getProfitPercentage().floatValue();
         }
         if (data.getDiscountStandard() != null) {
-            dStd = data.getDiscountStandard().floatValue();
+            discountStandard = data.getDiscountStandard().floatValue();
         }
         if (data.getDiscountPremium() != null) {
-            dPrm = data.getDiscountPremium().floatValue();
+            discountPremium = data.getDiscountPremium().floatValue();
         }
         if (data.getDiscountVip() != null) {
-            dVip = data.getDiscountVip().floatValue();
+            discountVip = data.getDiscountVip().floatValue();
         }
 
         return new ProductDisplayData(
@@ -229,9 +229,9 @@ public class FinvoryController {
                 new ArrayList<>(data.getInventories()),
                 data.getObsoleteInventory(),
                 profit,
-                dStd,
-                dPrm,
-                dVip
+                discountStandard,
+                discountPremium,
+                discountVip
         );
     }
 
@@ -474,9 +474,9 @@ public class FinvoryController {
 
     public HashMap<String, Integer> getSalesOrDemandReport() {
         HashMap<String, Integer> map = new HashMap<>();
-        for (InvoiceSim i : data.getInvoices()) {
-            if ("COMPLETED".equals(i.getStatus())) {
-                for (InvoiceLineSim line : i.getLines()) {
+        for (InvoiceSim invoiceSim : data.getInvoices()) {
+            if ("COMPLETED".equals(invoiceSim.getStatus())) {
+                for (InvoiceLineSim line : invoiceSim.getLines()) {
                     map.put(line.getProductName(), map.getOrDefault(line.getProductName(), 0) + line.getQuantity());
                 }
             }
@@ -548,45 +548,45 @@ public class FinvoryController {
         return null;
     }
 
-    private CompanyAccount findCompanyByUsername(String u) {
-        if (u == null) {
+    private CompanyAccount findCompanyByUsername(String userName) {
+        if (userName == null) {
             return null;
         }
         for (CompanyAccount companyAccount : users.getCompanyAccounts()) {
-            if (u.equals(companyAccount.getUsername())) {
+            if (userName.equals(companyAccount.getUsername())) {
                 return companyAccount;
             }
         }
         return null;
     }
 
-    private PersonalAccount findPersonalByUsername(String u) {
-        if (u == null) {
+    private PersonalAccount findPersonalByUsername(String userName) {
+        if (userName == null) {
             return null;
         }
         for (PersonalAccount personalAccount : users.getPersonalAccounts()) {
-            if (u.equals(personalAccount.getUsername())) {
+            if (userName.equals(personalAccount.getUsername())) {
                 return personalAccount;
             }
         }
         return null;
     }
 
-    public Inventory findInventoryByName(String name) {
+    public Inventory findInventoryByName(String nameInventory) {
         if (data == null || data.getInventories() == null) {
             return null;
         }
         for (Inventory inventory : data.getInventories()) {
-            if (inventory.getName().equalsIgnoreCase(name)) {
+            if (inventory.getName().equalsIgnoreCase(nameInventory)) {
                 return inventory;
             }
         }
         return null;
     }
 
-    public ArrayList<Inventory> findInventoriesByPartialName(String query) {
+    public ArrayList<Inventory> findInventoriesByPartialName(String partialName) {
         ArrayList<Inventory> matches = new ArrayList<>();
-        String q = query.trim().toLowerCase();
+        String q = partialName.trim().toLowerCase();
         for (Inventory inv : data.getInventories()) {
             if (inv.getName() != null && inv.getName().toLowerCase().contains(q)) {
                 matches.add(inv);
@@ -595,11 +595,11 @@ public class FinvoryController {
         return matches;
     }
 
-    public Supplier findSupplierByName(String name) {
-        if (data == null || data.getSuppliers() == null || name == null) {
+    public Supplier findSupplierByName(String nameSupplier) {
+        if (data == null || data.getSuppliers() == null || nameSupplier == null) {
             return null;
         }
-        String q = name.trim();
+        String q = nameSupplier.trim();
         for (Supplier supplier : data.getSuppliers()) {
             if (supplier.getFullName() != null && supplier.getFullName().equalsIgnoreCase(q)) {
                 return supplier;
@@ -675,13 +675,13 @@ public class FinvoryController {
         return true;
     }
 
-    public boolean handleUpdatePricesGUI(String profit, String std, String prm, String vip, String tax) {
+    public boolean handleUpdatePricesGUI(String profit, String standard, String premium, String vip, String taxInvoice) {
         try {
             BigDecimal profitVal = new BigDecimal(profit);
-            BigDecimal standardValue = new BigDecimal(std);
-            BigDecimal premiumValue = new BigDecimal(prm);
+            BigDecimal standardValue = new BigDecimal(standard);
+            BigDecimal premiumValue = new BigDecimal(premium);
             BigDecimal vipValue = new BigDecimal(vip);
-            BigDecimal taxValue = new BigDecimal(tax);
+            BigDecimal taxValue = new BigDecimal(taxInvoice);
             data.setProfitPercentage(profitVal);
             data.setDiscountStandard(standardValue);
             data.setDiscountPremium(premiumValue);
@@ -805,16 +805,16 @@ public class FinvoryController {
         return String.format("F%s-%03d", prefix, nextSequence);
     }
 
-    public Customer searchCustomerForInvoice(String query) {
-        if (query == null || query.trim().isEmpty()) {
+    public Customer searchCustomerForInvoice(String invoice) {
+        if (invoice == null || invoice.trim().isEmpty()) {
             return null;
         }
-        String que = query.trim().toLowerCase();
+        String textInvoice = invoice.trim().toLowerCase();
         for (Customer customer : data.getCustomers()) {
-            if (customer.getIdentification().equals(query.trim())) {
+            if (customer.getIdentification().equals(invoice.trim())) {
                 return customer;
             }
-            if (customer.getName().toLowerCase().contains(que)) {
+            if (customer.getName().toLowerCase().contains(textInvoice)) {
                 return customer;
             }
         }
@@ -841,13 +841,13 @@ public class FinvoryController {
     public List<Object[]> getSalesTableData() {
         List<Object[]> rows = new ArrayList<>();
         if (data != null && data.getInvoices() != null) {
-            for (ec.edu.espe.finvory.model.InvoiceSim inv : data.getInvoices()) {
+            for (ec.edu.espe.finvory.model.InvoiceSim invoice : data.getInvoices()) {
                 rows.add(new Object[]{
-                    inv.getId(),
-                    inv.getDate().toString(),
-                    inv.getCustomer().getName(),
-                    String.format("%.2f", inv.getSubtotal()),
-                    String.format("%.2f", inv.getTotal())
+                    invoice.getId(),
+                    invoice.getDate().toString(),
+                    invoice.getCustomer().getName(),
+                    String.format("%.2f", invoice.getSubtotal()),
+                    String.format("%.2f", invoice.getTotal())
                 });
             }
         }
@@ -899,7 +899,7 @@ public class FinvoryController {
         return null;
     }
 
-    public boolean reassignObsoleteProduct(String productId, int quantity, String destinationInvName, String reason) {
+    public boolean reassignObsoleteProduct(String productId, int quantity, String destinationInventoryName, String reasonForRelocation) {
         if (quantity <= 0) {
             return false;
         }
@@ -908,7 +908,7 @@ public class FinvoryController {
         List<ReturnedProduct> returnsList = data.getReturns();
 
         Inventory destination = data.getInventories().stream()
-                .filter(inv -> inv.getName().equalsIgnoreCase(destinationInvName))
+                .filter(inv -> inv.getName().equalsIgnoreCase(destinationInventoryName))
                 .findFirst()
                 .orElse(null);
 
@@ -919,13 +919,13 @@ public class FinvoryController {
         obsolete.addStock(productId, -quantity);
         destination.addStock(productId, quantity);
 
-        updateReturnsList(productId, quantity, reason);
+        updateReturnsList(productId, quantity, reasonForRelocation);
 
         saveData();
         return true;
     }
 
-    public boolean discardObsoleteProduct(String productId, int quantity, String reason) {
+    public boolean discardObsoleteProduct(String productId, int quantity, String reasonOfDiscard) {
         if (quantity <= 0) {
             return false;
         }
@@ -938,7 +938,7 @@ public class FinvoryController {
 
         obsolete.addStock(productId, -quantity);
 
-        updateReturnsList(productId, quantity, reason);
+        updateReturnsList(productId, quantity, reasonOfDiscard);
 
         saveData();
         return true;
@@ -949,15 +949,15 @@ public class FinvoryController {
         int remainingToDiscard = quantity;
 
         for (int i = 0; i < returnsList.size(); i++) {
-            ReturnedProduct ret = returnsList.get(i);
-            if (ret.getProduct().getId().equals(productId) && ret.getReason().equalsIgnoreCase(reason)) {
-                int currentQty = ret.getQuantity();
-                if (currentQty <= remainingToDiscard) {
-                    remainingToDiscard -= currentQty;
+            ReturnedProduct returnedProduct = returnsList.get(i);
+            if (returnedProduct.getProduct().getId().equals(productId) && returnedProduct.getReason().equalsIgnoreCase(reason)) {
+                int currentQuantity = returnedProduct.getQuantity();
+                if (currentQuantity <= remainingToDiscard) {
+                    remainingToDiscard -= currentQuantity;
                     returnsList.remove(i);
                     i--;
                 } else {
-                    ret.setQuantity(currentQty - remainingToDiscard);
+                    returnedProduct.setQuantity(currentQuantity - remainingToDiscard);
                     remainingToDiscard = 0;
                     break;
                 }
@@ -966,15 +966,15 @@ public class FinvoryController {
 
         if (remainingToDiscard > 0) {
             for (int i = 0; i < returnsList.size(); i++) {
-                ReturnedProduct ret = returnsList.get(i);
-                if (ret.getProduct().getId().equals(productId)) {
-                    int currentQty = ret.getQuantity();
+                ReturnedProduct returnedProduct = returnsList.get(i);
+                if (returnedProduct.getProduct().getId().equals(productId)) {
+                    int currentQty = returnedProduct.getQuantity();
                     if (currentQty <= remainingToDiscard) {
                         remainingToDiscard -= currentQty;
                         returnsList.remove(i);
                         i--;
                     } else {
-                        ret.setQuantity(currentQty - remainingToDiscard);
+                        returnedProduct.setQuantity(currentQty - remainingToDiscard);
                         remainingToDiscard = 0;
                         break;
                     }
@@ -987,9 +987,9 @@ public class FinvoryController {
         if (currentCompanyUsername == null) {
             return null;
         }
-        for (PersonalAccount pa : users.getPersonalAccounts()) {
-            if (pa.getUsername().equals(currentCompanyUsername)) {
-                return pa;
+        for (PersonalAccount personalAccount : users.getPersonalAccounts()) {
+            if (personalAccount.getUsername().equals(currentCompanyUsername)) {
+                return personalAccount;
             }
         }
         return null;
@@ -1033,8 +1033,8 @@ public class FinvoryController {
         }
     }
 
-    public CompanyAccount findCompanyByName(String queryName) {
-        String query = queryName.toLowerCase().trim();
+    public CompanyAccount findCompanyByName(String companyName) {
+        String query = companyName.toLowerCase().trim();
         for (CompanyAccount company : users.getCompanyAccounts()) {
             if (company.getName().toLowerCase().contains(query)) {
                 return company;
