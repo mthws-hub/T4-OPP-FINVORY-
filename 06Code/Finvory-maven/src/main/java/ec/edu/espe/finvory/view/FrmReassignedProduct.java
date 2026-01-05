@@ -31,13 +31,13 @@ public class FrmReassignedProduct extends JDialog{
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        lblID = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
+        lblQuantity = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jLabel5 = new javax.swing.JLabel();
+        tblReassingProduct = new javax.swing.JTable();
+        lblInventory = new javax.swing.JLabel();
         btnReturn = new javax.swing.JButton();
         btnReassing = new javax.swing.JButton();
         txtId = new javax.swing.JLabel();
@@ -48,19 +48,19 @@ public class FrmReassignedProduct extends JDialog{
 
         jPanel1.setBackground(new java.awt.Color(224, 224, 224));
 
-        jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
-        jLabel1.setText("REASIGNAR PRODUCTO");
+        lblTitle.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
+        lblTitle.setText("REASIGNAR PRODUCTO");
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel2.setText("ID:");
+        lblID.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblID.setText("ID:");
 
-        jLabel3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel3.setText("NOMBRE:");
+        lblName.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblName.setText("NOMBRE:");
 
-        jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel4.setText("CANTIDAD:");
+        lblQuantity.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblQuantity.setText("CANTIDAD:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblReassingProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -79,10 +79,10 @@ public class FrmReassignedProduct extends JDialog{
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblReassingProduct);
 
-        jLabel5.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel5.setText("INVENTARIO A REASIGNAR:");
+        lblInventory.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblInventory.setText("INVENTARIO A REASIGNAR:");
 
         btnReturn.setBackground(new java.awt.Color(0, 123, 0));
         btnReturn.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
@@ -114,23 +114,23 @@ public class FrmReassignedProduct extends JDialog{
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(lblName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel4)
+                        .addComponent(lblQuantity)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtObsoleteStock, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel5))
+                    .addComponent(lblInventory))
                 .addContainerGap(15, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addGap(78, 78, 78))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(75, 75, 75)
@@ -143,20 +143,20 @@ public class FrmReassignedProduct extends JDialog{
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(lblID)
                     .addComponent(txtId))
                 .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3)
-                        .addComponent(jLabel4)
+                        .addComponent(lblName)
+                        .addComponent(lblQuantity)
                         .addComponent(txtObsoleteStock))
                     .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5)
+                .addComponent(lblInventory)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
@@ -201,14 +201,14 @@ public class FrmReassignedProduct extends JDialog{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReassing;
     private javax.swing.JButton btnReturn;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblID;
+    private javax.swing.JLabel lblInventory;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblQuantity;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JTable tblReassingProduct;
     private javax.swing.JLabel txtId;
     private javax.swing.JLabel txtName;
     private javax.swing.JLabel txtObsoleteStock;

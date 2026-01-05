@@ -66,11 +66,11 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         icon = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblFullName = new javax.swing.JLabel();
         txtFullName = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        lblUser = new javax.swing.JLabel();
         txtUserName = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        lblPassword = new javax.swing.JLabel();
         passPersonal = new javax.swing.JPasswordField();
         btnViewPassword = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
@@ -81,14 +81,14 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
 
         jPanel1.setBackground(new java.awt.Color(224, 224, 224));
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel2.setText("Nombre Completo:");
+        lblFullName.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblFullName.setText("Nombre Completo:");
 
-        jLabel3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel3.setText("Usuario:");
+        lblUser.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblUser.setText("Usuario:");
 
-        jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel4.setText("Contraseña:");
+        lblPassword.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblPassword.setText("Contraseña:");
 
         passPersonal.setText("jPasswordField1");
 
@@ -134,11 +134,11 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel2)
+                        .addComponent(lblFullName)
                         .addComponent(txtFullName)
-                        .addComponent(jLabel3)
+                        .addComponent(lblUser)
                         .addComponent(txtUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE))
-                    .addComponent(jLabel4)
+                    .addComponent(lblPassword)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(btnSave)
@@ -167,15 +167,15 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
                         .addGap(23, 23, 23)
                         .addComponent(btnUploadPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
+                .addComponent(lblFullName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
-                .addComponent(jLabel3)
+                .addComponent(lblUser)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
+                .addComponent(lblPassword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(passPersonal)
@@ -262,10 +262,10 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
     private javax.swing.JButton btnUploadPhoto;
     private javax.swing.JButton btnViewPassword;
     private javax.swing.JLabel icon;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblFullName;
+    private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblUser;
     private javax.swing.JPasswordField passPersonal;
     private javax.swing.JTextField txtFullName;
     private javax.swing.JTextField txtUserName;

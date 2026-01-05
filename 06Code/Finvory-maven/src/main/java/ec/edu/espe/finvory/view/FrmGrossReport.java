@@ -264,7 +264,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -288,8 +288,8 @@ public class FrmGrossReport extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Perpetua", 1, 36)); // NOI18N
-        jLabel1.setText("Reporte de Ventas Brutas");
+        lblTitle.setFont(new java.awt.Font("Perpetua", 1, 36)); // NOI18N
+        lblTitle.setText("Reporte de Ventas Brutas");
 
         jLabel5.setText("Total Ventas Brutas Hoy");
 
@@ -313,6 +313,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
         });
 
         btnFilter.setBackground(new java.awt.Color(0, 123, 0));
+        btnFilter.setForeground(new java.awt.Color(255, 255, 255));
         btnFilter.setText("Filtrar");
         btnFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -348,6 +349,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
         jScrollPane1.setViewportView(scrGrossTable);
 
         btnRefresh.setBackground(new java.awt.Color(0, 123, 0));
+        btnRefresh.setForeground(new java.awt.Color(255, 255, 255));
         btnRefresh.setText("Refrescar");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -356,6 +358,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
         });
 
         btnExportCsv.setBackground(new java.awt.Color(0, 123, 0));
+        btnExportCsv.setForeground(new java.awt.Color(255, 255, 255));
         btnExportCsv.setText("Exportar CSV");
         btnExportCsv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -435,14 +438,14 @@ public class FrmGrossReport extends javax.swing.JFrame {
                         .addComponent(btnExportCsv))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(215, 215, 215)
-                        .addComponent(jLabel1)))
+                        .addComponent(lblTitle)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -542,7 +545,6 @@ public class FrmGrossReport extends javax.swing.JFrame {
     private javax.swing.JButton btnFilter;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JCheckBox checkBoxIncludePendingInvoices;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -552,6 +554,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
     private javax.swing.JLabel lblGrossHistoricValue1;
     private javax.swing.JLabel lblGrossTodayValue1;
     private javax.swing.JLabel lblInvoiceCountValue1;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblTotalGrossFooterTitle;
     private javax.swing.JLabel lblTotalGrossFooterValue;
     private javax.swing.JRadioButton radioButtonPerDay;

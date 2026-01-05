@@ -40,14 +40,14 @@ public class FrmObsoleteInventories extends JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblProductID = new javax.swing.JLabel();
         txtIdProduct = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        lblLocation = new javax.swing.JLabel();
         txtProductAddress = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabObsoleteProduct = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        lblQuantity = new javax.swing.JLabel();
         txtObsoleteStock = new javax.swing.JLabel();
         btnFindProduct = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -63,11 +63,11 @@ public class FrmObsoleteInventories extends JDialog {
 
         jPanel1.setBackground(new java.awt.Color(224, 224, 224));
 
-        jLabel1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel1.setText("ID del producto:");
+        lblProductID.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblProductID.setText("ID del producto:");
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel2.setText("Ubicación:");
+        lblLocation.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblLocation.setText("Ubicación:");
 
         tabObsoleteProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -82,11 +82,11 @@ public class FrmObsoleteInventories extends JDialog {
         ));
         jScrollPane1.setViewportView(tabObsoleteProduct);
 
-        jLabel3.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
-        jLabel3.setText("INVENTARIO DE OBSOLETOS");
+        lblTitle.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
+        lblTitle.setText("INVENTARIO DE OBSOLETOS");
 
-        jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel4.setText("Cantidad:");
+        lblQuantity.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblQuantity.setText("Cantidad:");
 
         btnFindProduct.setBackground(new java.awt.Color(0, 123, 0));
         btnFindProduct.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
@@ -115,13 +115,13 @@ public class FrmObsoleteInventories extends JDialog {
                                 .addGap(67, 67, 67)
                                 .addComponent(txtProductAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
+                                .addComponent(lblProductID)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtIdProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
+                                .addComponent(lblLocation)
                                 .addGap(195, 195, 195)
-                                .addComponent(jLabel4)
+                                .addComponent(lblQuantity)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtObsoleteStock, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -129,25 +129,25 @@ public class FrmObsoleteInventories extends JDialog {
                         .addGap(75, 75, 75))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
+                .addComponent(lblTitle)
                 .addGap(135, 135, 135))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(jLabel3)
+                .addComponent(lblTitle)
                 .addGap(18, 18, 18)
                 .addComponent(txtProductAddress)
                 .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(lblProductID)
                     .addComponent(txtIdProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnFindProduct))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4)
+                    .addComponent(lblLocation)
+                    .addComponent(lblQuantity)
                     .addComponent(txtObsoleteStock))
                 .addGap(28, 28, 28)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -391,13 +391,13 @@ public class FrmObsoleteInventories extends JDialog {
     private javax.swing.JMenuItem itmDelete;
     private javax.swing.JMenuItem itmReassign;
     private javax.swing.JMenuItem itmReturns;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblLocation;
+    private javax.swing.JLabel lblProductID;
+    private javax.swing.JLabel lblQuantity;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JMenu mnuInventories;
     private javax.swing.JMenu mnuProducts;
     private javax.swing.JMenu mnuReturnsRecord;

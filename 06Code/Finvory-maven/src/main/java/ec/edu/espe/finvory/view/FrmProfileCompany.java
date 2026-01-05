@@ -107,18 +107,18 @@ public class FrmProfileCompany extends javax.swing.JFrame {
         btnUploadPhoto = new javax.swing.JButton();
         pnlCardsContainer = new javax.swing.JPanel();
         cardGeneral = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        lblCompany = new javax.swing.JLabel();
         txtCompanyName = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        lblRUC = new javax.swing.JLabel();
         txtRuc = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        lblPhone = new javax.swing.JLabel();
         txtPhone = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        lblUser = new javax.swing.JLabel();
         txtUserName = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
+        lblPassword = new javax.swing.JLabel();
         passCompany = new javax.swing.JPasswordField();
         btnCancel = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
@@ -236,26 +236,26 @@ public class FrmProfileCompany extends javax.swing.JFrame {
 
         cardGeneral.setBackground(new java.awt.Color(224, 224, 224));
 
-        jLabel1.setFont(new java.awt.Font("Perpetua", 1, 36)); // NOI18N
-        jLabel1.setText("Información General");
+        lblTitle.setFont(new java.awt.Font("Perpetua", 1, 36)); // NOI18N
+        lblTitle.setText("Información General");
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        jLabel2.setText("Compañía:");
+        lblCompany.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        lblCompany.setText("Compañía:");
 
-        jLabel3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        jLabel3.setText("RUC:");
+        lblRUC.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        lblRUC.setText("RUC:");
 
-        jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        jLabel4.setText("Celular:");
+        lblPhone.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        lblPhone.setText("Celular:");
 
-        jLabel5.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        jLabel5.setText("Email:");
+        lblEmail.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        lblEmail.setText("Email:");
 
-        jLabel6.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        jLabel6.setText("Usuario:");
+        lblUser.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        lblUser.setText("Usuario:");
 
-        jLabel7.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        jLabel7.setText("Contraseña:");
+        lblPassword.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        lblPassword.setText("Contraseña:");
 
         passCompany.setText("jPasswordField1personal.jpgpersonal.jpgpersonal.jpgpersonal.jpg");
 
@@ -294,13 +294,13 @@ public class FrmProfileCompany extends javax.swing.JFrame {
             .addGroup(cardGeneralLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(cardGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
+                    .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblRUC, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCompany)
                     .addComponent(txtCompanyName, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
+                    .addComponent(lblPhone)
+                    .addComponent(lblUser)
+                    .addComponent(lblPassword)
                     .addGroup(cardGeneralLayout.createSequentialGroup()
                         .addGroup(cardGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(passCompany, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
@@ -310,7 +310,7 @@ public class FrmProfileCompany extends javax.swing.JFrame {
                             .addComponent(txtRuc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnViewPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1)
+                    .addComponent(lblTitle)
                     .addGroup(cardGeneralLayout.createSequentialGroup()
                         .addGap(241, 241, 241)
                         .addComponent(btnSave)
@@ -322,29 +322,29 @@ public class FrmProfileCompany extends javax.swing.JFrame {
             cardGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(cardGeneralLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addComponent(lblCompany)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCompanyName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
+                .addComponent(lblRUC)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtRuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
+                .addComponent(lblPhone)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                .addComponent(lblEmail)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
+                .addComponent(lblUser)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
+                .addComponent(lblPassword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(cardGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(passCompany, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -756,7 +756,6 @@ public class FrmProfileCompany extends javax.swing.JFrame {
     private javax.swing.JLabel icon;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -767,16 +766,17 @@ public class FrmProfileCompany extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblCompany;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblPhone;
+    private javax.swing.JLabel lblRUC;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblUser;
     private javax.swing.JPasswordField passCompany;
     private javax.swing.JPanel pnlCardsContainer;
     private javax.swing.JPanel pnlSlidebar;

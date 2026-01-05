@@ -60,11 +60,11 @@ public class FrmInventories extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblInventoryName = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblCountry = new javax.swing.JLabel();
+        lblCity = new javax.swing.JLabel();
+        lblProduct = new javax.swing.JLabel();
         btnFindInventory = new javax.swing.JButton();
         txtCountryInventory = new javax.swing.JLabel();
         txtCityInventory = new javax.swing.JLabel();
@@ -73,7 +73,7 @@ public class FrmInventories extends javax.swing.JFrame {
         tabProducts = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        itemPrincipalMenu = new javax.swing.JMenuItem();
         mnuHandle = new javax.swing.JMenu();
         itemProducts = new javax.swing.JMenuItem();
         itemObsoleteProducts = new javax.swing.JMenuItem();
@@ -84,17 +84,17 @@ public class FrmInventories extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(224, 224, 224));
 
-        jLabel1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel1.setText("Nombre del Inventario:");
+        lblInventoryName.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblInventoryName.setText("Nombre del Inventario:");
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel2.setText("País:");
+        lblCountry.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblCountry.setText("País:");
 
-        jLabel3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel3.setText("Ciudad:");
+        lblCity.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblCity.setText("Ciudad:");
 
-        jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel4.setText("Productos:");
+        lblProduct.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblProduct.setText("Productos:");
 
         btnFindInventory.setBackground(new java.awt.Color(0, 123, 0));
         btnFindInventory.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
@@ -115,21 +115,21 @@ public class FrmInventories extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addComponent(lblProduct)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblCountry, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCountryInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
+                        .addComponent(lblCity)
                         .addGap(18, 18, 18)
                         .addComponent(txtCityInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(246, 246, 246)
                         .addComponent(btnFindInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(151, 151, 151))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblInventoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -139,21 +139,21 @@ public class FrmInventories extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(lblInventoryName)
                     .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
+                            .addComponent(lblCountry)
+                            .addComponent(lblCity)
                             .addComponent(txtCountryInventory)
                             .addComponent(txtCityInventory)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(btnFindInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
+                .addComponent(lblProduct)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -197,13 +197,13 @@ public class FrmInventories extends javax.swing.JFrame {
 
         jMenu1.setText("Finvory");
 
-        jMenuItem1.setText("Menu Principal");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        itemPrincipalMenu.setText("Menu Principal");
+        itemPrincipalMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                itemPrincipalMenuActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(itemPrincipalMenu);
 
         jMenuBar1.add(jMenu1);
 
@@ -333,9 +333,9 @@ public class FrmInventories extends javax.swing.JFrame {
         addNewInventory.setVisible(true);
     }//GEN-LAST:event_itemAddNewInventoryActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void itemPrincipalMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPrincipalMenuActionPerformed
         this.dispose();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_itemPrincipalMenuActionPerformed
     private void handleNoMatches() {
         JOptionPane.showMessageDialog(this, "No se encontraron coincidencias.");
         clearFields();
@@ -392,18 +392,18 @@ public class FrmInventories extends javax.swing.JFrame {
     private javax.swing.JButton btnFindInventory;
     private javax.swing.JMenuItem itemAddNewInventory;
     private javax.swing.JMenuItem itemObsoleteProducts;
+    private javax.swing.JMenuItem itemPrincipalMenu;
     private javax.swing.JMenuItem itemProducts;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCity;
+    private javax.swing.JLabel lblCountry;
+    private javax.swing.JLabel lblInventoryName;
+    private javax.swing.JLabel lblProduct;
     private javax.swing.JMenu mnuHandle;
     private javax.swing.JTable tabProducts;
     private javax.swing.JLabel txtCityInventory;

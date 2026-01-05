@@ -40,9 +40,9 @@ public class FrmProducts extends javax.swing.JFrame {
 
     private void updateTitle() {
         if (specificInventory != null) {
-            jLabel1.setText("Gestionando: " + specificInventory.getName());
+            lblTitle.setText("Gestionando: " + specificInventory.getName());
         } else {
-            jLabel1.setText("Catálogo Global de Productos");
+            lblTitle.setText("Catálogo Global de Productos");
         }
     }
 
@@ -85,7 +85,7 @@ public class FrmProducts extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        lblProductsList = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableProducts = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
@@ -94,15 +94,15 @@ public class FrmProducts extends javax.swing.JFrame {
         btnDelete = new javax.swing.JButton();
         btnMoveProduct = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         itemInventories = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel2.setText("Lista de productos:");
+        lblProductsList.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblProductsList.setText("Lista de productos:");
 
         jTableProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -134,7 +134,7 @@ public class FrmProducts extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(lblProductsList)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -142,7 +142,7 @@ public class FrmProducts extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(jLabel2)
+                .addComponent(lblProductsList)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(12, Short.MAX_VALUE))
@@ -216,8 +216,8 @@ public class FrmProducts extends javax.swing.JFrame {
                 .addContainerGap(37, Short.MAX_VALUE))
         );
 
-        jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
-        jLabel1.setText("Productos Registados");
+        lblTitle.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
+        lblTitle.setText("Productos Registados");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -225,14 +225,14 @@ public class FrmProducts extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(223, 223, 223)
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addContainerGap(231, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
@@ -396,8 +396,6 @@ public class FrmProducts extends javax.swing.JFrame {
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnMoveProduct;
     private javax.swing.JMenuItem itemInventories;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
@@ -405,5 +403,7 @@ public class FrmProducts extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableProducts;
+    private javax.swing.JLabel lblProductsList;
+    private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables
 }

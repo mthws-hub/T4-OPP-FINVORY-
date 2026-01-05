@@ -34,7 +34,7 @@ public class FrmLogin extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         lblUser = new javax.swing.JLabel();
@@ -54,8 +54,8 @@ public class FrmLogin extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 153, 0));
         jLabel1.setText("Finvory");
 
-        jLabel2.setFont(new java.awt.Font("Perpetua", 1, 36)); // NOI18N
-        jLabel2.setText("Welcome Back");
+        lblTitle.setFont(new java.awt.Font("Perpetua", 1, 36)); // NOI18N
+        lblTitle.setText("Welcome Back");
 
         jLabel3.setFont(new java.awt.Font("Perpetua", 0, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(102, 102, 102));
@@ -69,7 +69,7 @@ public class FrmLogin extends javax.swing.JFrame {
                 .addGap(60, 60, 60)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2)
+                    .addComponent(lblTitle)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)))
@@ -80,7 +80,7 @@ public class FrmLogin extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addComponent(lblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 8, Short.MAX_VALUE))
@@ -251,12 +251,12 @@ String user = txtUserName.getText();
     private javax.swing.JButton btnLogIn;
     private javax.swing.JButton btnSignUp;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblUser;
     private javax.swing.JPasswordField passPassword;
     private javax.swing.JTextField txtUserName;

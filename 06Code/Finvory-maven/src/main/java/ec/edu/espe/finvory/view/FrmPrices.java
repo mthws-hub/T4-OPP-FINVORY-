@@ -46,13 +46,13 @@ public class FrmPrices extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lblPricesAlgorithm = new javax.swing.JLabel();
+        lblProfit = new javax.swing.JLabel();
+        lblDiscountStd = new javax.swing.JLabel();
+        lblDiscountPrm = new javax.swing.JLabel();
+        lblDiscountVip = new javax.swing.JLabel();
         ftfProfit = new javax.swing.JFormattedTextField();
         ftfDiscountStd = new javax.swing.JFormattedTextField();
         ftfDiscountPrm = new javax.swing.JFormattedTextField();
@@ -62,29 +62,29 @@ public class FrmPrices extends javax.swing.JFrame {
         btnReturn = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblTaxRate = new javax.swing.JLabel();
+        lblCurrentTaxRate = new javax.swing.JLabel();
         ftfTax = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
-        jLabel1.setText("Configuracion de Precios");
+        lblTitle.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
+        lblTitle.setText("Configuracion de Precios");
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 14)); // NOI18N
-        jLabel2.setText("Algoritmo de Precios");
+        lblPricesAlgorithm.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 14)); // NOI18N
+        lblPricesAlgorithm.setText("Algoritmo de Precios");
 
-        jLabel3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel3.setText("Ganancia:");
+        lblProfit.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblProfit.setText("Ganancia:");
 
-        jLabel4.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel4.setText("Descuento Standard:");
+        lblDiscountStd.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblDiscountStd.setText("Descuento Standard:");
 
-        jLabel5.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel5.setText("Descuento Premium:");
+        lblDiscountPrm.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblDiscountPrm.setText("Descuento Premium:");
 
-        jLabel6.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel6.setText("Descuento Vip:");
+        lblDiscountVip.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblDiscountVip.setText("Descuento Vip:");
 
         ftfDiscountVip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,40 +101,40 @@ public class FrmPrices extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
+                            .addComponent(lblProfit)
+                            .addComponent(lblDiscountStd)
+                            .addComponent(lblDiscountPrm)
+                            .addComponent(lblDiscountVip))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(ftfDiscountVip, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
                             .addComponent(ftfDiscountStd)
                             .addComponent(ftfProfit)
                             .addComponent(ftfDiscountPrm)))
-                    .addComponent(jLabel2))
+                    .addComponent(lblPricesAlgorithm))
                 .addContainerGap(107, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addComponent(lblPricesAlgorithm)
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(ftfProfit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
+                            .addComponent(lblProfit))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel4))
+                        .addComponent(lblDiscountStd))
                     .addComponent(ftfDiscountStd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
+                    .addComponent(lblDiscountPrm)
                     .addComponent(ftfDiscountPrm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel6)
+                    .addComponent(lblDiscountVip)
                     .addComponent(ftfDiscountVip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
@@ -198,11 +198,11 @@ public class FrmPrices extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
-        jLabel7.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 14)); // NOI18N
-        jLabel7.setText("Tasa de Impuesto");
+        lblTaxRate.setFont(new java.awt.Font("Copperplate Gothic Light", 1, 14)); // NOI18N
+        lblTaxRate.setText("Tasa de Impuesto");
 
-        jLabel8.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel8.setText("Tasa de Impuesto Actual:");
+        lblCurrentTaxRate.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblCurrentTaxRate.setText("Tasa de Impuesto Actual:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -212,10 +212,10 @@ public class FrmPrices extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
+                        .addComponent(lblCurrentTaxRate)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ftfTax, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel7))
+                    .addComponent(lblTaxRate))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -225,9 +225,9 @@ public class FrmPrices extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(ftfTax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
+                        .addComponent(lblTaxRate)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel8)))
+                        .addComponent(lblCurrentTaxRate)))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
@@ -248,14 +248,14 @@ public class FrmPrices extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addGap(51, 51, 51))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -326,16 +326,16 @@ public class FrmPrices extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField ftfDiscountVip;
     private javax.swing.JFormattedTextField ftfProfit;
     private javax.swing.JFormattedTextField ftfTax;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblCurrentTaxRate;
+    private javax.swing.JLabel lblDiscountPrm;
+    private javax.swing.JLabel lblDiscountStd;
+    private javax.swing.JLabel lblDiscountVip;
+    private javax.swing.JLabel lblPricesAlgorithm;
+    private javax.swing.JLabel lblProfit;
+    private javax.swing.JLabel lblTaxRate;
+    private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables
 }

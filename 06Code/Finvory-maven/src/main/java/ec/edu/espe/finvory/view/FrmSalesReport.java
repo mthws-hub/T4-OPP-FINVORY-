@@ -78,16 +78,16 @@ public class FrmSalesReport extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btnExportCSV = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblStartDate = new javax.swing.JLabel();
+        lblEndDate = new javax.swing.JLabel();
         btnFilter = new javax.swing.JButton();
-        jdEnd = new com.toedter.calendar.JDateChooser();
-        jdStart = new com.toedter.calendar.JDateChooser();
+        jdEndDate = new com.toedter.calendar.JDateChooser();
+        jdStartDate = new com.toedter.calendar.JDateChooser();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSales = new javax.swing.JTable();
@@ -102,8 +102,8 @@ public class FrmSalesReport extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
-        jLabel1.setText("Reporte de Ventas");
+        lblTitle.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
+        lblTitle.setText("Reporte de Ventas");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -111,14 +111,14 @@ public class FrmSalesReport extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(143, 143, 143)
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -163,11 +163,11 @@ public class FrmSalesReport extends javax.swing.JFrame {
                 .addGap(15, 15, 15))
         );
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        jLabel2.setText("Fecha Inicio:");
+        lblStartDate.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        lblStartDate.setText("Fecha Inicio:");
 
-        jLabel3.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        jLabel3.setText("Fecha Fin:");
+        lblEndDate.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        lblEndDate.setText("Fecha Fin:");
 
         btnFilter.setBackground(new java.awt.Color(0, 123, 0));
         btnFilter.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
@@ -186,12 +186,12 @@ public class FrmSalesReport extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(43, 43, 43)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(lblStartDate, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblEndDate, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jdEnd, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
-                    .addComponent(jdStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jdEndDate, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                    .addComponent(jdStartDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(99, 99, 99)
                 .addComponent(btnFilter)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -206,12 +206,12 @@ public class FrmSalesReport extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jdStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
+                            .addComponent(jdStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblStartDate))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jdEnd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(lblEndDate, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jdEndDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -364,7 +364,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
-        if (jdStart.getDate() == null || jdEnd.getDate() == null) {
+        if (jdStartDate.getDate() == null || jdEndDate.getDate() == null) {
             javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione ambas fechas.");
             return;
         }
@@ -376,8 +376,8 @@ public class FrmSalesReport extends javax.swing.JFrame {
         model.setColumnIdentifiers(headers);
         model.setRowCount(0);
 
-        java.time.LocalDate start = jdStart.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-        java.time.LocalDate end = jdEnd.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+        java.time.LocalDate start = jdStartDate.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+        java.time.LocalDate end = jdEndDate.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
 
         double totalSum = 0;
         for (ec.edu.espe.finvory.model.InvoiceSim inv : controller.getData().getInvoices()) {
@@ -429,9 +429,6 @@ public class FrmSalesReport extends javax.swing.JFrame {
     private javax.swing.JButton btnExportCSV;
     private javax.swing.JButton btnFilter;
     private javax.swing.JButton btnRefresh;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -442,8 +439,11 @@ public class FrmSalesReport extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.toedter.calendar.JDateChooser jdEnd;
-    private com.toedter.calendar.JDateChooser jdStart;
+    private com.toedter.calendar.JDateChooser jdEndDate;
+    private com.toedter.calendar.JDateChooser jdStartDate;
+    private javax.swing.JLabel lblEndDate;
+    private javax.swing.JLabel lblStartDate;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblTotalVentas;
     private javax.swing.JMenuItem mnuGrossReport;
     private javax.swing.JMenuItem mnuPopularProducts;

@@ -70,8 +70,8 @@ public class FrmNewAccount extends javax.swing.JFrame {
         btnRegisterPersonal = new javax.swing.JButton();
         passPersonalPassword = new javax.swing.JPasswordField();
         jPanel3 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        lblType = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -344,11 +344,11 @@ public class FrmNewAccount extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(224, 224, 224));
 
-        jLabel1.setFont(new java.awt.Font("Perpetua", 1, 24)); // NOI18N
-        jLabel1.setText("REGISTRO DE USUARIO");
+        lblTitle.setFont(new java.awt.Font("Perpetua", 1, 24)); // NOI18N
+        lblTitle.setText("REGISTRO DE USUARIO");
 
-        jLabel10.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel10.setText("Escoga el tipo de cuenta:");
+        lblType.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblType.setText("Escoga el tipo de cuenta:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -357,20 +357,20 @@ public class FrmNewAccount extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel10)))
+                        .addComponent(lblType))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(81, 81, 81)
+                        .addComponent(lblTitle)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(lblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10)
+                .addComponent(lblType)
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
@@ -574,8 +574,6 @@ public class FrmNewAccount extends javax.swing.JFrame {
     private javax.swing.JButton btnRegisterCompany;
     private javax.swing.JButton btnRegisterPersonal;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -593,6 +591,8 @@ public class FrmNewAccount extends javax.swing.JFrame {
     private javax.swing.JLabel lblPersonalUser;
     private javax.swing.JLabel lblPhone;
     private javax.swing.JLabel lblRuc;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblType;
     private javax.swing.JPasswordField passCompanyPassword;
     private javax.swing.JPasswordField passPersonalPassword;
     private javax.swing.JTextField txtCity;

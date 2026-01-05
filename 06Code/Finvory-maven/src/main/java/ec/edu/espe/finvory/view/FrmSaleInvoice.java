@@ -119,20 +119,20 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
 
         jTextField1 = new javax.swing.JTextField();
         panel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblSaleNumber = new javax.swing.JLabel();
+        lblDate = new javax.swing.JLabel();
         txtSalesNumber = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblCI = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        lblPhone = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        lblTypeOfCustomer = new javax.swing.JLabel();
         txtClientType = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        lblPaymentType = new javax.swing.JLabel();
         radPaymentMethodCash = new javax.swing.JRadioButton();
         radPaymentMethodTransfer = new javax.swing.JRadioButton();
         radPaymentMethodCheque = new javax.swing.JRadioButton();
@@ -141,16 +141,16 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         txtDate = new javax.swing.JButton();
         txtPhone = new javax.swing.JTextField();
         txtTypeClient = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
+        lblCustomer = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         btnHandleList = new javax.swing.JButton();
         btnConfirmSale = new javax.swing.JButton();
         btnCancelSale = new javax.swing.JButton();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
+        lblTotal = new javax.swing.JLabel();
+        lblTotalSub = new javax.swing.JLabel();
+        lblTax = new javax.swing.JLabel();
+        lblTotalSale = new javax.swing.JLabel();
         txtSubtotal = new javax.swing.JLabel();
         txtTax = new javax.swing.JLabel();
         txtTotalSale = new javax.swing.JLabel();
@@ -172,14 +172,14 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         panel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(162, 188, 224)));
         panel.setForeground(new java.awt.Color(162, 188, 224));
 
-        jLabel1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel1.setText("Venta No.");
+        lblSaleNumber.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblSaleNumber.setText("Venta No.");
 
-        jLabel2.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel2.setText("Fecha:");
+        lblDate.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblDate.setText("Fecha:");
 
-        jLabel5.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel5.setText("CI:");
+        lblCI.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblCI.setText("CI:");
 
         txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -187,8 +187,8 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel6.setText("Nombre:");
+        lblName.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblName.setText("Nombre:");
 
         txtName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,17 +196,17 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel7.setText("Celular:");
+        lblPhone.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblPhone.setText("Celular:");
 
-        jLabel9.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel9.setText("Email:");
+        lblEmail.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblEmail.setText("Email:");
 
-        jLabel11.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel11.setText("Tipo de Cliente:");
+        lblTypeOfCustomer.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblTypeOfCustomer.setText("Tipo de Cliente:");
 
-        jLabel12.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel12.setText("Tipo de Pago:");
+        lblPaymentType.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblPaymentType.setText("Tipo de Pago:");
 
         radPaymentMethodCash.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         radPaymentMethodCash.setText("efectivo");
@@ -244,8 +244,8 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel8.setText("CLIENTE:");
+        lblCustomer.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblCustomer.setText("CLIENTE:");
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
@@ -253,13 +253,13 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(jLabel1)
+                .addComponent(lblSaleNumber)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtSale, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(panelLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(jLabel8)
+                .addComponent(lblCustomer)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -272,10 +272,10 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
             .addGroup(panelLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblPaymentType)
+                    .addComponent(lblCI)
+                    .addComponent(lblPhone)
+                    .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -285,9 +285,9 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                             .addComponent(txtId))
                         .addGap(29, 29, 29)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11))
+                            .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblTypeOfCustomer))
                         .addGap(12, 12, 12)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtTypeClient, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -325,40 +325,40 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel1)
+                                .addComponent(lblSaleNumber)
                                 .addComponent(txtSale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel2))
+                                .addComponent(lblDate))
                             .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8)
+                        .addComponent(lblCustomer)
                         .addGap(5, 5, 5)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(panelLayout.createSequentialGroup()
-                                        .addComponent(jLabel5)
+                                        .addComponent(lblCI)
                                         .addGap(20, 20, 20))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                                         .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel11)
+                                    .addComponent(lblPhone)
+                                    .addComponent(lblTypeOfCustomer)
                                     .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtTypeClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel6)
+                                .addComponent(lblName)
                                 .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
+                            .addComponent(lblEmail)
                             .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(radPaymentMethodTransfer)
                                 .addComponent(radPaymentMethodCash)
-                                .addComponent(jLabel12))
+                                .addComponent(lblPaymentType))
                             .addComponent(radPaymentMethodCheque))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel10)
@@ -401,17 +401,17 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
             }
         });
 
-        jLabel13.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel13.setText("TOTAL");
+        lblTotal.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblTotal.setText("TOTAL");
 
-        jLabel14.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel14.setText("Subtotal:");
+        lblTotalSub.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblTotalSub.setText("Subtotal:");
 
-        jLabel15.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel15.setText("Impuesto:");
+        lblTax.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblTax.setText("Impuesto:");
 
-        jLabel16.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        jLabel16.setText("Total venta:");
+        lblTotalSale.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
+        lblTotalSale.setText("Total venta:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -423,15 +423,13 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnConfirmSale)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancelSale)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 250, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnHandleList)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(btnCancelSale))
+                    .addComponent(btnHandleList))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel16))
+                    .addComponent(lblTotalSub)
+                    .addComponent(lblTax)
+                    .addComponent(lblTotalSale))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -449,30 +447,30 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(142, 142, 142))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel13)
+                .addComponent(lblTotal)
                 .addGap(5, 5, 5)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnHandleList)
-                    .addComponent(jLabel14)
+                    .addComponent(lblTotalSub)
                     .addComponent(txtSubtotal)
                     .addComponent(txtTotalSub, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
+                    .addComponent(lblTax)
                     .addComponent(txtTax)
                     .addComponent(txTax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfirmSale)
                     .addComponent(btnCancelSale)
-                    .addComponent(jLabel16)
+                    .addComponent(lblTotalSale)
                     .addComponent(txtTotalSale)
                     .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(46, Short.MAX_VALUE))
@@ -704,21 +702,8 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     private javax.swing.JButton btnConfirmSale;
     private javax.swing.JButton btnFind;
     private javax.swing.JButton btnHandleList;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -726,6 +711,19 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel lblCI;
+    private javax.swing.JLabel lblCustomer;
+    private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblPaymentType;
+    private javax.swing.JLabel lblPhone;
+    private javax.swing.JLabel lblSaleNumber;
+    private javax.swing.JLabel lblTax;
+    private javax.swing.JLabel lblTotal;
+    private javax.swing.JLabel lblTotalSale;
+    private javax.swing.JLabel lblTotalSub;
+    private javax.swing.JLabel lblTypeOfCustomer;
     private javax.swing.JPanel panel;
     private javax.swing.JRadioButton radPaymentMethodCash;
     private javax.swing.JRadioButton radPaymentMethodCheque;

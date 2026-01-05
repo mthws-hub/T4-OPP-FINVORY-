@@ -92,7 +92,7 @@
       },
       "productStock": {
         "MP14": 45,
-        "ARM-001": 9,
+        "ARM-001": 6,
         "ARM-002": 3,
         "ARM-003": 23,
         "ARM-004": 45
@@ -133,8 +133,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-11-25",
-      "paymentDueDate": "2025-11-25",
+      "date": "2025-11-23",
+      "paymentDueDate": "2025-11-23",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -161,8 +161,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-11-25",
-      "paymentDueDate": "2025-11-25",
+      "date": "2025-11-23",
+      "paymentDueDate": "2025-11-23",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -196,8 +196,8 @@
     },
     {
       "invoiceNumber": "F-3",
-      "date": "2025-11-25",
-      "paymentDueDate": "2025-11-25",
+      "date": "2025-11-23",
+      "paymentDueDate": "2025-11-23",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -228,6 +228,62 @@
       "taxRate": 0.15,
       "taxAmount": 195.00,
       "total": 1495.00
+    },
+    {
+      "invoiceNumber": "F-4",
+      "date": "2026-01-01",
+      "paymentDueDate": "2026-01-01",
+      "customer": {
+        "name": "Olga",
+        "identification": "0017654542312",
+        "phone": "0976787769",
+        "email": "olga@gmail.com",
+        "clientType": "PREMIUM"
+      },
+      "lines": [
+        {
+          "productId": "ARM-001",
+          "productName": "AK-47",
+          "quantity": 1,
+          "priceApplied": 150.0,
+          "lineTotal": 150.00
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 150.00,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 22.50,
+      "total": 172.50
+    },
+    {
+      "invoiceNumber": "F-5",
+      "date": "2026-01-03",
+      "paymentDueDate": "2026-01-03",
+      "customer": {
+        "name": "Sebastian",
+        "identification": "0018988987887",
+        "phone": "0976789870",
+        "email": "sebas@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "ARM-001",
+          "productName": "AK-47",
+          "quantity": 2,
+          "priceApplied": 150.0,
+          "lineTotal": 300.00
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 300.00,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 45.00,
+      "total": 345.00
     }
   ],
   "returns": [
@@ -242,7 +298,7 @@
       },
       "quantity": 1,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-02"
+      "returnDate": "2026-01-04"
     },
     {
       "product": {
@@ -255,7 +311,7 @@
       },
       "quantity": 1,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-02"
+      "returnDate": "2026-01-04"
     },
     {
       "product": {
@@ -268,7 +324,7 @@
       },
       "quantity": 4,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-02"
+      "returnDate": "2026-01-04"
     },
     {
       "product": {
@@ -281,7 +337,7 @@
       },
       "quantity": 3,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-02"
+      "returnDate": "2026-01-04"
     },
     {
       "product": {
@@ -294,7 +350,7 @@
       },
       "quantity": 2,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-02"
+      "returnDate": "2026-01-04"
     },
     {
       "product": {
@@ -307,7 +363,7 @@
       },
       "quantity": 1,
       "reason": "Otro",
-      "returnDate": "2026-01-02"
+      "returnDate": "2026-01-04"
     },
     {
       "product": {
@@ -320,7 +376,7 @@
       },
       "quantity": 4,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-02"
+      "returnDate": "2026-01-04"
     },
     {
       "product": {
@@ -333,7 +389,7 @@
       },
       "quantity": 5,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-02"
+      "returnDate": "2026-01-04"
     }
   ],
   "taxRate": 0.15,

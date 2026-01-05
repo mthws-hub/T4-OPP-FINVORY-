@@ -51,7 +51,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        lblCompany = new javax.swing.JLabel();
         txtCompany = new javax.swing.JTextField();
         btnFind = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -59,14 +59,14 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
         btnInfo = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        itemProfile = new javax.swing.JMenuItem();
         itemExit = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        jLabel1.setText("Empresa:");
+        lblCompany.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        lblCompany.setText("Empresa:");
 
         btnFind.setBackground(new java.awt.Color(0, 123, 0));
         btnFind.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
@@ -106,13 +106,13 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
 
         jMenu1.setText("Finvory");
 
-        jMenuItem2.setText("Mi Perfil");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        itemProfile.setText("Mi Perfil");
+        itemProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                itemProfileActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(itemProfile);
 
         itemExit.setText("Salir");
         itemExit.addActionListener(new java.awt.event.ActionListener() {
@@ -140,7 +140,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jLabel1)
+                .addComponent(lblCompany)
                 .addGap(18, 18, 18)
                 .addComponent(txtCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
@@ -159,7 +159,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
+                        .addComponent(lblCompany)
                         .addComponent(txtCompany, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnFind, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -200,7 +200,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void itemProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProfileActionPerformed
         FrmProfilePersonal profilePersonal = new FrmProfilePersonal(this, true, controller);
         this.setVisible(false);
         profilePersonal.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -210,7 +210,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             }
         });
         profilePersonal.setVisible(true);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_itemProfileActionPerformed
 
     private void btnInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         String comanyName = txtCompany.getText().trim();
@@ -244,12 +244,12 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
     private javax.swing.JButton btnFind;
     private javax.swing.JButton btnInfo;
     private javax.swing.JMenuItem itemExit;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenuItem itemProfile;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCompany;
     private javax.swing.JTable tabAllProducts;
     private javax.swing.JTextField txtCompany;
     // End of variables declaration//GEN-END:variables
