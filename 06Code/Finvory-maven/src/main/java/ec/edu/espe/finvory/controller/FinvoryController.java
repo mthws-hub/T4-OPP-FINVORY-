@@ -9,6 +9,7 @@ import ec.edu.espe.finvory.mongo.MongoDataExporter;
 import ec.edu.espe.finvory.view.FrmInventories;
 import ec.edu.espe.finvory.view.FrmMainMenu;
 import ec.edu.espe.finvory.view.FrmMainMenuPersonalAccount;
+import ec.edu.espe.finvory.utils.ValidationUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import org.bson.Document;
 import com.mongodb.client.model.Filters;
+import static ec.edu.espe.finvory.utils.ValidationUtils.caesarCipher;
 import java.util.Collections;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -167,8 +169,17 @@ public class FinvoryController {
         if (findCompanyByUsername(username) != null || findPersonalByUsername(username) != null) {
             return false;
         }
+        String encryptedPass = caesarCipher(data.get("password"), 1);
+        CompanyAccount newCompany = new CompanyAccount(
+                data.get("companyName"),
+                address,
+                data.get("ruc"),
+                data.get("phone"),
+                data.get("email"),
+                username,
+                encryptedPass
+        );
 
-        CompanyAccount newCompany = new CompanyAccount(data.get("companyName"), address, data.get("ruc"), data.get("phone"), data.get("email"), username, data.get("password"));
         users.getCompanyAccounts().add(newCompany);
         dataBase.saveUsers(users);
 
@@ -185,7 +196,14 @@ public class FinvoryController {
             return false;
         }
 
-        PersonalAccount newPersonal = new PersonalAccount(data.get("fullName"), username, data.get("password"));
+        String encryptedPass = caesarCipher(data.get("password"), 1);
+
+        PersonalAccount newPersonal = new PersonalAccount(
+                data.get("fullName"),
+                username,
+                encryptedPass
+        );
+
         users.getPersonalAccounts().add(newPersonal);
         dataBase.saveUsers(users);
         syncUsersToCloud();
@@ -999,7 +1017,8 @@ public class FinvoryController {
         PersonalAccount personalAccount = getLoggedInPersonalAccount();
         if (personalAccount != null) {
             personalAccount.setFullName(newFullName);
-            personalAccount.setPassword(newPassword);
+            String encryptedNewPass = caesarCipher(newPassword, 1);
+            personalAccount.setPassword(encryptedNewPass);
             dataBase.saveUsers(users);
             syncUsersToCloud();
             JOptionPane.showMessageDialog(null, "Perfil actualizado correctamente.");

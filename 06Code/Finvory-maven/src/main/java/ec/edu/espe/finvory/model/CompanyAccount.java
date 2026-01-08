@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.model;
 
+import ec.edu.espe.finvory.utils.ValidationUtils;
 /**
  *
  * @author Arelys Otavalo, The POOwer Rangers of Programming
@@ -29,7 +30,11 @@ public class CompanyAccount {
     }
 
     public boolean checkPassword(String attempt) {
-        return this.password != null && this.password.equals(attempt);
+        if (this.password == null || attempt == null) {
+            return false;
+        }
+        String encryptedAttempt = ValidationUtils.caesarCipher(attempt, 1);
+        return this.password.equals(encryptedAttempt);
     }
 
     public String getName() {
@@ -95,5 +100,5 @@ public class CompanyAccount {
     public void setUsername(String username) {
         this.username = username;
     }
-    
+
 }

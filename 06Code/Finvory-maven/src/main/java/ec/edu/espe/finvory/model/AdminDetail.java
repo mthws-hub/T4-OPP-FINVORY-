@@ -1,12 +1,12 @@
 package ec.edu.espe.finvory.model;
 
 import java.time.LocalDate;
+import ec.edu.espe.finvory.utils.ValidationUtils;
 
 /**
  *
  * @author Arelys Otavalo, The POOwer Rangers Of Programming
  */
-
 public class AdminDetail {
 
     private String fullName;
@@ -27,7 +27,11 @@ public class AdminDetail {
     }
 
     public boolean checkPassword(String attempt) {
-        return this.password != null && this.password.equals(attempt);
+        if (this.password == null || attempt == null) {
+            return false;
+        }
+        String encryptedAttempt = ValidationUtils.caesarCipher(attempt, 1);
+        return this.password.equals(encryptedAttempt);
     }
 
     public String getFullName() {

@@ -46,8 +46,8 @@ public class ValidationUtils {
     public static boolean isValidIdentification(String id) {
         return validate(id, REGEX_ID);
     }
-    
-    public static boolean isValidInteger(String value){
+
+    public static boolean isValidInteger(String value) {
         return validate(value, REGEX_INTEGER_ONLY);
     }
 
@@ -255,7 +255,7 @@ public class ValidationUtils {
         }
         return getAddressFormError("Inventario", address.getCountry(), address.getCity(), address.getStreet());
     }
-    
+
     public static boolean isValidQuantity(String value) {
         if (isEmpty(value)) {
             return false;
@@ -266,5 +266,16 @@ public class ValidationUtils {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public static String caesarCipher(String text, int shift) {
+        if (text == null) {
+            return null;
+        }
+        StringBuilder result = new StringBuilder();
+        for (char character : text.toCharArray()) {
+            result.append((char) (character + shift));
+        }
+        return result.toString();
     }
 }

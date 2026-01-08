@@ -14,7 +14,7 @@
       "phone": "022445566",
       "email": "admin@frico.com",
       "username": "adminFrico",
-      "password": "123"
+      "password": "234"
     },
     {
       "name": "McDonalds",
@@ -30,7 +30,7 @@
       "phone": "0963514785",
       "email": "joseph3elcrac@gmail.com",
       "username": "Joseph",
-      "password": "123",
+      "password": "234",
       "logoPath": "data\\profiles\\Joseph_profile.jpeg"
     },
     {
@@ -47,7 +47,7 @@
       "phone": "0983249630",
       "email": "tropi@gmail.com",
       "username": "Said",
-      "password": "123"
+      "password": "234"
     },
     {
       "name": "Repuestos",
@@ -63,7 +63,7 @@
       "phone": "5454454",
       "email": "455454",
       "username": "adminPrueba",
-      "password": "123"
+      "password": "234"
     },
     {
       "name": "KFC",
@@ -79,7 +79,7 @@
       "phone": "0098745127",
       "email": "lm@gmail.com",
       "username": "Pepe",
-      "password": "123"
+      "password": "234"
     },
     {
       "name": "CompanyTest",
@@ -95,7 +95,7 @@
       "phone": "0987541020",
       "email": "a@a.com",
       "username": "licas",
-      "password": "123"
+      "password": "234"
     },
     {
       "name": "BlockBuster",
@@ -111,7 +111,7 @@
       "phone": "0983249630",
       "email": "blockbuster@gmail.com",
       "username": "Mathews",
-      "password": "Mathews123",
+      "password": "Nbuifxt234",
       "logoPath": "data\\profiles\\Mathews_profile.jpeg"
     }
   ],
@@ -119,28 +119,28 @@
     {
       "fullName": "Juan Perez",
       "username": "juanp",
-      "password": "123"
+      "password": "234"
     },
     {
       "fullName": "Pedro Pascal",
       "username": "pedrito",
-      "password": "1236"
+      "password": "2347"
     },
     {
       "fullName": "Moisés Isaac Caicedo Corozo",
       "username": "niñoMoi",
-      "password": "Moi123",
+      "password": "Npj234",
       "profilePhotoPath": "data\\profiles\\niñoMoi_profile.png"
     },
     {
       "fullName": "Pepito",
       "username": "pepito",
-      "password": "123"
+      "password": "234"
     },
     {
       "fullName": "asdas",
       "username": "prueba@",
-      "password": "123"
+      "password": "234"
     },
     {
       "fullName": "",
@@ -150,12 +150,12 @@
     {
       "fullName": "Said Pastor",
       "username": "21212",
-      "password": "2112"
+      "password": "3223"
     },
     {
       "fullName": "Kylian Mbappé Lottin",
       "username": "Mbappe",
-      "password": "Lottin",
+      "password": "Mpuujo",
       "profilePhotoPath": "data\\profiles\\Mbappe_profile.jpg"
     }
   ]

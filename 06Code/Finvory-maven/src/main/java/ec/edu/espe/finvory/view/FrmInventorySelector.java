@@ -65,7 +65,7 @@ public class FrmInventorySelector extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabInventories = new javax.swing.JTable();
         btnSelect = new javax.swing.JButton();
@@ -75,8 +75,8 @@ public class FrmInventorySelector extends javax.swing.JDialog {
 
         jPanel1.setBackground(new java.awt.Color(224, 224, 224));
 
-        jLabel2.setFont(new java.awt.Font("Perpetua Titling MT", 1, 24)); // NOI18N
-        jLabel2.setText("SELECCIONe UN INVENTARIO");
+        lblTitle.setFont(new java.awt.Font("Perpetua Titling MT", 1, 24)); // NOI18N
+        lblTitle.setText("SELECCIONe UN INVENTARIO");
 
         tabInventories.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         tabInventories.setModel(new javax.swing.table.DefaultTableModel(
@@ -136,7 +136,7 @@ public class FrmInventorySelector extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(72, 72, 72)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
+                            .addComponent(lblTitle)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(84, Short.MAX_VALUE))
         );
@@ -144,7 +144,7 @@ public class FrmInventorySelector extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(60, 60, 60)
-                .addComponent(jLabel2)
+                .addComponent(lblTitle)
                 .addGap(41, 41, 41)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(57, 57, 57)
@@ -185,9 +185,9 @@ public class FrmInventorySelector extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnSelect;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JTable tabInventories;
     // End of variables declaration//GEN-END:variables
 }
