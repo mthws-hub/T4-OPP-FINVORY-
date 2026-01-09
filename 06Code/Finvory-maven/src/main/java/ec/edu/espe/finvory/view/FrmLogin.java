@@ -243,7 +243,8 @@ String user = txtUserName.getText();
     }//GEN-LAST:event_btnSignUpActionPerformed
 
     private void btnAboutTo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutTo1ActionPerformed
-        new FrmAbout(this, true).setVisible(true);
+        FrmAbout about = new FrmAbout();
+        about.setVisible(true);
     }//GEN-LAST:event_btnAboutTo1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

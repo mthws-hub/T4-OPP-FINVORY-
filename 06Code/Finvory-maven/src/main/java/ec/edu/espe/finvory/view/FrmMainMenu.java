@@ -278,7 +278,8 @@ public class FrmMainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_itemSalesReportActionPerformed
 
     private void itemFinvoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemFinvoryActionPerformed
-        new FrmAbout(this, true).setVisible(true);
+        FrmAbout about = new FrmAbout();
+        about.setVisible(true);
     }//GEN-LAST:event_itemFinvoryActionPerformed
 
     private void itemProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProfileActionPerformed
