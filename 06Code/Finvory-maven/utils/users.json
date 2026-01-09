@@ -157,6 +157,11 @@
       "username": "Mbappe",
       "password": "Mpuujo",
       "profilePhotoPath": "data\\profiles\\Mbappe_profile.jpg"
+    },
+    {
+      "fullName": "Florencia Aguilar",
+      "username": "Flor",
+      "password": "2345"
     }
   ]
 }

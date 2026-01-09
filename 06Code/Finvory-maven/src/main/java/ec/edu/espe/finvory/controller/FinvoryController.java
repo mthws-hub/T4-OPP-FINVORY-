@@ -1237,4 +1237,82 @@ public class FinvoryController {
         return rows;
     }
 
+
+    public boolean updatePricesWithValidation(String profitStr, String stdStr, String prmStr, String vipStr, String taxStr) {
+        String errorMsg = ec.edu.espe.finvory.utils.ValidationUtils.getPriceConfigError(profitStr, stdStr, prmStr, vipStr, taxStr);
+
+        if (errorMsg != null) {
+            return false;
+        }
+
+        try {
+            if (this.data != null && this.currentCompanyUsername != null) {
+
+                java.math.BigDecimal profit = new java.math.BigDecimal(profitStr);
+                java.math.BigDecimal tax = new java.math.BigDecimal(taxStr);
+                java.math.BigDecimal discountStandard = new java.math.BigDecimal(stdStr);
+                java.math.BigDecimal discountPremium = new java.math.BigDecimal(prmStr);
+                java.math.BigDecimal discountVip = new java.math.BigDecimal(vipStr);
+
+                data.setProfitPercentage(profit);
+                data.setTaxRate(tax);
+                data.setDiscountStandard(discountStandard);
+                data.setDiscountPremium(discountPremium);
+                data.setDiscountVip(discountVip);
+
+                dataBase.saveCompanyData(data, currentCompanyUsername);
+
+                com.mongodb.client.MongoDatabase db = ec.edu.espe.finvory.mongo.MongoDBConnection.getDatabaseStatic();
+                if (db != null) {
+                    org.bson.Document configDoc = new org.bson.Document()
+                            .append("companyUsername", this.currentCompanyUsername)
+                            .append("taxRate", tax.doubleValue())
+                            .append("profitPercentage", profit.doubleValue())
+                            .append("discountStandard", discountStandard.doubleValue())
+                            .append("discountPremium", discountPremium.doubleValue())
+                            .append("discountVip", discountVip.doubleValue());
+
+                    db.getCollection("configurations").replaceOne(
+                            com.mongodb.client.model.Filters.eq("companyUsername", this.currentCompanyUsername),
+                            configDoc,
+                            new com.mongodb.client.model.ReplaceOptions().upsert(true)
+                    );
+                }
+                return true; 
+            }
+        } catch (Exception e) {
+            System.err.println("Error en el proceso de guardado: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public void syncPricesToCloud() {
+        if (this.data == null || this.currentCompanyUsername == null) {
+            System.err.println("Error: No hay sesión o datos para sincronizar.");
+            return;
+        }
+
+        try {
+            com.mongodb.client.MongoDatabase db = ec.edu.espe.finvory.mongo.MongoDBConnection.getDatabaseStatic();
+            if (db != null) {
+                org.bson.Document configDoc = new org.bson.Document()
+                        .append("companyUsername", this.currentCompanyUsername)
+                        .append("taxRate", data.getTaxRate().doubleValue())
+                        .append("profitPercentage", data.getProfitPercentage().doubleValue())
+                        .append("discountStandard", data.getDiscountStandard().doubleValue())
+                        .append("discountPremium", data.getDiscountPremium().doubleValue())
+                        .append("discountVip", data.getDiscountVip().doubleValue());
+
+                db.getCollection("configurations").replaceOne(
+                        com.mongodb.client.model.Filters.eq("companyUsername", this.currentCompanyUsername),
+                        configDoc,
+                        new com.mongodb.client.model.ReplaceOptions().upsert(true)
+                );
+
+                System.out.println("Sincronización forzada exitosa para: " + this.currentCompanyUsername);
+            }
+        } catch (Exception e) {
+            System.err.println("Error en la nube: " + e.getMessage());
+        }
+    }
 }

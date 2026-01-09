@@ -37,6 +37,7 @@ public class FrmPrices extends javax.swing.JFrame {
             ftfTax.setText(String.valueOf(data.getTaxRate()));
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -269,30 +270,31 @@ public class FrmPrices extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        String profitStr = ftfProfit.getText().trim();
-        String stdStr = ftfDiscountStd.getText().trim();
-        String prmStr = ftfDiscountPrm.getText().trim();
-        String vipStr = ftfDiscountVip.getText().trim();
-        String taxStr = ftfTax.getText().trim();
-        String errorMsg = ValidationUtils.getPriceConfigError(profitStr, stdStr, prmStr, vipStr, taxStr);
+        String profit = ftfProfit.getText().trim();
+        String standard = ftfDiscountStd.getText().trim();
+        String premium = ftfDiscountPrm.getText().trim();
+        String vip = ftfDiscountVip.getText().trim();
+        String tax = ftfTax.getText().trim();
+
+        String errorMsg = ec.edu.espe.finvory.utils.ValidationUtils.getPriceConfigError(profit, standard, premium, vip, tax);
 
         if (errorMsg != null) {
             JOptionPane.showMessageDialog(this, errorMsg, "Error de Validación", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        boolean success = controller.handleUpdatePricesGUI(profitStr, stdStr, prmStr, vipStr, taxStr);
+        boolean success = controller.updatePricesWithValidation(profit, standard, premium, vip, tax);
 
         if (success) {
-            JOptionPane.showMessageDialog(this, "Precios actualizados y guardados correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Configuración guardada en local y sincronizada en la nube.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             loadCurrentValues();
         } else {
-            JOptionPane.showMessageDialog(this, "Error crítico al guardar la configuración.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al sincronizar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void ftfDiscountVipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfDiscountVipActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_ftfDiscountVipActionPerformed
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed

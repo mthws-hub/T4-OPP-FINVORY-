@@ -1,8 +1,20 @@
 {
   "companyInfo": {
     "name": "McDonalds",
+    "address": {
+      "country": "Ecuador",
+      "city": "QUITO",
+      "street": "Solanda",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "ruc": "0011751774793",
     "phone": "0963514785",
-    "email": "joseph3elcrac@gmail.com"
+    "email": "joseph3elcrac@gmail.com",
+    "username": "Joseph",
+    "password": "234",
+    "logoPath": "data\\profiles\\Joseph_profile.jpeg"
   },
   "customers": [
     {
@@ -133,8 +145,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-11-23",
-      "paymentDueDate": "2025-11-23",
+      "date": "2025-11-16",
+      "paymentDueDate": "2025-11-16",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -161,8 +173,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-11-23",
-      "paymentDueDate": "2025-11-23",
+      "date": "2025-11-16",
+      "paymentDueDate": "2025-11-16",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -196,8 +208,8 @@
     },
     {
       "invoiceNumber": "F-3",
-      "date": "2025-11-23",
-      "paymentDueDate": "2025-11-23",
+      "date": "2025-11-16",
+      "paymentDueDate": "2025-11-16",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -231,8 +243,8 @@
     },
     {
       "invoiceNumber": "F-4",
-      "date": "2026-01-01",
-      "paymentDueDate": "2026-01-01",
+      "date": "2025-12-25",
+      "paymentDueDate": "2025-12-25",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -259,8 +271,8 @@
     },
     {
       "invoiceNumber": "F-5",
-      "date": "2026-01-03",
-      "paymentDueDate": "2026-01-03",
+      "date": "2025-12-27",
+      "paymentDueDate": "2025-12-27",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -298,7 +310,7 @@
       },
       "quantity": 1,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-07"
+      "returnDate": "2026-01-08"
     },
     {
       "product": {
@@ -311,7 +323,7 @@
       },
       "quantity": 1,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-07"
+      "returnDate": "2026-01-08"
     },
     {
       "product": {
@@ -324,7 +336,7 @@
       },
       "quantity": 4,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-07"
+      "returnDate": "2026-01-08"
     },
     {
       "product": {
@@ -337,7 +349,7 @@
       },
       "quantity": 3,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-07"
+      "returnDate": "2026-01-08"
     },
     {
       "product": {
@@ -350,7 +362,7 @@
       },
       "quantity": 2,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-07"
+      "returnDate": "2026-01-08"
     },
     {
       "product": {
@@ -363,7 +375,7 @@
       },
       "quantity": 1,
       "reason": "Otro",
-      "returnDate": "2026-01-07"
+      "returnDate": "2026-01-08"
     },
     {
       "product": {
@@ -376,7 +388,7 @@
       },
       "quantity": 4,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-07"
+      "returnDate": "2026-01-08"
     },
     {
       "product": {
@@ -389,12 +401,12 @@
       },
       "quantity": 5,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-07"
+      "returnDate": "2026-01-08"
     }
   ],
   "taxRate": 0.15,
-  "profitPercentage": 0.0,
-  "discountStandard": 0.0,
-  "discountPremium": 0.0,
-  "discountVip": 0.0
+  "profitPercentage": 1.0,
+  "discountStandard": 0.1,
+  "discountPremium": 0.2,
+  "discountVip": 0.3
 }
