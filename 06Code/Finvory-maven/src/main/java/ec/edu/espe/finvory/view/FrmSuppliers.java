@@ -257,8 +257,8 @@ public class FrmSuppliers extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        FrmAddNewSupplier win = new FrmAddNewSupplier(this.controller);
-        win.addWindowListener(new WindowAdapter() {
+        FrmAddNewSupplier window = new FrmAddNewSupplier(this.controller);
+        window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 loadSupplierTable();
@@ -266,7 +266,7 @@ public class FrmSuppliers extends javax.swing.JFrame {
             }
         });
         this.setVisible(false);
-        win.setVisible(true);
+        window.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
