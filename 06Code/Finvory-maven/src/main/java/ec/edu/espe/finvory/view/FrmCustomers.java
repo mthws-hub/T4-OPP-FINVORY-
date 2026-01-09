@@ -243,8 +243,8 @@ public class FrmCustomers extends javax.swing.JFrame {
         if (selectedRow != -1) {
             String id = tblCustomers.getValueAt(selectedRow, 0).toString();
 
-            FrmAddNewCustomer win = new FrmAddNewCustomer(this.controller, id);
-            win.addWindowListener(new java.awt.event.WindowAdapter() {
+            FrmAddNewCustomer window = new FrmAddNewCustomer(this.controller, id);
+            window.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent e) {
                     loadCustomerTable();
@@ -252,13 +252,13 @@ public class FrmCustomers extends javax.swing.JFrame {
                 }
             });
             this.setVisible(false);
-            win.setVisible(true);
+            window.setVisible(true);
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        FrmAddNewCustomer win = new FrmAddNewCustomer(this.controller);
-        win.addWindowListener(new java.awt.event.WindowAdapter() {
+        FrmAddNewCustomer window = new FrmAddNewCustomer(this.controller);
+        window.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 loadCustomerTable();
@@ -266,7 +266,7 @@ public class FrmCustomers extends javax.swing.JFrame {
             }
         });
         this.setVisible(false);
-        win.setVisible(true);
+        window.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -288,8 +288,8 @@ public class FrmCustomers extends javax.swing.JFrame {
         );
 
         if (confirm == JOptionPane.YES_OPTION) {
-            boolean eliminado = controller.handleDeleteCustomerGUI(id);
-            if (eliminado) {
+            boolean delete = controller.handleDeleteCustomerGUI(id);
+            if (delete) {
                 JOptionPane.showMessageDialog(this, "Cliente eliminado exitosamente.");
                 loadCustomerTable(); 
             } else {

@@ -362,17 +362,17 @@ public class FrmSalesReport extends javax.swing.JFrame {
         java.time.LocalDate end = jdEnd.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
 
         double totalSum = 0;
-        for (ec.edu.espe.finvory.model.InvoiceSim inv : controller.getData().getInvoices()) {
-            java.time.LocalDate date = inv.getDate();
+        for (ec.edu.espe.finvory.model.InvoiceSim inventory : controller.getData().getInvoices()) {
+            java.time.LocalDate date = inventory.getDate();
             if (!date.isBefore(start) && !date.isAfter(end)) {
                 model.addRow(new Object[]{
-                    inv.getId(),
-                    inv.getDate().toString(),
-                    inv.getCustomer().getName(),
-                    String.format("%.2f", inv.getSubtotal()),
-                    String.format("%.2f", inv.getTotal())
+                    inventory.getId(),
+                    inventory.getDate().toString(),
+                    inventory.getCustomer().getName(),
+                    String.format("%.2f", inventory.getSubtotal()),
+                    String.format("%.2f", inventory.getTotal())
                 });
-                totalSum += inv.getTotal().doubleValue();
+                totalSum += inventory.getTotal().doubleValue();
             }
         }
 
