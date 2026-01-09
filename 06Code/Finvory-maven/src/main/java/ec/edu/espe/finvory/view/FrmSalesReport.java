@@ -44,30 +44,6 @@ public class FrmSalesReport extends javax.swing.JFrame {
         lblTotalVentas.setText("Total Ventas: $" + String.format("%.2f", totalSum));
     }
 
-    private void loadPopularProductsTable() {
-        DefaultTableModel tableModel = (DefaultTableModel) tblSales.getModel();
-        String[] headers = {"Producto", "Cantidad vendida"};
-        tableModel.setColumnIdentifiers(headers);
-        tableModel.setRowCount(0);
-
-        List<Object[]> data = controller.getPopularProductsReportData();
-        for (Object[] row : data) {
-            tableModel.addRow(row);
-        }
-    }
-
-    private void showPopularProducts() {
-        currentReportType = "POPULAR_PRODUCTS";
-        DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
-        model.setColumnIdentifiers(new String[]{"Producto", "Cantidad vendida"});
-        model.setRowCount(0);
-
-        List<Object[]> data = controller.getPopularProductsReportData();
-        for (Object[] row : data) {
-            model.addRow(row);
-        }
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -86,8 +62,8 @@ public class FrmSalesReport extends javax.swing.JFrame {
         lblStartDate = new javax.swing.JLabel();
         lblEndDate = new javax.swing.JLabel();
         btnFilter = new javax.swing.JButton();
-        jdEndDate = new com.toedter.calendar.JDateChooser();
-        jdStartDate = new com.toedter.calendar.JDateChooser();
+        jdEnd = new com.toedter.calendar.JDateChooser();
+        jdStart = new com.toedter.calendar.JDateChooser();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSales = new javax.swing.JTable();
@@ -190,8 +166,8 @@ public class FrmSalesReport extends javax.swing.JFrame {
                     .addComponent(lblEndDate, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jdEndDate, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
-                    .addComponent(jdStartDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jdEnd, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                    .addComponent(jdStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(99, 99, 99)
                 .addComponent(btnFilter)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -206,12 +182,12 @@ public class FrmSalesReport extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jdStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jdStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblStartDate))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblEndDate, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jdEndDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jdEnd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -328,56 +304,62 @@ public class FrmSalesReport extends javax.swing.JFrame {
 
     private void btnExportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCSVActionPerformed
         javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+        fileChooser.setDialogTitle("Guardar Reporte de Ventas");
+
         if (fileChooser.showSaveDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
             String path = fileChooser.getSelectedFile().getAbsolutePath();
+
             if (!path.toLowerCase().endsWith(".csv")) {
                 path += ".csv";
             }
 
-            DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
-            String[] headers = new String[model.getColumnCount()];
-            for (int i = 0; i < model.getColumnCount(); i++) {
-                headers[i] = model.getColumnName(i);
-            }
+            String reportTitle = "REPORTE DETALLADO DE VENTAS";
+            String[] headers = {"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"};
 
-            List<Object[]> data = new ArrayList<>();
+            javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSales.getModel();
+            java.util.List<Object[]> dataRows = new java.util.ArrayList<>();
+
             for (int i = 0; i < model.getRowCount(); i++) {
                 Object[] row = new Object[model.getColumnCount()];
                 for (int j = 0; j < model.getColumnCount(); j++) {
                     row[j] = model.getValueAt(i, j);
                 }
-                data.add(row);
+                dataRows.add(row);
             }
-            controller.exportTableToCSV(path, headers, data);
+            controller.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
+
+            javax.swing.JOptionPane.showMessageDialog(this, "El reporte de ventas se ha exportado con éxito.");
         }
     }//GEN-LAST:event_btnExportCSVActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        if (currentReportType.equals("POPULAR_PRODUCTS")) {
-            showPopularProducts();
-        } else {
-            currentReportType = "SALES_LIST";
-            DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
-            model.setColumnIdentifiers(new String[]{"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"});
-            loadSalesTable();
-        }
+        DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
+        String[] headers = {"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"};
+        model.setColumnIdentifiers(headers);
+
+        jdStart.setDate(null);
+        jdEnd.setDate(null);
+
+        currentReportType = "SALES_LIST";
+        loadSalesTable();
+
+        System.out.println("Reporte de ventas reiniciado.");
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
-        if (jdStartDate.getDate() == null || jdEndDate.getDate() == null) {
+        if (jdStart.getDate() == null || jdEnd.getDate() == null) {
             javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione ambas fechas.");
             return;
         }
-
-        currentReportType = "SALES_LIST";
-
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSales.getModel();
         String[] headers = {"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"};
         model.setColumnIdentifiers(headers);
         model.setRowCount(0);
 
-        java.time.LocalDate start = jdStartDate.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-        java.time.LocalDate end = jdEndDate.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+        currentReportType = "SALES_LIST";
+
+        java.time.LocalDate start = jdStart.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+        java.time.LocalDate end = jdEnd.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
 
         double totalSum = 0;
         for (ec.edu.espe.finvory.model.InvoiceSim inv : controller.getData().getInvoices()) {
@@ -395,6 +377,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
         }
 
         lblTotalVentas.setText("TOTAL VENTAS: $" + String.format("%.2f", totalSum));
+
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void mnuGrossReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGrossReportActionPerformed
@@ -413,16 +396,8 @@ public class FrmSalesReport extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuGrossReportActionPerformed
 
     private void mnuPopularProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPopularProductsActionPerformed
-        currentReportType = "POPULAR_PRODUCTS";
-        DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
-        model.setColumnIdentifiers(new String[]{"Producto", "Cantidad vendida"});
-        model.setRowCount(0);
-
-        List<Object[]> data = controller.getPopularProductsReportData();
-        for (Object[] row : data) {
-            model.addRow(row);
-        }
-        lblTotalVentas.setText("Productos Demandados");
+        FrmPopularProducts frmPopular = new FrmPopularProducts(this.controller);
+        frmPopular.setVisible(true);
     }//GEN-LAST:event_mnuPopularProductsActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -439,8 +414,8 @@ public class FrmSalesReport extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.toedter.calendar.JDateChooser jdEndDate;
-    private com.toedter.calendar.JDateChooser jdStartDate;
+    private com.toedter.calendar.JDateChooser jdEnd;
+    private com.toedter.calendar.JDateChooser jdStart;
     private javax.swing.JLabel lblEndDate;
     private javax.swing.JLabel lblStartDate;
     private javax.swing.JLabel lblTitle;

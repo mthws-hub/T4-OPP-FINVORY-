@@ -210,8 +210,8 @@
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jdEndDate" pref="127" max="32767" attributes="0"/>
-                      <Component id="jdStartDate" max="32767" attributes="0"/>
+                      <Component id="jdEnd" pref="127" max="32767" attributes="0"/>
+                      <Component id="jdStart" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
                   <Component id="btnFilter" min="-2" max="-2" attributes="0"/>
@@ -230,13 +230,13 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jdStartDate" min="-2" max="-2" attributes="0"/>
+                              <Component id="jdStart" min="-2" max="-2" attributes="0"/>
                               <Component id="lblStartDate" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="lblEndDate" alignment="1" min="-2" max="-2" attributes="0"/>
-                              <Component id="jdEndDate" alignment="1" min="-2" max="-2" attributes="0"/>
+                              <Component id="jdEnd" alignment="1" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -279,9 +279,9 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFilterActionPerformed"/>
           </Events>
         </Component>
-        <Component class="com.toedter.calendar.JDateChooser" name="jdEndDate">
+        <Component class="com.toedter.calendar.JDateChooser" name="jdEnd">
         </Component>
-        <Component class="com.toedter.calendar.JDateChooser" name="jdStartDate">
+        <Component class="com.toedter.calendar.JDateChooser" name="jdStart">
         </Component>
       </SubComponents>
     </Container>
