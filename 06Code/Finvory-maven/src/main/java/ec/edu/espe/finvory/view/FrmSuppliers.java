@@ -284,7 +284,7 @@ public class FrmSuppliers extends javax.swing.JFrame {
         );
 
         if (confirm == JOptionPane.YES_OPTION) {
-            boolean eliminado = controller.deleteSupplierGUI(ruc);
+            boolean eliminado = controller.supplierController.deleteSupplierGUI(ruc);
             if (eliminado) {
                 JOptionPane.showMessageDialog(this, "Proveedor eliminado.");
                 loadSupplierTable();

@@ -46,7 +46,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         LocalDate today = LocalDate.now();
         txtDate.setText(today.toString());
         if (controller != null) {
-            String invoiceId = controller.generateNextInvoiceId();
+            String invoiceId = controller.saleController.generateNextInvoiceId();
             txtSale.setText(invoiceId);
         } else {
             txtSale.setText("ERR-CTRL");
@@ -582,7 +582,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         if (radPaymentMethodCheque.isSelected()) {
             payment = "CHEQUE POSTFECHADO";
         }
-        boolean success = controller.handleNewSale(selectedCustomer, currentCart, payment);
+        boolean success = controller.saleController.handleNewSale(selectedCustomer, currentCart, payment);
 
         if (success) {
             JOptionPane.showMessageDialog(this, "¡Venta registrada y guardada en la nube exitosamente!");
@@ -614,7 +614,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
             return;
         }
         String query = !idQuery.isEmpty() ? idQuery : nameQuery;
-        java.util.ArrayList<Customer> matches = controller.findCustomersByQuery(query);
+        java.util.ArrayList<Customer> matches = controller.customerController.findCustomersByQuery(query);
 
         if (matches.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No se encontraron clientes.", "Sin Resultados", JOptionPane.INFORMATION_MESSAGE);

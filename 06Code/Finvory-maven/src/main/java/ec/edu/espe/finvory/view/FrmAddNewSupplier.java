@@ -46,7 +46,7 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
     }
 
     private void loadSupplierData() {
-        Supplier supplier = controller.findSupplier(supplierIdToEdit);
+        Supplier supplier = controller.supplierController.findSupplier(supplierIdToEdit);
         if (supplier != null) {
             txtId1Supplier.setText(supplier.getId1());
             txtId2Supplier.setText(supplier.getId2());
@@ -345,7 +345,7 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
             boolean success;
 
             if (supplierIdToEdit == null) {
-                success = controller.createSupplierGUI(id1, id2, name, phone, email, desc);
+                success = controller.supplierController.createSupplierGUI(id1, id2, name, phone, email, desc);
                 if (success) {
                     JOptionPane.showMessageDialog(this, "Proveedor creado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     emptyFields();
@@ -353,7 +353,7 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "El proveedor ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
-                success = controller.handleUpdateSupplierGUI(supplierIdToEdit, name, phone, email, desc, id2);
+                success = controller.supplierController.handleUpdateSupplierGUI(supplierIdToEdit, name, phone, email, desc, id2);
                 if (success) {
                     JOptionPane.showMessageDialog(this, "Proveedor actualizado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     this.dispose();

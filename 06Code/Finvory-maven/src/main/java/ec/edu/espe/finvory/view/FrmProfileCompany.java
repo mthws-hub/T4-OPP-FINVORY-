@@ -730,7 +730,7 @@ public class FrmProfileCompany extends javax.swing.JFrame {
 
         if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
             java.io.File selectedFile = fileChooser.getSelectedFile();
-            String newPath = controller.handleUploadPhoto(selectedFile, company.getUsername(), company.getLogoPath());
+            String newPath = controller.userController.handleUploadPhoto(selectedFile, company.getUsername(), company.getLogoPath());
 
             if (newPath != null) {
                 company.setLogoPath(newPath);

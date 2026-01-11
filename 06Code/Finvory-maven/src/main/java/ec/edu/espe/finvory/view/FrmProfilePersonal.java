@@ -28,7 +28,7 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
     }
 
     private void loadUserData() {
-        PersonalAccount account = controller.getLoggedInPersonalAccount();
+        PersonalAccount account = controller.userController.getLoggedInPersonalAccount();
         if (account != null) {
             txtFullName.setText(account.getFullName());
             txtUserName.setText(account.getUsername());
@@ -229,7 +229,7 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
             return;
         }
 
-        controller.handleUpdatePersonalProfile(name, pass);
+        controller.userController.handleUpdatePersonalProfile(name, pass);
         this.dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -245,8 +245,8 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
 
         if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
             java.io.File selectedFile = fileChooser.getSelectedFile();
-            PersonalAccount account = controller.getLoggedInPersonalAccount();
-            String newPath = controller.handleUploadPhoto(selectedFile, account.getUsername(), account.getProfilePhotoPath());
+            PersonalAccount account = controller.userController.getLoggedInPersonalAccount();
+            String newPath = controller.userController.handleUploadPhoto(selectedFile, account.getUsername(), account.getProfilePhotoPath());
             if (newPath != null) {
                 account.setProfilePhotoPath(newPath);
                 controller.saveData();

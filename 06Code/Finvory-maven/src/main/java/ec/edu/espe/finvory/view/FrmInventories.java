@@ -274,7 +274,7 @@ public class FrmInventories extends javax.swing.JFrame {
         }
 
         try {
-            ArrayList<Inventory> matches = controller.findInventoriesByPartialName(query);
+            ArrayList<Inventory> matches = controller.inventoryController.findInventoriesByPartialName(query);
             if (matches.isEmpty()) {
                 handleNoMatches();
             } else if (matches.size() == 1) {
@@ -371,7 +371,7 @@ public class FrmInventories extends javax.swing.JFrame {
     private void populateTable() {
         DefaultTableModel model = (DefaultTableModel) tabProducts.getModel();
         model.setRowCount(0);
-        List<Object[]> rows = controller.getInventoryTableData(currentInventory);
+        List<Object[]> rows = controller.inventoryController.getInventoryTableData(currentInventory);
         for (Object[] row : rows) {
             model.addRow(row);
             

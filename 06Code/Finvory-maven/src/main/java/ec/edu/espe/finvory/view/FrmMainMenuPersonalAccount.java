@@ -188,7 +188,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
         }
 
         try {
-            List<Object[]> results = controller.searchProductsByCompany(companyName);
+            List<Object[]> results = controller.productController.searchProductsByCompany(companyName);
             updateTable(results);
         } catch (Exception e) {
             e.printStackTrace();
@@ -218,7 +218,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Escriba el nombre de una empresa primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        CompanyAccount targetCompany = controller.findCompanyByName(comanyName);
+        CompanyAccount targetCompany = controller.userController.findCompanyByName(comanyName);
         if (targetCompany != null) {
             String phone = targetCompany.getPhone();
             String email = targetCompany.getEmail();

@@ -300,7 +300,7 @@ public class FrmAddNewInventory extends JDialog {
         address.setZipCode(zipCode);
         address.setRegion(region);
 
-        boolean success = controller.handleCreateInventory(name, address);
+        boolean success = controller.inventoryController.handleCreateInventory(name, address);
 
         if (success) {
             JOptionPane.showMessageDialog(this, "Inventario creado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);

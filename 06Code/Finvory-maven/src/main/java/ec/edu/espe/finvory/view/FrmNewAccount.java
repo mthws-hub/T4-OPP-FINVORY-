@@ -414,7 +414,7 @@ public class FrmNewAccount extends javax.swing.JFrame {
         if (ValidationUtils.isEmpty(username)) {
             lblPersonalUser.setForeground(ERROR_COLOR);
             errors.append("- El usuario es obligatorio.\n");
-        } else if (controller.isUsernameTaken(username)) {
+        } else if (controller.userController.isUsernameTaken(username)) {
             lblPersonalUser.setForeground(ERROR_COLOR);
             errors.append("- El nombre de usuario '").append(username).append("' ya está en uso.\n");
         }
@@ -432,7 +432,7 @@ public class FrmNewAccount extends javax.swing.JFrame {
         personalData.put("password", password);
         personalData.put("fullName", name);
 
-        boolean success = controller.registerPersonalGUI(personalData);
+        boolean success = controller.userController.registerPersonalGUI(personalData);
 
         if (success) {
             JOptionPane.showMessageDialog(this, "Cuenta Personal creada exitosamente!");
@@ -491,7 +491,7 @@ public class FrmNewAccount extends javax.swing.JFrame {
         if (ValidationUtils.isEmpty(username)) {
             jLabel8.setForeground(ERROR_COLOR);
             errors.append("- El usuario es obligatorio.\n");
-        } else if (controller.isUsernameTaken(username)) {
+        } else if (controller.userController.isUsernameTaken(username)) {
             jLabel8.setForeground(ERROR_COLOR);
             errors.append("- El nombre de usuario '").append(username).append("' ya está en uso.\n");
         }
@@ -514,7 +514,7 @@ public class FrmNewAccount extends javax.swing.JFrame {
 
         Address address = new Address(country, city, street);
 
-        boolean success = controller.registerCompanyGUI(companyData, address);
+        boolean success = controller.userController.registerCompanyGUI(companyData, address);
 
         if (success) {
             JOptionPane.showMessageDialog(this, "Cuenta de Empresa creada exitosamente!");

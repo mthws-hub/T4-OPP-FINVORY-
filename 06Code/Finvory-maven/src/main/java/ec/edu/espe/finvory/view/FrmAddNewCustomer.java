@@ -38,7 +38,7 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
     }
 
     private void loadCustomerData(String customerId) {
-        Customer customer = controller.findCustomerPublic(customerId);
+        Customer customer = controller.customerController.findCustomerPublic(customerId);
 
         if (customer == null) {
             JOptionPane.showMessageDialog(this, "Cliente no encontrado para edición.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -334,9 +334,9 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
 
         boolean success;
         if (customerIdToEdit == null) {
-            success = controller.handleAddCustomer(name, id, phone, email, type);
+            success = controller.customerController.handleAddCustomer(name, id, phone, email, type);
         } else {
-            success = controller.handleUpdateCustomerGUI(customerIdToEdit, name, phone, email, type);
+            success = controller.customerController.handleUpdateCustomerGUI(customerIdToEdit, name, phone, email, type);
         }
 
         if (success) {

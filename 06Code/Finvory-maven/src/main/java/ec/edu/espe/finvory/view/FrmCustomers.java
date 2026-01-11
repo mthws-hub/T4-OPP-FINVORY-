@@ -288,7 +288,7 @@ public class FrmCustomers extends javax.swing.JFrame {
         );
 
         if (confirm == JOptionPane.YES_OPTION) {
-            boolean delete = controller.handleDeleteCustomerGUI(id);
+            boolean delete = controller.customerController.handleDeleteCustomerGUI(id);
             if (delete) {
                 JOptionPane.showMessageDialog(this, "Cliente eliminado exitosamente.");
                 loadCustomerTable(); 

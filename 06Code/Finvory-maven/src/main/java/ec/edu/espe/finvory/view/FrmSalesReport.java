@@ -34,7 +34,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
         model.setRowCount(0);
         double totalSum = 0;
 
-        List<Object[]> salesData = controller.getSalesTableData();
+        List<Object[]> salesData = controller.saleController.getSalesTableData();
         if (salesData != null) {
             for (Object[] row : salesData) {
                 model.addRow(row);
@@ -326,7 +326,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
                 }
                 dataRows.add(row);
             }
-            controller.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
+            controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
 
             javax.swing.JOptionPane.showMessageDialog(this, "El reporte de ventas se ha exportado con éxito.");
         }

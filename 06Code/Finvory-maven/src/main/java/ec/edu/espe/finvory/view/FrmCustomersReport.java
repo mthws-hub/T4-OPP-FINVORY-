@@ -27,7 +27,7 @@ public class FrmCustomersReport extends javax.swing.JFrame {
 
     private void initSelectors() {
         cmbYear.removeAllItems();
-        List<String> years = controller.getAvailableInvoiceYears();
+        List<String> years = controller.saleController.getAvailableInvoiceYears();
         for (String year : years) {
             cmbYear.addItem(year);
         }
@@ -50,7 +50,7 @@ public class FrmCustomersReport extends javax.swing.JFrame {
             cmbMonth.addItem(month);
         }
         cmbYear.removeAllItems();
-        List<String> availableYears = controller.getAvailableInvoiceYears();
+        List<String> availableYears = controller.saleController.getAvailableInvoiceYears();
         for (String year : availableYears) {
             cmbYear.addItem(year);
         }
@@ -63,7 +63,7 @@ public class FrmCustomersReport extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblInformation.getModel();
         model.setRowCount(0);
 
-        List<Object[]> reportData = controller.getCustomerActivityFlexibleData(year, month);
+        List<Object[]> reportData = controller.customerController.getCustomerActivityFlexibleData(year, month);
 
         for (Object[] row : reportData) {
             model.addRow(row);
@@ -238,7 +238,7 @@ public class FrmCustomersReport extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblInformation.getModel();
         model.setRowCount(0);
 
-        java.util.List<Object[]> reportData = controller.getCustomerActivityFlexibleData(year, month);
+        java.util.List<Object[]> reportData = controller.customerController.getCustomerActivityFlexibleData(year, month);
 
         if (reportData.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this, "No se encontraron registros para este periodo.");
@@ -273,7 +273,7 @@ public class FrmCustomersReport extends javax.swing.JFrame {
                 dataRows.add(row);
             }
 
-            controller.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
+            controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
             javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
         }
     }//GEN-LAST:event_btnExportCSVActionPerformed

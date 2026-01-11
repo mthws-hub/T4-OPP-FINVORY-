@@ -38,7 +38,7 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         }
 
         cmbYear.removeAllItems();
-        List<String> availableYears = controller.getAvailableInvoiceYears();
+        List<String> availableYears = controller.saleController.getAvailableInvoiceYears();
         for (String year : availableYears) {
             cmbYear.addItem(year);
         }
@@ -224,7 +224,7 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSuppliers.getModel();
         model.setRowCount(0);
 
-        java.util.List<Object[]> reportData = controller.getSupplierPerformanceFlexibleData(year, month);
+        java.util.List<Object[]> reportData = controller.supplierController.getSupplierPerformanceFlexibleData(year, month);
 
         for (Object[] row : reportData) {
             model.addRow(row);
@@ -255,7 +255,7 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
                 dataRows.add(row);
             }
 
-            controller.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
+            controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
             javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
         }
     }//GEN-LAST:event_btnExportCSVActionPerformed

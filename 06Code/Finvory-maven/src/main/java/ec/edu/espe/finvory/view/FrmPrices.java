@@ -283,7 +283,7 @@ public class FrmPrices extends javax.swing.JFrame {
             return;
         }
 
-        boolean success = controller.updatePricesWithValidation(profit, standard, premium, vip, tax);
+        boolean success = controller.pricesController.updatePricesWithValidation(profit, standard, premium, vip, tax);
 
         if (success) {
             JOptionPane.showMessageDialog(this, "Configuración guardada en local y sincronizada en la nube.", "Éxito", JOptionPane.INFORMATION_MESSAGE);

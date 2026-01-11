@@ -248,7 +248,7 @@ public class FrmObsoleteInventories extends JDialog {
                 int quantity = Integer.parseInt(qtyStr.trim());
 
                 if (quantity > 0 && quantity <= currentQty) {
-                    if (controller.discardObsoleteProduct(id, quantity, reason)) {
+                    if (controller.obsoleteController.discardObsoleteProduct(id, quantity, reason)) {
                         JOptionPane.showMessageDialog(this, "Producto desechado.");
                         loadObsoleteTable();
                         validEntry = true;
@@ -302,7 +302,7 @@ public class FrmObsoleteInventories extends JDialog {
                 int quantity = Integer.parseInt(quantityString.trim());
 
                 if (quantity > 0 && quantity <= currentQuantity) {
-                    if (controller.reassignObsoleteProduct(id, quantity, selectedInventory, reason)) {
+                    if (controller.obsoleteController.reassignObsoleteProduct(id, quantity, selectedInventory, reason)) {
                         JOptionPane.showMessageDialog(this, "Reasignación exitosa.");
                         loadObsoleteTable();
                         validEntry = true;

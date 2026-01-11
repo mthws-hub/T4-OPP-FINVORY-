@@ -327,7 +327,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         if (ValidationUtils.isEmpty(id)) {
             lblProductId.setForeground(ERROR_COLOR);
             errors.append("- El ID del producto es obligatorio.\n");
-        } else if (productIdToEdit == null && controller.findProduct(id) != null) {
+        } else if (productIdToEdit == null && controller.productController.findProduct(id) != null) {
             lblProductId.setForeground(ERROR_COLOR);
             errors.append("- Ya existe un producto con ese ID.\n");
         }
@@ -371,17 +371,17 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         productData.put("stock", stockStr);
         productData.put("supplierId", supplierId);
 
-        Supplier supplierObj = controller.findSupplier(supplierId);
+        Supplier supplierObj = controller.supplierController.findSupplier(supplierId);
         boolean success;
 
         if (productIdToEdit == null) {
-            success = controller.handleCreateProduct(productData, supplierObj, targetInventory);
+            success = controller.productController.handleCreateProduct(productData, supplierObj, targetInventory);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Producto creado exitosamente.");
                 emptyFields();
             }
         } else {
-            success = controller.handleUpdateProductGUI(productIdToEdit, productData, targetInventory);
+            success = controller.productController.handleUpdateProductGUI(productIdToEdit, productData, targetInventory);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Producto actualizado correctamente.");
             }
@@ -448,7 +448,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
     }
 
     private void loadProductData(String pid) {
-        Product product = controller.findProduct(pid);
+        Product product = controller.productController.findProduct(pid);
         if (product == null) {
             this.dispose();
             return;
@@ -494,7 +494,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         if (selection == null || selection.startsWith("Seleccione")) {
             return null;
         }
-        return controller.findInventoryByName(selection);
+        return controller.inventoryController.findInventoryByName(selection);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

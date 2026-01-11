@@ -67,7 +67,7 @@ public class FrmProducts extends javax.swing.JFrame {
             return;
         }
 
-        List<Object[]> rows = controller.getProductTableData(specificInventory);
+        List<Object[]> rows = controller.productController.getProductTableData(specificInventory);
 
         for (Object[] row : rows) {
             model.addRow(row);
@@ -362,7 +362,7 @@ public class FrmProducts extends javax.swing.JFrame {
                     "Confirmar Movimiento", JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
-                boolean success = controller.handleMoveProductStock(specificInventory, targetInventory, productId);
+                boolean success = controller.productController.handleMoveProductStock(specificInventory, targetInventory, productId);
 
                 if (success) {
                     JOptionPane.showMessageDialog(this, "Producto movido exitosamente.");

@@ -44,9 +44,9 @@ public class FrmEditProductListOnInvoice extends JDialog {
         foundProduct = null;
 
         if (!id.isEmpty()) {
-            foundProduct = controller.findProductPublic(id);
+            foundProduct = controller.productController.findProductPublic(id);
         } else if (!barcode.isEmpty()) {
-            foundProduct = controller.findProductByBarcodePublic(barcode);
+            foundProduct = controller.productController.findProductByBarcodePublic(barcode);
         }
 
         if (foundProduct != null) {
@@ -219,7 +219,7 @@ public class FrmEditProductListOnInvoice extends JDialog {
         }
         int quantity = Integer.parseInt(quantityStr.trim());
         String inventoryName = (String) cmbInventory.getSelectedItem();
-        Inventory selectedInv = controller.findInventoryByName(inventoryName);
+        Inventory selectedInv = controller.inventoryController.findInventoryByName(inventoryName);
 
         if (selectedInv == null) {
             JOptionPane.showMessageDialog(this, "Seleccione un inventario válido.", "Error", JOptionPane.ERROR_MESSAGE);
