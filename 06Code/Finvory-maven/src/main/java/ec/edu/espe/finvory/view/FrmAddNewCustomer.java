@@ -53,38 +53,6 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
         cmbTypeOfCustomer.setSelectedItem(customer.getClientType());
     }
 
-    private boolean validateCustomerData() {
-        boolean isValid = true;
-
-        lblName.setForeground(DEFAULT_COLOR);
-        lblId.setForeground(DEFAULT_COLOR);
-        lblPhone.setForeground(DEFAULT_COLOR);
-        lblEmail.setForeground(DEFAULT_COLOR);
-
-        if (txtName.getText().trim().isEmpty() || !ValidationUtils.isTextOnly(txtName.getText().trim())) {
-            lblName.setForeground(ERROR_COLOR);
-            isValid = false;
-        }
-
-        String id = txtID.getText().trim();
-        if (id.length() != 10 && id.length() != 13) {
-            lblId.setForeground(ERROR_COLOR);
-            isValid = false;
-        }
-
-        if (!ValidationUtils.REGEX_PHONE_GENERAL.matcher(txtPhone.getText().trim()).matches()) {
-            lblPhone.setForeground(ERROR_COLOR);
-            isValid = false;
-        }
-
-        if (!ValidationUtils.REGEX_EMAIL.matcher(txtEmail.getText().trim()).matches()) {
-            lblEmail.setForeground(ERROR_COLOR);
-            isValid = false;
-        }
-
-        return isValid;
-    }
-
     private void emptyFields() {
         txtName.setText("");
         txtID.setText("");
@@ -292,75 +260,16 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-
-        txtID.setForeground(java.awt.Color.BLACK);
-        txtName.setForeground(java.awt.Color.BLACK);
-        txtEmail.setForeground(java.awt.Color.BLACK);
-        txtPhone.setForeground(java.awt.Color.BLACK);
-
-        String id = txtID.getText().trim();
-        String name = txtName.getText().trim();
-        String email = txtEmail.getText().trim();
-        String phone = txtPhone.getText().trim();
-        String type = cmbTypeOfCustomer.getSelectedItem().toString();
-
-        StringBuilder errors = new StringBuilder();
-
-        if (id.isEmpty() || !id.matches("\\d{10}|\\d{13}")) {
-            errors.append("- ID inválido (debe tener 10 o 13 dígitos).\n");
-            txtID.setForeground(java.awt.Color.RED);
-        }
-
-        if (name.isEmpty() || !name.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
-            errors.append("- Nombre inválido (solo letras).\n");
-            txtName.setForeground(java.awt.Color.RED);
-        }
-
-        if (email.isEmpty() || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            errors.append("- Correo electrónico inválido.\n");
-            txtEmail.setForeground(java.awt.Color.RED);
-        }
-
-        if (phone.isEmpty() || !phone.matches("^\\d{7,15}$")) {
-            errors.append("- Teléfono inválido (7 a 15 dígitos).\n");
-            txtPhone.setForeground(java.awt.Color.RED);
-        }
-
-        if (errors.length() > 0) {
-            JOptionPane.showMessageDialog(this, "Por favor corrija los siguientes campos:\n" + errors.toString(),
-                    "Error de Validación", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        boolean success;
-        if (customerIdToEdit == null) {
-            success = controller.customerController.handleAddCustomer(name, id, phone, email, type);
-        } else {
-            success = controller.customerController.handleUpdateCustomerGUI(customerIdToEdit, name, phone, email, type);
-        }
-
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Cliente guardado exitosamente.");
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Error: El ID ya existe o hubo un problema al guardar.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-
+        onAdd();
     }//GEN-LAST:event_btnAddActionPerformed
 
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        this.dispose();
+        onReturn();     
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        int option = JOptionPane.showConfirmDialog(this, "¿Está seguro de cancelar el registro y borrar los datos?", "Confirmación", JOptionPane.YES_NO_OPTION);
-
-        if (option == JOptionPane.YES_OPTION) {
-            emptyFields();
-        }
+        onCancel();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
@@ -370,6 +279,141 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
 
     }//GEN-LAST:event_txtNameActionPerformed
+        
+    private void onAdd() {
+        resetFieldColors();
+
+        CustomerFormData data = readForm();
+        ValidationResult validation = validateForm(data);
+
+        if (!validation.isValid) {
+            showValidationErrors(validation);
+            return;
+        }
+
+        boolean success = saveCustomer(data);
+
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Cliente guardado exitosamente.");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Error: El ID ya existe o hubo un problema al guardar.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void onCancel() {
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de cancelar el registro y borrar los datos?",
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (option == JOptionPane.YES_OPTION) {
+            emptyFields();
+        }
+    }
+
+    private void onReturn() {
+        this.dispose();
+    }
+
+    private void resetFieldColors() {
+        txtID.setForeground(java.awt.Color.BLACK);
+        txtName.setForeground(java.awt.Color.BLACK);
+        txtEmail.setForeground(java.awt.Color.BLACK);
+        txtPhone.setForeground(java.awt.Color.BLACK);
+    }
+
+    private CustomerFormData readForm() {
+        CustomerFormData data = new CustomerFormData();
+        data.id = txtID.getText().trim();
+        data.name = txtName.getText().trim();
+        data.email = txtEmail.getText().trim();
+        data.phone = txtPhone.getText().trim();
+        data.type = cmbTypeOfCustomer.getSelectedItem().toString();
+        return data;
+    }
+
+    private ValidationResult validateForm(CustomerFormData data) {
+        ValidationResult result = new ValidationResult();
+
+        if (data.id.isEmpty() || !data.id.matches("\\d{10}|\\d{13}")) {
+            result.add("- ID inválido (debe tener 10 o 13 dígitos).", Field.ID);
+        }
+
+        if (data.name.isEmpty() || !data.name.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+            result.add("- Nombre inválido (solo letras).", Field.NAME);
+        }
+
+        if (data.email.isEmpty() || !data.email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+            result.add("- Correo electrónico inválido.", Field.EMAIL);
+        }
+
+        if (data.phone.isEmpty() || !data.phone.matches("^\\d{7,15}$")) {
+            result.add("- Teléfono inválido (7 a 15 dígitos).", Field.PHONE);
+        }
+
+        return result;
+    }
+
+    private void showValidationErrors(ValidationResult validation) {
+        // Pintar campos en rojo según el error
+        for (Field f : validation.fieldsWithError) {
+            switch (f) {
+                case ID -> txtID.setForeground(java.awt.Color.RED);
+                case NAME -> txtName.setForeground(java.awt.Color.RED);
+                case EMAIL -> txtEmail.setForeground(java.awt.Color.RED);
+                case PHONE -> txtPhone.setForeground(java.awt.Color.RED);
+            }
+        }
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Por favor corrija los siguientes campos:\n" + validation.message.toString(),
+                "Error de Validación",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    private boolean saveCustomer(CustomerFormData data) {
+        if (customerIdToEdit == null) {
+            return controller.customerController.handleAddCustomer(
+                    data.name, data.id, data.phone, data.email, data.type
+            );
+        }
+
+        return controller.customerController.handleUpdateCustomerGUI(
+                customerIdToEdit, data.name, data.phone, data.email, data.type
+        );
+    }
+
+    /* ======= Helpers OOP (clases internas pequeñas) ======= */
+
+    private enum Field { ID, NAME, EMAIL, PHONE }
+
+    private static class CustomerFormData {
+        String id;
+        String name;
+        String email;
+        String phone;
+        String type;
+    }
+
+    private static class ValidationResult {
+        boolean isValid = true;
+        StringBuilder message = new StringBuilder();
+        java.util.EnumSet<Field> fieldsWithError = java.util.EnumSet.noneOf(Field.class);
+
+        void add(String msg, Field field) {
+            isValid = false;
+            message.append(msg).append("\n");
+            fieldsWithError.add(field);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;

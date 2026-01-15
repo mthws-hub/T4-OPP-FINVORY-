@@ -137,65 +137,10 @@ public class FrmFinvorySplash extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void run() {
-        Thread hilo = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    for (int i = 0; i <= 100; i++) {
-                        Thread.sleep(30);
-                        prgBar.setValue(i);
-                        lblPercent.setText(i + "%");
-                        if (i == 10) {
-                            lblStatus.setText("Cargando módulos...");
-                        }
-                        if (i == 30) {
-                            lblStatus.setText("Conectando a base de datos...");
-                        }
-                        if (i == 60) {
-                            lblStatus.setText("Cargando inventarios...");
-                        }
-                        if (i == 90) {
-                            lblStatus.setText("Iniciando interfaz...");
-                        }
-                    }
-                    Thread.sleep(500);
-                    openLogin();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        hilo.start();
-    }
-
     private void openLogin() {
         this.dispose();
         FrmLogin frmLogin = new FrmLogin(controller);
         frmLogin.setVisible(true);
-    }
-
-    private void paintImage(JLabel lbl, String route) {
-        URL url = getClass().getResource(route);
-        if (url != null) {
-            ImageIcon imagenOriginal = new ImageIcon(url);
-            int imgW = imagenOriginal.getIconWidth();
-            int imgH = imagenOriginal.getIconHeight();
-            int lblW = lbl.getWidth();
-            int lblH = lbl.getHeight();
-            double ratio = Math.min((double) lblW / imgW, (double) lblH / imgH);
-
-            int newWidth = (int) (imgW * ratio);
-            int newHeight = (int) (imgH * ratio);
-            Image imagen = imagenOriginal.getImage();
-            Image imagenEscalada = imagen.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-            lbl.setIcon(new ImageIcon(imagenEscalada));
-            lbl.setHorizontalAlignment(JLabel.CENTER);
-            lbl.setVerticalAlignment(JLabel.CENTER);
-
-        } else {
-            System.out.println("ERROR checks the route" + route);
-        }
     }
 
     private void setupLogo() {

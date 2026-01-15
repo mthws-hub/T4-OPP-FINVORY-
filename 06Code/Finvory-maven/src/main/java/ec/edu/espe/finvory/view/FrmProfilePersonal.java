@@ -208,53 +208,125 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnViewPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewPasswordActionPerformed
-        if (!isPasswordVisible) {
-            passPersonal.setEchoChar((char) 0);
-            btnViewPassword.setIcon(ec.edu.espe.finvory.utils.ValidationUtils.getScaledIcon(
-                    getClass().getResource("/eyeOpen.png"), 24, 24));
-        } else {
-            passPersonal.setEchoChar('*');
-            btnViewPassword.setIcon(ec.edu.espe.finvory.utils.ValidationUtils.getScaledIcon(
-                    getClass().getResource("/eyeClose.png"), 24, 24));
-        }
-        isPasswordVisible = !isPasswordVisible;
+        onTogglePasswordVisibility();
     }//GEN-LAST:event_btnViewPasswordActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        String name = txtFullName.getText().trim();
-        String pass = new String(passPersonal.getPassword());
-
-        if (name.isEmpty() || pass.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacíos.");
-            return;
-        }
-
-        controller.userController.handleUpdatePersonalProfile(name, pass);
-        this.dispose();
+        onSaveChanges();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        this.dispose();
+        onCloseDialog();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnUploadPhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadPhotoActionPerformed
+        onUploadPhoto();
+    }//GEN-LAST:event_btnUploadPhotoActionPerformed
+
+    private void onTogglePasswordVisibility() {
+        isPasswordVisible = !isPasswordVisible;
+
+        if (isPasswordVisible) {
+            showPassword();
+        } else {
+            hidePassword();
+        }
+    }
+
+    private void showPassword() {
+        passPersonal.setEchoChar((char) 0);
+        setEyeIconOpen();
+    }
+
+    private void hidePassword() {
+        passPersonal.setEchoChar('*');
+        setEyeIconClose();
+    }
+
+    private void setEyeIconOpen() {
+        btnViewPassword.setIcon(ec.edu.espe.finvory.utils.ValidationUtils.getScaledIcon(
+                getClass().getResource("/eyeOpen.png"), 24, 24));
+    }
+
+    private void setEyeIconClose() {
+        btnViewPassword.setIcon(ec.edu.espe.finvory.utils.ValidationUtils.getScaledIcon(
+                getClass().getResource("/eyeClose.png"), 24, 24));
+    }
+
+    private void onSaveChanges() {
+        String name = txtFullName.getText().trim();
+        String pass = new String(passPersonal.getPassword());
+
+        if (!validateFields(name, pass)) return;
+
+        controller.userController.handleUpdatePersonalProfile(name, pass);
+        onCloseDialog();
+    }
+
+    private boolean validateFields(String name, String pass) {
+        if (isEmpty(name) || isEmpty(pass)) {
+            showWarning("Los campos no pueden estar vacíos.");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isEmpty(String text) {
+        return text == null || text.trim().isEmpty();
+    }
+
+    private void onCloseDialog() {
+        this.dispose();
+    }
+
+    private void onUploadPhoto() {
+        java.io.File selectedFile = chooseImageFile();
+        if (selectedFile == null) return;
+
+        PersonalAccount account = controller.userController.getLoggedInPersonalAccount();
+        if (account == null) {
+            showError("No hay una cuenta personal iniciada.");
+            return;
+        }
+
+        String newPath = controller.userController.handleUploadPhoto(
+                selectedFile,
+                account.getUsername(),
+                account.getProfilePhotoPath()
+        );
+
+        if (newPath != null) {
+            account.setProfilePhotoPath(newPath);
+            controller.saveData();
+            loadUserData();
+            showInfo("Foto actualizada correctamente.");
+        }
+    }
+
+    private java.io.File chooseImageFile() {
         javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
         javax.swing.filechooser.FileNameExtensionFilter filter
                 = new javax.swing.filechooser.FileNameExtensionFilter("Imágenes (PNG, JPG, JPEG)", "png", "jpg", "jpeg");
         fileChooser.setFileFilter(filter);
 
-        if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
-            java.io.File selectedFile = fileChooser.getSelectedFile();
-            PersonalAccount account = controller.userController.getLoggedInPersonalAccount();
-            String newPath = controller.userController.handleUploadPhoto(selectedFile, account.getUsername(), account.getProfilePhotoPath());
-            if (newPath != null) {
-                account.setProfilePhotoPath(newPath);
-                controller.saveData();
-                loadUserData();
-                JOptionPane.showMessageDialog(this, "Foto actualizada correctamente.");
-            }
+        int result = fileChooser.showOpenDialog(this);
+        if (result == javax.swing.JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
         }
-    }//GEN-LAST:event_btnUploadPhotoActionPerformed
+        return null;
+    }
+
+    private void showInfo(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Info", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void showWarning(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Aviso", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void showError(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

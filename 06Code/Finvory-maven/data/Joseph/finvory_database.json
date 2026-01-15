@@ -6,13 +6,6 @@
   },
   "customers": [
     {
-      "name": "Sebastian",
-      "identification": "0018988987887",
-      "phone": "0976789870",
-      "email": "sebas@gmail.com",
-      "clientType": "STANDARD"
-    },
-    {
       "name": "Olga",
       "identification": "0017654542312",
       "phone": "0976787769",
@@ -25,17 +18,23 @@
       "phone": "0997393921",
       "email": "jecka@gmail.com",
       "clientType": "VIP"
+    },
+    {
+      "name": "Juan Ramirez",
+      "identification": "1711882934",
+      "phone": "0972637281",
+      "email": "juanitop@gmail.com",
+      "clientType": "PREMIUM"
+    },
+    {
+      "name": "Sebastian",
+      "identification": "0018988987887",
+      "phone": "0976789870",
+      "email": "sebas@gmail.com",
+      "clientType": "STANDARD"
     }
   ],
   "products": [
-    {
-      "id": "ARM-001",
-      "name": "AK-47",
-      "description": "Balas de alto calibre las favoritas de yussepe",
-      "barcode": "1452369874521",
-      "baseCostPrice": 150.00,
-      "supplierId": "1254784513"
-    },
     {
       "id": "ARM-002",
       "name": "HK G36",
@@ -45,11 +44,11 @@
       "supplierId": "1254784513"
     },
     {
-      "id": "P004",
-      "name": "Skar",
-      "description": "No description",
-      "barcode": "12121212221",
-      "baseCostPrice": 12.00,
+      "id": "ARM-004",
+      "name": "Famas",
+      "description": "Corta distancia",
+      "barcode": "344564365365",
+      "baseCostPrice": 145.00,
       "supplierId": "1254784513"
     },
     {
@@ -61,22 +60,38 @@
       "supplierId": "1254784513"
     },
     {
-      "id": "ARM-004",
-      "name": "Famas",
-      "description": "Corta distancia",
-      "barcode": "344564365365",
-      "baseCostPrice": 145.00,
+      "id": "ARM-001",
+      "name": "AK-47",
+      "description": "Balas de alto calibre las favoritas de yussepe",
+      "barcode": "1452369874521",
+      "baseCostPrice": 150.00,
+      "supplierId": "1254784513"
+    },
+    {
+      "id": "P004",
+      "name": "Skar",
+      "description": "No description",
+      "barcode": "12121212221",
+      "baseCostPrice": 12.00,
       "supplierId": "1254784513"
     }
   ],
   "suppliers": [
     {
+      "fullName": "Melany Navarrete",
+      "id1": "0010702218765",
+      "id2": "",
+      "phone": "0978567690",
+      "email": "melany@gmail.com",
+      "description": "no hay"
+    },
+    {
       "fullName": "Cristiano Ronaldo dos Santos Aveiro",
       "id1": "1254784513",
       "id2": "2855",
-      "phone": "0963514785",
+      "phone": "0999986553",
       "email": "elbicho@gmail.com",
-      "description": "Noooo"
+      "description": "Noooo haaaay"
     }
   ],
   "inventories": [
@@ -93,9 +108,9 @@
       "productStock": {
         "MP14": 45,
         "ARM-001": 6,
-        "ARM-002": 3,
+        "ARM-002": 5,
         "ARM-003": 23,
-        "ARM-004": 45
+        "ARM-004": 48
       }
     },
     {
@@ -109,7 +124,8 @@
         "region": ""
       },
       "productStock": {
-        "P004": 49
+        "P004": 49,
+        "ARM-002": 2
       }
     }
   ],
@@ -127,14 +143,15 @@
       "ARM-001": 13,
       "ARM-002": 12,
       "ARM-003": 7,
-      "ARM-004": 15
+      "ARM-004": 15,
+      "arm-004": 5
     }
   },
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-11-15",
-      "paymentDueDate": "2025-11-15",
+      "date": "2025-11-06",
+      "paymentDueDate": "2025-11-06",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -161,8 +178,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-11-15",
-      "paymentDueDate": "2025-11-15",
+      "date": "2025-11-06",
+      "paymentDueDate": "2025-11-06",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -195,9 +212,37 @@
       "total": 575.00
     },
     {
+      "invoiceNumber": "F-5",
+      "date": "2025-12-17",
+      "paymentDueDate": "2025-12-17",
+      "customer": {
+        "name": "Sebastian",
+        "identification": "0018988987887",
+        "phone": "0976789870",
+        "email": "sebas@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "ARM-001",
+          "productName": "AK-47",
+          "quantity": 2,
+          "priceApplied": 150.0,
+          "lineTotal": 300.00
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 300.00,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 45.00,
+      "total": 345.00
+    },
+    {
       "invoiceNumber": "F-3",
-      "date": "2025-11-15",
-      "paymentDueDate": "2025-11-15",
+      "date": "2025-11-06",
+      "paymentDueDate": "2025-11-06",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -231,8 +276,8 @@
     },
     {
       "invoiceNumber": "F-4",
-      "date": "2025-12-24",
-      "paymentDueDate": "2025-12-24",
+      "date": "2025-12-15",
+      "paymentDueDate": "2025-12-15",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -256,49 +301,21 @@
       "taxRate": 0.15,
       "taxAmount": 22.50,
       "total": 172.50
-    },
-    {
-      "invoiceNumber": "F-5",
-      "date": "2025-12-26",
-      "paymentDueDate": "2025-12-26",
-      "customer": {
-        "name": "Sebastian",
-        "identification": "0018988987887",
-        "phone": "0976789870",
-        "email": "sebas@gmail.com",
-        "clientType": "STANDARD"
-      },
-      "lines": [
-        {
-          "productId": "ARM-001",
-          "productName": "AK-47",
-          "quantity": 2,
-          "priceApplied": 150.0,
-          "lineTotal": 300.00
-        }
-      ],
-      "status": "COMPLETED",
-      "subtotal": 300.00,
-      "discountRate": 0,
-      "discountAmount": 0.00,
-      "taxRate": 0.15,
-      "taxAmount": 45.00,
-      "total": 345.00
     }
   ],
   "returns": [
     {
       "product": {
-        "id": "ARM-001",
-        "name": "AK-47",
-        "description": "Balas de alto calibre las favoritas de yussepe",
-        "barcode": "1452369874521",
-        "baseCostPrice": 150.00,
+        "id": "ARM-004",
+        "name": "Famas",
+        "description": "Corta distancia",
+        "barcode": "344564365365",
+        "baseCostPrice": 145.00,
         "supplierId": "1254784513"
       },
-      "quantity": 1,
-      "reason": "Defectuoso",
-      "returnDate": "2026-01-09"
+      "quantity": 2,
+      "reason": "Compra Incorrecta",
+      "returnDate": "2026-01-15"
     },
     {
       "product": {
@@ -311,33 +328,7 @@
       },
       "quantity": 1,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-09"
-    },
-    {
-      "product": {
-        "id": "ARM-002",
-        "name": "HK G36",
-        "description": "5.56x45mm",
-        "barcode": "1269754126984",
-        "baseCostPrice": 200.00,
-        "supplierId": "1254784513"
-      },
-      "quantity": 4,
-      "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-09"
-    },
-    {
-      "product": {
-        "id": "P004",
-        "name": "Skar",
-        "description": "No description",
-        "barcode": "12121212221",
-        "baseCostPrice": 12.00,
-        "supplierId": "1254784513"
-      },
-      "quantity": 3,
-      "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-09"
+      "returnDate": "2026-01-15"
     },
     {
       "product": {
@@ -350,7 +341,7 @@
       },
       "quantity": 2,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-09"
+      "returnDate": "2026-01-15"
     },
     {
       "product": {
@@ -363,7 +354,20 @@
       },
       "quantity": 1,
       "reason": "Otro",
-      "returnDate": "2026-01-09"
+      "returnDate": "2026-01-15"
+    },
+    {
+      "product": {
+        "id": "ARM-004",
+        "name": "Famas",
+        "description": "Corta distancia",
+        "barcode": "344564365365",
+        "baseCostPrice": 145.00,
+        "supplierId": "1254784513"
+      },
+      "quantity": 4,
+      "reason": "Otro",
+      "returnDate": "2026-01-15"
     },
     {
       "product": {
@@ -376,25 +380,12 @@
       },
       "quantity": 4,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-09"
-    },
-    {
-      "product": {
-        "id": "ARM-004",
-        "name": "Famas",
-        "description": "Corta distancia",
-        "barcode": "344564365365",
-        "baseCostPrice": 145.00,
-        "supplierId": "1254784513"
-      },
-      "quantity": 5,
-      "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-09"
+      "returnDate": "2026-01-15"
     }
   ],
   "taxRate": 0.15,
-  "profitPercentage": 1.0,
-  "discountStandard": 0.1,
-  "discountPremium": 0.2,
-  "discountVip": 0.3
+  "profitPercentage": 1.2,
+  "discountStandard": 0.2,
+  "discountPremium": 0.3,
+  "discountVip": 0.4
 }

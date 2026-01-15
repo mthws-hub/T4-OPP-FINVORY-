@@ -1,23 +1,28 @@
 package ec.edu.espe.finvory.view;
 
+import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.model.InvoiceSim;
 import java.awt.Color;
-import java.text.NumberFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import javax.swing.JOptionPane;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import ec.edu.espe.finvory.model.InvoiceSim;
-import ec.edu.espe.finvory.controller.FinvoryController;
+
 
 
 /**
@@ -494,37 +499,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnExportCsvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCsvActionPerformed
-        JFileChooser fc = new JFileChooser();
-    fc.setSelectedFile(new File("reporte_ventas_brutas.csv"));
-    int opt = fc.showSaveDialog(this);
-    if (opt != JFileChooser.APPROVE_OPTION) return;
-
-    File f = fc.getSelectedFile();
-    try (PrintWriter w = new PrintWriter(new FileWriter(f))) {
-        DefaultTableModel m = (DefaultTableModel) scrGrossTable.getModel();
-
-        // headers
-        for (int c = 0; c < m.getColumnCount(); c++) {
-            w.print(m.getColumnName(c));
-            if (c < m.getColumnCount() - 1) w.print(",");
-        }
-        w.println();
-
-        // rows
-        for (int r = 0; r < m.getRowCount(); r++) {
-            for (int c = 0; c < m.getColumnCount(); c++) {
-                Object val = m.getValueAt(r, c);
-                String s = val == null ? "" : val.toString().replace(",", "."); // evitar comas en números
-                w.print(s);
-                if (c < m.getColumnCount() - 1) w.print(",");
-            }
-            w.println();
-        }
-
-        JOptionPane.showMessageDialog(this, "CSV exportado: " + f.getAbsolutePath());
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error exportando CSV: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
+        onExportCsv();
     }//GEN-LAST:event_btnExportCsvActionPerformed
 
     private void radioButtonPerDayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonPerDayActionPerformed
@@ -534,6 +509,72 @@ public class FrmGrossReport extends javax.swing.JFrame {
     private void radioButtonperInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonperInvoiceActionPerformed
         runReport();
     }//GEN-LAST:event_radioButtonperInvoiceActionPerformed
+
+    private void onExportCsv() {
+    File file = chooseCsvFile();
+    if (file == null) {
+        return;
+    }
+
+    try {
+        exportTableToCsv(file, (DefaultTableModel) scrGrossTable.getModel());
+        JOptionPane.showMessageDialog(this, "CSV exportado: " + file.getAbsolutePath());
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Error exportando CSV: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+}
+
+    private File chooseCsvFile() {
+        JFileChooser fc = new JFileChooser();
+        fc.setSelectedFile(new File("reporte_ventas_brutas.csv"));
+        int opt = fc.showSaveDialog(this);
+        if (opt != JFileChooser.APPROVE_OPTION) {
+            return null;
+        }
+        return fc.getSelectedFile();
+    }
+
+    private void exportTableToCsv(File file, DefaultTableModel model) throws Exception {
+        try (PrintWriter w = new PrintWriter(new FileWriter(file))) {
+            writeCsvHeader(w, model);
+            writeCsvRows(w, model);
+        }
+    }
+
+    private void writeCsvHeader(PrintWriter w, DefaultTableModel model) {
+        for (int c = 0; c < model.getColumnCount(); c++) {
+            w.print(model.getColumnName(c));
+            if (c < model.getColumnCount() - 1) {
+                w.print(",");
+            }
+        }
+        w.println();
+    }
+
+    private void writeCsvRows(PrintWriter w, DefaultTableModel model) {
+        for (int r = 0; r < model.getRowCount(); r++) {
+            for (int c = 0; c < model.getColumnCount(); c++) {
+                Object val = model.getValueAt(r, c);
+                w.print(sanitizeCsv(val));
+                if (c < model.getColumnCount() - 1) {
+                    w.print(",");
+                }
+            }
+            w.println();
+        }
+    }
+
+    private String sanitizeCsv(Object value) {
+        if (value == null) {
+            return "";
+        }
+        return value.toString().replace(",", ".");
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

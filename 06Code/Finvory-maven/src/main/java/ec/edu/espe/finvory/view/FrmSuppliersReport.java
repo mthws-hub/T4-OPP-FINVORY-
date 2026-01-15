@@ -218,46 +218,11 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        int year = Integer.parseInt(cmbYear.getSelectedItem().toString());
-        int month = cmbMonth.getSelectedIndex();
-
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSuppliers.getModel();
-        model.setRowCount(0);
-
-        java.util.List<Object[]> reportData = controller.supplierController.getSupplierPerformanceFlexibleData(year, month);
-
-        for (Object[] row : reportData) {
-            model.addRow(row);
-        }
+        onSearchSuppliersReport();
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnExportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCSVActionPerformed
-        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
-        if (fileChooser.showSaveDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
-            String path = fileChooser.getSelectedFile().getAbsolutePath();
-            if (!path.toLowerCase().endsWith(".csv")) {
-                path += ".csv";
-            }
-
-            String month = cmbMonth.getSelectedItem().toString();
-            String year = cmbYear.getSelectedItem().toString();
-            String reportTitle = "REPORTE DE DESEMPEÑO DE PROVEEDORES: " + month.toUpperCase() + " " + year;
-
-            String[] headers = {"Proveedor", "Productos Suministrados"};
-            javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSuppliers.getModel();
-            List<Object[]> dataRows = new java.util.ArrayList<>();
-
-            for (int i = 0; i < model.getRowCount(); i++) {
-                Object[] row = new Object[model.getColumnCount()];
-                for (int j = 0; j < model.getColumnCount(); j++) {
-                    row[j] = model.getValueAt(i, j);
-                }
-                dataRows.add(row);
-            }
-
-            controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
-            javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
-        }
+        onExportSuppliersReportCsv();
     }//GEN-LAST:event_btnExportCSVActionPerformed
 
     /**
@@ -283,6 +248,101 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrmSuppliersReport().setVisible(true));
+    }
+    
+    private void onSearchSuppliersReport() {
+    int year = getSelectedYear();
+    int month = getSelectedMonthIndex();
+
+    clearSuppliersTable();
+
+    java.util.List<Object[]> reportData = controller.supplierController
+            .getSupplierPerformanceFlexibleData(year, month);
+
+    fillSuppliersTable(reportData);
+}
+
+private int getSelectedYear() {
+    return Integer.parseInt(cmbYear.getSelectedItem().toString());
+}
+
+/**
+ * Mes:
+ * 0 = "Todos los meses"
+ * 1..12 = Enero..Diciembre (porque el combo tiene "Todos" primero)
+ */
+    private int getSelectedMonthIndex() {
+        return cmbMonth.getSelectedIndex();
+    }
+
+    private void clearSuppliersTable() {
+        javax.swing.table.DefaultTableModel model =
+                (javax.swing.table.DefaultTableModel) tblSuppliers.getModel();
+        model.setRowCount(0);
+    }
+
+    private void fillSuppliersTable(java.util.List<Object[]> reportData) {
+        javax.swing.table.DefaultTableModel model =
+                (javax.swing.table.DefaultTableModel) tblSuppliers.getModel();
+
+        if (reportData == null) {
+            return;
+        }
+
+        for (Object[] row : reportData) {
+            model.addRow(row);
+        }
+    }
+
+    private void onExportSuppliersReportCsv() {
+        String path = askCsvSavePath();
+        if (path == null) {
+            return;
+        }
+
+        String reportTitle = buildReportTitle();
+        String[] headers = {"Proveedor", "Productos Suministrados"};
+
+        java.util.List<Object[]> dataRows = extractTableRows(tblSuppliers);
+
+        controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
+        javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
+    }
+
+    private String askCsvSavePath() {
+        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+        if (fileChooser.showSaveDialog(this) != javax.swing.JFileChooser.APPROVE_OPTION) {
+            return null;
+        }
+
+        String path = fileChooser.getSelectedFile().getAbsolutePath();
+        if (!path.toLowerCase().endsWith(".csv")) {
+            path += ".csv";
+        }
+        return path;
+    }
+
+    private String buildReportTitle() {
+        String month = cmbMonth.getSelectedItem().toString();
+        String year = cmbYear.getSelectedItem().toString();
+        return "REPORTE DE DESEMPEÑO DE PROVEEDORES: " + month.toUpperCase() + " " + year;
+    }
+
+    private java.util.List<Object[]> extractTableRows(javax.swing.JTable table) {
+        javax.swing.table.DefaultTableModel model =
+                (javax.swing.table.DefaultTableModel) table.getModel();
+
+        java.util.List<Object[]> dataRows = new java.util.ArrayList<>();
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            Object[] row = new Object[model.getColumnCount()];
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                row[j] = model.getValueAt(i, j);
+            }
+            dataRows.add(row);
+        }
+
+        return dataRows;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

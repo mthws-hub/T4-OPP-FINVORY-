@@ -32,6 +32,10 @@ public class FrmPopularProducts extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tblPopular.getModel();
         model.setRowCount(0);
 
+        if (controller == null || controller.productController == null) {
+            return;
+        }
+
         List<Object[]> data = controller.productController.getPopularProductsReportData();
         for (Object[] row : data) {
             model.addRow(row);

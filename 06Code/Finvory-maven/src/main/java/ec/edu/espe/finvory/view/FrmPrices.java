@@ -270,14 +270,29 @@ public class FrmPrices extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        onUpdatePrices();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void ftfDiscountVipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfDiscountVipActionPerformed
+        
+    }//GEN-LAST:event_ftfDiscountVipActionPerformed
+
+    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnReturnActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        onCancelUpdate();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void onUpdatePrices() {
         String profit = ftfProfit.getText().trim();
         String standard = ftfDiscountStd.getText().trim();
         String premium = ftfDiscountPrm.getText().trim();
         String vip = ftfDiscountVip.getText().trim();
         String tax = ftfTax.getText().trim();
 
-        String errorMsg = ec.edu.espe.finvory.utils.ValidationUtils.getPriceConfigError(profit, standard, premium, vip, tax);
-
+        String errorMsg = ValidationUtils.getPriceConfigError(profit, standard, premium, vip, tax);
         if (errorMsg != null) {
             JOptionPane.showMessageDialog(this, errorMsg, "Error de Validación", JOptionPane.WARNING_MESSAGE);
             return;
@@ -291,17 +306,9 @@ public class FrmPrices extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Error al sincronizar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnUpdateActionPerformed
+}
 
-    private void ftfDiscountVipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfDiscountVipActionPerformed
-        
-    }//GEN-LAST:event_ftfDiscountVipActionPerformed
-
-    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnReturnActionPerformed
-
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void onCancelUpdate() {
         int option = JOptionPane.showConfirmDialog(
                 this,
                 "¿Está seguro de cancelar la actualización? Se recargarán los valores guardados.",
@@ -309,15 +316,17 @@ public class FrmPrices extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE
         );
+
         if (option == JOptionPane.YES_OPTION) {
             loadCurrentValues();
-            JOptionPane.showMessageDialog(this,
+            JOptionPane.showMessageDialog(
+                    this,
                     "Operación cancelada. Valores restaurados.",
                     "Cancelado",
                     JOptionPane.INFORMATION_MESSAGE
             );
         }
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

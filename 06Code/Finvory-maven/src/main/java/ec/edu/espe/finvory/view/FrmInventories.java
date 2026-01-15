@@ -266,75 +266,23 @@ public class FrmInventories extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFindInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindInventoryActionPerformed
-        String query = txtName.getText().trim();
-        String errorMsg = ec.edu.espe.finvory.utils.ValidationUtils.getSearchError(query);
-        if (errorMsg != null) {
-            JOptionPane.showMessageDialog(this, errorMsg, "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        try {
-            ArrayList<Inventory> matches = controller.inventoryController.findInventoriesByPartialName(query);
-            if (matches.isEmpty()) {
-                handleNoMatches();
-            } else if (matches.size() == 1) {
-                handleSingleMatch(matches.get(0));
-            } else {
-                handleMultipleMatches(matches);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        }
+        onFindInventory();
     }//GEN-LAST:event_btnFindInventoryActionPerformed
 
     private void itemProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProductsActionPerformed
-        if (this.currentInventory != null) {
-            FrmProducts products = new FrmProducts(controller, this.currentInventory);
-            products.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosed(java.awt.event.WindowEvent e) {
-                    FrmInventories.this.setVisible(true);
-                }
-            });
-            products.setVisible(true);
-            this.setVisible(false);
-        } else {
-            JOptionPane.showMessageDialog(this, "Primero debe buscar y seleccionar un inventario.");
-        }
+        onOpenProducts();
     }//GEN-LAST:event_itemProductsActionPerformed
 
     private void itemObsoleteProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemObsoleteProductsActionPerformed
-        FrmObsoleteInventories obsoleteInventorie = new FrmObsoleteInventories(this, true, controller);
-        this.setVisible(false);
-        
-        obsoleteInventorie.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmInventories.this.setVisible(true);
-                if (currentInventory != null) {
-                    populateTable();
-                }
-            }
-        });
-        obsoleteInventorie.setVisible(true);
+        onOpenObsoleteProducts();
     }//GEN-LAST:event_itemObsoleteProductsActionPerformed
 
     private void itemAddNewInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAddNewInventoryActionPerformed
-        FrmAddNewInventory addNewInventory = new FrmAddNewInventory(this, true, controller);
-        this.setVisible(false);
-        addNewInventory.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmInventories.this.setVisible(true);
-
-                FrmInventories.this.populateTable();
-            }
-        });
-        addNewInventory.setVisible(true);
+        onAddNewInventory();
     }//GEN-LAST:event_itemAddNewInventoryActionPerformed
 
     private void itemPrincipalMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPrincipalMenuActionPerformed
-        this.dispose();
+        onClose();
     }//GEN-LAST:event_itemPrincipalMenuActionPerformed
     private void handleNoMatches() {
         JOptionPane.showMessageDialog(this, "No se encontraron coincidencias.");
@@ -386,7 +334,88 @@ public class FrmInventories extends javax.swing.JFrame {
         this.currentInventory = null;
     
 }
+    
+    private void onFindInventory() {
+    String query = txtName.getText().trim();
+    String errorMsg = ec.edu.espe.finvory.utils.ValidationUtils.getSearchError(query);
+    if (errorMsg != null) {
+        JOptionPane.showMessageDialog(this, errorMsg, "Aviso", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
+    try {
+        ArrayList<Inventory> matches = controller.inventoryController.findInventoriesByPartialName(query);
+        handleSearchResult(matches);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }
+}
+
+    private void handleSearchResult(ArrayList<Inventory> matches) {
+        if (matches == null || matches.isEmpty()) {
+            handleNoMatches();
+            return;
+        }
+        if (matches.size() == 1) {
+            handleSingleMatch(matches.get(0));
+            return;
+        }
+        handleMultipleMatches(matches);
+    }
+
+    private void onOpenProducts() {
+        if (currentInventory == null) {
+            JOptionPane.showMessageDialog(this, "Primero debe buscar y seleccionar un inventario.");
+            return;
+        }
+
+        FrmProducts products = new FrmProducts(controller, currentInventory);
+        products.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                FrmInventories.this.setVisible(true);
+            }
+        });
+
+        products.setVisible(true);
+        this.setVisible(false);
+    }
+
+    private void onOpenObsoleteProducts() {
+        FrmObsoleteInventories obsoleteInventorie = new FrmObsoleteInventories(this, true, controller);
+        this.setVisible(false);
+
+        obsoleteInventorie.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                FrmInventories.this.setVisible(true);
+                if (currentInventory != null) {
+                    populateTable();
+                }
+            }
+        });
+
+        obsoleteInventorie.setVisible(true);
+    }
+
+    private void onAddNewInventory() {
+        FrmAddNewInventory addNewInventory = new FrmAddNewInventory(this, true, controller);
+        this.setVisible(false);
+
+        addNewInventory.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                FrmInventories.this.setVisible(true);
+                populateTable();
+            }
+        });
+
+        addNewInventory.setVisible(true);
+    }
+
+    private void onClose() {
+        this.dispose();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFindInventory;

@@ -57,6 +57,111 @@ public class FrmEditProductListOnInvoice extends JDialog {
             JOptionPane.showMessageDialog(this, "Producto no encontrado.", "Búsqueda", JOptionPane.WARNING_MESSAGE);
         }
     }
+    
+    private void onAddProduct() {
+    Product product = getOrSearchProduct();
+    if (product == null) {
+        return;
+    }
+
+    Integer quantity = getValidatedQuantity();
+    if (quantity == null) {
+        return;
+    }
+
+    Inventory selectedInv = getSelectedInventory();
+    if (selectedInv == null) {
+        JOptionPane.showMessageDialog(this, "Seleccione un inventario válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    if (!hasEnoughStock(selectedInv, product, quantity)) {
+        return;
+    }
+
+    if (!confirmAddToInvoice(product, selectedInv, quantity)) {
+        return;
+    }
+
+    addToInvoice(product, selectedInv, quantity);
+    resetFormAfterAdd();
+    }
+
+    private void onClose() {
+        this.dispose();
+    }
+
+    private Product getOrSearchProduct() {
+        if (foundProduct == null) {
+            searchProduct();
+        }
+        return foundProduct;
+    }
+
+    private Integer getValidatedQuantity() {
+        String quantityStr = txtQuantity.getText();
+
+        if (!ec.edu.espe.finvory.utils.ValidationUtils.isValidQuantity(quantityStr)) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "La cantidad debe ser un número entero positivo mayor a 0.",
+                    "Error de Validación",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return null;
+        }
+        return Integer.parseInt(quantityStr.trim());
+    }
+
+    private Inventory getSelectedInventory() {
+        String inventoryName = (String) cmbInventory.getSelectedItem();
+        if (inventoryName == null || inventoryName.trim().isEmpty()) {
+            return null;
+        }
+        return controller.inventoryController.findInventoryByName(inventoryName);
+    }
+
+    private boolean hasEnoughStock(Inventory inventory, Product product, int quantity) {
+        int currentStock = inventory.getStock(product.getId());
+        if (currentStock < quantity) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Stock insuficiente en " + inventory.getName() + ".\nDisponible: " + currentStock + "\nSolicitado: " + quantity,
+                    "Stock Insuficiente",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return false;
+        }
+        return true;
+    }
+
+    private boolean confirmAddToInvoice(Product product, Inventory inventory, int quantity) {
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "¿Agregar a la factura?\n\n"
+                + "Producto: " + product.getName() + "\n"
+                + "ID: " + product.getId() + "\n"
+                + "Barcode: " + product.getBarcode() + "\n"
+                + "Cantidad: " + quantity + "\n"
+                + "Desde: " + inventory.getName(),
+                "Confirmar Producto",
+                JOptionPane.YES_NO_OPTION
+        );
+        return confirm == JOptionPane.YES_OPTION;
+    }
+
+    private void addToInvoice(Product product, Inventory inventory, int quantity) {
+        if (parentInvoice != null) {
+            parentInvoice.addProductToCart(product, inventory, quantity);
+        }
+    }
+
+    private void resetFormAfterAdd() {
+        emptyFields();
+        foundProduct = null;
+        txtId.requestFocus();
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -205,56 +310,11 @@ public class FrmEditProductListOnInvoice extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        if (foundProduct == null) {
-            searchProduct();
-            if (foundProduct == null) {
-                return;
-            }
-        }
-        String quantityStr = txtQuantity.getText();
-
-        if (!ec.edu.espe.finvory.utils.ValidationUtils.isValidQuantity(quantityStr)) {
-            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero positivo mayor a 0.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        int quantity = Integer.parseInt(quantityStr.trim());
-        String inventoryName = (String) cmbInventory.getSelectedItem();
-        Inventory selectedInv = controller.inventoryController.findInventoryByName(inventoryName);
-
-        if (selectedInv == null) {
-            JOptionPane.showMessageDialog(this, "Seleccione un inventario válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        int currentStock = selectedInv.getStock(foundProduct.getId());
-        if (currentStock < quantity) {
-            JOptionPane.showMessageDialog(this,
-                    "Stock insuficiente en " + inventoryName + ".\nDisponible: " + currentStock + "\nSolicitado: " + quantity,
-                    "Stock Insuficiente", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Agregar a la factura?\n\n"
-                + "Producto: " + foundProduct.getName() + "\n"
-                + "ID: " + foundProduct.getId() + "\n"
-                + "Barcode: " + foundProduct.getBarcode() + "\n"
-                + "Cantidad: " + quantity + "\n"
-                + "Desde: " + selectedInv.getName(),
-                "Confirmar Producto",
-                JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            if (parentInvoice != null) {
-                parentInvoice.addProductToCart(foundProduct, selectedInv, quantity);
-                emptyFields();
-                foundProduct = null;
-                txtId.requestFocus();
-            }
-        }
+        onAddProduct();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        this.dispose();
+        onClose();
     }//GEN-LAST:event_btnDeleteActionPerformed
     private void emptyFields() {
         txtId.setText("");

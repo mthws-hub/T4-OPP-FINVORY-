@@ -172,16 +172,63 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void itemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemExitActionPerformed
-        FrmLogin win = new FrmLogin(this.controller);
-        win.setVisible(true);
-        this.dispose();
+        onExitToLogin();
     }//GEN-LAST:event_itemExitActionPerformed
 
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
+        onFindCompanyProducts();
+    }//GEN-LAST:event_btnFindActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        onCloseProgram();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void itemProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProfileActionPerformed
+        onOpenPersonalProfile();
+    }//GEN-LAST:event_itemProfileActionPerformed
+
+    private void btnInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
+        onShowCompanyInfo();
+    }//GEN-LAST:event_btnInfoActionPerformed
+    
+    private void updateTable(List<Object[]> rows) {
+        DefaultTableModel model = (DefaultTableModel) tabAllProducts.getModel();
+        model.setRowCount(0);
+        if (rows == null || rows.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron productos o la empresa no existe.", "Sin Resultados", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        for (Object[] row : rows) {
+            model.addRow(row);
+        }
+    }
+    
+    private void onExitToLogin() {
+        FrmLogin win = new FrmLogin(this.controller);
+        win.setVisible(true);
+        this.dispose();
+    }
+
+    private void onCloseProgram() {
+        System.exit(0);
+    }
+
+    private void onOpenPersonalProfile() {
+        FrmProfilePersonal profilePersonal = new FrmProfilePersonal(this, true, controller);
+        this.setVisible(false);
+        profilePersonal.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                FrmMainMenuPersonalAccount.this.setVisible(true);
+            }
+        });
+        profilePersonal.setVisible(true);
+    }
+
+    private void onFindCompanyProducts() {
         String companyName = txtCompany.getText().trim();
 
         String errorMsg = ValidationUtils.getSearchError(companyName);
-
         if (errorMsg != null) {
             JOptionPane.showMessageDialog(this, errorMsg, "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
@@ -194,52 +241,31 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al buscar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnFindActionPerformed
+    }
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void onShowCompanyInfo() {
+        String companyName = txtCompany.getText().trim();
 
-    private void itemProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProfileActionPerformed
-        FrmProfilePersonal profilePersonal = new FrmProfilePersonal(this, true, controller);
-        this.setVisible(false);
-        profilePersonal.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmMainMenuPersonalAccount.this.setVisible(true);
-            }
-        });
-        profilePersonal.setVisible(true);
-    }//GEN-LAST:event_itemProfileActionPerformed
-
-    private void btnInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
-        String comanyName = txtCompany.getText().trim();
-        if (ValidationUtils.isEmpty(comanyName)) {
+        if (ValidationUtils.isEmpty(companyName)) {
             JOptionPane.showMessageDialog(this, "Escriba el nombre de una empresa primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        CompanyAccount targetCompany = controller.userController.findCompanyByName(comanyName);
+
+        CompanyAccount targetCompany = controller.userController.findCompanyByName(companyName);
+
         if (targetCompany != null) {
             String phone = targetCompany.getPhone();
             String email = targetCompany.getEmail();
-            String info = String.format("Datos de %s:\nCelular/Teléfono: %s\nCorreo: %s",
-                    targetCompany.getName(), phone, email);
+            String info = String.format(
+                    "Datos de %s:\nCelular/Teléfono: %s\nCorreo: %s",
+                    targetCompany.getName(), phone, email
+            );
             JOptionPane.showMessageDialog(this, info, "Información de Contacto", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "No se encontró información de contacto para esta empresa.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnInfoActionPerformed
-    private void updateTable(List<Object[]> rows) {
-        DefaultTableModel model = (DefaultTableModel) tabAllProducts.getModel();
-        model.setRowCount(0);
-        if (rows == null || rows.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No se encontraron productos o la empresa no existe.", "Sin Resultados", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        for (Object[] row : rows) {
-            model.addRow(row);
-        }
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFind;
     private javax.swing.JButton btnInfo;

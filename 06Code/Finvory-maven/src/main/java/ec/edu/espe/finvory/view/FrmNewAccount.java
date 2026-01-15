@@ -399,133 +399,15 @@ public class FrmNewAccount extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterPersonalActionPerformed
-        resetColors();
-
-        String name = txtPersonalFullName.getText().trim();
-        String username = txtPersonalUserName.getText().trim();
-        String password = new String(passPersonalPassword.getPassword());
-
-        StringBuilder errors = new StringBuilder();
-
-        if (!ValidationUtils.hasTwoWords(name)) {
-            lblPersonalFullName.setForeground(ERROR_COLOR);
-            errors.append("- El nombre debe contener al menos un Nombre y un Apellido (solo letras).\n");
-        }
-        if (ValidationUtils.isEmpty(username)) {
-            lblPersonalUser.setForeground(ERROR_COLOR);
-            errors.append("- El usuario es obligatorio.\n");
-        } else if (controller.userController.isUsernameTaken(username)) {
-            lblPersonalUser.setForeground(ERROR_COLOR);
-            errors.append("- El nombre de usuario '").append(username).append("' ya está en uso.\n");
-        }
-        if (ValidationUtils.isEmpty(password)) {
-            lblPersonalPassword.setForeground(ERROR_COLOR);
-            errors.append("- La contraseña es obligatoria.\n");
-        }
-        if (errors.length() > 0) {
-            JOptionPane.showMessageDialog(this, "Por favor corrija los siguientes errores:\n\n" + errors.toString(), "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        HashMap<String, String> personalData = new HashMap<>();
-        personalData.put("username", username);
-        personalData.put("password", password);
-        personalData.put("fullName", name);
-
-        boolean success = controller.userController.registerPersonalGUI(personalData);
-
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Cuenta Personal creada exitosamente!");
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al registrar.", "Fallo de Registro", JOptionPane.ERROR_MESSAGE);
-        }
+        onRegisterPersonal();
     }//GEN-LAST:event_btnRegisterPersonalActionPerformed
 
     private void btnRegisterCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterCompanyActionPerformed
-        resetColors();
-
-        String name = txtCompanyName.getText().trim();
-        String ruc = txtCompanyRuc.getText().trim();
-        String phone = txtPhone.getText().trim();
-        String email = txtEmail.getText().trim();
-        String country = txtCountry.getText().trim();
-        String city = txtCity.getText().trim();
-        String street = txtStreet.getText().trim();
-        String username = txtCompanyUserName.getText().trim();
-        String password = new String(passCompanyPassword.getPassword());
-
-        StringBuilder errors = new StringBuilder();
-
-        if (ValidationUtils.isEmpty(name)) {
-            lblCompanyName.setForeground(ERROR_COLOR);
-            errors.append("- El nombre de la empresa es obligatorio.\n");
-        } else if (!ValidationUtils.isTextOnly(name)) {
-            lblCompanyName.setForeground(ERROR_COLOR);
-            errors.append("- El nombre de la empresa solo debe contener letras.\n");
-        }
-        if (!ValidationUtils.isStrictRuc(ruc)) {
-            lblRuc.setForeground(ERROR_COLOR);
-            errors.append("- El RUC debe tener 13 dígitos numéricos y empezar en '001'.\n");
-        }
-        if (!ValidationUtils.isValidPhone10Digits(phone)) {
-            lblPhone.setForeground(ERROR_COLOR);
-            errors.append("- El celular debe tener exactamente 10 dígitos numéricos.\n");
-        }
-        if (!ValidationUtils.isValidEmail(email)) {
-            lblEmail.setForeground(ERROR_COLOR);
-            errors.append("- El correo electrónico no es válido (ej: usuario@dominio.com).\n");
-        }
-        if (ValidationUtils.isEmpty(country) || !ValidationUtils.isTextOnly(country)) {
-            lblCountry.setForeground(ERROR_COLOR);
-            errors.append("- El país es obligatorio y solo debe contener letras.\n");
-        }
-        if (ValidationUtils.isEmpty(city) || !ValidationUtils.isTextOnly(city)) {
-            lblCity.setForeground(ERROR_COLOR);
-            errors.append("- La ciudad es obligatoria y solo debe contener letras.\n");
-        }
-        if (ValidationUtils.isEmpty(street)) {
-            jLabel7.setForeground(ERROR_COLOR);
-            errors.append("- La calle es obligatoria.\n");
-        }
-        if (ValidationUtils.isEmpty(username)) {
-            jLabel8.setForeground(ERROR_COLOR);
-            errors.append("- El usuario es obligatorio.\n");
-        } else if (controller.userController.isUsernameTaken(username)) {
-            jLabel8.setForeground(ERROR_COLOR);
-            errors.append("- El nombre de usuario '").append(username).append("' ya está en uso.\n");
-        }
-        if (ValidationUtils.isEmpty(password)) {
-            jLabel9.setForeground(ERROR_COLOR);
-            errors.append("- La contraseña es obligatoria.\n");
-        }
-        if (errors.length() > 0) {
-            JOptionPane.showMessageDialog(this, "Por favor corrija los siguientes errores:\n\n" + errors.toString(), "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        HashMap<String, String> companyData = new HashMap<>();
-        companyData.put("username", username);
-        companyData.put("password", password);
-        companyData.put("companyName", name);
-        companyData.put("ruc", ruc);
-        companyData.put("phone", phone);
-        companyData.put("email", email);
-
-        Address address = new Address(country, city, street);
-
-        boolean success = controller.userController.registerCompanyGUI(companyData, address);
-
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Cuenta de Empresa creada exitosamente!");
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al registrar.", "Fallo de Registro", JOptionPane.ERROR_MESSAGE);
-        }
+        onRegisterCompany();
     }//GEN-LAST:event_btnRegisterCompanyActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.dispose();
+        onCancel();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtPersonalFullNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPersonalFullNameActionPerformed
@@ -570,6 +452,227 @@ public class FrmNewAccount extends javax.swing.JFrame {
         lblPersonalUser.setForeground(DEFAULT_COLOR);
         lblPersonalPassword.setForeground(DEFAULT_COLOR);
     }
+    
+    private void onRegisterPersonal() {
+        resetColors();
+
+        String name = getPersonalFullName();
+        String username = getPersonalUsername();
+        String password = getPersonalPassword();
+
+        String errors = validatePersonalForm(name, username, password);
+        if (errors != null) {
+            showValidationErrors(errors);
+            return;
+        }
+
+        HashMap<String, String> personalData = buildPersonalData(username, password, name);
+
+        boolean success = controller.userController.registerPersonalGUI(personalData);
+        handleRegisterResult(success, "Cuenta Personal creada exitosamente!");
+    }
+
+    private void onRegisterCompany() {
+        resetColors();
+
+        String name = getCompanyName();
+        String ruc = getCompanyRuc();
+        String phone = getCompanyPhone();
+        String email = getCompanyEmail();
+        String country = getCountry();
+        String city = getCity();
+        String street = getStreet();
+        String username = getCompanyUsername();
+        String password = getCompanyPassword();
+
+        String errors = validateCompanyForm(name, ruc, phone, email, country, city, street, username, password);
+        if (errors != null) {
+            showValidationErrors(errors);
+            return;
+        }
+
+        HashMap<String, String> companyData = buildCompanyData(username, password, name, ruc, phone, email);
+        Address address = new Address(country, city, street);
+
+        boolean success = controller.userController.registerCompanyGUI(companyData, address);
+        handleRegisterResult(success, "Cuenta de Empresa creada exitosamente!");
+    }
+
+    private void onCancel() {
+        this.dispose();
+    }
+
+    private String getPersonalFullName() {
+        return txtPersonalFullName.getText().trim();
+    }
+
+    private String getPersonalUsername() {
+        return txtPersonalUserName.getText().trim();
+    }
+
+    private String getPersonalPassword() {
+        return new String(passPersonalPassword.getPassword());
+    }
+
+    private String getCompanyName() {
+        return txtCompanyName.getText().trim();
+    }
+
+    private String getCompanyRuc() {
+        return txtCompanyRuc.getText().trim();
+    }
+
+    private String getCompanyPhone() {
+        return txtPhone.getText().trim();
+    }
+
+    private String getCompanyEmail() {
+        return txtEmail.getText().trim();
+    }
+
+    private String getCountry() {
+        return txtCountry.getText().trim();
+    }
+
+    private String getCity() {
+        return txtCity.getText().trim();
+    }
+
+    private String getStreet() {
+        return txtStreet.getText().trim();
+    }
+
+    private String getCompanyUsername() {
+        return txtCompanyUserName.getText().trim();
+    }
+
+    private String getCompanyPassword() {
+        return new String(passCompanyPassword.getPassword());
+    }
+
+    private String validatePersonalForm(String name, String username, String password) {
+        StringBuilder errors = new StringBuilder();
+
+        if (!ValidationUtils.hasTwoWords(name)) {
+            lblPersonalFullName.setForeground(ERROR_COLOR);
+            errors.append("- El nombre debe contener al menos un Nombre y un Apellido (solo letras).\n");
+        }
+
+        if (ValidationUtils.isEmpty(username)) {
+            lblPersonalUser.setForeground(ERROR_COLOR);
+            errors.append("- El usuario es obligatorio.\n");
+        } else if (controller.userController.isUsernameTaken(username)) {
+            lblPersonalUser.setForeground(ERROR_COLOR);
+            errors.append("- El nombre de usuario '").append(username).append("' ya está en uso.\n");
+        }
+
+        if (ValidationUtils.isEmpty(password)) {
+            lblPersonalPassword.setForeground(ERROR_COLOR);
+            errors.append("- La contraseña es obligatoria.\n");
+        }
+
+        return errors.length() > 0 ? errors.toString() : null;
+    }
+
+    private String validateCompanyForm(String name, String ruc, String phone, String email,
+                                      String country, String city, String street,
+                                      String username, String password) {
+
+        StringBuilder errors = new StringBuilder();
+
+        if (ValidationUtils.isEmpty(name)) {
+            lblCompanyName.setForeground(ERROR_COLOR);
+            errors.append("- El nombre de la empresa es obligatorio.\n");
+        } else if (!ValidationUtils.isTextOnly(name)) {
+            lblCompanyName.setForeground(ERROR_COLOR);
+            errors.append("- El nombre de la empresa solo debe contener letras.\n");
+        }
+
+        if (!ValidationUtils.isStrictRuc(ruc)) {
+            lblRuc.setForeground(ERROR_COLOR);
+            errors.append("- El RUC debe tener 13 dígitos numéricos y empezar en '001'.\n");
+        }
+
+        if (!ValidationUtils.isValidPhone10Digits(phone)) {
+            lblPhone.setForeground(ERROR_COLOR);
+            errors.append("- El celular debe tener exactamente 10 dígitos numéricos.\n");
+        }
+
+        if (!ValidationUtils.isValidEmail(email)) {
+            lblEmail.setForeground(ERROR_COLOR);
+            errors.append("- El correo electrónico no es válido (ej: usuario@dominio.com).\n");
+        }
+
+        if (ValidationUtils.isEmpty(country) || !ValidationUtils.isTextOnly(country)) {
+            lblCountry.setForeground(ERROR_COLOR);
+            errors.append("- El país es obligatorio y solo debe contener letras.\n");
+        }
+
+        if (ValidationUtils.isEmpty(city) || !ValidationUtils.isTextOnly(city)) {
+            lblCity.setForeground(ERROR_COLOR);
+            errors.append("- La ciudad es obligatoria y solo debe contener letras.\n");
+        }
+
+        if (ValidationUtils.isEmpty(street)) {
+            jLabel7.setForeground(ERROR_COLOR);
+            errors.append("- La calle es obligatoria.\n");
+        }
+
+        if (ValidationUtils.isEmpty(username)) {
+            jLabel8.setForeground(ERROR_COLOR);
+            errors.append("- El usuario es obligatorio.\n");
+        } else if (controller.userController.isUsernameTaken(username)) {
+            jLabel8.setForeground(ERROR_COLOR);
+            errors.append("- El nombre de usuario '").append(username).append("' ya está en uso.\n");
+        }
+
+        if (ValidationUtils.isEmpty(password)) {
+            jLabel9.setForeground(ERROR_COLOR);
+            errors.append("- La contraseña es obligatoria.\n");
+        }
+
+        return errors.length() > 0 ? errors.toString() : null;
+    }
+
+    private HashMap<String, String> buildPersonalData(String username, String password, String fullName) {
+        HashMap<String, String> personalData = new HashMap<>();
+        personalData.put("username", username);
+        personalData.put("password", password);
+        personalData.put("fullName", fullName);
+        return personalData;
+    }
+
+    private HashMap<String, String> buildCompanyData(String username, String password,
+                                                    String companyName, String ruc,
+                                                    String phone, String email) {
+        HashMap<String, String> companyData = new HashMap<>();
+        companyData.put("username", username);
+        companyData.put("password", password);
+        companyData.put("companyName", companyName);
+        companyData.put("ruc", ruc);
+        companyData.put("phone", phone);
+        companyData.put("email", email);
+        return companyData;
+    }
+
+    private void showValidationErrors(String errors) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Por favor corrija los siguientes errores:\n\n" + errors,
+                "Error de Validación",
+                JOptionPane.WARNING_MESSAGE
+        );
+    }
+
+    private void handleRegisterResult(boolean success, String successMsg) {
+        if (success) {
+            JOptionPane.showMessageDialog(this, successMsg);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al registrar.", "Fallo de Registro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegisterCompany;
     private javax.swing.JButton btnRegisterPersonal;

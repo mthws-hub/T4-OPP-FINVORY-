@@ -239,25 +239,81 @@ public class FrmCustomers extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        int selectedRow = tblCustomers.getSelectedRow();
-        if (selectedRow != -1) {
-            String id = tblCustomers.getValueAt(selectedRow, 0).toString();
-
-            FrmAddNewCustomer window = new FrmAddNewCustomer(this.controller, id);
-            window.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosed(java.awt.event.WindowEvent e) {
-                    loadCustomerTable();
-                    setVisible(true);
-                }
-            });
-            this.setVisible(false);
-            window.setVisible(true);
-        }
+        onEditCustomer();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        FrmAddNewCustomer window = new FrmAddNewCustomer(this.controller);
+        onAddCustomer();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        onDeleteCustomer();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void ItemPrincipalMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemPrincipalMenuActionPerformed
+        onGoToMainMenu();
+    }//GEN-LAST:event_ItemPrincipalMenuActionPerformed
+
+    private String getSelectedCustomerId() {
+        int row = tblCustomers.getSelectedRow();
+        if (row == -1) {
+            return null;
+    }
+        return tblCustomers.getValueAt(row, 0).toString();
+    }
+    
+    private void onEditCustomer() {
+        
+        String id = getSelectedCustomerId();
+        if (id == null) {
+            return;
+        }
+        openCustomerForm(id);
+    }
+
+    private void onAddCustomer() {
+        openCustomerForm(null);
+    }
+
+    private void onDeleteCustomer() {
+        
+        String id = getSelectedCustomerId();
+        if (id == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, seleccione un cliente de la tabla para eliminar.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int row = tblCustomers.getSelectedRow(); // solo para el nombre
+        String nombre = tblCustomers.getValueAt(row, 1).toString();
+
+        if (!confirmDelete(nombre)) return;
+
+        boolean deleted = controller.customerController.handleDeleteCustomerGUI(id);
+        if (deleted) {
+            JOptionPane.showMessageDialog(this, "Cliente eliminado exitosamente.");
+            loadCustomerTable();
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error: No se pudo eliminar el cliente.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    private void onGoToMainMenu() {
+        this.dispose();
+    }
+
+    private void openCustomerForm(String customerId) {
+        FrmAddNewCustomer window = (customerId == null)
+                ? new FrmAddNewCustomer(this.controller)
+                : new FrmAddNewCustomer(this.controller, customerId);
+
         window.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
@@ -265,43 +321,21 @@ public class FrmCustomers extends javax.swing.JFrame {
                 setVisible(true);
             }
         });
+
         this.setVisible(false);
         window.setVisible(true);
-    }//GEN-LAST:event_btnAddActionPerformed
+    }
 
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-
-        int selectedRow = tblCustomers.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione un cliente de la tabla para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String id = tblCustomers.getValueAt(selectedRow, 0).toString();
-        String nombre = tblCustomers.getValueAt(selectedRow, 1).toString();
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de eliminar al cliente: " + nombre + "?\nEsta acción no se puede deshacer.",
+    private boolean confirmDelete(String customerName) {
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de eliminar al cliente: " + customerName + "?\nEsta acción no se puede deshacer.",
                 "Confirmar Eliminación",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE
         );
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            boolean delete = controller.customerController.handleDeleteCustomerGUI(id);
-            if (delete) {
-                JOptionPane.showMessageDialog(this, "Cliente eliminado exitosamente.");
-                loadCustomerTable(); 
-            } else {
-                JOptionPane.showMessageDialog(this, "Error: No se pudo eliminar el cliente.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void ItemPrincipalMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemPrincipalMenuActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_ItemPrincipalMenuActionPerformed
+        return confirm == JOptionPane.YES_OPTION;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem ItemPrincipalMenu;

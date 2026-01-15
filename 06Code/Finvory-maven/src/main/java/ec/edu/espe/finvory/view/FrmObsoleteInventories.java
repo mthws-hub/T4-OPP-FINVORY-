@@ -221,168 +221,254 @@ public class FrmObsoleteInventories extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
-        this.dispose();
+        onCloseDialog();
 
     }//GEN-LAST:event_itemInventoriesActionPerformed
 
     private void itmDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmDeleteActionPerformed
-
-        int row = tabObsoleteProduct.getSelectedRow();
-        if (row == -1) {
-            return;
-        }
-
-        String id = tabObsoleteProduct.getValueAt(row, 0).toString();
-        String reason = tabObsoleteProduct.getValueAt(row, 2).toString();
-        int currentQty = Integer.parseInt(tabObsoleteProduct.getValueAt(row, 4).toString());
-
-        boolean validEntry = false;
-        while (!validEntry) {
-            String qtyStr = JOptionPane.showInputDialog(this, "Cantidad a desechar de la fila seleccionada:\n(Máximo: " + currentQty + ")");
-
-            if (qtyStr == null) {
-                break;
-            }
-
-            try {
-                int quantity = Integer.parseInt(qtyStr.trim());
-
-                if (quantity > 0 && quantity <= currentQty) {
-                    if (controller.obsoleteController.discardObsoleteProduct(id, quantity, reason)) {
-                        JOptionPane.showMessageDialog(this, "Producto desechado.");
-                        loadObsoleteTable();
-                        validEntry = true;
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                            "Error: Debe ser un número entero positivo máximo hasta " + currentQty,
-                            "Cantidad Incorrecta", JOptionPane.WARNING_MESSAGE);
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this,
-                        "Error: Debe ser un número entero positivo máximo hasta " + currentQty,
-                        "Entrada Inválida", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-
-
+        onDiscardSelected();
     }//GEN-LAST:event_itmDeleteActionPerformed
 
     private void itmReassignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmReassignActionPerformed
-
-        int row = tabObsoleteProduct.getSelectedRow();
-        if (row == -1) {
-            return;
-        }
-
-        String id = tabObsoleteProduct.getValueAt(row, 0).toString();
-        String name = tabObsoleteProduct.getValueAt(row, 1).toString();
-        String reason = tabObsoleteProduct.getValueAt(row, 2).toString();
-        int currentQuantity = Integer.parseInt(tabObsoleteProduct.getValueAt(row, 4).toString());
-
-        String[] inventories = controller.getData().getInventories().stream()
-                .map(Inventory::getName).toArray(String[]::new);
-
-        String selectedInventory = (String) JOptionPane.showInputDialog(this, "Destino:", "Reasignar",
-                JOptionPane.QUESTION_MESSAGE, null, inventories, inventories[0]);
-
-        if (selectedInventory == null) {
-            return;
-        }
-
-        boolean validEntry = false;
-        while (!validEntry) {
-            String quantityString = JOptionPane.showInputDialog(this, "Ingrese cantidad para " + name + "\n(Máximo permitido: " + currentQuantity + "):");
-
-            if (quantityString == null) {
-                break;
-            }
-
-            try {
-                int quantity = Integer.parseInt(quantityString.trim());
-
-                if (quantity > 0 && quantity <= currentQuantity) {
-                    if (controller.obsoleteController.reassignObsoleteProduct(id, quantity, selectedInventory, reason)) {
-                        JOptionPane.showMessageDialog(this, "Reasignación exitosa.");
-                        loadObsoleteTable();
-                        validEntry = true;
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                            "Error: Debe ser un número entero positivo máximo hasta " + currentQuantity,
-                            "Cantidad Incorrecta", JOptionPane.WARNING_MESSAGE);
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this,
-                        "Error: Debe ser un número entero positivo máximo hasta " + currentQuantity,
-                        "Entrada Inválida", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+        onReassignSelected();
     }//GEN-LAST:event_itmReassignActionPerformed
 
     private void itmReturnsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmReturnsActionPerformed
-        FrmProductReturns productReturns = new FrmProductReturns(this, true, controller);
-        productReturns.setVisible(true);
-
-        loadObsoleteTable();
-        this.setVisible(true);
+        onOpenReturns();
     }//GEN-LAST:event_itmReturnsActionPerformed
 
     private void btnFindProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindProductActionPerformed
-
-        String searchId = txtIdProduct.getText().trim();
-        DefaultTableModel model = (DefaultTableModel) tabObsoleteProduct.getModel();
-        model.setRowCount(0);
-
-        List<ec.edu.espe.finvory.model.ReturnedProduct> allReturns = controller.getData().getReturns();
-
-        if (allReturns == null || allReturns.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No hay registros de devoluciones.");
-            return;
-        }
-
-        boolean found = false;
-        for (ec.edu.espe.finvory.model.ReturnedProduct returnedProduct : allReturns) {
-            if (searchId.isEmpty() || returnedProduct.getProduct().getId().equalsIgnoreCase(searchId)) {
-                Object[] row = {
-                    returnedProduct.getProduct().getId(),
-                    returnedProduct.getProduct().getName(),
-                    returnedProduct.getReason(),
-                    returnedProduct.getReturnDate().toString(),
-                    String.valueOf(returnedProduct.getQuantity())
-                };
-                model.addRow(row);
-                found = true;
-            }
-        }
-
-        if (!found && !searchId.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No se encontraron devoluciones para el ID: " + searchId);
-        }
-
+        onFindProductReturns();
     }//GEN-LAST:event_btnFindProductActionPerformed
 
     public void loadObsoleteTable() {
         DefaultTableModel model = (DefaultTableModel) tabObsoleteProduct.getModel();
         model.setRowCount(0);
-        java.util.List<ec.edu.espe.finvory.model.ReturnedProduct> returnsList = controller.getData().getReturns();
 
-        if (returnsList != null) {
-            for (ec.edu.espe.finvory.model.ReturnedProduct returnedProduct : returnsList) {
-                if (returnedProduct.getProduct() != null) {
-                    Object[] row = {
-                        returnedProduct.getProduct().getId(),
-                        returnedProduct.getProduct().getName(),
-                        returnedProduct.getReason(),
-                        returnedProduct.getReturnDate().toString(),
-                        String.valueOf(returnedProduct.getQuantity())
-                    };
-                    model.addRow(row);
-                }
-            }
+        if (controller == null || controller.getData() == null) return;
+
+        java.util.List<ec.edu.espe.finvory.model.ReturnedProduct> returnsList = controller.getData().getReturns();
+        if (returnsList == null) return;
+
+        for (ec.edu.espe.finvory.model.ReturnedProduct returnedProduct : returnsList) {
+            if (returnedProduct == null || returnedProduct.getProduct() == null) continue;
+
+            Object[] row = {
+                returnedProduct.getProduct().getId(),
+                returnedProduct.getProduct().getName(),
+                returnedProduct.getReason(),
+                returnedProduct.getReturnDate().toString(),
+                String.valueOf(returnedProduct.getQuantity())
+            };
+            model.addRow(row);
+        }
+    }
+    
+    private void onCloseDialog() {
+    this.dispose();
+    }
+
+    private void onOpenReturns() {
+        FrmProductReturns productReturns = new FrmProductReturns(this, true, controller);
+        productReturns.setVisible(true);
+        loadObsoleteTable();
+        this.setVisible(true);
+    }
+
+    private void onDiscardSelected() {
+        int row = getSelectedRowOrWarn();
+        if (row == -1) return;
+
+        String id = getTableValue(row, 0);
+        String reason = getTableValue(row, 2);
+        int currentQty = parseIntSafe(getTableValue(row, 4), 0);
+
+        if (currentQty <= 0) {
+            JOptionPane.showMessageDialog(this, "La cantidad actual no es válida.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
+        Integer quantity = askQuantity("Cantidad a desechar de la fila seleccionada:\n(Máximo: " + currentQty + ")", currentQty);
+        if (quantity == null) return;
+
+        boolean success = controller.obsoleteController.discardObsoleteProduct(id, quantity, reason);
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Producto desechado.");
+            loadObsoleteTable();
+        }
     }
+
+    private void onReassignSelected() {
+        int row = getSelectedRowOrWarn();
+        if (row == -1) return;
+
+        String id = getTableValue(row, 0);
+        String name = getTableValue(row, 1);
+        String reason = getTableValue(row, 2);
+        int currentQty = parseIntSafe(getTableValue(row, 4), 0);
+
+        if (currentQty <= 0) {
+            JOptionPane.showMessageDialog(this, "La cantidad actual no es válida.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String selectedInventory = askInventoryDestination();
+        if (selectedInventory == null) return;
+
+        Integer quantity = askQuantity(
+                "Ingrese cantidad para " + name + "\n(Máximo permitido: " + currentQty + "):",
+                currentQty
+        );
+        if (quantity == null) return;
+
+        boolean success = controller.obsoleteController.reassignObsoleteProduct(id, quantity, selectedInventory, reason);
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Reasignación exitosa.");
+            loadObsoleteTable();
+        }
+    }
+
+    private void onFindProductReturns() {
+        String searchId = txtIdProduct.getText().trim();
+        DefaultTableModel model = (DefaultTableModel) tabObsoleteProduct.getModel();
+        model.setRowCount(0);
+
+        List<ec.edu.espe.finvory.model.ReturnedProduct> allReturns = getReturnsOrWarnIfEmpty();
+        if (allReturns == null) return;
+
+        boolean found = fillTableWithReturns(model, allReturns, searchId);
+
+        if (!found && !searchId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron devoluciones para el ID: " + searchId);
+        }
+    }
+    
+    private int getSelectedRowOrWarn() {
+    int row = tabObsoleteProduct.getSelectedRow();
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this, "Seleccione una fila primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
+    }
+    return row;
+    }
+
+    private String getTableValue(int row, int col) {
+        Object v = tabObsoleteProduct.getValueAt(row, col);
+        return v == null ? "" : v.toString();
+    }
+
+    private int parseIntSafe(String value, int defaultValue) {
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    private Integer askQuantity(String message, int maxAllowed) {
+        while (true) {
+            String qtyStr = JOptionPane.showInputDialog(this, message);
+
+            if (qtyStr == null) {
+                return null; // cancel
+            }
+
+            Integer qty = tryParsePositiveInt(qtyStr);
+            if (qty == null || qty <= 0 || qty > maxAllowed) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Error: Debe ser un número entero positivo máximo hasta " + maxAllowed,
+                        "Cantidad Incorrecta",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                continue;
+            }
+
+            return qty;
+        }
+    }
+
+    private Integer tryParsePositiveInt(String text) {
+        try {
+            return Integer.parseInt(text.trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error: Debe ser un número entero positivo.",
+                    "Entrada Inválida",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return null;
+        }
+    }
+
+    private String askInventoryDestination() {
+        if (controller == null || controller.getData() == null || controller.getData().getInventories() == null
+                || controller.getData().getInventories().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay inventarios disponibles.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+
+        String[] inventories = controller.getData().getInventories().stream()
+                .map(Inventory::getName)
+                .toArray(String[]::new);
+
+        return (String) JOptionPane.showInputDialog(
+                this,
+                "Destino:",
+                "Reasignar",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                inventories,
+                inventories[0]
+        );
+    }
+
+    private List<ec.edu.espe.finvory.model.ReturnedProduct> getReturnsOrWarnIfEmpty() {
+        if (controller == null || controller.getData() == null) {
+            JOptionPane.showMessageDialog(this, "No hay datos cargados.", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        List<ec.edu.espe.finvory.model.ReturnedProduct> allReturns = controller.getData().getReturns();
+
+        if (allReturns == null || allReturns.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay registros de devoluciones.");
+            return null;
+        }
+
+        return allReturns;
+    }
+
+    private boolean fillTableWithReturns(DefaultTableModel model,
+                                        List<ec.edu.espe.finvory.model.ReturnedProduct> allReturns,
+                                        String searchId) {
+
+        boolean found = false;
+
+        for (ec.edu.espe.finvory.model.ReturnedProduct returnedProduct : allReturns) {
+            if (returnedProduct == null || returnedProduct.getProduct() == null) continue;
+
+            String productId = returnedProduct.getProduct().getId();
+            boolean matches = searchId.isEmpty() || productId.equalsIgnoreCase(searchId);
+
+            if (!matches) continue;
+
+            Object[] row = {
+                productId,
+                returnedProduct.getProduct().getName(),
+                returnedProduct.getReason(),
+                returnedProduct.getReturnDate().toString(),
+                String.valueOf(returnedProduct.getQuantity())
+            };
+
+            model.addRow(row);
+            found = true;
+        }
+
+        return found;
+    }
+
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

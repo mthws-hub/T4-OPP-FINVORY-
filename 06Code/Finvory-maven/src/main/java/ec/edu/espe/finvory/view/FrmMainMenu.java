@@ -190,135 +190,118 @@ public class FrmMainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
-        FrmInventories frmInventories = new FrmInventories(this.controller);
-        frmInventories.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmMainMenu.this.setVisible(true);
-            }
-        });
-        frmInventories.setVisible(true);
-        this.setVisible(false);
+        onOpenInventories();
     }//GEN-LAST:event_itemInventoriesActionPerformed
 
     private void itemQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemQuitActionPerformed
-        FrmLogin win = new FrmLogin(this.controller);
-        win.setVisible(true);
-        this.dispose();
+        onQuitToLogin();
     }//GEN-LAST:event_itemQuitActionPerformed
 
     private void itemSuppliersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSuppliersActionPerformed
-        FrmSuppliers suppliers = new FrmSuppliers(this.controller);
-        suppliers.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmMainMenu.this.setVisible(true);
-            }
-        });
-        suppliers.setVisible(true);
-        this.setVisible(false);
+        onOpenSuppliers();
     }//GEN-LAST:event_itemSuppliersActionPerformed
 
     private void itemPricesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPricesActionPerformed
-        FrmPrices prices = new FrmPrices(this.controller);
-        prices.addWindowListener(new java.awt.event.WindowAdapter() {
+        onOpenPrices();
+    }//GEN-LAST:event_itemPricesActionPerformed
+
+    private void MnuCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnuCustomerActionPerformed
+        onOpenCustomers();
+    }//GEN-LAST:event_MnuCustomerActionPerformed
+
+    private void itemNewSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNewSaleActionPerformed
+        onOpenNewSale();
+    }//GEN-LAST:event_itemNewSaleActionPerformed
+
+    private void itemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemCloseActionPerformed
+        onCloseProgram();
+    }//GEN-LAST:event_itemCloseActionPerformed
+
+    private void itemSalesReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSalesReportActionPerformed
+        onOpenSalesReport();
+    }//GEN-LAST:event_itemSalesReportActionPerformed
+
+    private void itemFinvoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemFinvoryActionPerformed
+        onOpenAbout();
+    }//GEN-LAST:event_itemFinvoryActionPerformed
+
+    private void itemProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProfileActionPerformed
+        onOpenProfile();
+    }//GEN-LAST:event_itemProfileActionPerformed
+
+    private void itemCustomersReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemCustomersReportActionPerformed
+        onOpenCustomersReport();
+    }//GEN-LAST:event_itemCustomersReportActionPerformed
+
+    private void itemSuppliersReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSuppliersReportActionPerformed
+        onOpenSuppliersReport();
+    }//GEN-LAST:event_itemSuppliersReportActionPerformed
+
+    private void openAndHide(javax.swing.JFrame frame) {
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmMainMenu.this.setVisible(true);
             }
         });
-        prices.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_itemPricesActionPerformed
+        frame.setVisible(true);
+        FrmMainMenu.this.setVisible(false);
+    }
 
-    private void MnuCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnuCustomerActionPerformed
+    private void onOpenInventories() {
+        openAndHide(new FrmInventories(this.controller));
+    }
+
+    private void onOpenSuppliers() {
+        openAndHide(new FrmSuppliers(this.controller));
+    }
+
+    private void onOpenPrices() {
+        openAndHide(new FrmPrices(this.controller));
+    }
+
+    private void onOpenCustomers() {
         if (this.controller == null) {
             System.out.println("Error: El controlador en MainMenu es null");
             return;
         }
-        FrmCustomers customersFrame = new FrmCustomers(this.controller);
-        customersFrame.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmMainMenu.this.setVisible(true);
-            }
-        });
-        customersFrame.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_MnuCustomerActionPerformed
+        openAndHide(new FrmCustomers(this.controller));
+    }
 
-    private void itemNewSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNewSaleActionPerformed
-        FrmSaleInvoice sale = new FrmSaleInvoice(controller);
-        sale.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmMainMenu.this.setVisible(true);
-            }
-        });
-        sale.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_itemNewSaleActionPerformed
+    private void onOpenNewSale() {
+        openAndHide(new FrmSaleInvoice(this.controller));
+    }
 
-    private void itemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemCloseActionPerformed
+    private void onOpenSalesReport() {
+        openAndHide(new FrmSalesReport(this.controller));
+    }
+
+    private void onOpenCustomersReport() {
+        openAndHide(new FrmCustomersReport(this.controller));
+    }
+
+    private void onOpenSuppliersReport() {
+        openAndHide(new FrmSuppliersReport(this.controller));
+    }
+
+    private void onOpenProfile() {
+        openAndHide(new FrmProfileCompany(this.controller));
+    }
+
+    private void onQuitToLogin() {
+        FrmLogin win = new FrmLogin(this.controller);
+        win.setVisible(true);
+        this.dispose();
+    }
+
+    private void onCloseProgram() {
         System.exit(0);
-    }//GEN-LAST:event_itemCloseActionPerformed
+    }
 
-    private void itemSalesReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSalesReportActionPerformed
-        FrmSalesReport frmSales = new FrmSalesReport(this.controller);
-        frmSales.addWindowListener(new java.awt.event.WindowAdapter() {
-
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmMainMenu.this.setVisible(true);
-            }
-        });
-
-        frmSales.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_itemSalesReportActionPerformed
-
-    private void itemFinvoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemFinvoryActionPerformed
+    private void onOpenAbout() {
         FrmAbout about = new FrmAbout();
         about.setVisible(true);
-    }//GEN-LAST:event_itemFinvoryActionPerformed
-
-    private void itemProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProfileActionPerformed
-        FrmProfileCompany profileCompany = new FrmProfileCompany(controller);
-        profileCompany.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmMainMenu.this.setVisible(true);
-            }
-        });
-        profileCompany.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_itemProfileActionPerformed
-
-    private void itemCustomersReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemCustomersReportActionPerformed
-        FrmCustomersReport frmCustReport = new FrmCustomersReport(this.controller);
-
-        frmCustReport.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmMainMenu.this.setVisible(true);
-            }
-        });
-
-        frmCustReport.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_itemCustomersReportActionPerformed
-
-    private void itemSuppliersReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSuppliersReportActionPerformed
-        FrmSuppliersReport frmSuppReport = new FrmSuppliersReport(this.controller);
-        frmSuppReport.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmMainMenu.this.setVisible(true);
-            }
-        });
-        frmSuppReport.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_itemSuppliersReportActionPerformed
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu MnuAbout;

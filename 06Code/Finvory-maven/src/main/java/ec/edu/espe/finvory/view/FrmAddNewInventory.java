@@ -227,87 +227,7 @@ public class FrmAddNewInventory extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        resetColors();
-
-        String name = txtName.getText().trim();
-        String country = txtCountry.getText().trim();
-        String city = txtCity.getText().trim();
-        String street = txtStreet.getText().trim();
-        String streetNumber = txtStreetNumber.getText().trim();
-        String zipCode = txtZipCode.getText().trim();
-        String region = txtRegion.getText().trim();
-
-        boolean hasError = false;
-        StringBuilder errorMsg = new StringBuilder();
-
-        if (ValidationUtils.isEmpty(name)) {
-            lblName.setForeground(Color.RED);
-            hasError = true;
-        }
-        if (ValidationUtils.isEmpty(country)) {
-            lblCountry.setForeground(Color.RED);
-            hasError = true;
-        } else if (!ValidationUtils.isTextOnly(country)) {
-            lblCountry.setForeground(Color.RED);
-            errorMsg.append("- País solo debe contener letras.\n");
-            hasError = true;
-        }
-        if (ValidationUtils.isEmpty(city)) {
-            lblCity.setForeground(Color.RED);
-            hasError = true;
-        } else if (!ValidationUtils.isTextOnly(city)) {
-            lblCity.setForeground(Color.RED);
-            errorMsg.append("- Ciudad solo debe contener letras.\n");
-            hasError = true;
-        }
-        if (ValidationUtils.isEmpty(street)) {
-            lblStreet.setForeground(Color.RED);
-            hasError = true;
-        } else if (!ValidationUtils.isTextOnly(street)) {
-            lblStreet.setForeground(Color.RED);
-            errorMsg.append("- Calle solo debe contener letras.\n");
-            hasError = true;
-        }
-        if (ValidationUtils.isEmpty(streetNumber)) {
-            jLabel7.setForeground(Color.RED);
-            hasError = true;
-        } else if (!ValidationUtils.isNumeric(streetNumber)) {
-            jLabel7.setForeground(Color.RED);
-            errorMsg.append("- Número de calle debe ser numérico.\n");
-            hasError = true;
-        }
-        if (ValidationUtils.isEmpty(region)) {
-            jLabel8.setForeground(Color.RED);
-            hasError = true;
-        } else if (!ValidationUtils.isTextOnly(region)) {
-            jLabel8.setForeground(Color.RED);
-            errorMsg.append("- Región solo debe contener letras.\n");
-            hasError = true;
-        }
-        if (!ValidationUtils.isEmpty(zipCode) && !ValidationUtils.isNumeric(zipCode)) {
-            jLabel6.setForeground(Color.RED);
-            errorMsg.append("- Código Postal debe ser numérico.\n");
-            hasError = true;
-        }
-        if (hasError) {
-            String finalMsg = errorMsg.length() > 0 ? errorMsg.toString() : "Por favor llene correctamente los campos marcados en rojo.";
-            JOptionPane.showMessageDialog(this, finalMsg, "Error de Validación", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        Address address = new Address(country, city, street);
-        address.setStreetNumber(streetNumber);
-        address.setZipCode(zipCode);
-        address.setRegion(region);
-
-        boolean success = controller.inventoryController.handleCreateInventory(name, address);
-
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Inventario creado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Error: Ya existe un inventario con ese nombre.", "Error al Guardar", JOptionPane.ERROR_MESSAGE);
-        }
+        onAdd();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
@@ -319,24 +239,181 @@ public class FrmAddNewInventory extends JDialog {
     }//GEN-LAST:event_jMenu1MenuKeyPressed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        resetColors();
-        int opt = JOptionPane.showConfirmDialog(this, "Sus datos ingresados se perderán ¿Está seguro?", "Confirmar", JOptionPane.YES_NO_OPTION);
-        if (opt == JOptionPane.YES_OPTION) {
-            txtCity.setText("");
-            txtCountry.setText("");
-            txtName.setText("");
-            txtRegion.setText("");
-            txtStreet.setText("");
-            txtStreetNumber.setText("");
-            txtZipCode.setText("");
-        }
+        onCancel();
     }//GEN-LAST:event_btnCancelActionPerformed
     private void resetColors() {
+        
         lblCountry.setForeground(Color.black);
         lblCity.setForeground(Color.black);
         lblStreet.setForeground(Color.black);
         lblName.setForeground(Color.black);
+
+        jLabel6.setForeground(Color.black);
+        jLabel7.setForeground(Color.black);
+        jLabel8.setForeground(Color.black);
+        
     }
+    private void onAdd() {
+        resetColors();
+
+        InventoryFormData data = readForm();
+        ValidationResult validation = validateForm(data);
+
+        if (!validation.isValid) {
+            showValidationErrors(validation);
+            return;
+        }
+
+        Address address = buildAddress(data);
+
+        boolean success = controller.inventoryController.handleCreateInventory(data.name, address);
+
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Inventario creado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: Ya existe un inventario con ese nombre.", "Error al Guardar", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void onCancel() {
+        resetColors();
+
+        int opt = JOptionPane.showConfirmDialog(
+                this,
+                "Sus datos ingresados se perderán ¿Está seguro?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (opt == JOptionPane.YES_OPTION) {
+            clearFields();
+        }
+    }
+
+    private InventoryFormData readForm() {
+        InventoryFormData data = new InventoryFormData();
+        data.name = txtName.getText().trim();
+        data.country = txtCountry.getText().trim();
+        data.city = txtCity.getText().trim();
+        data.street = txtStreet.getText().trim();
+        data.streetNumber = txtStreetNumber.getText().trim();
+        data.zipCode = txtZipCode.getText().trim();
+        data.region = txtRegion.getText().trim();
+        return data;
+    }
+
+    private ValidationResult validateForm(InventoryFormData data) {
+        ValidationResult result = new ValidationResult();
+
+        if (ValidationUtils.isEmpty(data.name)) {
+            result.add(Field.NAME, null);
+        }
+
+        if (ValidationUtils.isEmpty(data.country)) {
+            result.add(Field.COUNTRY, null);
+        } else if (!ValidationUtils.isTextOnly(data.country)) {
+            result.add(Field.COUNTRY, "- País solo debe contener letras.\n");
+        }
+
+        if (ValidationUtils.isEmpty(data.city)) {
+            result.add(Field.CITY, null);
+        } else if (!ValidationUtils.isTextOnly(data.city)) {
+            result.add(Field.CITY, "- Ciudad solo debe contener letras.\n");
+        }
+
+        if (ValidationUtils.isEmpty(data.street)) {
+            result.add(Field.STREET, null);
+        } else if (!ValidationUtils.isTextOnly(data.street)) {
+            result.add(Field.STREET, "- Calle solo debe contener letras.\n");
+        }
+
+        if (ValidationUtils.isEmpty(data.streetNumber)) {
+            result.add(Field.STREET_NUMBER, null);
+        } else if (!ValidationUtils.isNumeric(data.streetNumber)) {
+            result.add(Field.STREET_NUMBER, "- Número de calle debe ser numérico.\n");
+        }
+
+        if (ValidationUtils.isEmpty(data.region)) {
+            result.add(Field.REGION, null);
+        } else if (!ValidationUtils.isTextOnly(data.region)) {
+            result.add(Field.REGION, "- Región solo debe contener letras.\n");
+        }
+
+        if (!ValidationUtils.isEmpty(data.zipCode) && !ValidationUtils.isNumeric(data.zipCode)) {
+            result.add(Field.ZIP_CODE, "- Código Postal debe ser numérico.\n");
+        }
+
+        return result;
+    }
+
+    private void showValidationErrors(ValidationResult validation) {
+        // pinta labels en rojo según el campo
+        for (Field f : validation.fieldsWithError) {
+            switch (f) {
+                case NAME -> lblName.setForeground(Color.RED);
+                case COUNTRY -> lblCountry.setForeground(Color.RED);
+                case CITY -> lblCity.setForeground(Color.RED);
+                case STREET -> lblStreet.setForeground(Color.RED);
+                case STREET_NUMBER -> jLabel7.setForeground(Color.RED);
+                case ZIP_CODE -> jLabel6.setForeground(Color.RED);
+                case REGION -> jLabel8.setForeground(Color.RED);
+            }
+        }
+
+        String finalMsg = validation.message.length() > 0
+                ? validation.message.toString()
+                : "Por favor llene correctamente los campos marcados en rojo.";
+
+        JOptionPane.showMessageDialog(this, finalMsg, "Error de Validación", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private Address buildAddress(InventoryFormData data) {
+        Address address = new Address(data.country, data.city, data.street);
+        address.setStreetNumber(data.streetNumber);
+        address.setZipCode(data.zipCode);
+        address.setRegion(data.region);
+        return address;
+    }
+
+    private void clearFields() {
+        txtCity.setText("");
+        txtCountry.setText("");
+        txtName.setText("");
+        txtRegion.setText("");
+        txtStreet.setText("");
+        txtStreetNumber.setText("");
+        txtZipCode.setText("");
+    }
+
+    /* ===== Helpers internos (OOP) ===== */
+
+    private enum Field { NAME, COUNTRY, CITY, STREET, STREET_NUMBER, ZIP_CODE, REGION }
+
+    private static class InventoryFormData {
+        String name;
+        String country;
+        String city;
+        String street;
+        String streetNumber;
+        String zipCode;
+        String region;
+    }
+
+    private static class ValidationResult {
+        boolean isValid = true;
+        StringBuilder message = new StringBuilder();
+        java.util.EnumSet<Field> fieldsWithError = java.util.EnumSet.noneOf(Field.class);
+
+        void add(Field field, String msg) {
+            isValid = false;
+            fieldsWithError.add(field);
+            if (msg != null) {
+                message.append(msg);
+            }
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;

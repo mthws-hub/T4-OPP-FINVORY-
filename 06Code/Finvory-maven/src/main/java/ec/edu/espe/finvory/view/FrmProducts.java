@@ -279,25 +279,7 @@ public class FrmProducts extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        int selectedRow = jTableProducts.getSelectedRow();
-        if (selectedRow == -1) {
-            return;
-        }
-
-        String productId = jTableProducts.getValueAt(selectedRow, 0).toString();
-        String productName = jTableProducts.getValueAt(selectedRow, 1).toString();
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Desea eliminar '" + productName + "' del inventario '" + specificInventory.getName() + "'?\n"
-                + "Esto dejará el stock en 0.",
-                "Confirmar", JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            specificInventory.setStock(productId, 0);
-            controller.saveData();
-            loadProductTable();
-            JOptionPane.showMessageDialog(this, "Stock eliminado.");
-        }
+        onDeleteStock();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
@@ -305,13 +287,7 @@ public class FrmProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        int selectedRow = jTableProducts.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un producto para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        String productId = jTableProducts.getValueAt(selectedRow, 0).toString();
-        openProductForm(productId);
+        onEditProduct();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void itemInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemInventoriesActionPerformed
@@ -319,59 +295,7 @@ public class FrmProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_itemInventoriesActionPerformed
 
     private void btnMoveProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveProductActionPerformed
-        if (specificInventory == null) {
-            JOptionPane.showMessageDialog(this, "Debe estar dentro de un inventario específico para mover productos.", "Acción no permitida", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        int selectedRow = jTableProducts.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un producto para mover.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String productId = jTableProducts.getValueAt(selectedRow, 0).toString();
-        String productName = jTableProducts.getValueAt(selectedRow, 1).toString();
-        int currentStock = (int) jTableProducts.getValueAt(selectedRow, 7);
-
-        if (currentStock <= 0) {
-            JOptionPane.showMessageDialog(this, "El producto no tiene stock disponible para mover.", "Stock Insuficiente", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        List<Inventory> allInventories = controller.getInventories();
-        ArrayList<Inventory> targetInventories = new ArrayList<>();
-
-        for (Inventory inventory : allInventories) {
-            if (!inventory.getName().equals(specificInventory.getName())) {
-                targetInventories.add(inventory);
-            }
-        }
-        if (targetInventories.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No existen otros inventarios creados para mover el producto.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        
-        FrmInventorySelector selector = new FrmInventorySelector(this, true, targetInventories);
-        selector.setVisible(true);
-        Inventory targetInventory = selector.getSelectedInventory();
-
-        if (targetInventory != null) {
-            int confirm = JOptionPane.showConfirmDialog(this,
-                    "¿Mover todo el stock (" + currentStock + ") de '" + productName + "'\n"
-                    + "desde '" + specificInventory.getName() + "' hacia '" + targetInventory.getName() + "'?",
-                    "Confirmar Movimiento", JOptionPane.YES_NO_OPTION);
-
-            if (confirm == JOptionPane.YES_OPTION) {
-                boolean success = controller.productController.handleMoveProductStock(specificInventory, targetInventory, productId);
-
-                if (success) {
-                    JOptionPane.showMessageDialog(this, "Producto movido exitosamente.");
-                    loadProductTable();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al mover el producto.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
+        onMoveProductStock();
     }//GEN-LAST:event_btnMoveProductActionPerformed
     private void openProductForm(String productIdToEdit) {
         FrmAddNewProduct form;
@@ -390,6 +314,158 @@ public class FrmProducts extends javax.swing.JFrame {
         });
         form.setVisible(true);
     }
+    
+    private void onDeleteStock() {
+        int row = getSelectedRow();
+        if (row == -1) return;
+
+        if (specificInventory == null) {
+            showWarning("Debe estar dentro de un inventario específico para borrar stock.");
+            return;
+        }
+
+        String productId = getTableValue(row, 0);
+        String productName = getTableValue(row, 1);
+
+        if (!confirmDelete(productName, specificInventory.getName())) return;
+
+        specificInventory.setStock(productId, 0);
+        controller.saveData();
+        loadProductTable();
+        showInfo("Stock eliminado.");
+    }
+
+    private void onMoveProductStock() {
+        if (!isInSpecificInventory()) {
+            showWarning("Debe estar dentro de un inventario específico para mover productos.");
+            return;
+        }
+
+        int row = getSelectedRow();
+        if (row == -1) {
+            showWarning("Seleccione un producto para mover.");
+            return;
+        }
+
+        String productId = getTableValue(row, 0);
+        String productName = getTableValue(row, 1);
+        int currentStock = getTableInt(row, 7);
+
+        if (currentStock <= 0) {
+            showWarning("El producto no tiene stock disponible para mover.");
+            return;
+        }
+
+        List<Inventory> targets = getTargetInventories();
+        if (targets.isEmpty()) {
+            showInfo("No existen otros inventarios creados para mover el producto.");
+            return;
+        }
+
+        Inventory targetInventory = askTargetInventory(targets);
+        if (targetInventory == null) return;
+
+        if (!confirmMove(productName, currentStock, specificInventory.getName(), targetInventory.getName())) return;
+
+        boolean success = controller.productController.handleMoveProductStock(specificInventory, targetInventory, productId);
+
+        if (success) {
+            showInfo("Producto movido exitosamente.");
+            loadProductTable();
+        } else {
+            showError("Error al mover el producto.");
+        }
+    }
+
+    private boolean isInSpecificInventory() {
+        return specificInventory != null;
+    }
+
+    private int getSelectedRow() {
+        return jTableProducts.getSelectedRow();
+    }
+
+    private String getTableValue(int row, int col) {
+        Object v = jTableProducts.getValueAt(row, col);
+        return v == null ? "" : v.toString();
+    }
+
+    private int getTableInt(int row, int col) {
+        Object v = jTableProducts.getValueAt(row, col);
+        if (v instanceof Integer) return (Integer) v;
+        try {
+            return Integer.parseInt(v.toString().trim());
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    private boolean confirmDelete(String productName, String inventoryName) {
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "¿Desea eliminar '" + productName + "' del inventario '" + inventoryName + "'?\n"
+                + "Esto dejará el stock en 0.",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION
+        );
+        return confirm == JOptionPane.YES_OPTION;
+    }
+
+    private boolean confirmMove(String productName, int stock, String fromInv, String toInv) {
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "¿Mover todo el stock (" + stock + ") de '" + productName + "'\n"
+                + "desde '" + fromInv + "' hacia '" + toInv + "'?",
+                "Confirmar Movimiento",
+                JOptionPane.YES_NO_OPTION
+        );
+        return confirm == JOptionPane.YES_OPTION;
+    }
+
+    private List<Inventory> getTargetInventories() {
+        List<Inventory> allInventories = controller.getInventories();
+        ArrayList<Inventory> targets = new ArrayList<>();
+
+        if (allInventories == null) return targets;
+
+        for (Inventory inv : allInventories) {
+            if (inv == null || inv.getName() == null) continue;
+            if (!inv.getName().equals(specificInventory.getName())) {
+                targets.add(inv);
+            }
+        }
+        return targets;
+    }
+
+    private Inventory askTargetInventory(List<Inventory> targets) {
+        FrmInventorySelector selector = new FrmInventorySelector(this, true, new ArrayList<>(targets));
+        selector.setVisible(true);
+        return selector.getSelectedInventory();
+    }
+
+    private void showInfo(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Info", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void showWarning(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Aviso", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void showError(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void onEditProduct() {
+        int row = getSelectedRow();
+        if (row == -1) {
+            showWarning("Seleccione un producto para editar.");
+            return;
+        }
+        String productId = getTableValue(row, 0);
+        openProductForm(productId);
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;

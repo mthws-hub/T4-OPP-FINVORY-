@@ -563,94 +563,27 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelSaleActionPerformed
-        int option = JOptionPane.showConfirmDialog(this, "¿Está seguro de cancelar la venta? Los datos se perderán.", "Confirmar Cancelación", JOptionPane.YES_NO_OPTION);
-        if (option == JOptionPane.YES_OPTION) {
-            emptyFields();
-            this.dispose();
-        }
+        onCancelSale();
     }//GEN-LAST:event_btnCancelSaleActionPerformed
 
     private void btnConfirmSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmSaleActionPerformed
-        if (selectedCustomer == null || currentCart.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Faltan datos (Cliente o Productos).", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String payment = "EFECTIVO";
-        if (radPaymentMethodTransfer.isSelected()) {
-            payment = "TRANSFERENCIA";
-        }
-        if (radPaymentMethodCheque.isSelected()) {
-            payment = "CHEQUE POSTFECHADO";
-        }
-        boolean success = controller.saleController.handleNewSale(selectedCustomer, currentCart, payment);
-
-        if (success) {
-            JOptionPane.showMessageDialog(this, "¡Venta registrada y guardada en la nube exitosamente!");
-            emptyFields();
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al guardar la venta.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        onConfirmSale();
     }//GEN-LAST:event_btnConfirmSaleActionPerformed
 
     private void btnHandleListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHandleListActionPerformed
-        if (selectedCustomer == null) {
-            JOptionPane.showMessageDialog(this, "Por favor seleccione un cliente antes de agregar productos.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        FrmEditProductListOnInvoice dialog = new FrmEditProductListOnInvoice(this, true, controller);
-        dialog.setVisible(true);
+        onManageProductList();
     }//GEN-LAST:event_btnHandleListActionPerformed
 
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
-        if (controller == null) {
-            JOptionPane.showMessageDialog(this, "Error: Controlador no inicializado.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String idQuery = txtId.getText().trim();
-        String nameQuery = txtName.getText().trim();
-        if (idQuery.isEmpty() && nameQuery.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese ID o Nombre para buscar.", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        String query = !idQuery.isEmpty() ? idQuery : nameQuery;
-        java.util.ArrayList<Customer> matches = controller.customerController.findCustomersByQuery(query);
-
-        if (matches.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No se encontraron clientes.", "Sin Resultados", JOptionPane.INFORMATION_MESSAGE);
-            emptyFields();
-
-        } else if (matches.size() == 1) {
-            loadCustomerIntoForm(matches.get(0));
-
-        } else {
-            FrmCustomerSelector selector = new FrmCustomerSelector(this, true, matches);
-            selector.setVisible(true);
-            Customer selected = selector.getSelectedCustomer();
-            if (selected != null) {
-                loadCustomerIntoForm(selected);
-            }
-        }
+        onFindCustomer();
     }//GEN-LAST:event_btnFindActionPerformed
 
     private void radPaymentMethodTransferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radPaymentMethodTransferActionPerformed
-        if (radPaymentMethodTransfer.isSelected()) {
-            radPaymentMethodCheque.setEnabled(false);
-            radPaymentMethodCash.setEnabled(false);
-        } else {
-            radPaymentMethodCheque.setEnabled(true);
-            radPaymentMethodCash.setEnabled(true);
-        }
+        onPaymentTransferToggle();
     }//GEN-LAST:event_radPaymentMethodTransferActionPerformed
 
     private void radPaymentMethodCashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radPaymentMethodCashActionPerformed
-        if (radPaymentMethodCash.isSelected()) {
-            radPaymentMethodCheque.setEnabled(false);
-            radPaymentMethodTransfer.setEnabled(false);
-        } else {
-            radPaymentMethodCheque.setEnabled(true);
-            radPaymentMethodTransfer.setEnabled(true);
-        }
+        onPaymentCashToggle();
     }//GEN-LAST:event_radPaymentMethodCashActionPerformed
 
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
@@ -666,7 +599,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTypeClientActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        this.dispose();
+        onGoToMainMenu();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void emptyFields() {
@@ -696,6 +629,221 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         txtPhone.setText(customer.getPhone());
         JOptionPane.showMessageDialog(this, "Cliente cargado: " + customer.getName(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
     }
+    
+    private void onCancelSale() {
+        if (!confirmCancelSale()) {
+            return;
+        }
+        resetInvoiceForm();
+        this.dispose();
+    }
+
+    private boolean confirmCancelSale() {
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de cancelar la venta? Los datos se perderán.",
+                "Confirmar Cancelación",
+                JOptionPane.YES_NO_OPTION
+        );
+        return option == JOptionPane.YES_OPTION;
+    }
+
+    private void onConfirmSale() {
+        if (!isSaleDataValid()) {
+            showMissingDataError();
+            return;
+        }
+
+        String payment = getSelectedPaymentMethod();
+
+        boolean success = controller.saleController.handleNewSale(selectedCustomer, currentCart, payment);
+
+        if (success) {
+            showSaleSuccess();
+            resetInvoiceForm();
+            this.dispose();
+        } else {
+            showSaleError();
+        }
+    }
+
+    private boolean isSaleDataValid() {
+        return selectedCustomer != null && !currentCart.isEmpty();
+    }
+
+    private void showMissingDataError() {
+        JOptionPane.showMessageDialog(
+                this,
+                "Faltan datos (Cliente o Productos).",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    private String getSelectedPaymentMethod() {
+        if (radPaymentMethodTransfer.isSelected()) {
+            return "TRANSFERENCIA";
+        }
+        if (radPaymentMethodCheque.isSelected()) {
+            return "CHEQUE POSTFECHADO";
+        }
+        return "EFECTIVO";
+    }
+
+    private void showSaleSuccess() {
+        JOptionPane.showMessageDialog(
+                this,
+                "¡Venta registrada y guardada en la nube exitosamente!",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
+    private void showSaleError() {
+        JOptionPane.showMessageDialog(
+                this,
+                "Error al guardar la venta.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    private void onManageProductList() {
+        if (!isCustomerSelected()) {
+            showSelectCustomerWarning();
+            return;
+        }
+        openEditProductListDialog();
+    }
+
+    private boolean isCustomerSelected() {
+        return selectedCustomer != null;
+    }
+
+    private void showSelectCustomerWarning() {
+        JOptionPane.showMessageDialog(
+                this,
+                "Por favor seleccione un cliente antes de agregar productos.",
+                "Aviso",
+                JOptionPane.WARNING_MESSAGE
+        );
+    }
+
+    private void openEditProductListDialog() {
+        FrmEditProductListOnInvoice dialog = new FrmEditProductListOnInvoice(this, true, controller);
+        dialog.setVisible(true);
+    }
+
+    private void onFindCustomer() {
+        if (!isControllerReady()) {
+            showControllerNotReadyError();
+            return;
+        }
+
+        String query = buildCustomerQuery();
+        if (query == null) {
+            showEmptySearchWarning();
+            return;
+        }
+
+        java.util.ArrayList<Customer> matches = controller.customerController.findCustomersByQuery(query);
+        handleCustomerSearchResults(matches);
+    }
+
+    private boolean isControllerReady() {
+        return controller != null;
+    }
+
+    private void showControllerNotReadyError() {
+        JOptionPane.showMessageDialog(
+                this,
+                "Error: Controlador no inicializado.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    private String buildCustomerQuery() {
+        String idQuery = txtId.getText().trim();
+        String nameQuery = txtName.getText().trim();
+
+        if (!idQuery.isEmpty()) {
+            return idQuery;
+        }
+        if (!nameQuery.isEmpty()) {
+            return nameQuery;
+        }
+        return null;
+    }
+
+    private void showEmptySearchWarning() {
+        JOptionPane.showMessageDialog(
+                this,
+                "Ingrese ID o Nombre para buscar.",
+                "Campo Vacío",
+                JOptionPane.WARNING_MESSAGE
+        );
+    }
+
+    private void handleCustomerSearchResults(java.util.ArrayList<Customer> matches) {
+        if (matches == null || matches.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No se encontraron clientes.",
+                    "Sin Resultados",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            resetInvoiceForm();
+            return;
+        }
+
+        if (matches.size() == 1) {
+            loadCustomerIntoForm(matches.get(0));
+            return;
+        }
+
+        openCustomerSelector(matches);
+    }
+
+    private void openCustomerSelector(java.util.ArrayList<Customer> matches) {
+        FrmCustomerSelector selector = new FrmCustomerSelector(this, true, matches);
+        selector.setVisible(true);
+
+        Customer selected = selector.getSelectedCustomer();
+        if (selected != null) {
+            loadCustomerIntoForm(selected);
+        }
+    }
+
+    private void onPaymentTransferToggle() {
+        updatePaymentOptionsState(radPaymentMethodTransfer, radPaymentMethodCash, radPaymentMethodCheque);
+    }
+
+    private void onPaymentCashToggle() {
+        updatePaymentOptionsState(radPaymentMethodCash, radPaymentMethodTransfer, radPaymentMethodCheque);
+    }
+
+    private void updatePaymentOptionsState(javax.swing.JRadioButton selected,
+                                          javax.swing.JRadioButton opt1,
+                                          javax.swing.JRadioButton opt2) {
+
+        boolean isSelected = selected.isSelected();
+        opt1.setEnabled(!isSelected);
+        opt2.setEnabled(!isSelected);
+    }
+
+    private void onGoToMainMenu() {
+        this.dispose();
+    }
+
+    /**
+     * Alias para que NO tengas que cambiar tu método original emptyFields()
+     * (así no rompes nada del proyecto)
+     */
+    private void resetInvoiceForm() {
+        emptyFields();
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelSale;

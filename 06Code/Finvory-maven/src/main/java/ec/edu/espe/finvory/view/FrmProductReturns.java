@@ -183,46 +183,7 @@ public class FrmProductReturns extends JDialog {
     }//GEN-LAST:event_txtQuantityActionPerformed
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-
-        String id = txtId.getText().trim();
-        String quantityStr = txtQuantity.getText().trim();
-        String reason = cmbReason.getSelectedItem().toString();
-
-        if (!ec.edu.espe.finvory.utils.ValidationUtils.isValidQuantity(quantityStr)) {
-            JOptionPane.showMessageDialog(this, "Ingrese una número entero positivo.");
-            return;
-        }
-        int quantity = Integer.parseInt(quantityStr);
-
-        ec.edu.espe.finvory.model.Product foundProduct = null;
-        for (ec.edu.espe.finvory.model.Product product : controller.getData().getProducts()) {
-            if (product.getId().equalsIgnoreCase(id)) {
-                foundProduct = product;
-                break;
-            }
-        }
-
-        if (foundProduct == null) {
-            JOptionPane.showMessageDialog(this, "El producto con ID " + id + " no existe.");
-            return;
-        }
-
-        int option = JOptionPane.showConfirmDialog(this, "¿Confirmar devolución?", "Confirmación", JOptionPane.YES_NO_OPTION);
-        if (option == JOptionPane.YES_OPTION) {
-
-            ec.edu.espe.finvory.model.ReturnedProduct ret = new ec.edu.espe.finvory.model.ReturnedProduct(foundProduct, quantity, reason);
-        
-            controller.getData().addReturn(ret);
-       
-            controller.getData().getObsoleteInventory().addStock(id, quantity);
-
-            controller.saveData();
-
-            JOptionPane.showMessageDialog(this, "Devolución registrada con éxito.");
-            this.dispose();
-        }
-
-
+        onConfirmReturn();
     }//GEN-LAST:event_btnConfirmActionPerformed
 
     private void emptyFields() {
@@ -248,9 +209,88 @@ public class FrmProductReturns extends JDialog {
         product = new ReturnedProduct(null, quantity, reason);
         return product;
     }
+    
+    
     /**
      * @param args the command line arguments
      */
+    
+    private void onConfirmReturn() {
+        String id = getProductIdInput();
+        String quantityStr = getQuantityInput();
+        String reason = getSelectedReason();
+
+        if (!isQuantityValid(quantityStr)) {
+            showMessage("Ingrese una número entero positivo.");
+            return;
+        }
+
+        int quantity = Integer.parseInt(quantityStr);
+
+        ec.edu.espe.finvory.model.Product foundProduct = findProductById(id);
+        if (foundProduct == null) {
+            showMessage("El producto con ID " + id + " no existe.");
+            return;
+        }
+
+        if (!confirmAction("¿Confirmar devolución?")) {
+            return;
+        }
+
+        registerReturn(foundProduct, quantity, reason);
+        showMessage("Devolución registrada con éxito.");
+        this.dispose();
+    
+    }
+
+    private String getProductIdInput() {
+        return txtId.getText().trim();
+    }
+
+    private String getQuantityInput() {
+        return txtQuantity.getText().trim();
+    }
+
+    private String getSelectedReason() {
+        Object selected = cmbReason.getSelectedItem();
+        return selected == null ? "" : selected.toString();
+    }
+
+    private boolean isQuantityValid(String quantityStr) {
+        return ec.edu.espe.finvory.utils.ValidationUtils.isValidQuantity(quantityStr);
+    }
+
+    private ec.edu.espe.finvory.model.Product findProductById(String id) {
+        if (controller == null || controller.getData() == null || controller.getData().getProducts() == null) {
+            return null;
+        }
+
+        for (ec.edu.espe.finvory.model.Product p : controller.getData().getProducts()) {
+            if (p != null && p.getId() != null && p.getId().equalsIgnoreCase(id)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    private boolean confirmAction(String message) {
+        int option = JOptionPane.showConfirmDialog(this, message, "Confirmación", JOptionPane.YES_NO_OPTION);
+        return option == JOptionPane.YES_OPTION;
+    }
+
+    private void registerReturn(ec.edu.espe.finvory.model.Product product, int quantity, String reason) {
+        ec.edu.espe.finvory.model.ReturnedProduct ret =
+                new ec.edu.espe.finvory.model.ReturnedProduct(product, quantity, reason);
+
+        controller.getData().addReturn(ret);
+        controller.getData().getObsoleteInventory().addStock(product.getId(), quantity);
+        controller.saveData();
+    }
+
+    private void showMessage(String msg) {
+        JOptionPane.showMessageDialog(this, msg);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;

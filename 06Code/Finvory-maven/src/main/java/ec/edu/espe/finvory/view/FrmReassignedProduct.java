@@ -187,12 +187,29 @@ public class FrmReassignedProduct extends JDialog{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        this.dispose();
+        onCloseDialog();
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void btnReassingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReassingActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "El producto ha sido reasignado al inventario --> ");
+        onReassignProduct();
     }//GEN-LAST:event_btnReassingActionPerformed
+
+    private void onCloseDialog() {
+        this.dispose();
+    }
+
+    private void onReassignProduct() {
+        showReassignMessage();
+    }
+
+    private void showReassignMessage() {
+        JOptionPane.showMessageDialog(
+                this,
+                "El producto ha sido reasignado al inventario --> ",
+                "Reasignación",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
 
     /**
      * @param args the command line arguments

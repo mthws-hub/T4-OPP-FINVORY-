@@ -313,99 +313,11 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        resetColors();
-        String id = txtID.getText().trim();
-        String barcode = txtBarCode.getText().trim();
-        String name = txtProductName.getText().trim();
-        String description = txtDescription.getText().trim();
-        String priceStr = txtPrice.getText().trim();
-        String stockStr = txtInitialStock.getText().trim();
-        String supplierSelection = (String) cmbProductSupplier.getSelectedItem();
-
-        StringBuilder errors = new StringBuilder();
-
-        if (ValidationUtils.isEmpty(id)) {
-            lblProductId.setForeground(ERROR_COLOR);
-            errors.append("- El ID del producto es obligatorio.\n");
-        } else if (productIdToEdit == null && controller.productController.findProduct(id) != null) {
-            lblProductId.setForeground(ERROR_COLOR);
-            errors.append("- Ya existe un producto con ese ID.\n");
-        }
-        if (ValidationUtils.isEmpty(name)) {
-            lblProductName.setForeground(ERROR_COLOR);
-            errors.append("- El nombre del producto es obligatorio.\n");
-        }
-        if (ValidationUtils.isEmpty(priceStr)) {
-            lblPrice.setForeground(ERROR_COLOR);
-            errors.append("- El precio de costo es obligatorio.\n");
-        } else if (!ValidationUtils.isPositiveDecimal(priceStr)) {
-            lblPrice.setForeground(ERROR_COLOR);
-            errors.append("- El precio debe ser un número positivo (ej: 10.50).\n");
-        }
-        if (ValidationUtils.isEmpty(stockStr)) {
-            lblStock.setForeground(ERROR_COLOR);
-            errors.append("- El stock es obligatorio.\n");
-        } else if (!ValidationUtils.isNonNegativeInteger(stockStr)) {
-            lblStock.setForeground(ERROR_COLOR);
-            errors.append("- El stock debe ser un número entero positivo (ej: 10).\n");
-        }
-        if (!ValidationUtils.isNumeric(barcode)) {
-            lblBarCode.setForeground(ERROR_COLOR);
-            errors.append("- El código de barras solo puede contener numeros.\n");
-        } 
-        if (errors.length() > 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor corrija los siguientes errores:\n\n" + errors.toString(),
-                    "Error de Validación",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        String supplierId = extractIdFromCombo(supplierSelection);
-
-        HashMap<String, String> productData = new HashMap<>();
-        productData.put("id", id);
-        productData.put("barcode", barcode);
-        productData.put("name", name);
-        productData.put("description", description);
-        productData.put("costPrice", priceStr);
-        productData.put("stock", stockStr);
-        productData.put("supplierId", supplierId);
-
-        Supplier supplierObj = controller.supplierController.findSupplier(supplierId);
-        boolean success;
-
-        if (productIdToEdit == null) {
-            success = controller.productController.handleCreateProduct(productData, supplierObj, targetInventory);
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Producto creado exitosamente.");
-                emptyFields();
-            }
-        } else {
-            success = controller.productController.handleUpdateProductGUI(productIdToEdit, productData, targetInventory);
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Producto actualizado correctamente.");
-            }
-        }
+        onAddOrUpdate();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        int option = JOptionPane.showConfirmDialog(
-                this,
-                "¿Está seguro de cancelar el registro? Todos los datos serán borrados.",
-                "Confirmación de Cancelación",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE
-        );
-
-        if (option == JOptionPane.YES_OPTION) {
-            emptyFields();
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Registro cancelado. Los campos han sido limpiados.",
-                    "Cancelado",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        }
+        onCancel();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
@@ -496,6 +408,179 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         }
         return controller.inventoryController.findInventoryByName(selection);
     }
+   
+    private void onAddOrUpdate() {
+        resetColors();
+
+        ProductFormData data = readForm();
+        ValidationResult validation = validateForm(data);
+
+        if (!validation.isValid) {
+            showValidationErrors(validation);
+            return;
+        }
+
+        String supplierId = extractIdFromCombo(data.supplierSelection);
+        Supplier supplierObj = controller.supplierController.findSupplier(supplierId);
+
+        HashMap<String, String> productData = buildProductDataMap(data, supplierId);
+
+        boolean success = saveProduct(data, productData, supplierObj);
+
+        if (!success) {
+            JOptionPane.showMessageDialog(this,
+                    "No se pudo guardar el producto. Verifique los datos.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (productIdToEdit == null) {
+            JOptionPane.showMessageDialog(this, "Producto creado exitosamente.");
+            emptyFields();
+        } else {
+            JOptionPane.showMessageDialog(this, "Producto actualizado correctamente.");
+        }
+    }
+
+    private void onCancel() {
+        resetColors();
+
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de cancelar el registro? Todos los datos serán borrados.",
+                "Confirmación de Cancelación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (option == JOptionPane.YES_OPTION) {
+            emptyFields();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Registro cancelado. Los campos han sido limpiados.",
+                    "Cancelado",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+    }
+
+    private ProductFormData readForm() {
+        ProductFormData data = new ProductFormData();
+        data.id = txtID.getText().trim();
+        data.barcode = txtBarCode.getText().trim();
+        data.name = txtProductName.getText().trim();
+        data.description = txtDescription.getText().trim();
+        data.priceStr = txtPrice.getText().trim();
+        data.stockStr = txtInitialStock.getText().trim();
+        data.supplierSelection = (String) cmbProductSupplier.getSelectedItem();
+        data.inventorySelection = (String) cmbInitialStock.getSelectedItem();
+        return data;
+    }
+
+    private ValidationResult validateForm(ProductFormData data) {
+        ValidationResult result = new ValidationResult();
+
+        if (ValidationUtils.isEmpty(data.id)) {
+            result.add(Field.ID, "- El ID del producto es obligatorio.\n");
+        } else if (productIdToEdit == null && controller.productController.findProduct(data.id) != null) {
+            result.add(Field.ID, "- Ya existe un producto con ese ID.\n");
+        }
+
+        if (ValidationUtils.isEmpty(data.name)) {
+            result.add(Field.NAME, "- El nombre del producto es obligatorio.\n");
+        }
+
+        if (ValidationUtils.isEmpty(data.priceStr)) {
+            result.add(Field.PRICE, "- El precio de costo es obligatorio.\n");
+        } else if (!ValidationUtils.isPositiveDecimal(data.priceStr)) {
+            result.add(Field.PRICE, "- El precio debe ser un número positivo (ej: 10.50).\n");
+        }
+
+        if (ValidationUtils.isEmpty(data.stockStr)) {
+            result.add(Field.STOCK, "- El stock es obligatorio.\n");
+        } else if (!ValidationUtils.isNonNegativeInteger(data.stockStr)) {
+            result.add(Field.STOCK, "- El stock debe ser un número entero positivo (ej: 10).\n");
+        }
+
+        // Si barcode está vacío, lo dejo pasar; si tiene algo, debe ser numérico
+        if (!ValidationUtils.isEmpty(data.barcode) && !ValidationUtils.isNumeric(data.barcode)) {
+            result.add(Field.BARCODE, "- El código de barras solo puede contener números.\n");
+        }
+
+        return result;
+    }
+
+    private void showValidationErrors(ValidationResult validation) {
+        for (Field f : validation.fieldsWithError) {
+            switch (f) {
+                case ID -> lblProductId.setForeground(ERROR_COLOR);
+                case BARCODE -> lblBarCode.setForeground(ERROR_COLOR);
+                case NAME -> lblProductName.setForeground(ERROR_COLOR);
+                case DESCRIPTION -> lblDescription.setForeground(ERROR_COLOR);
+                case PRICE -> lblPrice.setForeground(ERROR_COLOR);
+                case STOCK -> lblStock.setForeground(ERROR_COLOR);
+                case SUPPLIER -> lblSupplier.setForeground(ERROR_COLOR);
+                case INVENTORY -> lblInventory.setForeground(ERROR_COLOR);
+            }
+        }
+
+        JOptionPane.showMessageDialog(this,
+                "Por favor corrija los siguientes errores:\n\n" + validation.message.toString(),
+                "Error de Validación",
+                JOptionPane.WARNING_MESSAGE);
+    }
+
+    private HashMap<String, String> buildProductDataMap(ProductFormData data, String supplierId) {
+        HashMap<String, String> productData = new HashMap<>();
+        productData.put("id", data.id);
+        productData.put("barcode", data.barcode);
+        productData.put("name", data.name);
+        productData.put("description", data.description);
+        productData.put("costPrice", data.priceStr);
+        productData.put("stock", data.stockStr);
+        productData.put("supplierId", supplierId);
+        return productData;
+    }
+
+    private boolean saveProduct(ProductFormData data, HashMap<String, String> productData, Supplier supplierObj) {
+        Inventory inv = resolveInventory(data.inventorySelection);
+
+        if (productIdToEdit == null) {
+            return controller.productController.handleCreateProduct(productData, supplierObj, inv);
+        }
+        return controller.productController.handleUpdateProductGUI(productIdToEdit, productData, inv);
+    }
+
+    /* ===== Helpers internos (OOP) ===== */
+
+    private enum Field { ID, BARCODE, NAME, DESCRIPTION, PRICE, STOCK, SUPPLIER, INVENTORY }
+
+    private static class ProductFormData {
+        String id;
+        String barcode;
+        String name;
+        String description;
+        String priceStr;
+        String stockStr;
+        String supplierSelection;
+        String inventorySelection;
+    }
+
+    private static class ValidationResult {
+        boolean isValid = true;
+        StringBuilder message = new StringBuilder();
+        java.util.EnumSet<Field> fieldsWithError = java.util.EnumSet.noneOf(Field.class);
+
+        void add(Field field, String msg) {
+            isValid = false;
+            fieldsWithError.add(field);
+            if (msg != null) {
+                message.append(msg);
+            }
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;

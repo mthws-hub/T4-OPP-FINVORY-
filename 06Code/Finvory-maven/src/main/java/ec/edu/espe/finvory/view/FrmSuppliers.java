@@ -237,43 +237,45 @@ public class FrmSuppliers extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        int selectedRow = jTableSuppliers.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione un proveedor de la tabla para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        String ruc = jTableSuppliers.getValueAt(selectedRow, 0).toString();
-        FrmAddNewSupplier editForm = new FrmAddNewSupplier(this.controller, ruc);
-        editForm.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                loadSupplierTable();
-                setVisible(true); 
-            }
-        });
-
-        this.setVisible(false);
-        editForm.setVisible(true);
+        onEditSupplier();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        FrmAddNewSupplier window = new FrmAddNewSupplier(this.controller);
-        window.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                loadSupplierTable();
-                setVisible(true);
-            }
-        });
-        this.setVisible(false);
-        window.setVisible(true);
+        onAddSupplier();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        onDeleteSupplier();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        onCloseSuppliers();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void onEditSupplier() {
+        int selectedRow = jTableSuppliers.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, seleccione un proveedor de la tabla para editar.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String ruc = jTableSuppliers.getValueAt(selectedRow, 0).toString();
+        openSupplierFormForEdit(ruc);
+    }
+
+    private void onAddSupplier() {
+        openSupplierFormForCreate();
+    }
+
+    private void onDeleteSupplier() {
         int selectedRow = jTableSuppliers.getSelectedRow();
         if (selectedRow == -1) {
             return;
         }
+
         String ruc = jTableSuppliers.getValueAt(selectedRow, 0).toString();
         String nombre = jTableSuppliers.getValueAt(selectedRow, 1).toString();
 
@@ -290,11 +292,35 @@ public class FrmSuppliers extends javax.swing.JFrame {
                 loadSupplierTable();
             }
         }
-    }//GEN-LAST:event_btnDeleteActionPerformed
+    }
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void onCloseSuppliers() {
         this.dispose();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }
+
+    private void openSupplierFormForEdit(String ruc) {
+        FrmAddNewSupplier editForm = new FrmAddNewSupplier(this.controller, ruc);
+        attachReloadOnClose(editForm);
+        this.setVisible(false);
+        editForm.setVisible(true);
+    }
+
+    private void openSupplierFormForCreate() {
+        FrmAddNewSupplier window = new FrmAddNewSupplier(this.controller);
+        attachReloadOnClose(window);
+        this.setVisible(false);
+        window.setVisible(true);
+    }
+
+    private void attachReloadOnClose(java.awt.Window window) {
+        window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadSupplierTable();
+                setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;

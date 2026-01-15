@@ -334,39 +334,60 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        if (validateSupplierData()) {
-            String id1 = txtId1Supplier.getText().trim();
-            String id2 = txtId2Supplier.getText().trim();
-            String name = txtName.getText().trim();
-            String phone = txtPhone.getText().trim();
-            String email = txtEmail.getText().trim();
-            String desc = txtpDescription.getText().trim();
-
-            boolean success;
-
-            if (supplierIdToEdit == null) {
-                success = controller.supplierController.createSupplierGUI(id1, id2, name, phone, email, desc);
-                if (success) {
-                    JOptionPane.showMessageDialog(this, "Proveedor creado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    emptyFields();
-                } else {
-                    JOptionPane.showMessageDialog(this, "El proveedor ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } else {
-                success = controller.supplierController.handleUpdateSupplierGUI(supplierIdToEdit, name, phone, email, desc, id2);
-                if (success) {
-                    JOptionPane.showMessageDialog(this, "Proveedor actualizado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
+        onAddOrUpdate();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        onCancel();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void itemSuppliersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSuppliersActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_itemSuppliersActionPerformed
+    
+    private void onAddOrUpdate() {
+        if (!validateSupplierData()) {
+            return;
+        }
+
+        SupplierFormData data = readForm();
+
+        boolean success;
+        if (supplierIdToEdit == null) {
+            success = controller.supplierController.createSupplierGUI(
+                    data.id1, data.id2, data.name, data.phone, data.email, data.desc
+            );
+
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Proveedor creado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                emptyFields();
+            } else {
+                JOptionPane.showMessageDialog(this, "El proveedor ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            return;
+        }
+
+        success = controller.supplierController.handleUpdateSupplierGUI(
+                supplierIdToEdit, data.name, data.phone, data.email, data.desc, data.id2
+        );
+
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Proveedor actualizado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void onCancel() {
         resetColors();
-        int option = JOptionPane.showConfirmDialog(this, "¿Está seguro de cancelar?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de cancelar?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION
+        );
+
         if (option == JOptionPane.YES_OPTION) {
             if (supplierIdToEdit != null) {
                 this.dispose();
@@ -374,11 +395,29 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
                 emptyFields();
             }
         }
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }
 
-    private void itemSuppliersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSuppliersActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_itemSuppliersActionPerformed
+    private SupplierFormData readForm() {
+        SupplierFormData data = new SupplierFormData();
+        data.id1 = txtId1Supplier.getText().trim();
+        data.id2 = txtId2Supplier.getText().trim();
+        data.name = txtName.getText().trim();
+        data.phone = txtPhone.getText().trim();
+        data.email = txtEmail.getText().trim();
+        data.desc = txtpDescription.getText().trim();
+        return data;
+    }
+
+    /* ===== Helpers internos (OOP) ===== */
+
+    private static class SupplierFormData {
+        String id1;
+        String id2;
+        String name;
+        String phone;
+        String email;
+        String desc;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;

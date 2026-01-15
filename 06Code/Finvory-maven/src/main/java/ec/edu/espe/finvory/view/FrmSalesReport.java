@@ -4,6 +4,7 @@ import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -297,94 +298,160 @@ public class FrmSalesReport extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        //FrmMainMenu frmMain = new FrmMainMenu(controller);
-        //frmMain.setVisible(true);
-        this.dispose();
+        onCloseReport();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void btnExportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCSVActionPerformed
-        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
-        fileChooser.setDialogTitle("Guardar Reporte de Ventas");
-
-        if (fileChooser.showSaveDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
-            String path = fileChooser.getSelectedFile().getAbsolutePath();
-
-            if (!path.toLowerCase().endsWith(".csv")) {
-                path += ".csv";
-            }
-
-            String reportTitle = "REPORTE DETALLADO DE VENTAS";
-            String[] headers = {"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"};
-
-            javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSales.getModel();
-            java.util.List<Object[]> dataRows = new java.util.ArrayList<>();
-
-            for (int i = 0; i < model.getRowCount(); i++) {
-                Object[] row = new Object[model.getColumnCount()];
-                for (int j = 0; j < model.getColumnCount(); j++) {
-                    row[j] = model.getValueAt(i, j);
-                }
-                dataRows.add(row);
-            }
-            controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
-
-            javax.swing.JOptionPane.showMessageDialog(this, "El reporte de ventas se ha exportado con éxito.");
-        }
+        onExportSalesCsv();
     }//GEN-LAST:event_btnExportCSVActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
-        String[] headers = {"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"};
-        model.setColumnIdentifiers(headers);
-
-        jdStart.setDate(null);
-        jdEnd.setDate(null);
-
-        currentReportType = "SALES_LIST";
-        loadSalesTable();
-
-        System.out.println("Reporte de ventas reiniciado.");
+        onRefreshReport();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
-        if (jdStart.getDate() == null || jdEnd.getDate() == null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione ambas fechas.");
-            return;
-        }
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSales.getModel();
-        String[] headers = {"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"};
-        model.setColumnIdentifiers(headers);
-        model.setRowCount(0);
-
-        currentReportType = "SALES_LIST";
-
-        java.time.LocalDate start = jdStart.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-        java.time.LocalDate end = jdEnd.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-
-        double totalSum = 0;
-        for (ec.edu.espe.finvory.model.InvoiceSim inventory : controller.getData().getInvoices()) {
-            java.time.LocalDate date = inventory.getDate();
-            if (!date.isBefore(start) && !date.isAfter(end)) {
-                model.addRow(new Object[]{
-                    inventory.getId(),
-                    inventory.getDate().toString(),
-                    inventory.getCustomer().getName(),
-                    String.format("%.2f", inventory.getSubtotal()),
-                    String.format("%.2f", inventory.getTotal())
-                });
-                totalSum += inventory.getTotal().doubleValue();
-            }
-        }
-
-        lblTotalVentas.setText("TOTAL VENTAS: $" + String.format("%.2f", totalSum));
-
+        onFilterByDates();
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void mnuGrossReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGrossReportActionPerformed
+        onOpenGrossReport();
+    }//GEN-LAST:event_mnuGrossReportActionPerformed
+
+    private void mnuPopularProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPopularProductsActionPerformed
+        onOpenPopularProducts();
+    }//GEN-LAST:event_mnuPopularProductsActionPerformed
+
+    private void onCloseReport() {
+        this.dispose();
+    }
+
+    private void onExportSalesCsv() {
+        String path = askCsvSavePath();
+        if (path == null) {
+            return;
+        }
+
+        String reportTitle = "REPORTE DETALLADO DE VENTAS";
+        String[] headers = {"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"};
+
+        java.util.List<Object[]> dataRows = extractTableRows(tblSales);
+        controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
+
+        JOptionPane.showMessageDialog(this, "El reporte de ventas se ha exportado con éxito.");
+    }
+
+    private String askCsvSavePath() {
+        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+        fileChooser.setDialogTitle("Guardar Reporte de Ventas");
+
+        if (fileChooser.showSaveDialog(this) != javax.swing.JFileChooser.APPROVE_OPTION) {
+            return null;
+        }
+
+        String path = fileChooser.getSelectedFile().getAbsolutePath();
+        if (!path.toLowerCase().endsWith(".csv")) {
+            path += ".csv";
+        }
+        return path;
+    }
+
+    private java.util.List<Object[]> extractTableRows(javax.swing.JTable table) {
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) table.getModel();
+        java.util.List<Object[]> dataRows = new java.util.ArrayList<>();
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            Object[] row = new Object[model.getColumnCount()];
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                row[j] = model.getValueAt(i, j);
+            }
+            dataRows.add(row);
+        }
+
+        return dataRows;
+    }
+
+    private void onRefreshReport() {
+        resetSalesTableHeaders();
+        clearDateFilters();
+        currentReportType = "SALES_LIST";
+        loadSalesTable();
+    }
+
+    private void resetSalesTableHeaders() {
+        DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
+        String[] headers = {"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"};
+        model.setColumnIdentifiers(headers);
+    }
+
+    private void clearDateFilters() {
+        jdStart.setDate(null);
+        jdEnd.setDate(null);
+    }
+
+    private void onFilterByDates() {
+        if (!areDatesSelected()) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione ambas fechas.");
+            return;
+        }
+
+        resetSalesTableHeaders();
+        clearSalesTableRows();
+        currentReportType = "SALES_LIST";
+
+        java.time.LocalDate start = toLocalDate(jdStart.getDate());
+        java.time.LocalDate end = toLocalDate(jdEnd.getDate());
+
+        double totalSum = fillSalesBetweenDates(start, end);
+        lblTotalVentas.setText("TOTAL VENTAS: $" + String.format("%.2f", totalSum));
+    }
+
+    private boolean areDatesSelected() {
+        return jdStart.getDate() != null && jdEnd.getDate() != null;
+    }
+
+    private void clearSalesTableRows() {
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSales.getModel();
+        model.setRowCount(0);
+    }
+
+    private java.time.LocalDate toLocalDate(java.util.Date date) {
+        return date.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+    }
+
+    private double fillSalesBetweenDates(java.time.LocalDate start, java.time.LocalDate end) {
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSales.getModel();
+
+        double totalSum = 0;
+
+        if (controller == null || controller.getData() == null || controller.getData().getInvoices() == null) {
+            return 0;
+        }
+
+        for (ec.edu.espe.finvory.model.InvoiceSim invoice : controller.getData().getInvoices()) {
+            if (invoice == null || invoice.getDate() == null) {
+                continue;
+            }
+
+            java.time.LocalDate date = invoice.getDate();
+            if (!date.isBefore(start) && !date.isAfter(end)) {
+                model.addRow(new Object[]{
+                    invoice.getId(),
+                    invoice.getDate().toString(),
+                    invoice.getCustomer().getName(),
+                    String.format("%.2f", invoice.getSubtotal()),
+                    String.format("%.2f", invoice.getTotal())
+                });
+                totalSum += invoice.getTotal().doubleValue();
+            }
+        }
+
+        return totalSum;
+    }
+
+    private void onOpenGrossReport() {
         FrmGrossReport gross = new FrmGrossReport(this.controller);
 
         gross.addWindowListener(new java.awt.event.WindowAdapter() {
-
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmSalesReport.this.setVisible(true);
@@ -393,12 +460,12 @@ public class FrmSalesReport extends javax.swing.JFrame {
 
         gross.setVisible(true);
         FrmSalesReport.this.setVisible(false);
-    }//GEN-LAST:event_mnuGrossReportActionPerformed
+    }
 
-    private void mnuPopularProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPopularProductsActionPerformed
+    private void onOpenPopularProducts() {
         FrmPopularProducts frmPopular = new FrmPopularProducts(this.controller);
         frmPopular.setVisible(true);
-    }//GEN-LAST:event_mnuPopularProductsActionPerformed
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;

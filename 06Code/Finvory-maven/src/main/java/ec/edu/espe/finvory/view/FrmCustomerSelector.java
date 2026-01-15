@@ -148,21 +148,36 @@ public class FrmCustomerSelector extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        this.selectedCustomer = null;
-        this.dispose();
+        onCancel();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
+        onSelect();
+    }//GEN-LAST:event_btnSelectActionPerformed
+
+    private void onCancel() {
+    this.selectedCustomer = null;
+    this.dispose();
+    }
+
+    private void onSelect() {
         int selectedRow = tblCustomers.getSelectedRow();
+
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Por favor seleccione un cliente de la tabla.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Por favor seleccione un cliente de la tabla.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE
+            );
             return;
         }
+
         if (selectedRow < customers.size()) {
             this.selectedCustomer = customers.get(selectedRow);
             this.dispose();
         }
-    }//GEN-LAST:event_btnSelectActionPerformed
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

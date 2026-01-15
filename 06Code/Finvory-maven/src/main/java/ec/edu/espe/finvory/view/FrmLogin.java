@@ -209,21 +209,7 @@ public class FrmLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
-String user = txtUserName.getText();
-        String pass = new String(passPassword.getPassword());
-        boolean successfulLogin = controller.userController.handleLoginGUI(user, pass);
-        if (successfulLogin) {
-            lblUser.setForeground(Color.black);
-            lblPassword.setForeground(Color.black);
-            System.out.println("Login Exitoso");
-            this.dispose(); 
-            controller.userController.startMainMenuPublic();
-        } else {
-            JOptionPane.showMessageDialog(this, "Credenciales Incorrectas", "Error de Acceso", JOptionPane.ERROR_MESSAGE);
-            lblUser.setForeground(Color.red);
-            lblPassword.setForeground(Color.red);
-            txtUserName.requestFocus();
-        }
+        onLogin();
     }//GEN-LAST:event_btnLogInActionPerformed
 
     private void passPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passPasswordKeyPressed
@@ -246,6 +232,38 @@ String user = txtUserName.getText();
         FrmAbout about = new FrmAbout();
         about.setVisible(true);
     }//GEN-LAST:event_btnAboutTo1ActionPerformed
+
+    private void onLogin() {
+    String user = txtUserName.getText().trim();
+    String pass = new String(passPassword.getPassword());
+
+    boolean successfulLogin = controller.userController.handleLoginGUI(user, pass);
+
+    if (successfulLogin) {
+        setLoginSuccessUI();
+        this.dispose();
+        controller.userController.startMainMenuPublic();
+    } else {
+        setLoginErrorUI();
+    }
+    }
+
+    private void setLoginSuccessUI() {
+        lblUser.setForeground(Color.black);
+        lblPassword.setForeground(Color.black);
+    }
+
+    private void setLoginErrorUI() {
+        JOptionPane.showMessageDialog(
+                this,
+                "Credenciales Incorrectas",
+                "Error de Acceso",
+                JOptionPane.ERROR_MESSAGE
+        );
+        lblUser.setForeground(Color.red);
+        lblPassword.setForeground(Color.red);
+        txtUserName.requestFocus();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAboutTo1;

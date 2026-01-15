@@ -14,6 +14,8 @@ public class FrmCustomersReport extends javax.swing.JFrame {
     private FinvoryController controller;
     public FrmCustomersReport() {
         initComponents();
+        btnSearch.setEnabled(false);
+        btnExportCSV.setEnabled(false);
     }
 
     public FrmCustomersReport(FinvoryController controller) {
@@ -22,23 +24,7 @@ public class FrmCustomersReport extends javax.swing.JFrame {
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         setupDateSelectors();
-        btnSearchActionPerformed(null);
-    }
-
-    private void initSelectors() {
-        cmbYear.removeAllItems();
-        List<String> years = controller.saleController.getAvailableInvoiceYears();
-        for (String year : years) {
-            cmbYear.addItem(year);
-        }
-
-        cmbMonth.removeAllItems();
-        cmbMonth.addItem("Todos los meses");
-        String[] months = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
-        for (String m : months) {
-            cmbMonth.addItem(m);
-        }
+        onSearch();
     }
 
     private void setupDateSelectors() {
@@ -87,7 +73,7 @@ public class FrmCustomersReport extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         btnExportCSV = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lblTitle.setFont(new java.awt.Font("Perpetua Titling MT", 1, 20)); // NOI18N
         lblTitle.setText("Reporte de Actividad de Clientes");
@@ -167,7 +153,7 @@ public class FrmCustomersReport extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(74, 74, 74)
                 .addComponent(lblTitle)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -197,7 +183,7 @@ public class FrmCustomersReport extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(394, Short.MAX_VALUE)
+                .addContainerGap(410, Short.MAX_VALUE)
                 .addComponent(btnExportCSV)
                 .addGap(37, 37, 37))
         );
@@ -225,57 +211,18 @@ public class FrmCustomersReport extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        int year = Integer.parseInt(cmbYear.getSelectedItem().toString());
-        int month = cmbMonth.getSelectedIndex();
-
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblInformation.getModel();
-        model.setRowCount(0);
-
-        java.util.List<Object[]> reportData = controller.customerController.getCustomerActivityFlexibleData(year, month);
-
-        if (reportData.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "No se encontraron registros para este periodo.");
-        } else {
-            for (Object[] row : reportData) {
-                model.addRow(row);
-            }
-        }
+        onSearch();
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnExportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCSVActionPerformed
-        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
-        if (fileChooser.showSaveDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
-            String path = fileChooser.getSelectedFile().getAbsolutePath();
-            if (!path.toLowerCase().endsWith(".csv")) {
-                path += ".csv";
-            }
-
-            String month = cmbMonth.getSelectedItem().toString();
-            String year = cmbYear.getSelectedItem().toString();
-            String reportTitle = "REPORTE DE ACTIVIDAD: " + month.toUpperCase() + " " + year;
-
-            String[] headers = {"Cliente", "Frecuencia de Compra", "Monto Invertido"};
-            javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblInformation.getModel();
-            List<Object[]> dataRows = new java.util.ArrayList<>();
-
-            for (int i = 0; i < model.getRowCount(); i++) {
-                Object[] row = new Object[model.getColumnCount()];
-                for (int j = 0; j < model.getColumnCount(); j++) {
-                    row[j] = model.getValueAt(i, j);
-                }
-                dataRows.add(row);
-            }
-
-            controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
-            javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
-        }
+        onExportCSV();
     }//GEN-LAST:event_btnExportCSVActionPerformed
 
     /**
@@ -285,7 +232,55 @@ public class FrmCustomersReport extends javax.swing.JFrame {
 
     java.awt.EventQueue.invokeLater(() -> new FrmCustomersReport().setVisible(true));
 }
+    
+    private void onSearch() {
+        loadCustomerData();
 
+        javax.swing.table.DefaultTableModel model =
+                (javax.swing.table.DefaultTableModel) tblInformation.getModel();
+
+        if (model.getRowCount() == 0) {
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "No se encontraron registros para este periodo."
+            );
+        }
+    }
+
+    private void onExportCSV() {
+        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+        if (fileChooser.showSaveDialog(this) != javax.swing.JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        String path = fileChooser.getSelectedFile().getAbsolutePath();
+        if (!path.toLowerCase().endsWith(".csv")) {
+            path += ".csv";
+        }
+
+        String month = cmbMonth.getSelectedItem().toString();
+        String year = cmbYear.getSelectedItem().toString();
+        String reportTitle = "REPORTE DE ACTIVIDAD: " + month.toUpperCase() + " " + year;
+
+        String[] headers = {"Cliente", "Frecuencia de Compra", "Monto Invertido"};
+
+        javax.swing.table.DefaultTableModel model =
+                (javax.swing.table.DefaultTableModel) tblInformation.getModel();
+
+        List<Object[]> dataRows = new java.util.ArrayList<>();
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            Object[] row = new Object[model.getColumnCount()];
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                row[j] = model.getValueAt(i, j);
+            }
+            dataRows.add(row);
+        }
+
+        controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
+        javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
+    }
+  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;
     private javax.swing.JButton btnSearch;
@@ -301,3 +296,4 @@ public class FrmCustomersReport extends javax.swing.JFrame {
     private javax.swing.JTable tblInformation;
     // End of variables declaration//GEN-END:variables
 }
+

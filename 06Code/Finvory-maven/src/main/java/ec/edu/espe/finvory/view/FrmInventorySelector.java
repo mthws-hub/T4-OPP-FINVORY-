@@ -39,7 +39,7 @@ public class FrmInventorySelector extends javax.swing.JDialog {
         }
     }
 
-    private void selectInventory() {
+    private void onselectInventory() {
         int selectedRow = tabInventories.getSelectedRow();
 
         if (selectedRow >= 0) {
@@ -175,7 +175,7 @@ public class FrmInventorySelector extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
-        selectInventory();
+        onselectInventory();
     }//GEN-LAST:event_btnSelectActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
