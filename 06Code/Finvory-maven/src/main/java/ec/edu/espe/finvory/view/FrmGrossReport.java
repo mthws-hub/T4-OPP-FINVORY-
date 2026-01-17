@@ -23,14 +23,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-
-
 /**
  *
  * @author Joseph B. Medina
  */
 public class FrmGrossReport extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmGrossReport.class.getName());
     private final FinvoryController controller;
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -65,7 +63,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         runReport();
     }
-    
+
     private void styleGreenButton(javax.swing.JButton btn) {
         btn.setBackground(new Color(0, 123, 0));
         btn.setForeground(Color.WHITE);
@@ -78,7 +76,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
 
         btn.setMargin(new java.awt.Insets(6, 14, 6, 14));
     }
-    
+
     private Date getFromDateStartOfDay() {
         Date d = (Date) spnFromDate.getValue();
         Calendar cal = Calendar.getInstance();
@@ -88,7 +86,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
-}
+    }
 
     private Date getToDateEndOfDay() {
         Date d = (Date) spnToDate.getValue();
@@ -99,162 +97,180 @@ public class FrmGrossReport extends javax.swing.JFrame {
         cal.set(Calendar.SECOND, 59);
         cal.set(Calendar.MILLISECOND, 999);
         return cal.getTime();
-}
+    }
 
     private boolean validateDates(Date from, Date to) {
         if (from.after(to)) {
             JOptionPane.showMessageDialog(
-                this,
-                "La fecha 'Desde' no puede ser mayor que 'Hasta'.",
-                "Fechas inválidas",
-                JOptionPane.WARNING_MESSAGE
+                    this,
+                    "La fecha 'Desde' no puede ser mayor que 'Hasta'.",
+                    "Fechas inválidas",
+                    JOptionPane.WARNING_MESSAGE
             );
             return false;
         }
         return true;
-}
-    
+    }
+
     private LocalDate toLocalDate(Date d) {
         return d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     private String money(BigDecimal val) {
-        if (val == null) val = BigDecimal.ZERO;
+        if (val == null) {
+            val = BigDecimal.ZERO;
+        }
         NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("es", "EC"));
         return nf.format(val);
     }
-    
+
     private void runReport() {
-    if (controller == null || controller.getData() == null || controller.getData().getInvoices() == null) {
+        if (controller == null || controller.getData() == null || controller.getData().getInvoices() == null) {
 
-        lblGrossTodayValue1.setText(money(BigDecimal.ZERO));
-        lblGrossHistoricValue1.setText(money(BigDecimal.ZERO));
-        lblInvoiceCountValue1.setText("0");
-        lblTotalGrossFooterValue.setText(money(BigDecimal.ZERO));
+            lblGrossTodayValue1.setText(money(BigDecimal.ZERO));
+            lblGrossHistoricValue1.setText(money(BigDecimal.ZERO));
+            lblInvoiceCountValue1.setText("0");
+            lblTotalGrossFooterValue.setText(money(BigDecimal.ZERO));
 
-        scrGrossTable.setModel(new DefaultTableModel(
-            new Object[]{"Fecha", "Facturas", "Bruto", "Neto", "Total (con IVA)"}, 0
-        ));
-        return;
+            scrGrossTable.setModel(new DefaultTableModel(
+                    new Object[]{"Fecha", "Facturas", "Bruto", "Neto", "Total (con IVA)"}, 0
+            ));
+            return;
+        }
+
+        Date fromDate = getFromDateStartOfDay();
+        Date toDate = getToDateEndOfDay();
+        if (!validateDates(fromDate, toDate)) {
+            return;
+        }
+
+        LocalDate from = toLocalDate(fromDate);
+        LocalDate to = toLocalDate(toDate);
+
+        boolean includePending = checkBoxIncludePendingInvoices.isSelected();
+        boolean perDay = radioButtonPerDay.isSelected();
+
+        List<InvoiceSim> invoices = controller.getData().getInvoices();
+
+        List<InvoiceSim> filtered = new ArrayList<>();
+        for (InvoiceSim inv : invoices) {
+            if (inv == null || inv.getDate() == null) {
+                continue;
+            }
+
+            LocalDate d = inv.getDate();
+            boolean inRange = (!d.isBefore(from)) && (!d.isAfter(to));
+            if (!inRange) {
+                continue;
+            }
+
+            boolean isCompleted = "COMPLETED".equals(inv.getStatus());
+            if (!includePending && !isCompleted) {
+                continue;
+            }
+
+            filtered.add(inv);
+        }
+
+        BigDecimal grossRange = BigDecimal.ZERO;
+        for (InvoiceSim inv : filtered) {
+            grossRange = grossRange.add(inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO);
+        }
+
+        LocalDate today = LocalDate.now();
+        BigDecimal grossToday = BigDecimal.ZERO;
+        for (InvoiceSim inv : invoices) {
+            if (inv == null || inv.getDate() == null) {
+                continue;
+            }
+            if (!inv.getDate().equals(today)) {
+                continue;
+            }
+
+            boolean isCompleted = "COMPLETED".equals(inv.getStatus());
+            if (!includePending && !isCompleted) {
+                continue;
+            }
+
+            grossToday = grossToday.add(inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO);
+        }
+
+        lblGrossTodayValue1.setText(money(grossToday));
+        lblGrossHistoricValue1.setText(money(grossRange));
+        lblInvoiceCountValue1.setText(String.valueOf(filtered.size()));
+        lblTotalGrossFooterValue.setText(money(grossRange));
+
+        if (perDay) {
+            loadTablePerDay(filtered);
+        } else {
+            loadTablePerInvoice(filtered);
+        }
     }
 
-    Date fromDate = getFromDateStartOfDay();
-    Date toDate = getToDateEndOfDay();
-    if (!validateDates(fromDate, toDate)) return;
-
-    LocalDate from = toLocalDate(fromDate);
-    LocalDate to = toLocalDate(toDate);
-
-    boolean includePending = checkBoxIncludePendingInvoices.isSelected();
-    boolean perDay = radioButtonPerDay.isSelected();
-
-    List<InvoiceSim> invoices = controller.getData().getInvoices();
-
-    List<InvoiceSim> filtered = new ArrayList<>();
-    for (InvoiceSim inv : invoices) {
-        if (inv == null || inv.getDate() == null) continue;
-
-        LocalDate d = inv.getDate();
-        boolean inRange = (!d.isBefore(from)) && (!d.isAfter(to));
-        if (!inRange) continue;
-
-        boolean isCompleted = "COMPLETED".equals(inv.getStatus());
-        if (!includePending && !isCompleted) continue;
-
-        filtered.add(inv);
-    }
-
-    BigDecimal grossRange = BigDecimal.ZERO;
-    for (InvoiceSim inv : filtered) {
-        grossRange = grossRange.add(inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO);
-    }
-
-    LocalDate today = LocalDate.now();
-    BigDecimal grossToday = BigDecimal.ZERO;
-    for (InvoiceSim inv : invoices) {
-        if (inv == null || inv.getDate() == null) continue;
-        if (!inv.getDate().equals(today)) continue;
-
-        boolean isCompleted = "COMPLETED".equals(inv.getStatus());
-        if (!includePending && !isCompleted) continue;
-
-        grossToday = grossToday.add(inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO);
-    }
-
-    lblGrossTodayValue1.setText(money(grossToday));
-    lblGrossHistoricValue1.setText(money(grossRange));
-    lblInvoiceCountValue1.setText(String.valueOf(filtered.size()));
-    lblTotalGrossFooterValue.setText(money(grossRange));
-    
-    if (perDay) loadTablePerDay(filtered);
-    else loadTablePerInvoice(filtered);
-}
-    
     private void loadTablePerDay(List<InvoiceSim> invoices) {
-     DefaultTableModel model = new DefaultTableModel(
-        new Object[]{"Fecha", "Facturas", "Bruto", "Neto", "Total (con IVA)"}, 0
-    );
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Fecha", "Facturas", "Bruto", "Neto", "Total (con IVA)"}, 0
+        );
 
-    Map<LocalDate, Integer> count = new HashMap<>();
-    Map<LocalDate, BigDecimal> brutoSum = new HashMap<>();
-    Map<LocalDate, BigDecimal> netoSum = new HashMap<>();
-    Map<LocalDate, BigDecimal> totalSum = new HashMap<>();
+        Map<LocalDate, Integer> count = new HashMap<>();
+        Map<LocalDate, BigDecimal> brutoSum = new HashMap<>();
+        Map<LocalDate, BigDecimal> netoSum = new HashMap<>();
+        Map<LocalDate, BigDecimal> totalSum = new HashMap<>();
 
-    for (InvoiceSim inv : invoices) {
-        LocalDate d = inv.getDate();
-        count.put(d, count.getOrDefault(d, 0) + 1);
+        for (InvoiceSim inv : invoices) {
+            LocalDate d = inv.getDate();
+            count.put(d, count.getOrDefault(d, 0) + 1);
 
-        BigDecimal bruto = inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO;
-        BigDecimal descuento = inv.getDiscountAmount() != null ? inv.getDiscountAmount() : BigDecimal.ZERO;
-        BigDecimal neto = bruto.subtract(descuento);
-        BigDecimal total = inv.getTotal() != null ? inv.getTotal() : BigDecimal.ZERO;
+            BigDecimal bruto = inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO;
+            BigDecimal descuento = inv.getDiscountAmount() != null ? inv.getDiscountAmount() : BigDecimal.ZERO;
+            BigDecimal neto = bruto.subtract(descuento);
+            BigDecimal total = inv.getTotal() != null ? inv.getTotal() : BigDecimal.ZERO;
 
-        brutoSum.put(d, brutoSum.getOrDefault(d, BigDecimal.ZERO).add(bruto));
-        netoSum.put(d, netoSum.getOrDefault(d, BigDecimal.ZERO).add(neto));
-        totalSum.put(d, totalSum.getOrDefault(d, BigDecimal.ZERO).add(total));
+            brutoSum.put(d, brutoSum.getOrDefault(d, BigDecimal.ZERO).add(bruto));
+            netoSum.put(d, netoSum.getOrDefault(d, BigDecimal.ZERO).add(neto));
+            totalSum.put(d, totalSum.getOrDefault(d, BigDecimal.ZERO).add(total));
+        }
+
+        List<LocalDate> days = new ArrayList<>(count.keySet());
+        days.sort(Comparator.naturalOrder());
+
+        for (LocalDate d : days) {
+            model.addRow(new Object[]{
+                d.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                count.get(d),
+                money(brutoSum.get(d)),
+                money(netoSum.get(d)),
+                money(totalSum.get(d))
+            });
+        }
+
+        scrGrossTable.setModel(model);
     }
 
-    List<LocalDate> days = new ArrayList<>(count.keySet());
-    days.sort(Comparator.naturalOrder());
-
-    for (LocalDate d : days) {
-        model.addRow(new Object[]{
-            d.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-            count.get(d),
-            money(brutoSum.get(d)),
-            money(netoSum.get(d)),
-            money(totalSum.get(d))
-        });
-    }
-
-    scrGrossTable.setModel(model);
-}
-    
     private void loadTablePerInvoice(List<InvoiceSim> invoices) {
-    DefaultTableModel model = new DefaultTableModel(
-        new Object[]{"Fecha", "Factura", "Bruto", "Neto", "Total (con IVA)"}, 0
-    );
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Fecha", "Factura", "Bruto", "Neto", "Total (con IVA)"}, 0
+        );
 
-    invoices.sort(Comparator.comparing(InvoiceSim::getDate));
+        invoices.sort(Comparator.comparing(InvoiceSim::getDate));
 
-    for (InvoiceSim inv : invoices) {
-        BigDecimal bruto = inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO;
-        BigDecimal descuento = inv.getDiscountAmount() != null ? inv.getDiscountAmount() : BigDecimal.ZERO;
-        BigDecimal neto = bruto.subtract(descuento);
-        BigDecimal total = inv.getTotal() != null ? inv.getTotal() : BigDecimal.ZERO;
+        for (InvoiceSim inv : invoices) {
+            BigDecimal bruto = inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO;
+            BigDecimal descuento = inv.getDiscountAmount() != null ? inv.getDiscountAmount() : BigDecimal.ZERO;
+            BigDecimal neto = bruto.subtract(descuento);
+            BigDecimal total = inv.getTotal() != null ? inv.getTotal() : BigDecimal.ZERO;
 
-        model.addRow(new Object[]{
-            inv.getDate().format(DF),
-            inv.getId(),
-            money(bruto),
-            money(neto),
-            money(total)
-        });
+            model.addRow(new Object[]{
+                inv.getDate().format(DF),
+                inv.getId(),
+                money(bruto),
+                money(neto),
+                money(total)
+            });
+        }
+
+        scrGrossTable.setModel(model);
     }
-
-    scrGrossTable.setModel(model);
-}
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -511,23 +527,23 @@ public class FrmGrossReport extends javax.swing.JFrame {
     }//GEN-LAST:event_radioButtonperInvoiceActionPerformed
 
     private void onExportCsv() {
-    File file = chooseCsvFile();
-    if (file == null) {
-        return;
-    }
+        File file = chooseCsvFile();
+        if (file == null) {
+            return;
+        }
 
-    try {
-        exportTableToCsv(file, (DefaultTableModel) scrGrossTable.getModel());
-        JOptionPane.showMessageDialog(this, "CSV exportado: " + file.getAbsolutePath());
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(
-                this,
-                "Error exportando CSV: " + ex.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-        );
+        try {
+            exportTableToCsv(file, (DefaultTableModel) scrGrossTable.getModel());
+            JOptionPane.showMessageDialog(this, "CSV exportado: " + file.getAbsolutePath());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error exportando CSV: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
-}
 
     private File chooseCsvFile() {
         JFileChooser fc = new JFileChooser();

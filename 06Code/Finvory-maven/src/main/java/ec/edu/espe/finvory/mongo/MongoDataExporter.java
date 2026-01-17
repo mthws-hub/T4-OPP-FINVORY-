@@ -26,7 +26,7 @@ public class MongoDataExporter {
         } else {
             account = null;
         }
-        
+
         exportCompanyInternal(companyUsername, account, data, mongoDatabase);
     }
 
@@ -58,7 +58,7 @@ public class MongoDataExporter {
             return;
         }
 
-        Database localDatabase = new Database();
+        DataPersistenceManager localDatabase = new DataPersistenceManager();
         SystemUsers systemUsers = localDatabase.loadUsers();
 
         exportUsers(systemUsers, mongoDatabase);
@@ -72,36 +72,50 @@ public class MongoDataExporter {
         connection.close();
     }
 
-    public static void exportUsers(SystemUsers systemUsers, MongoDatabase mongoDatabase) {
-        MongoCollection<Document> collection = mongoDatabase.getCollection("users");
+    public static void exportUsers(SystemUsers users, com.mongodb.client.MongoDatabase database) {
+        if (users == null || database == null) {
+            return;
+        }
+        com.mongodb.client.MongoCollection<org.bson.Document> companyCol = database.getCollection("companies");
+        for (CompanyAccount companyAccount : users.getCompanyAccounts()) {
+            Document doc = new Document()
+                    .append("companyUsername", companyAccount.getUsername())
+                    .append("password", companyAccount.getPassword()) 
+                    .append("name", companyAccount.getName())
+                    .append("ruc", companyAccount.getRuc())
+                    .append("phone", companyAccount.getPhone())
+                    .append("email", companyAccount.getEmail())
+                    .append("logoPath", companyAccount.getLogoPath());
 
-        List<Document> documents = new ArrayList<>();
+            if (companyAccount.getAddress() != null) {
+                doc.append("address", new Document()
+                        .append("country", companyAccount.getAddress().getCountry())
+                        .append("city", companyAccount.getAddress().getCity())
+                        .append("street", companyAccount.getAddress().getStreet()));
+            }
 
-        for (CompanyAccount companyAccount : systemUsers.getCompanyAccounts()) {
-            Document document = new Document();
-            document.append("username", companyAccount.getUsername());
-            document.append("password", companyAccount.getPassword());
-            document.append("type", "COMPANY");
-            document.append("companyUsername", companyAccount.getUsername());
-            document.append("name", companyAccount.getName());
-            document.append("logoPath", companyAccount.getLogoPath());
-            documents.add(document);
+            companyCol.replaceOne(
+                    com.mongodb.client.model.Filters.eq("companyUsername", companyAccount.getUsername()),
+                    doc,
+                    new com.mongodb.client.model.ReplaceOptions().upsert(true)
+            );
         }
 
-        for (PersonalAccount personalAccount : systemUsers.getPersonalAccounts()) {
-            Document document = new Document();
-            document.append("username", personalAccount.getUsername());
-            document.append("password", personalAccount.getPassword());
-            document.append("type", "PERSONAL");
-            document.append("fullName", personalAccount.getFullName());
-            document.append("profilePhotoPath", personalAccount.getProfilePhotoPath());
-            documents.add(document);
-        }
+        com.mongodb.client.MongoCollection<org.bson.Document> personalCol = database.getCollection("personal_accounts");
+        for (PersonalAccount personalAccount : users.getPersonalAccounts()) {
+            Document doc = new Document()
+                    .append("username", personalAccount.getUsername())
+                    .append("password", personalAccount.getPassword())
+                    .append("fullName", personalAccount.getFullName())
+                    .append("profilePhotoPath", personalAccount.getProfilePhotoPath());
 
-        if (!documents.isEmpty()) {
-            collection.deleteMany(new Document());
-            collection.insertMany(documents);
+            personalCol.replaceOne(
+                    com.mongodb.client.model.Filters.eq("username", personalAccount.getUsername()),
+                    doc,
+                    new com.mongodb.client.model.ReplaceOptions().upsert(true)
+            );
         }
+        System.out.println("Usuarios sincronizados con éxito.");
     }
 
     public static void exportCompanyData(String companyUsername, FinvoryData data, CompanyAccount companyAccount) {

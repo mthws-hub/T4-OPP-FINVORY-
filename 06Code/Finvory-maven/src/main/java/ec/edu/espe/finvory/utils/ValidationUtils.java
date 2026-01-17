@@ -1,8 +1,8 @@
 package ec.edu.espe.finvory.utils;
 
 import ec.edu.espe.finvory.model.Address;
-import java.util.regex.Pattern;
 import java.math.BigDecimal;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -217,20 +217,7 @@ public class ValidationUtils {
         return null;
     }
 
-    public static javax.swing.ImageIcon getScaledIcon(java.net.URL url, int containerWidth, int containerHeight) {
-        if (url == null) {
-            return null;
-        }
-
-        javax.swing.ImageIcon original = new javax.swing.ImageIcon(url);
-        int imgW = original.getIconWidth();
-        int imgH = original.getIconHeight();
-        double ratio = Math.min((double) containerWidth / imgW, (double) containerHeight / imgH);
-        int newWidth = (int) (imgW * ratio);
-        int newHeight = (int) (imgH * ratio);
-        java.awt.Image scaled = original.getImage().getScaledInstance(newWidth, newHeight, java.awt.Image.SCALE_SMOOTH);
-        return new javax.swing.ImageIcon(scaled);
-    }
+    
     public static final Pattern REGEX_STREET_NUMBER = Pattern.compile("^[a-zA-Z0-9\\s#\\-\\/\\.]+$");
 
     public static boolean isValidRegion(String region) {

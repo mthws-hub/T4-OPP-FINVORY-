@@ -1,5 +1,6 @@
 package ec.edu.espe.finvory.controller;
 
+import ec.edu.espe.finvory.mongo.DataPersistenceManager;
 import ec.edu.espe.finvory.model.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,7 +13,7 @@ public class FinvoryController {
 
     public FinvoryData data;
     public SystemUsers users;
-    public Database dataBase;
+    public DataPersistenceManager dataBase;
     public String currentCompanyUsername;
     public String userType = "";
     private static final BigDecimal DEFAULT_TAX_RATE = new BigDecimal("0.12"); 
@@ -25,8 +26,9 @@ public class FinvoryController {
     public SaleAndInvoiceController saleController;
     public CustomerController customerController;
     public SupplierController supplierController;
+    public ReportController reportcontroller;
 
-    public FinvoryController(Database dataBase) {
+    public FinvoryController(DataPersistenceManager dataBase) {
         this.dataBase = dataBase;
         this.users = dataBase.loadUsers();
         this.userController = new UserController(this);
@@ -38,6 +40,7 @@ public class FinvoryController {
         this.saleController = new SaleAndInvoiceController(this);
         this.customerController = new CustomerController(this);
         this.supplierController = new SupplierController(this);
+        this.reportcontroller = new ReportController(this);
     }
 
     public FinvoryData getData() {
@@ -52,7 +55,7 @@ public class FinvoryController {
         return users;
     }
 
-    public Database getDataBase() {
+    public DataPersistenceManager getDataBase() {
         return dataBase;
     }
 

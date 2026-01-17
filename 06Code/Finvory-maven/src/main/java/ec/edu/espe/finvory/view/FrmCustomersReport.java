@@ -7,11 +7,11 @@ import java.util.List;
  *
  * @author Maryuri Quiña, The POOwer Rangers Of Programming
  */
-
 public class FrmCustomersReport extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmCustomersReport.class.getName());
     private FinvoryController controller;
+
     public FrmCustomersReport() {
         initComponents();
         btnSearch.setEnabled(false);
@@ -43,17 +43,11 @@ public class FrmCustomersReport extends javax.swing.JFrame {
     }
 
     private void loadCustomerData() {
-        int year = Integer.parseInt(cmbYear.getSelectedItem().toString());
-        int month = cmbMonth.getSelectedIndex();
-
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblInformation.getModel();
-        model.setRowCount(0);
-
-        List<Object[]> reportData = controller.customerController.getCustomerActivityFlexibleData(year, month);
-
-        for (Object[] row : reportData) {
-            model.addRow(row);
-        }
+        controller.customerController.loadCustomerActivityReport(
+                cmbYear.getSelectedItem(),
+                cmbMonth.getSelectedIndex(),
+                tblInformation
+        );
     }
 
     @SuppressWarnings("unchecked")
@@ -230,14 +224,14 @@ public class FrmCustomersReport extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
 
-    java.awt.EventQueue.invokeLater(() -> new FrmCustomersReport().setVisible(true));
-}
-    
+        java.awt.EventQueue.invokeLater(() -> new FrmCustomersReport().setVisible(true));
+    }
+
     private void onSearch() {
         loadCustomerData();
 
-        javax.swing.table.DefaultTableModel model =
-                (javax.swing.table.DefaultTableModel) tblInformation.getModel();
+        javax.swing.table.DefaultTableModel model
+                = (javax.swing.table.DefaultTableModel) tblInformation.getModel();
 
         if (model.getRowCount() == 0) {
             javax.swing.JOptionPane.showMessageDialog(
@@ -248,39 +242,15 @@ public class FrmCustomersReport extends javax.swing.JFrame {
     }
 
     private void onExportCSV() {
-        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
-        if (fileChooser.showSaveDialog(this) != javax.swing.JFileChooser.APPROVE_OPTION) {
-            return;
-        }
-
-        String path = fileChooser.getSelectedFile().getAbsolutePath();
-        if (!path.toLowerCase().endsWith(".csv")) {
-            path += ".csv";
-        }
-
-        String month = cmbMonth.getSelectedItem().toString();
-        String year = cmbYear.getSelectedItem().toString();
-        String reportTitle = "REPORTE DE ACTIVIDAD: " + month.toUpperCase() + " " + year;
-
-        String[] headers = {"Cliente", "Frecuencia de Compra", "Monto Invertido"};
-
-        javax.swing.table.DefaultTableModel model =
-                (javax.swing.table.DefaultTableModel) tblInformation.getModel();
-
-        List<Object[]> dataRows = new java.util.ArrayList<>();
-
-        for (int i = 0; i < model.getRowCount(); i++) {
-            Object[] row = new Object[model.getColumnCount()];
-            for (int j = 0; j < model.getColumnCount(); j++) {
-                row[j] = model.getValueAt(i, j);
-            }
-            dataRows.add(row);
-        }
-
-        controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
-        javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
+        controller.customerController.exportCustomerActivityReport(
+                this,
+                cmbYear.getSelectedItem().toString(),
+                cmbMonth.getSelectedItem().toString(),
+                tblInformation,
+                controller.exportController
+        );
     }
-  
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;
     private javax.swing.JButton btnSearch;
@@ -296,4 +266,3 @@ public class FrmCustomersReport extends javax.swing.JFrame {
     private javax.swing.JTable tblInformation;
     // End of variables declaration//GEN-END:variables
 }
-

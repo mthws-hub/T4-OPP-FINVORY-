@@ -1,6 +1,7 @@
 package ec.edu.espe.finvory.controller;
 
 import ec.edu.espe.finvory.model.*;
+import ec.edu.espe.finvory.view.FrmCustomersReport;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -201,4 +202,87 @@ public class CustomerController {
         return rows;
     }
 
+    public List<Customer> findCustomers(String id, String name) {
+        if (id != null && !id.isBlank()) {
+            return findCustomersByQuery(id);
+        }
+        if (name != null && !name.isBlank()) {
+            return findCustomersByQuery(name);
+        }
+        return List.of();
+    }
+
+    public void loadCustomerActivityReport(Object selectedYear, int selectedMonthIndex, javax.swing.JTable targetTable) {
+        if (selectedYear == null) {
+            return;
+        }
+
+        int year = Integer.parseInt(selectedYear.toString());
+        int month = selectedMonthIndex;
+
+        javax.swing.table.DefaultTableModel model
+                = (javax.swing.table.DefaultTableModel) targetTable.getModel();
+
+        model.setRowCount(0);
+
+        List<Object[]> reportData
+                = getCustomerActivityFlexibleData(year, month);
+
+        for (Object[] row : reportData) {
+            model.addRow(row);
+        }
+    }
+
+    public void exportCustomerActivityReport(
+            java.awt.Component parent,
+            String year,
+            String month,
+            javax.swing.JTable sourceTable,
+            ExportController exportController
+    ) {
+        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+
+        if (fileChooser.showSaveDialog(parent) != javax.swing.JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        String path = fileChooser.getSelectedFile().getAbsolutePath();
+        if (!path.toLowerCase().endsWith(".csv")) {
+            path += ".csv";
+        }
+
+        String reportTitle
+                = "REPORTE DE ACTIVIDAD: " + month.toUpperCase() + " " + year;
+
+        String[] headers = {
+            "Cliente",
+            "Frecuencia de Compra",
+            "Monto Invertido"
+        };
+
+        javax.swing.table.DefaultTableModel model
+                = (javax.swing.table.DefaultTableModel) sourceTable.getModel();
+
+        List<Object[]> dataRows = new java.util.ArrayList<>();
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            Object[] row = new Object[model.getColumnCount()];
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                row[j] = model.getValueAt(i, j);
+            }
+            dataRows.add(row);
+        }
+
+        exportController.exportTableWithDateToCSV(
+                path,
+                reportTitle,
+                headers,
+                dataRows
+        );
+
+        javax.swing.JOptionPane.showMessageDialog(
+                parent,
+                "Reporte exportado con éxito."
+        );
+    }
 }

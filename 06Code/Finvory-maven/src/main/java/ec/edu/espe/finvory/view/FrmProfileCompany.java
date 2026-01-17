@@ -3,9 +3,9 @@ package ec.edu.espe.finvory.view;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Address;
 import ec.edu.espe.finvory.model.CompanyAccount;
+import ec.edu.espe.finvory.utils.UiUtilis;
 import ec.edu.espe.finvory.utils.ValidationUtils;
 import java.awt.CardLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,9 +28,9 @@ public class FrmProfileCompany extends javax.swing.JFrame {
     }
 
     private void setupDesign() {
-        icon.setIcon(ValidationUtils.getScaledIcon(getClass().getResource("/personal.jpg"), 161, 140));
-        btnViewPassword.setIcon(ValidationUtils.getScaledIcon(getClass().getResource("/eyeClose.png"), 24, 24));
-        btnUploadPhoto.setIcon(ValidationUtils.getScaledIcon(getClass().getResource("/upload.png"), 17, 17));
+        icon.setIcon(UiUtilis.getScaledIcon(getClass().getResource("/personal.jpg"), 161, 140));
+        btnViewPassword.setIcon(UiUtilis.getScaledIcon(getClass().getResource("/eyeClose.png"), 24, 24));
+        btnUploadPhoto.setIcon(UiUtilis.getScaledIcon(getClass().getResource("/upload.png"), 17, 17));
         cardLayout.show(pnlCardsContainer, "card2");
     }
 
@@ -83,7 +83,7 @@ public class FrmProfileCompany extends javax.swing.JFrame {
             int fixedWidth = 161;
             int fixedHeight = 152;
             if (imgUrl != null) {
-                icon.setIcon(ValidationUtils.getScaledIcon(imgUrl, fixedWidth, fixedHeight));
+                icon.setIcon(UiUtilis.getScaledIcon(imgUrl, fixedWidth, fixedHeight));
             }
         } catch (Exception e) {
             System.err.println("Error en persistencia visual: " + e.getMessage());
@@ -613,11 +613,11 @@ public class FrmProfileCompany extends javax.swing.JFrame {
     private void btnViewPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewPasswordActionPerformed
         if (!isPasswordVisible) {
             passCompany.setEchoChar((char) 0);
-            btnViewPassword.setIcon(ec.edu.espe.finvory.utils.ValidationUtils.getScaledIcon(
+            btnViewPassword.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
                     getClass().getResource("/eyeOpen.png"), 24, 24));
         } else {
             passCompany.setEchoChar('*');
-            btnViewPassword.setIcon(ec.edu.espe.finvory.utils.ValidationUtils.getScaledIcon(
+            btnViewPassword.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
                     getClass().getResource("/eyeClose.png"), 24, 24));
         }
         isPasswordVisible = !isPasswordVisible;

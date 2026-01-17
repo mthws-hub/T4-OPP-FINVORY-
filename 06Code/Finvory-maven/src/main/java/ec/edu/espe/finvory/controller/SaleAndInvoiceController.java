@@ -1,7 +1,6 @@
 package ec.edu.espe.finvory.controller;
 
 import ec.edu.espe.finvory.model.*;
-import org.bson.Document;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -11,6 +10,7 @@ import java.util.*;
  * @author Arelys Otavalo, the POOwer Rangers of Programming
  */
 public class SaleAndInvoiceController {
+
     private final FinvoryController mainController;
     private static final BigDecimal DEFAULT_TAX_RATE = new BigDecimal("0.15");
 
@@ -18,43 +18,140 @@ public class SaleAndInvoiceController {
         this.mainController = mainController;
     }
 
-    public boolean handleNewSale(Customer customer, HashMap<Product, HashMap<Inventory, Integer>> cart, String payment) {
-        if (cart.isEmpty() || customer == null) {
+    public boolean handleNewSale(Customer customer, HashMap<Product, HashMap<Inventory, Integer>> cart, String paymentType) {
+        if (cart == null || cart.isEmpty() || customer == null) {
             return false;
         }
 
-        FinvoryData data = mainController.data;
-        BigDecimal profitPercentage = data.getProfitPercentage() != null ? data.getProfitPercentage() : BigDecimal.ZERO;
+        FinvoryData data = mainController.getData();
+
+        BigDecimal taxRate = data.getTaxRate() != null ? data.getTaxRate() : DEFAULT_TAX_RATE;
         BigDecimal discountStandard = data.getDiscountStandard() != null ? data.getDiscountStandard() : BigDecimal.ZERO;
         BigDecimal discountPremium = data.getDiscountPremium() != null ? data.getDiscountPremium() : BigDecimal.ZERO;
         BigDecimal discountVip = data.getDiscountVip() != null ? data.getDiscountVip() : BigDecimal.ZERO;
-        BigDecimal taxRate = data.getTaxRate() != null ? data.getTaxRate() : DEFAULT_TAX_RATE;
-        BigDecimal discountRate = customer.getDiscountRate(discountStandard, discountPremium, discountVip);
 
         ArrayList<InvoiceLineSim> lines = new ArrayList<>();
 
         for (Map.Entry<Product, HashMap<Inventory, Integer>> entry : cart.entrySet()) {
             Product product = entry.getKey();
-            for (Map.Entry<Inventory, Integer> stockEntry : entry.getValue().entrySet()) {
-                Inventory inventory = stockEntry.getKey();
-                int quantity = stockEntry.getValue();
-                inventory.removeStock(product.getId(), quantity);
-                
-                BigDecimal price = product.getPrice(customer.getClientType(), profitPercentage, discountStandard, discountPremium, discountVip);
-                lines.add(new InvoiceLineSim(product.getId(), product.getName(), quantity, price));
+            HashMap<Inventory, Integer> stockDistribution = entry.getValue();
+
+            int totalQuantityForProduct = 0;
+
+            for (Map.Entry<Inventory, Integer> invEntry : stockDistribution.entrySet()) {
+                Inventory inventory = invEntry.getKey();
+                int qty = invEntry.getValue();
+
+                if (qty > 0) {
+                    inventory.removeStock(product.getId(), qty);
+                    totalQuantityForProduct += qty;
+                }
+            }
+
+            if (totalQuantityForProduct > 0) {
+                BigDecimal finalPrice = product.getPrice(
+                        customer.getClientType(),
+                        data.getProfitPercentage(),
+                        discountStandard,
+                        discountPremium,
+                        discountVip
+                );
+
+                lines.add(new InvoiceLineSim(product, totalQuantityForProduct, finalPrice));
             }
         }
 
-        String invoiceId = generateNextInvoiceId();
-        InvoiceSim invoice = new InvoiceSim(invoiceId, LocalDate.now(), LocalDate.now(), customer, lines, taxRate, discountRate);
-        
-        if (!payment.equals("CHEQUE POSTFECHADO")) {
-            invoice.complete();
+        String invoiceId = generateInvoiceId();
+        LocalDate now = LocalDate.now();
+
+        BigDecimal discountRate = BigDecimal.ZERO;
+        if ("VIP".equalsIgnoreCase(customer.getClientType())) {
+            discountRate = discountVip;
+        } else if ("PREMIUM".equalsIgnoreCase(customer.getClientType())) {
+            discountRate = discountPremium;
+        } else {
+            discountRate = discountStandard;
         }
-        
+
+        InvoiceSim invoice = new InvoiceSim(invoiceId, now, now, customer, lines, taxRate, discountRate);
+        invoice.complete();
+
         data.addInvoice(invoice);
+
         mainController.saveData();
+
         return true;
+    }
+
+    public List<Object[]> getSalesTableData() {
+        List<Object[]> rows = new ArrayList<>();
+        if (mainController.getData() != null && mainController.getData().getInvoices() != null) {
+            for (InvoiceSim invoice : mainController.getData().getInvoices()) {
+                rows.add(new Object[]{
+                    invoice.getId(),
+                    invoice.getDate().toString(),
+                    invoice.getCustomer().getName(),
+                    String.format("%.2f", invoice.getSubtotal()),
+                    String.format("%.2f", invoice.getTotal())
+                });
+            }
+        }
+        return rows;
+    }
+
+    public List<String> getAvailableInvoiceYears() {
+        Set<Integer> uniqueYears = new TreeSet<>(Collections.reverseOrder());
+        if (mainController.getData() != null && mainController.getData().getInvoices() != null) {
+            for (InvoiceSim invoice : mainController.getData().getInvoices()) {
+                uniqueYears.add(invoice.getDate().getYear());
+            }
+        }
+        if (uniqueYears.isEmpty()) {
+            uniqueYears.add(LocalDate.now().getYear());
+        }
+        List<String> years = new ArrayList<>();
+        for (Integer year : uniqueYears) {
+            years.add(String.valueOf(year));
+        }
+        return years;
+    }
+
+    public Customer searchCustomerForInvoice(String query) {
+        if (query == null || query.trim().isEmpty() || mainController.getData() == null) {
+            return null;
+        }
+
+        String text = query.trim().toLowerCase();
+        for (Customer customer : mainController.getData().getCustomers()) {
+            if (customer.getIdentification().equals(query.trim())) {
+                return customer;
+            }
+            if (customer.getName().toLowerCase().contains(text)) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
+    public String generateInvoiceId() {
+        return "FAC-" + System.currentTimeMillis();
+    }
+
+    public HashMap<String, Integer> getSalesOrDemandReport() {
+        HashMap<String, Integer> demandMap = new HashMap<>();
+        if (mainController.getData().getInvoices() == null) {
+            return demandMap;
+        }
+
+        for (InvoiceSim inv : mainController.getData().getInvoices()) {
+            if ("COMPLETED".equals(inv.getStatus())) {
+                for (InvoiceLineSim line : inv.getLines()) {
+                    demandMap.put(line.getProductName(),
+                            demandMap.getOrDefault(line.getProductName(), 0) + line.getQuantity());
+                }
+            }
+        }
+        return demandMap;
     }
 
     public String generateNextInvoiceId() {
@@ -70,78 +167,52 @@ public class SaleAndInvoiceController {
         return String.format("F%s-%03d", prefix, nextSequence);
     }
 
-    public Document buildInvoiceDocument(InvoiceSim invoice, String companyUsername) {
-        Document document = new Document();
-        document.append("companyUsername", companyUsername);
-        document.append("invoiceId", invoice.getId());
-        document.append("date", invoice.getDate());
-        document.append("paymentDueDate", invoice.getPaymentDueDate());
-        document.append("subtotal", invoice.getSubtotal().doubleValue());
-        document.append("tax", invoice.getTaxAmount().doubleValue());
-        document.append("total", invoice.getTotal().doubleValue());
-        return document;
-    }
+    public InvoiceSim calculatePotentialInvoice(Customer customer, HashMap<Product, HashMap<Inventory, Integer>> cart) {
+        if (cart == null || cart.isEmpty()) {
+            return new InvoiceSim();
+        }
+        FinvoryData data = mainController.getData();
+        BigDecimal taxRate = data.getTaxRate() != null ? data.getTaxRate() : new BigDecimal("0.15");
+        BigDecimal discountStandard = data.getDiscountStandard();
+        BigDecimal discountPremium = data.getDiscountPremium();
+        BigDecimal discountVip = data.getDiscountVip();
+        BigDecimal profit = data.getProfitPercentage();
 
-    public float[] getDashboardData() {
-        FinvoryData data = mainController.data;
-        float totalGrossDay = data.getTotalGrossDay() != null ? data.getTotalGrossDay().floatValue() : 0.0f;
-        float totalGrossProfile = data.getTotalGrossProfile() != null ? data.getTotalGrossProfile().floatValue() : 0.0f;
-        return new float[]{totalGrossDay, totalGrossProfile};
-    }
+        ArrayList<InvoiceLineSim> lines = new ArrayList<>();
 
-    public HashMap<String, Integer> getSalesOrDemandReport() {
-        HashMap<String, Integer> map = new HashMap<>();
-        for (InvoiceSim invoiceSim : mainController.data.getInvoices()) {
-            if ("COMPLETED".equals(invoiceSim.getStatus())) {
-                for (InvoiceLineSim line : invoiceSim.getLines()) {
-                    map.put(line.getProductName(), map.getOrDefault(line.getProductName(), 0) + line.getQuantity());
-                }
+        for (Map.Entry<Product, HashMap<Inventory, Integer>> entry : cart.entrySet()) {
+            Product product = entry.getKey();
+            int totalQty = entry.getValue().values().stream().mapToInt(Integer::intValue).sum();
+
+            if (totalQty > 0) {
+                BigDecimal price = product.getPrice(customer != null ? customer.getClientType() : "Final", profit, discountStandard, discountPremium, discountVip);
+                lines.add(new InvoiceLineSim(product, totalQty, price));
             }
         }
-        return map;
+
+        InvoiceSim tempInvoice = new InvoiceSim("TEMP", LocalDate.now(), LocalDate.now(), customer, lines, taxRate, BigDecimal.ZERO);
+        return tempInvoice;
     }
 
-    public List<Object[]> getSalesTableData() {
-        List<Object[]> rows = new ArrayList<>();
-        if (mainController.data != null && mainController.data.getInvoices() != null) {
-            for (InvoiceSim invoice : mainController.data.getInvoices()) {
-                rows.add(new Object[]{
-                    invoice.getId(),
-                    invoice.getDate().toString(),
-                    invoice.getCustomer().getName(),
-                    String.format("%.2f", invoice.getSubtotal()),
-                    String.format("%.2f", invoice.getTotal())
-                });
-            }
-        }
-        return rows;
+    public boolean isSaleValid(Customer customer, Map<Product, HashMap<Inventory, Integer>> cart) {
+        return customer != null && cart != null && !cart.isEmpty();
     }
 
-    public List<String> getAvailableInvoiceYears() {
-        Set<Integer> uniqueYears = new TreeSet<>(Collections.reverseOrder());
-        for (InvoiceSim invoice : mainController.data.getInvoices()) {
-            uniqueYears.add(invoice.getDate().getYear());
-        }
-
-        if (uniqueYears.isEmpty()) {
-            uniqueYears.add(LocalDate.now().getYear());
-        }
-
-        List<String> years = new ArrayList<>();
-        for (Integer year : uniqueYears) {
-            years.add(String.valueOf(year));
-        }
-        return years;
+    public boolean confirmSale(Customer customer, HashMap<Product, HashMap<Inventory, Integer>> cart, String paymentMethod) {
+        return handleNewSale(customer, cart, paymentMethod);
     }
 
-    public Customer searchCustomerForInvoice(String query) {
-        if (query == null || query.trim().isEmpty()) return null;
-        
-        String text = query.trim().toLowerCase();
-        for (Customer customer : mainController.data.getCustomers()) {
-            if (customer.getIdentification().equals(query.trim())) return customer;
-            if (customer.getName().toLowerCase().contains(text)) return customer;
+    public String resolvePaymentMethod(boolean cash, boolean transfer, boolean cheque) {
+        if (transfer) {
+            return "TRANSFERENCIA";
         }
-        return null;
+        if (cheque) {
+            return "CHEQUE POSTFECHADO";
+        }
+        return "EFECTIVO";
+    }
+
+    public LocalDate getCurrentInvoiceDate() {
+        return LocalDate.now();
     }
 }

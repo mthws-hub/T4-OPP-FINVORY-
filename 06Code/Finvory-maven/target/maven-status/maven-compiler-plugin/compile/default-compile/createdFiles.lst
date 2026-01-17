@@ -29,6 +29,7 @@ ec\edu\espe\finvory\view\FrmSalesReport$1.class
 ec\edu\espe\finvory\controller\ExportController.class
 ec\edu\espe\finvory\view\FrmInventories$4.class
 ec\edu\espe\finvory\view\FrmNewAccount$5.class
+ec\edu\espe\finvory\mongo\LocalFileService.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$7.class
 ec\edu\espe\finvory\view\FrmInventories$10.class
 ec\edu\espe\finvory\model\ReturnedProduct.class
@@ -49,7 +50,7 @@ ec\edu\espe\finvory\view\FrmSalesReport$7.class
 ec\edu\espe\finvory\view\FrmCustomers$4.class
 ec\edu\espe\finvory\view\FrmEditProductListOnInvoice$1.class
 ec\edu\espe\finvory\view\FrmInventories$5.class
-ec\edu\espe\finvory\controller\SaleController.class
+ec\edu\espe\finvory\utils\UiUtilis.class
 ec\edu\espe\finvory\view\FrmProfilePersonal$3.class
 ec\edu\espe\finvory\view\FrmProfileCompany$7.class
 ec\edu\espe\finvory\view\FrmAddNewSupplier$2.class
@@ -64,6 +65,7 @@ ec\edu\espe\finvory\view\FrmProfilePersonal$4.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$5.class
 ec\edu\espe\finvory\view\FrmSalesReport$3.class
 ec\edu\espe\finvory\view\FrmInventories$3.class
+ec\edu\espe\finvory\mongo\DataPersistenceManager.class
 ec\edu\espe\finvory\view\FrmAbout.class
 ec\edu\espe\finvory\model\CompanyAccount.class
 ec\edu\espe\finvory\view\FrmCustomers$2.class
@@ -90,6 +92,7 @@ ec\edu\espe\finvory\view\FrmCustomers$1.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$3.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$ValidationResult.class
 ec\edu\espe\finvory\view\FrmLogin$3.class
+ec\edu\espe\finvory\mongo\MongoDataLoader.class
 ec\edu\espe\finvory\mongo\MongoDBConnection.class
 ec\edu\espe\finvory\view\FrmProfileCompany$10.class
 ec\edu\espe\finvory\view\FrmSalesReport$4.class
@@ -134,6 +137,7 @@ ec\edu\espe\finvory\FinvoryApp.class
 ec\edu\espe\finvory\view\FrmCustomersReport.class
 ec\edu\espe\finvory\view\FrmEditProductListOnInvoice.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$1.class
+ec\edu\espe\finvory\controller\SaleInvoiceController.class
 ec\edu\espe\finvory\view\FrmProducts$7.class
 ec\edu\espe\finvory\view\FrmProfileCompany$6.class
 ec\edu\espe\finvory\controller\ProductController.class
@@ -169,13 +173,13 @@ ec\edu\espe\finvory\view\FrmAddNewCustomer$2.class
 ec\edu\espe\finvory\view\FrmSalesReport.class
 ec\edu\espe\finvory\view\FrmInventories$6.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$2.class
-ec\edu\espe\finvory\model\Database$1.class
 ec\edu\espe\finvory\model\Customer.class
 ec\edu\espe\finvory\view\FrmNewAccount$10.class
 ec\edu\espe\finvory\utils\ValidationUtils.class
 ec\edu\espe\finvory\view\FrmInventorySelector$3.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$11.class
 ec\edu\espe\finvory\view\FrmSuppliers$1.class
+ec\edu\espe\finvory\mongo\LocalFileService$1.class
 ec\edu\espe\finvory\controller\SaleAndInvoiceController.class
 ec\edu\espe\finvory\view\FrmCustomers$5.class
 ec\edu\espe\finvory\view\FrmProfileCompany$2.class
@@ -208,7 +212,6 @@ ec\edu\espe\finvory\view\FrmObsoleteInventories$3.class
 ec\edu\espe\finvory\controller\CustomerController.class
 ec\edu\espe\finvory\view\FrmProfileCompany$4.class
 ec\edu\espe\finvory\model\Product.class
-ec\edu\espe\finvory\model\Database.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$2.class
 ec\edu\espe\finvory\view\FrmProducts$5.class
 ec\edu\espe\finvory\view\FrmCustomersReport$1.class

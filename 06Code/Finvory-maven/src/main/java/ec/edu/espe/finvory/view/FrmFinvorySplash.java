@@ -2,20 +2,14 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
-import ec.edu.espe.finvory.utils.ValidationUtils;
+import ec.edu.espe.finvory.utils.UiUtilis;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
 /**
@@ -144,7 +138,7 @@ public class FrmFinvorySplash extends javax.swing.JFrame {
     }
 
     private void setupLogo() {
-        ImageIcon icon = ValidationUtils.getScaledIcon(
+        ImageIcon icon = UiUtilis.getScaledIcon(
                 getClass().getResource("/FinvoryLogo.jpeg"),
                 lblLogo.getWidth(),
                 lblLogo.getHeight()

@@ -33,18 +33,20 @@ public class PriceAndTaxController {
             BigDecimal premiumValue = new BigDecimal(premium);
             BigDecimal vipValue = new BigDecimal(vip);
             BigDecimal taxValue = new BigDecimal(taxInvoice);
-
-            FinvoryData data = mainController.data;
-            data.setProfitPercentage(profitVal);
-            data.setDiscountStandard(standardValue);
-            data.setDiscountPremium(premiumValue);
-            data.setDiscountVip(vipValue);
-            data.setTaxRate(taxValue);
-
-            mainController.saveData();
-            return true;
-        } catch (Exception e) {
-            System.err.println("Error actualizando precios: " + e.getMessage());
+            
+            FinvoryData data = mainController.getData();
+            if (data != null) {
+                data.setProfitPercentage(profitVal);
+                data.setDiscountStandard(standardValue);
+                data.setDiscountPremium(premiumValue);
+                data.setDiscountVip(vipValue);
+                data.setTaxRate(taxValue);
+                mainController.saveData();
+                return true;
+            }
+            return false;
+        } catch (NumberFormatException e) {
+            System.err.println("Error: Formato de número inválido en precios - " + e.getMessage());
             return false;
         }
     }

@@ -5,7 +5,6 @@ import ec.edu.espe.finvory.mongo.MongoDBConnection;
 import ec.edu.espe.finvory.mongo.MongoDataExporter;
 import ec.edu.espe.finvory.view.FrmMainMenu;
 import ec.edu.espe.finvory.view.FrmMainMenuPersonalAccount;
-import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 
@@ -181,7 +180,6 @@ public class UserController {
         }
         return false;
     }
-
 
     public String handleUploadPhoto(java.io.File sourceFile, String username, String oldPath) {
         try {

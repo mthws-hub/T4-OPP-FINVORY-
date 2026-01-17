@@ -2,6 +2,7 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.PersonalAccount;
+import ec.edu.espe.finvory.utils.UiUtilis;
 import ec.edu.espe.finvory.utils.ValidationUtils;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -34,9 +35,9 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
             txtUserName.setText(account.getUsername());
             passPersonal.setText(account.getPassword());
             txtUserName.setEditable(false);
-            btnUploadPhoto.setIcon(ec.edu.espe.finvory.utils.ValidationUtils.getScaledIcon(
+            btnUploadPhoto.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
                     getClass().getResource("/upload.png"), btnUploadPhoto.getWidth(), btnUploadPhoto.getHeight()));
-            btnViewPassword.setIcon(ec.edu.espe.finvory.utils.ValidationUtils.getScaledIcon(
+            btnViewPassword.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
                     getClass().getResource("/eyeClose.png"), 24, 24));
             java.net.URL imgUrl = null;
             try {
@@ -48,7 +49,7 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
                 int fixedWidth = 143;
                 int fixedHeight = 104;
                 if (imgUrl != null) {
-                    icon.setIcon(ValidationUtils.getScaledIcon(imgUrl, fixedWidth, fixedHeight));
+                    icon.setIcon(UiUtilis.getScaledIcon(imgUrl, fixedWidth, fixedHeight));
                 }
             } catch (Exception e) {
             }
@@ -244,12 +245,12 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
     }
 
     private void setEyeIconOpen() {
-        btnViewPassword.setIcon(ec.edu.espe.finvory.utils.ValidationUtils.getScaledIcon(
+        btnViewPassword.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
                 getClass().getResource("/eyeOpen.png"), 24, 24));
     }
 
     private void setEyeIconClose() {
-        btnViewPassword.setIcon(ec.edu.espe.finvory.utils.ValidationUtils.getScaledIcon(
+        btnViewPassword.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
                 getClass().getResource("/eyeClose.png"), 24, 24));
     }
 

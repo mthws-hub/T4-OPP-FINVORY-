@@ -361,7 +361,6 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
     }
 
     private void showValidationErrors(ValidationResult validation) {
-        // Pintar campos en rojo según el error
         for (Field f : validation.fieldsWithError) {
             switch (f) {
                 case ID -> txtID.setForeground(java.awt.Color.RED);
@@ -390,9 +389,7 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
                 customerIdToEdit, data.name, data.phone, data.email, data.type
         );
     }
-
-    /* ======= Helpers OOP (clases internas pequeñas) ======= */
-
+    
     private enum Field { ID, NAME, EMAIL, PHONE }
 
     private static class CustomerFormData {

@@ -4,14 +4,12 @@ import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Customer;
 import ec.edu.espe.finvory.model.Inventory;
+import ec.edu.espe.finvory.model.InvoiceLineSim;
+import ec.edu.espe.finvory.model.InvoiceSim;
 import ec.edu.espe.finvory.model.Product;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import ec.edu.espe.finvory.controller.SaleInvoiceController;
 
 /**
  *
@@ -20,16 +18,12 @@ import javax.swing.table.DefaultTableModel;
 public class FrmSaleInvoice extends javax.swing.JFrame {
 
     private FinvoryController controller;
-    private Customer selectedCustomer = null;
-    private HashMap<Product, HashMap<Inventory, Integer>> currentCart = new HashMap<>();
-    private BigDecimal subtotalVal = BigDecimal.ZERO;
-    private BigDecimal taxVal = BigDecimal.ZERO;
-    private BigDecimal totalVal = BigDecimal.ZERO;
+    private SaleInvoiceController ui;
 
     public FrmSaleInvoice() {
         initComponents();
         FinvoryApp.setIcon(this);
-        
+
     }
 
     public FrmSaleInvoice(FinvoryController controller) {
@@ -38,26 +32,25 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         initializeInvoiceData();
         setupFieldsState();
+        this.ui = new SaleInvoiceController(controller, this);
         FinvoryApp.setIcon(this);
-        
     }
 
     private void initializeInvoiceData() {
-        LocalDate today = LocalDate.now();
-        txtDate.setText(today.toString());
         if (controller != null) {
-            String invoiceId = controller.saleController.generateNextInvoiceId();
-            txtSale.setText(invoiceId);
+            txtSale.setText(controller.saleController.generateInvoiceId());
+            txtDate.setText(
+                    controller.saleController.getCurrentInvoiceDate().toString()
+            );
         } else {
             txtSale.setText("ERR-CTRL");
+            txtDate.setText("");
         }
         txtTypeClient.setEnabled(false);
         txtEmail.setEnabled(false);
         txtPhone.setEnabled(false);
         txtDate.setEnabled(false);
         txtSale.setEnabled(false);
-        txtTotalSub.setEnabled(false);
-        txTax.setEnabled(false);
         txtTotal.setEnabled(false);
     }
 
@@ -65,47 +58,6 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         txtPhone.setText("");
         txtEmail.setText("");
         txtClientType.setText("");
-    }
-
-    public void addProductToCart(Product product, Inventory sourceInventory, int quantity) {
-        if (selectedCustomer == null) {
-            JOptionPane.showMessageDialog(this, "Primero debe seleccionar un cliente para calcular los precios.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        currentCart.putIfAbsent(product, new HashMap<>());
-        Map<Inventory, Integer> inventoryMap = currentCart.get(product);
-        inventoryMap.put(sourceInventory, inventoryMap.getOrDefault(sourceInventory, 0) + quantity);
-        BigDecimal profit = controller.getData().getProfitPercentage();
-        BigDecimal dStd = controller.getData().getDiscountStandard();
-        BigDecimal dPrm = controller.getData().getDiscountPremium();
-        BigDecimal dVip = controller.getData().getDiscountVip();
-
-        BigDecimal unitPrice = product.getPrice(selectedCustomer.getClientType(), profit, dStd, dPrm, dVip);
-        BigDecimal lineTotal = unitPrice.multiply(new BigDecimal(quantity)).setScale(2, RoundingMode.HALF_UP);
-
-        DefaultTableModel model = (DefaultTableModel) tabProductList.getModel();
-        if (currentCart.size() == 1 && inventoryMap.size() == 1 && model.getValueAt(0, 0) == null) {
-            model.setRowCount(0);
-        }
-
-        model.addRow(new Object[]{
-            product.getId(),
-            quantity,
-            product.getName(),
-            lineTotal.doubleValue()
-        });
-
-        updateTotals(lineTotal);
-    }
-
-    private void updateTotals(BigDecimal lineAmountToAdd) {
-        subtotalVal = subtotalVal.add(lineAmountToAdd);
-        BigDecimal taxRate = controller.getData().getTaxRate();
-        taxVal = subtotalVal.multiply(taxRate).setScale(2, RoundingMode.HALF_UP);
-        totalVal = subtotalVal.add(taxVal).setScale(2, RoundingMode.HALF_UP);
-        txtTotalSub.setText(subtotalVal.toString());
-        txTax.setText(taxVal.toString());
-        txtTotal.setText(totalVal.toString());
     }
 
     /**
@@ -154,8 +106,6 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         txtSubtotal = new javax.swing.JLabel();
         txtTax = new javax.swing.JLabel();
         txtTotalSale = new javax.swing.JLabel();
-        txtTotalSub = new javax.swing.JTextField();
-        txTax = new javax.swing.JTextField();
         txtTotal = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -425,7 +375,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCancelSale))
                     .addComponent(btnHandleList))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 128, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTotalSub)
                     .addComponent(lblTax)
@@ -437,14 +387,12 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtTotalSale, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txtTotalSub, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(129, 129, 129)
                         .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txTax, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(77, 77, 77)
                         .addComponent(txtTax, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -459,14 +407,12 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnHandleList)
                     .addComponent(lblTotalSub)
-                    .addComponent(txtSubtotal)
-                    .addComponent(txtTotalSub, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSubtotal))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTax)
-                    .addComponent(txtTax)
-                    .addComponent(txTax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
+                    .addComponent(txtTax))
+                .addGap(13, 13, 13)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfirmSale)
                     .addComponent(btnCancelSale)
@@ -563,23 +509,27 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelSaleActionPerformed
-        onCancelSale();
+        ui.onCancel();
     }//GEN-LAST:event_btnCancelSaleActionPerformed
 
     private void btnConfirmSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmSaleActionPerformed
-        onConfirmSale();
+        ui.onConfirmSale(
+                radPaymentMethodCash.isSelected(),
+                radPaymentMethodTransfer.isSelected(),
+                radPaymentMethodCheque.isSelected()
+        );
     }//GEN-LAST:event_btnConfirmSaleActionPerformed
 
     private void btnHandleListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHandleListActionPerformed
-        onManageProductList();
+        ui.onManageProductList();
     }//GEN-LAST:event_btnHandleListActionPerformed
 
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
-        onFindCustomer();
+        ui.onFindCustomer(txtId.getText(), txtName.getText());
     }//GEN-LAST:event_btnFindActionPerformed
 
     private void radPaymentMethodTransferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radPaymentMethodTransferActionPerformed
-        onPaymentTransferToggle();
+        onPaymentCashToggle();
     }//GEN-LAST:event_radPaymentMethodTransferActionPerformed
 
     private void radPaymentMethodCashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radPaymentMethodCashActionPerformed
@@ -599,224 +549,49 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTypeClientActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        onGoToMainMenu();
+        this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void emptyFields() {
-        this.selectedCustomer = null;
-        this.currentCart.clear();
-        this.subtotalVal = BigDecimal.ZERO;
-        this.taxVal = BigDecimal.ZERO;
-        this.totalVal = BigDecimal.ZERO;
+    public void close() {
+        this.dispose();
+    }
+
+    public void showNoCustomerFound() {
+        JOptionPane.showMessageDialog(this, "No se encontraron clientes.");
+    }
+
+    public void showMissingDataError() {
+        JOptionPane.showMessageDialog(this, "Faltan datos (Cliente o Productos).", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void showSaleSuccess() {
+        JOptionPane.showMessageDialog(this, "¡Venta registrada correctamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void showSaleError() {
+        JOptionPane.showMessageDialog(this, "Error al guardar la venta.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void showSelectCustomerWarning() {
+        JOptionPane.showMessageDialog(this, "Seleccione un cliente primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void clearForm() {
         txtName.setText("");
         txtId.setText("");
         txtTypeClient.setText("");
         txtEmail.setText("");
         txtPhone.setText("");
-        txtTotalSub.setText("");
-        txTax.setText("");
         txtTotal.setText("");
-        DefaultTableModel model = (DefaultTableModel) tabProductList.getModel();
-        model.setRowCount(0);
+        ((DefaultTableModel) tabProductList.getModel()).setRowCount(0);
     }
 
-    private void loadCustomerIntoForm(Customer customer) {
-        this.selectedCustomer = customer;
-        txtId.setText(customer.getIdentification());
-        txtName.setText(customer.getName());
-        txtTypeClient.setText(customer.getClientType());
-        txtEmail.setText(customer.getEmail());
-        txtPhone.setText(customer.getPhone());
-        JOptionPane.showMessageDialog(this, "Cliente cargado: " + customer.getName(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    private void onCancelSale() {
-        if (!confirmCancelSale()) {
-            return;
-        }
-        resetInvoiceForm();
-        this.dispose();
-    }
-
-    private boolean confirmCancelSale() {
-        int option = JOptionPane.showConfirmDialog(
-                this,
-                "¿Está seguro de cancelar la venta? Los datos se perderán.",
-                "Confirmar Cancelación",
-                JOptionPane.YES_NO_OPTION
-        );
-        return option == JOptionPane.YES_OPTION;
-    }
-
-    private void onConfirmSale() {
-        if (!isSaleDataValid()) {
-            showMissingDataError();
-            return;
-        }
-
-        String payment = getSelectedPaymentMethod();
-
-        boolean success = controller.saleController.handleNewSale(selectedCustomer, currentCart, payment);
-
-        if (success) {
-            showSaleSuccess();
-            resetInvoiceForm();
-            this.dispose();
-        } else {
-            showSaleError();
-        }
-    }
-
-    private boolean isSaleDataValid() {
-        return selectedCustomer != null && !currentCart.isEmpty();
-    }
-
-    private void showMissingDataError() {
-        JOptionPane.showMessageDialog(
-                this,
-                "Faltan datos (Cliente o Productos).",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-        );
-    }
-
-    private String getSelectedPaymentMethod() {
-        if (radPaymentMethodTransfer.isSelected()) {
-            return "TRANSFERENCIA";
-        }
-        if (radPaymentMethodCheque.isSelected()) {
-            return "CHEQUE POSTFECHADO";
-        }
-        return "EFECTIVO";
-    }
-
-    private void showSaleSuccess() {
-        JOptionPane.showMessageDialog(
-                this,
-                "¡Venta registrada y guardada en la nube exitosamente!",
-                "Éxito",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
-
-    private void showSaleError() {
-        JOptionPane.showMessageDialog(
-                this,
-                "Error al guardar la venta.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-        );
-    }
-
-    private void onManageProductList() {
-        if (!isCustomerSelected()) {
-            showSelectCustomerWarning();
-            return;
-        }
-        openEditProductListDialog();
-    }
-
-    private boolean isCustomerSelected() {
-        return selectedCustomer != null;
-    }
-
-    private void showSelectCustomerWarning() {
-        JOptionPane.showMessageDialog(
-                this,
-                "Por favor seleccione un cliente antes de agregar productos.",
-                "Aviso",
-                JOptionPane.WARNING_MESSAGE
-        );
-    }
-
-    private void openEditProductListDialog() {
-        FrmEditProductListOnInvoice dialog = new FrmEditProductListOnInvoice(this, true, controller);
-        dialog.setVisible(true);
-    }
-
-    private void onFindCustomer() {
-        if (!isControllerReady()) {
-            showControllerNotReadyError();
-            return;
-        }
-
-        String query = buildCustomerQuery();
-        if (query == null) {
-            showEmptySearchWarning();
-            return;
-        }
-
-        java.util.ArrayList<Customer> matches = controller.customerController.findCustomersByQuery(query);
-        handleCustomerSearchResults(matches);
-    }
-
-    private boolean isControllerReady() {
-        return controller != null;
-    }
-
-    private void showControllerNotReadyError() {
-        JOptionPane.showMessageDialog(
-                this,
-                "Error: Controlador no inicializado.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-        );
-    }
-
-    private String buildCustomerQuery() {
-        String idQuery = txtId.getText().trim();
-        String nameQuery = txtName.getText().trim();
-
-        if (!idQuery.isEmpty()) {
-            return idQuery;
-        }
-        if (!nameQuery.isEmpty()) {
-            return nameQuery;
-        }
-        return null;
-    }
-
-    private void showEmptySearchWarning() {
-        JOptionPane.showMessageDialog(
-                this,
-                "Ingrese ID o Nombre para buscar.",
-                "Campo Vacío",
-                JOptionPane.WARNING_MESSAGE
-        );
-    }
-
-    private void handleCustomerSearchResults(java.util.ArrayList<Customer> matches) {
-        if (matches == null || matches.isEmpty()) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "No se encontraron clientes.",
-                    "Sin Resultados",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-            resetInvoiceForm();
-            return;
-        }
-
-        if (matches.size() == 1) {
-            loadCustomerIntoForm(matches.get(0));
-            return;
-        }
-
-        openCustomerSelector(matches);
-    }
-
-    private void openCustomerSelector(java.util.ArrayList<Customer> matches) {
-        FrmCustomerSelector selector = new FrmCustomerSelector(this, true, matches);
-        selector.setVisible(true);
-
-        Customer selected = selector.getSelectedCustomer();
-        if (selected != null) {
-            loadCustomerIntoForm(selected);
-        }
-    }
-
-    private void onPaymentTransferToggle() {
-        updatePaymentOptionsState(radPaymentMethodTransfer, radPaymentMethodCash, radPaymentMethodCheque);
+    public void showCustomer(Customer c) {
+        txtId.setText(c.getIdentification());
+        txtName.setText(c.getName());
+        txtTypeClient.setText(c.getClientType());
+        txtEmail.setText(c.getEmail());
+        txtPhone.setText(c.getPhone());
     }
 
     private void onPaymentCashToggle() {
@@ -824,27 +599,47 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     }
 
     private void updatePaymentOptionsState(javax.swing.JRadioButton selected,
-                                          javax.swing.JRadioButton opt1,
-                                          javax.swing.JRadioButton opt2) {
+            javax.swing.JRadioButton opt1,
+            javax.swing.JRadioButton opt2) {
 
         boolean isSelected = selected.isSelected();
         opt1.setEnabled(!isSelected);
         opt2.setEnabled(!isSelected);
     }
 
-    private void onGoToMainMenu() {
-        this.dispose();
+    public void addProductToCart(Product product, Inventory sourceInventory, int quantity) {
+        ui.addProduct(product, sourceInventory, quantity);
     }
 
-    /**
-     * Alias para que NO tengas que cambiar tu método original emptyFields()
-     * (así no rompes nada del proyecto)
-     */
-    private void resetInvoiceForm() {
-        emptyFields();
+    public void refreshProductTable(Product product, int quantity, InvoiceSim sim) {
+
+        InvoiceLineSim addedLine = null;
+        for (InvoiceLineSim line : sim.getLines()) {
+            if (line.getProductId().equals(product.getId())) {
+                addedLine = line;
+                break;
+            }
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tabProductList.getModel();
+
+        if (model.getRowCount() > 0 && model.getValueAt(0, 0) == null) {
+            model.setRowCount(0);
+        }
+
+        model.addRow(new Object[]{
+            product.getId(),
+            quantity,
+            product.getName(),
+            addedLine.getLineTotal().doubleValue()
+        });
     }
 
-
+    public void updateTotals(InvoiceSim sim) {
+        txtSubtotal.setText(sim.getSubtotal().toString());
+        txtTax.setText(sim.getTaxAmount().toString());
+        txtTotal.setText(sim.getTotal().toString());
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelSale;
     private javax.swing.JButton btnConfirmSale;
@@ -877,7 +672,6 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     private javax.swing.JRadioButton radPaymentMethodCheque;
     private javax.swing.JRadioButton radPaymentMethodTransfer;
     private javax.swing.JTable tabProductList;
-    private javax.swing.JTextField txTax;
     private javax.swing.JLabel txtClientType;
     private javax.swing.JButton txtDate;
     private javax.swing.JTextField txtEmail;
@@ -890,7 +684,6 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel txtTax;
     private javax.swing.JTextField txtTotal;
     private javax.swing.JLabel txtTotalSale;
-    private javax.swing.JTextField txtTotalSub;
     private javax.swing.JTextField txtTypeClient;
     // End of variables declaration//GEN-END:variables
 }

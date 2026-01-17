@@ -2,7 +2,7 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.model.Customer;
-import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -12,10 +12,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmCustomerSelector extends javax.swing.JDialog {
 
-    private ArrayList<Customer> customers;
+    private List<Customer> customers;
     private Customer selectedCustomer = null;
 
-    public FrmCustomerSelector(java.awt.Frame parent, boolean modal, ArrayList<Customer> customers) {
+    public FrmCustomerSelector(java.awt.Frame parent, boolean modal, List<Customer> customers) {
         super(parent, modal);
         this.customers = customers;
         initComponents();

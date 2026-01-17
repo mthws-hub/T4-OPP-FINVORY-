@@ -1,9 +1,5 @@
 package ec.edu.espe.finvory.model;
-import com.google.gson.Gson;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 /**
  *
  * @author @author Arelys Otavalo, The POOwer Rangers Of Programming

@@ -1,17 +1,19 @@
 {
   "companyInfo": {
     "name": "McDonalds",
-    "phone": "0963514785",
-    "email": "joseph3elcrac@gmail.com"
+    "address": {
+      "country": "Ecuador",
+      "city": "QUITO",
+      "street": "Solanda",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "phone": "0963519789",
+    "email": "joseph3elcrac@gmail.com",
+    "logoPath": "data\\profiles\\Joseph_profile.jpeg"
   },
   "customers": [
-    {
-      "name": "Olga",
-      "identification": "0017654542312",
-      "phone": "0976787769",
-      "email": "olga@gmail.com",
-      "clientType": "PREMIUM"
-    },
     {
       "name": "Jessenia Sánchez",
       "identification": "0011311194383",
@@ -27,6 +29,13 @@
       "clientType": "PREMIUM"
     },
     {
+      "name": "Olga",
+      "identification": "0017654542312",
+      "phone": "0976787769",
+      "email": "olga@gmail.com",
+      "clientType": "PREMIUM"
+    },
+    {
       "name": "Sebastian",
       "identification": "0018988987887",
       "phone": "0976789870",
@@ -35,22 +44,6 @@
     }
   ],
   "products": [
-    {
-      "id": "ARM-002",
-      "name": "HK G36",
-      "description": "5.56x45mm",
-      "barcode": "1269754126984",
-      "baseCostPrice": 200.00,
-      "supplierId": "1254784513"
-    },
-    {
-      "id": "ARM-004",
-      "name": "Famas",
-      "description": "Corta distancia",
-      "barcode": "344564365365",
-      "baseCostPrice": 145.00,
-      "supplierId": "1254784513"
-    },
     {
       "id": "ARM-003",
       "name": "M414",
@@ -74,17 +67,25 @@
       "barcode": "12121212221",
       "baseCostPrice": 12.00,
       "supplierId": "1254784513"
+    },
+    {
+      "id": "ARM-002",
+      "name": "HK G36",
+      "description": "5.56x45mm",
+      "barcode": "1269754126984",
+      "baseCostPrice": 200.00,
+      "supplierId": "1254784513"
+    },
+    {
+      "id": "ARM-004",
+      "name": "Famas",
+      "description": "Corta distancia",
+      "barcode": "344564365365",
+      "baseCostPrice": 145.00,
+      "supplierId": "1254784513"
     }
   ],
   "suppliers": [
-    {
-      "fullName": "Melany Navarrete",
-      "id1": "0010702218765",
-      "id2": "",
-      "phone": "0978567690",
-      "email": "melany@gmail.com",
-      "description": "no hay"
-    },
     {
       "fullName": "Cristiano Ronaldo dos Santos Aveiro",
       "id1": "1254784513",
@@ -92,9 +93,32 @@
       "phone": "0999986553",
       "email": "elbicho@gmail.com",
       "description": "Noooo haaaay"
+    },
+    {
+      "fullName": "Melany Navarrete",
+      "id1": "0010702218765",
+      "id2": "",
+      "phone": "0978567690",
+      "email": "melany@gmail.com",
+      "description": "no hay"
     }
   ],
   "inventories": [
+    {
+      "name": "Bombas",
+      "address": {
+        "country": "Colombia",
+        "city": "Medellin",
+        "street": "Julio",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {
+        "P004": 49,
+        "ARM-002": 2
+      }
+    },
     {
       "name": "Armas",
       "address": {
@@ -111,21 +135,6 @@
         "ARM-002": 5,
         "ARM-003": 23,
         "ARM-004": 48
-      }
-    },
-    {
-      "name": "Bombas",
-      "address": {
-        "country": "Colombia",
-        "city": "Medellin",
-        "street": "Julio",
-        "zipCode": "",
-        "streetNumber": "",
-        "region": ""
-      },
-      "productStock": {
-        "P004": 49,
-        "ARM-002": 2
       }
     }
   ],
@@ -150,8 +159,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-11-06",
-      "paymentDueDate": "2025-11-06",
+      "date": "2025-11-05",
+      "paymentDueDate": "2025-11-05",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -177,44 +186,9 @@
       "total": 172.50
     },
     {
-      "invoiceNumber": "F-2",
-      "date": "2025-11-06",
-      "paymentDueDate": "2025-11-06",
-      "customer": {
-        "name": "Sebastian",
-        "identification": "0018988987887",
-        "phone": "0976789870",
-        "email": "sebas@gmail.com",
-        "clientType": "STANDARD"
-      },
-      "lines": [
-        {
-          "productId": "ARM-002",
-          "productName": "HK G36",
-          "quantity": 1,
-          "priceApplied": 200.0,
-          "lineTotal": 200.00
-        },
-        {
-          "productId": "ARM-001",
-          "productName": "AK-47",
-          "quantity": 2,
-          "priceApplied": 150.0,
-          "lineTotal": 300.00
-        }
-      ],
-      "status": "COMPLETED",
-      "subtotal": 500.00,
-      "discountRate": 0,
-      "discountAmount": 0.00,
-      "taxRate": 0.15,
-      "taxAmount": 75.00,
-      "total": 575.00
-    },
-    {
       "invoiceNumber": "F-5",
-      "date": "2025-12-17",
-      "paymentDueDate": "2025-12-17",
+      "date": "2025-12-16",
+      "paymentDueDate": "2025-12-16",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -241,8 +215,8 @@
     },
     {
       "invoiceNumber": "F-3",
-      "date": "2025-11-06",
-      "paymentDueDate": "2025-11-06",
+      "date": "2025-11-05",
+      "paymentDueDate": "2025-11-05",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -275,9 +249,44 @@
       "total": 1495.00
     },
     {
+      "invoiceNumber": "F-2",
+      "date": "2025-11-05",
+      "paymentDueDate": "2025-11-05",
+      "customer": {
+        "name": "Sebastian",
+        "identification": "0018988987887",
+        "phone": "0976789870",
+        "email": "sebas@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "ARM-002",
+          "productName": "HK G36",
+          "quantity": 1,
+          "priceApplied": 200.0,
+          "lineTotal": 200.00
+        },
+        {
+          "productId": "ARM-001",
+          "productName": "AK-47",
+          "quantity": 2,
+          "priceApplied": 150.0,
+          "lineTotal": 300.00
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 500.00,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 75.00,
+      "total": 575.00
+    },
+    {
       "invoiceNumber": "F-4",
-      "date": "2025-12-15",
-      "paymentDueDate": "2025-12-15",
+      "date": "2025-12-14",
+      "paymentDueDate": "2025-12-14",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -315,7 +324,7 @@
       },
       "quantity": 2,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-15"
+      "returnDate": "2026-01-16"
     },
     {
       "product": {
@@ -328,7 +337,7 @@
       },
       "quantity": 1,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-15"
+      "returnDate": "2026-01-16"
     },
     {
       "product": {
@@ -341,33 +350,7 @@
       },
       "quantity": 2,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-15"
-    },
-    {
-      "product": {
-        "id": "ARM-003",
-        "name": "M414",
-        "description": "Distancia media",
-        "barcode": "1241256789000",
-        "baseCostPrice": 348.76,
-        "supplierId": "1254784513"
-      },
-      "quantity": 1,
-      "reason": "Otro",
-      "returnDate": "2026-01-15"
-    },
-    {
-      "product": {
-        "id": "ARM-004",
-        "name": "Famas",
-        "description": "Corta distancia",
-        "barcode": "344564365365",
-        "baseCostPrice": 145.00,
-        "supplierId": "1254784513"
-      },
-      "quantity": 4,
-      "reason": "Otro",
-      "returnDate": "2026-01-15"
+      "returnDate": "2026-01-16"
     },
     {
       "product": {
@@ -380,7 +363,33 @@
       },
       "quantity": 4,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-15"
+      "returnDate": "2026-01-16"
+    },
+    {
+      "product": {
+        "id": "ARM-003",
+        "name": "M414",
+        "description": "Distancia media",
+        "barcode": "1241256789000",
+        "baseCostPrice": 348.76,
+        "supplierId": "1254784513"
+      },
+      "quantity": 1,
+      "reason": "Otro",
+      "returnDate": "2026-01-16"
+    },
+    {
+      "product": {
+        "id": "ARM-004",
+        "name": "Famas",
+        "description": "Corta distancia",
+        "barcode": "344564365365",
+        "baseCostPrice": 145.00,
+        "supplierId": "1254784513"
+      },
+      "quantity": 4,
+      "reason": "Otro",
+      "returnDate": "2026-01-16"
     }
   ],
   "taxRate": 0.15,

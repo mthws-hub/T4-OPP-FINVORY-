@@ -1,7 +1,7 @@
 package ec.edu.espe.finvory;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
-import ec.edu.espe.finvory.model.Database;
+import ec.edu.espe.finvory.mongo.DataPersistenceManager;
 import ec.edu.espe.finvory.mongo.MongoDBConnection;
 import ec.edu.espe.finvory.view.FrmFinvorySplash;
 import java.awt.Image;
@@ -23,7 +23,7 @@ public class FinvoryApp {
         setupTaskbarIcon();
 
         mongoConnection = new MongoDBConnection();
-        Database db = new Database();
+        DataPersistenceManager db = new DataPersistenceManager();
         FinvoryController controller = new FinvoryController(db);
 
         SwingUtilities.invokeLater(new Runnable() {
