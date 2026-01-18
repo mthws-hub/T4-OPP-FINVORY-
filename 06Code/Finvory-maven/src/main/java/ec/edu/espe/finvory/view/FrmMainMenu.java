@@ -253,7 +253,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
     }
 
     private void onOpenSuppliers() {
-        openAndHide(new FrmSuppliers(this.controller));
+        openAndHide(new FrmSuppliers(this.controller.supplierController, this.controller));
     }
 
     private void onOpenPrices() {
@@ -265,7 +265,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
             System.out.println("Error: El controlador en MainMenu es null");
             return;
         }
-        openAndHide(new FrmCustomers(this.controller));
+        openAndHide(new FrmCustomers(this.controller.customerController));
     }
 
     private void onOpenNewSale() {

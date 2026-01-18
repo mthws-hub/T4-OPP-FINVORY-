@@ -66,6 +66,7 @@ ec\edu\espe\finvory\view\FrmAddNewCustomer$5.class
 ec\edu\espe\finvory\view\FrmSalesReport$3.class
 ec\edu\espe\finvory\view\FrmInventories$3.class
 ec\edu\espe\finvory\mongo\DataPersistenceManager.class
+ec\edu\espe\finvory\controller\IProductActions.class
 ec\edu\espe\finvory\view\FrmAbout.class
 ec\edu\espe\finvory\model\CompanyAccount.class
 ec\edu\espe\finvory\view\FrmCustomers$2.class
@@ -77,6 +78,7 @@ ec\edu\espe\finvory\view\FrmFinvorySplash.class
 ec\edu\espe\finvory\view\FrmAddNewInventory.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$ProductFormData.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$4.class
+ec\edu\espe\finvory\controller\ICustomerActions.class
 ec\edu\espe\finvory\view\FrmLogin$4.class
 ec\edu\espe\finvory\view\FrmPrices.class
 ec\edu\espe\finvory\model\FinvoryData.class
@@ -124,6 +126,7 @@ ec\edu\espe\finvory\view\FrmReassignedProduct.class
 ec\edu\espe\finvory\view\FrmPopularProducts.class
 ec\edu\espe\finvory\controller\PriceAndTaxController.class
 ec\edu\espe\finvory\view\FrmGrossReport$6.class
+ec\edu\espe\finvory\controller\ISupplierActions.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$2.class
 ec\edu\espe\finvory\view\FrmMainMenu$11.class
 ec\edu\espe\finvory\view\FrmAbout$1.class
@@ -181,7 +184,6 @@ ec\edu\espe\finvory\view\FrmSaleInvoice$11.class
 ec\edu\espe\finvory\view\FrmSuppliers$1.class
 ec\edu\espe\finvory\mongo\LocalFileService$1.class
 ec\edu\espe\finvory\controller\SaleAndInvoiceController.class
-ec\edu\espe\finvory\view\FrmCustomers$5.class
 ec\edu\espe\finvory\view\FrmProfileCompany$2.class
 ec\edu\espe\finvory\view\FrmGrossReport.class
 ec\edu\espe\finvory\view\FrmProfilePersonal.class

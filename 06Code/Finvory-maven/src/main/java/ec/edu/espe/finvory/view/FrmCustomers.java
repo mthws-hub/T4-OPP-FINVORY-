@@ -1,10 +1,8 @@
 package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
-import ec.edu.espe.finvory.controller.FinvoryController;
-import ec.edu.espe.finvory.model.Supplier;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import ec.edu.espe.finvory.controller.ICustomerActions;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -12,15 +10,16 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Arelys Otavalo
  */
+
 public class FrmCustomers extends javax.swing.JFrame {
 
-    FinvoryController controller;
+    private final ICustomerActions customerActionProcessor;
 
     /**
      * Creates new form FrmSuppliers
      */
-    public FrmCustomers(FinvoryController controller) {
-        this.controller = controller;
+    public FrmCustomers(ICustomerActions customerActionProcessor) {
+        this.customerActionProcessor = customerActionProcessor;
         initComponents();
         this.setLocationRelativeTo(null);
         setupTableSelection();
@@ -38,21 +37,13 @@ public class FrmCustomers extends javax.swing.JFrame {
         });
     }
 
-    public void loadCustomerTable() {
+    public final void loadCustomerTable() {
         DefaultTableModel model = (DefaultTableModel) tblCustomers.getModel();
         model.setRowCount(0);
 
-        if (controller != null && controller.getData() != null) {
-
-            for (ec.edu.espe.finvory.model.Customer customer : controller.getData().getCustomers()) {
-                model.addRow(new Object[]{
-                    customer.getIdentification(),
-                    customer.getName(),
-                    customer.getEmail(),
-                    customer.getPhone(),
-                    customer.getClientType()
-                });
-            }
+        List<Object[]> customerDataRows = customerActionProcessor.getCustomerTableData();
+        for (Object[] row : customerDataRows) {
+            model.addRow(row);
         }
     }
 
@@ -239,11 +230,11 @@ public class FrmCustomers extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        onEditCustomer();
+        onOpenEditCustomer();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        onAddCustomer();
+        onOpenAddCustomer();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -254,87 +245,46 @@ public class FrmCustomers extends javax.swing.JFrame {
         onGoToMainMenu();
     }//GEN-LAST:event_ItemPrincipalMenuActionPerformed
 
-    private String getSelectedCustomerId() {
-        int row = tblCustomers.getSelectedRow();
-        if (row == -1) {
-            return null;
-    }
-        return tblCustomers.getValueAt(row, 0).toString();
-    }
-    
-    private void onEditCustomer() {
-        
-        String id = getSelectedCustomerId();
-        if (id == null) {
-            return;
-        }
-        openCustomerForm(id);
-    }
-
-    private void onAddCustomer() {
-        openCustomerForm(null);
-    }
-
-    private void onDeleteCustomer() {
-        
-        String id = getSelectedCustomerId();
-        if (id == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor, seleccione un cliente de la tabla para eliminar.",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        int row = tblCustomers.getSelectedRow(); // solo para el nombre
-        String nombre = tblCustomers.getValueAt(row, 1).toString();
-
-        if (!confirmDelete(nombre)) return;
-
-        boolean deleted = controller.customerController.handleDeleteCustomerGUI(id);
-        if (deleted) {
-            JOptionPane.showMessageDialog(this, "Cliente eliminado exitosamente.");
-            loadCustomerTable();
-        } else {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Error: No se pudo eliminar el cliente.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
+    private void onOpenEditCustomer() {
+        int selectedRow = tblCustomers.getSelectedRow();
+        if (selectedRow != -1) {
+            String customerIdentification = tblCustomers.getValueAt(selectedRow, 1).toString();
+            new FrmAddNewCustomer(null, customerIdentification).setVisible(true);
+            this.dispose();
         }
     }
 
-    private void onGoToMainMenu() {
+    private void onOpenAddCustomer() {
+        new FrmAddNewCustomer().setVisible(true);
         this.dispose();
     }
 
-    private void openCustomerForm(String customerId) {
-        FrmAddNewCustomer window = (customerId == null)
-                ? new FrmAddNewCustomer(this.controller)
-                : new FrmAddNewCustomer(this.controller, customerId);
+    private void onDeleteCustomer() {
+        int selectedRow = tblCustomers.getSelectedRow();
+        if (selectedRow != -1) {
+            String customerName = tblCustomers.getValueAt(selectedRow, 0).toString();
+            String customerIdentification = tblCustomers.getValueAt(selectedRow, 1).toString();
 
-        window.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
+            if (confirmDelete(customerName)) {
+                customerActionProcessor.deleteCustomerById(customerIdentification);
                 loadCustomerTable();
-                setVisible(true);
             }
-        });
-
-        this.setVisible(false);
-        window.setVisible(true);
+        }
     }
 
     private boolean confirmDelete(String customerName) {
         int confirm = JOptionPane.showConfirmDialog(
                 this,
-                "¿Está seguro de eliminar al cliente: " + customerName + "?\nEsta acción no se puede deshacer.",
+                "¿Está seguro de eliminar al cliente: " + customerName + "?",
                 "Confirmar Eliminación",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE
         );
         return confirm == JOptionPane.YES_OPTION;
+    }
+
+    private void onGoToMainMenu() {
+        this.dispose();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

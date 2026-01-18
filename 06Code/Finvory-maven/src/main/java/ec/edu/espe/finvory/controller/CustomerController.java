@@ -10,12 +10,76 @@ import java.util.*;
  *
  * @author Arelys Otavalo, the POOwer Rangers of Programming
  */
-public class CustomerController {
+public class CustomerController implements ICustomerActions {
 
     private final FinvoryController mainController;
 
     public CustomerController(FinvoryController mainController) {
         this.mainController = mainController;
+    }
+
+    @Override
+    public List<Object[]> getCustomerTableData() {
+        List<Object[]> customerDataRows = new ArrayList<>();
+        if (mainController.data == null) {
+            return customerDataRows;
+        }
+
+        for (Customer customer : mainController.data.getCustomers()) {
+            customerDataRows.add(new Object[]{
+                customer.getName(),
+                customer.getIdentification(),
+                customer.getPhone(),
+                customer.getEmail(),
+                customer.getClientType()
+            });
+        }
+        return customerDataRows;
+    }
+
+    @Override
+    public Customer findCustomerById(String identification) {
+        if (identification == null || mainController.data == null) {
+            return null;
+        }
+        for (Customer customer : mainController.data.getCustomers()) {
+            if (customer.getIdentification().equals(identification)) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteCustomerById(String customerId) {
+        Customer customerToDelete = findCustomerById(customerId);
+        if (customerToDelete == null) {
+            return false;
+        }
+
+        for (InvoiceSim invoice : mainController.data.getInvoices()) {
+            if (invoice.getCustomer().getIdentification().equals(customerToDelete.getIdentification())) {
+                return false;
+            }
+        }
+
+        mainController.data.removeCustomer(customerToDelete);
+        mainController.saveData();
+        return true;
+    }
+
+    @Override
+    public boolean createNewCustomer(Customer customer) {
+        if (customer == null || findCustomerById(customer.getIdentification()) != null) {
+            return false;
+        }
+        mainController.data.addCustomer(customer);
+        mainController.saveData();
+        return true;
+    }
+
+    @Override
+    public void loadCustomerTable() {
     }
 
     public Customer findCustomerPublic(String format) {

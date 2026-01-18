@@ -2,6 +2,7 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.controller.IProductActions;
 import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.model.Product;
 import java.awt.event.WindowAdapter;
@@ -17,24 +18,23 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmProducts extends javax.swing.JFrame {
 
-    private FinvoryController controller;
+    private final IProductActions productActionProcessor;
+    private final FinvoryController controller;
     private Inventory specificInventory;
 
-    public FrmProducts(FinvoryController controller) {
-        this(controller, null);
-        FinvoryApp.setIcon(this);
-    }
-
-    public FrmProducts(FinvoryController controller, Inventory inventory) {
-        this.controller = controller;
+    /**
+     * Creates new form FrmProducts
+     *
+     */
+    public FrmProducts(IProductActions productActionProcessor, FinvoryController mainController, Inventory inventory) {
+        this.productActionProcessor = productActionProcessor;
+        this.controller = mainController;
         this.specificInventory = inventory;
         initComponents();
         this.setLocationRelativeTo(null);
-        updateTitle();
         setupTableSelection();
         loadProductTable();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        updateTitle();
         FinvoryApp.setIcon(this);
     }
 
@@ -63,17 +63,11 @@ public class FrmProducts extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTableProducts.getModel();
         model.setRowCount(0);
 
-        if (controller == null) {
-            return;
-        }
-
-        List<Object[]> rows = controller.productController.getProductTableData(specificInventory);
-
-        for (Object[] row : rows) {
+        List<Object[]> productRows = productActionProcessor.getProductTableData(specificInventory);
+        for (Object[] row : productRows) {
             model.addRow(row);
         }
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -314,10 +308,12 @@ public class FrmProducts extends javax.swing.JFrame {
         });
         form.setVisible(true);
     }
-    
+
     private void onDeleteStock() {
         int row = getSelectedRow();
-        if (row == -1) return;
+        if (row == -1) {
+            return;
+        }
 
         if (specificInventory == null) {
             showWarning("Debe estar dentro de un inventario específico para borrar stock.");
@@ -327,10 +323,12 @@ public class FrmProducts extends javax.swing.JFrame {
         String productId = getTableValue(row, 0);
         String productName = getTableValue(row, 1);
 
-        if (!confirmDelete(productName, specificInventory.getName())) return;
+        if (!confirmDelete(productName, specificInventory.getName())) {
+            return;
+        }
 
         specificInventory.setStock(productId, 0);
-        controller.saveData();
+        this.controller.saveData();
         loadProductTable();
         showInfo("Stock eliminado.");
     }
@@ -343,7 +341,6 @@ public class FrmProducts extends javax.swing.JFrame {
 
         int row = getSelectedRow();
         if (row == -1) {
-            showWarning("Seleccione un producto para mover.");
             return;
         }
 
@@ -363,11 +360,15 @@ public class FrmProducts extends javax.swing.JFrame {
         }
 
         Inventory targetInventory = askTargetInventory(targets);
-        if (targetInventory == null) return;
+        if (targetInventory == null) {
+            return;
+        }
 
-        if (!confirmMove(productName, currentStock, specificInventory.getName(), targetInventory.getName())) return;
+        if (!confirmMove(productName, currentStock, specificInventory.getName(), targetInventory.getName())) {
+            return;
+        }
 
-        boolean success = controller.productController.handleMoveProductStock(specificInventory, targetInventory, productId);
+        boolean success = this.controller.productController.handleMoveProductStock(specificInventory, targetInventory, productId);
 
         if (success) {
             showInfo("Producto movido exitosamente.");
@@ -392,7 +393,9 @@ public class FrmProducts extends javax.swing.JFrame {
 
     private int getTableInt(int row, int col) {
         Object v = jTableProducts.getValueAt(row, col);
-        if (v instanceof Integer) return (Integer) v;
+        if (v instanceof Integer) {
+            return (Integer) v;
+        }
         try {
             return Integer.parseInt(v.toString().trim());
         } catch (Exception e) {
@@ -426,10 +429,14 @@ public class FrmProducts extends javax.swing.JFrame {
         List<Inventory> allInventories = controller.getInventories();
         ArrayList<Inventory> targets = new ArrayList<>();
 
-        if (allInventories == null) return targets;
+        if (allInventories == null) {
+            return targets;
+        }
 
         for (Inventory inv : allInventories) {
-            if (inv == null || inv.getName() == null) continue;
+            if (inv == null || inv.getName() == null) {
+                continue;
+            }
             if (!inv.getName().equals(specificInventory.getName())) {
                 targets.add(inv);
             }
@@ -454,7 +461,7 @@ public class FrmProducts extends javax.swing.JFrame {
     private void showError(String msg) {
         JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
     }
-    
+
     private void onEditProduct() {
         int row = getSelectedRow();
         if (row == -1) {

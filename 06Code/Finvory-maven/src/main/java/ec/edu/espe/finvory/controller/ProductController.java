@@ -9,12 +9,38 @@ import java.util.*;
  *
  * @author Arelys Otavalo, the POOwer Rangers of Programming
  */
-public class ProductController {
+public class ProductController implements IProductActions {
 
     private final FinvoryController mainController;
 
     public ProductController(FinvoryController mainController) {
         this.mainController = mainController;
+    }
+
+    @Override
+    public Product findProductById(String productId) {
+        if (productId == null || mainController.data == null) return null;
+        for (Product product : mainController.data.getProducts()) {
+            if (productId.equalsIgnoreCase(product.getId())) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteProductById(String productId) {
+        Product product = findProductById(productId);
+        if (product != null) {
+            mainController.data.removeProduct(product);
+            mainController.saveData();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void loadProductTable() {
     }
 
     public Product findById(String id) {
@@ -50,10 +76,6 @@ public class ProductController {
     }
 
     public Product findProduct(String id) {
-        return findById(id);
-    }
-
-    public Product findProductById(String id) {
         return findById(id);
     }
 
@@ -222,7 +244,8 @@ public class ProductController {
         rows.sort((rowA, rowB) -> ((Integer) rowB[1]).compareTo((Integer) rowA[1]));
         return rows;
     }
-
+    
+    @Override
     public List<Object[]> getProductTableData(Inventory specificInventory) {
         List<Object[]> rows = new ArrayList<>();
         FinvoryData data = mainController.data;
@@ -278,7 +301,7 @@ public class ProductController {
         public final float discountVip;
 
         public ProductDisplayData(List<Product> products, List<Inventory> inventory, InventoryOfObsolete obsoleteInventory,
-                                  float profitPercentage, float discountStandard, float discountPremium, float discountVip) {
+                float profitPercentage, float discountStandard, float discountPremium, float discountVip) {
             this.products = products;
             this.inventories = inventory;
             this.obsoleteInventory = obsoleteInventory;

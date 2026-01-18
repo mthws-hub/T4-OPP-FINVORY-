@@ -2,9 +2,11 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.controller.ISupplierActions;
 import ec.edu.espe.finvory.model.Supplier;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,13 +16,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmSuppliers extends javax.swing.JFrame {
 
-    FinvoryController controller;
+    private final ISupplierActions supplierActionProcessor;
+    private final FinvoryController controller;
 
     /**
      * Creates new form FrmSuppliers
      */
-    public FrmSuppliers(FinvoryController controller) {
-        this.controller = controller;
+    public FrmSuppliers(ISupplierActions processor, FinvoryController mainController) {
+        this.supplierActionProcessor = processor;
+        this.controller = mainController;
         initComponents();
         this.setLocationRelativeTo(null);
         setupTableSelection();
@@ -31,26 +35,20 @@ public class FrmSuppliers extends javax.swing.JFrame {
     private void setupTableSelection() {
         btnEdit.setEnabled(false);
         btnDelete.setEnabled(false);
-        jTableSuppliers.getSelectionModel().addListSelectionListener(e -> {
-            boolean rowSelected = jTableSuppliers.getSelectedRow() != -1;
+        tblSuppliers.getSelectionModel().addListSelectionListener(e -> {
+            boolean rowSelected = tblSuppliers.getSelectedRow() != -1;
             btnEdit.setEnabled(rowSelected);
             btnDelete.setEnabled(rowSelected);
         });
     }
 
-    public void loadSupplierTable() {
-        DefaultTableModel model = (DefaultTableModel) jTableSuppliers.getModel();
+    public final void loadSupplierTable() {
+        DefaultTableModel model = (DefaultTableModel) tblSuppliers.getModel();
         model.setRowCount(0);
-        if (controller == null || controller.getData() == null) {
-            return;
-        }
-        for (Supplier supplier : controller.getData().getSuppliers()) {
-            model.addRow(new Object[]{
-                supplier.getId1(),
-                supplier.getFullName(),
-                supplier.getPhone(),
-                supplier.getEmail()
-            });
+
+        List<Object[]> data = supplierActionProcessor.getSupplierTableData();
+        for (Object[] row : data) {
+            model.addRow(row);
         }
     }
 
@@ -66,7 +64,7 @@ public class FrmSuppliers extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         lblSuppliersList = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableSuppliers = new javax.swing.JTable();
+        tblSuppliers = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         btnAdd = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
@@ -82,7 +80,7 @@ public class FrmSuppliers extends javax.swing.JFrame {
         lblSuppliersList.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         lblSuppliersList.setText("Lista de proovedores");
 
-        jTableSuppliers.setModel(new javax.swing.table.DefaultTableModel(
+        tblSuppliers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -93,7 +91,7 @@ public class FrmSuppliers extends javax.swing.JFrame {
                 "ID 1 (RUC)", "Nombre Completo", "Telefono", "Email"
             }
         ));
-        jScrollPane1.setViewportView(jTableSuppliers);
+        jScrollPane1.setViewportView(tblSuppliers);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -253,7 +251,7 @@ public class FrmSuppliers extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void onEditSupplier() {
-        int selectedRow = jTableSuppliers.getSelectedRow();
+        int selectedRow = tblSuppliers.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this,
                     "Por favor, seleccione un proveedor de la tabla para editar.",
@@ -262,7 +260,7 @@ public class FrmSuppliers extends javax.swing.JFrame {
             return;
         }
 
-        String ruc = jTableSuppliers.getValueAt(selectedRow, 0).toString();
+        String ruc = tblSuppliers.getValueAt(selectedRow, 0).toString();
         openSupplierFormForEdit(ruc);
     }
 
@@ -271,25 +269,24 @@ public class FrmSuppliers extends javax.swing.JFrame {
     }
 
     private void onDeleteSupplier() {
-        int selectedRow = jTableSuppliers.getSelectedRow();
-        if (selectedRow == -1) {
-            return;
-        }
+        int selectedRow = tblSuppliers.getSelectedRow();
+        if (selectedRow != -1) {
+            String ruc = tblSuppliers.getValueAt(selectedRow, 0).toString();
+            String nombre = tblSuppliers.getValueAt(selectedRow, 1).toString();
 
-        String ruc = jTableSuppliers.getValueAt(selectedRow, 0).toString();
-        String nombre = jTableSuppliers.getValueAt(selectedRow, 1).toString();
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro de eliminar al proveedor '" + nombre + "'?\nEsto no se puede deshacer.",
+                    "Confirmar Eliminación",
+                    JOptionPane.YES_NO_OPTION);
 
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de eliminar al proveedor '" + nombre + "'?\nEsto no se puede deshacer.",
-                "Confirmar Eliminación",
-                JOptionPane.YES_NO_OPTION
-        );
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            boolean eliminado = controller.supplierController.deleteSupplierGUI(ruc);
-            if (eliminado) {
-                JOptionPane.showMessageDialog(this, "Proveedor eliminado.");
-                loadSupplierTable();
+            if (confirm == JOptionPane.YES_OPTION) {
+                boolean eliminado = supplierActionProcessor.deleteSupplierByRuc(ruc);
+                if (eliminado) {
+                    JOptionPane.showMessageDialog(this, "Proveedor eliminado.");
+                    loadSupplierTable();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error: No se pudo eliminar (verifique si tiene productos asociados).");
+                }
             }
         }
     }
@@ -333,8 +330,8 @@ public class FrmSuppliers extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableSuppliers;
     private javax.swing.JLabel lblSuppliersList;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JTable tblSuppliers;
     // End of variables declaration//GEN-END:variables
 }

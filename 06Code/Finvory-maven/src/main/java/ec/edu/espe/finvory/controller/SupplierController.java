@@ -3,16 +3,45 @@ package ec.edu.espe.finvory.controller;
 import ec.edu.espe.finvory.model.*;
 import java.time.LocalDate;
 import java.util.*;
+
 /**
  *
  * @author Arelys Otavalo, the POOwer Rangers of Programming
  */
-public class SupplierController  {
-    
+public class SupplierController implements ISupplierActions {
+
     private final FinvoryController mainController;
 
     public SupplierController(FinvoryController mainController) {
         this.mainController = mainController;
+    }
+
+    @Override
+    public List<Object[]> getSupplierTableData() {
+        List<Object[]> rows = new ArrayList<>();
+        if (mainController.getData() == null) {
+            return rows;
+        }
+
+        for (Supplier supplier : mainController.getData().getSuppliers()) {
+            rows.add(new Object[]{
+                supplier.getId1(),
+                supplier.getFullName(),
+                supplier.getPhone(),
+                supplier.getEmail()
+            });
+        }
+        return rows;
+    }
+
+    @Override
+    public Supplier findSupplierByRuc(String ruc) {
+        return findSupplier(ruc);
+    }
+
+    @Override
+    public boolean deleteSupplierByRuc(String ruc) {
+        return deleteSupplierGUI(ruc);
     }
 
     public Supplier findSupplier(String id) {
@@ -85,10 +114,11 @@ public class SupplierController  {
         return true;
     }
 
-
     public HashMap<String, Integer> getSupplierDemandReport() {
         HashMap<String, Integer> map = new HashMap<>();
-        if (mainController.getData() == null) return map;
+        if (mainController.getData() == null) {
+            return map;
+        }
 
         for (InvoiceSim invoiceSim : mainController.getData().getInvoices()) {
             if ("COMPLETED".equals(invoiceSim.getStatus())) {
@@ -111,7 +141,9 @@ public class SupplierController  {
         Map<String, Integer> supplyMap = new HashMap<>();
         FinvoryData data = mainController.getData();
 
-        if (data == null) return rows;
+        if (data == null) {
+            return rows;
+        }
 
         for (InvoiceSim invoice : data.getInvoices()) {
             LocalDate invoiceDate = invoice.getDate();

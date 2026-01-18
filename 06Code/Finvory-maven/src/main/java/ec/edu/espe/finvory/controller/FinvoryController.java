@@ -2,6 +2,7 @@ package ec.edu.espe.finvory.controller;
 
 import ec.edu.espe.finvory.mongo.DataPersistenceManager;
 import ec.edu.espe.finvory.model.*;
+import ec.edu.espe.finvory.view.FrmCustomers;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class FinvoryController {
     public DataPersistenceManager dataBase;
     public String currentCompanyUsername;
     public String userType = "";
-    private static final BigDecimal DEFAULT_TAX_RATE = new BigDecimal("0.12"); 
+    private static final BigDecimal DEFAULT_TAX_RATE = new BigDecimal("0.12");
     public UserController userController;
     public ProductController productController;
     public InventoryController inventoryController;
@@ -27,6 +28,7 @@ public class FinvoryController {
     public CustomerController customerController;
     public SupplierController supplierController;
     public ReportController reportcontroller;
+    
 
     public FinvoryController(DataPersistenceManager dataBase) {
         this.dataBase = dataBase;
@@ -95,7 +97,7 @@ public class FinvoryController {
         if (currentCompanyUsername != null && data != null && data.getCompanyInfo() != null) {
             dataBase.saveCompanyData(data, currentCompanyUsername);
             dataBase.saveUsers(users);
-            syncUsersToCloud(); 
+            syncUsersToCloud();
         }
     }
 
@@ -113,5 +115,9 @@ public class FinvoryController {
 
     public int getObsoleteStock(String productId) {
         return obsoleteController.getObsoleteStock(productId);
+    }
+
+    public void openCustomerManagement() {
+        new FrmCustomers(this.customerController).setVisible(true);
     }
 }

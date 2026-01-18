@@ -369,7 +369,7 @@ public class FrmInventories extends javax.swing.JFrame {
             return;
         }
 
-        FrmProducts products = new FrmProducts(controller, currentInventory);
+        FrmProducts products = new FrmProducts(controller.productController, controller, currentInventory);
         products.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
