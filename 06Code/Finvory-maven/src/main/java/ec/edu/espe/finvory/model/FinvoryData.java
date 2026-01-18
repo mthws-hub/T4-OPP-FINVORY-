@@ -14,7 +14,7 @@ public class FinvoryData {
 
     private CompanyAccount companyInfo;
 
-    private final ArrayList<Customer> customers;
+    private ArrayList<Customer> customers;
     private final ArrayList<Product> products;
     private final ArrayList<Supplier> suppliers;
     private final ArrayList<Inventory> inventories;
@@ -194,6 +194,10 @@ public class FinvoryData {
 
     public void setReturns(ArrayList<ReturnedProduct> returns) {
         this.returns = returns;
+    }
+
+    public void setCustomers(ArrayList<Customer> customers) {
+        this.customers = customers;
     }
 
 }

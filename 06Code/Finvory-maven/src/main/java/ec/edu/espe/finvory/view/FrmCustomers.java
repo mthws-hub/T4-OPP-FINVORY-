@@ -1,6 +1,7 @@
 package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
+import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.controller.ICustomerActions;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -10,16 +11,17 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Arelys Otavalo
  */
-
 public class FrmCustomers extends javax.swing.JFrame {
 
     private final ICustomerActions customerActionProcessor;
+    private final FinvoryController mainController;
 
     /**
      * Creates new form FrmSuppliers
      */
-    public FrmCustomers(ICustomerActions customerActionProcessor) {
+    public FrmCustomers(ICustomerActions customerActionProcessor, FinvoryController mainController) {
         this.customerActionProcessor = customerActionProcessor;
+        this.mainController = mainController;
         initComponents();
         this.setLocationRelativeTo(null);
         setupTableSelection();
@@ -249,14 +251,34 @@ public class FrmCustomers extends javax.swing.JFrame {
         int selectedRow = tblCustomers.getSelectedRow();
         if (selectedRow != -1) {
             String customerIdentification = tblCustomers.getValueAt(selectedRow, 1).toString();
-            new FrmAddNewCustomer(null, customerIdentification).setVisible(true);
-            this.dispose();
+
+            FrmAddNewCustomer editForm = new FrmAddNewCustomer(this.mainController, customerIdentification);
+
+            editForm.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    setVisible(true);
+                    loadCustomerTable();
+                }
+            });
+
+            editForm.setVisible(true);
+            this.setVisible(false);
         }
     }
 
     private void onOpenAddCustomer() {
-        new FrmAddNewCustomer().setVisible(true);
-        this.dispose();
+        FrmAddNewCustomer addForm = new FrmAddNewCustomer(this.mainController);
+        addForm.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                setVisible(true);
+                loadCustomerTable();
+            }
+        });
+
+        addForm.setVisible(true);
+        this.setVisible(false);
     }
 
     private void onDeleteCustomer() {

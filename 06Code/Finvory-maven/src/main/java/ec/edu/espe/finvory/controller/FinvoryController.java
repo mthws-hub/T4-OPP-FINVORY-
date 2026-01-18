@@ -118,6 +118,6 @@ public class FinvoryController {
     }
 
     public void openCustomerManagement() {
-        new FrmCustomers(this.customerController).setVisible(true);
+        new FrmCustomers(this.customerController, this).setVisible(true);
     }
 }

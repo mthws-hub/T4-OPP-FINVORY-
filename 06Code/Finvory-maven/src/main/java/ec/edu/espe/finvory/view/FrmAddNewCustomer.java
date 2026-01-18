@@ -19,16 +19,15 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
 
     private final java.awt.Color ERROR_COLOR = java.awt.Color.RED;
     private final java.awt.Color DEFAULT_COLOR = java.awt.Color.BLACK;
-    
-    public FrmAddNewCustomer() {
-        initComponents();
-        this.setLocationRelativeTo(null);
-        FinvoryApp.setIcon(this);
-    }
 
     public FrmAddNewCustomer(FinvoryController controller) {
-        this();
+        initComponents();
         this.controller = controller;
+        this.setLocationRelativeTo(null);
+        this.toFront();
+        this.requestFocus();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        FinvoryApp.setIcon(this);
     }
 
     public FrmAddNewCustomer(FinvoryController controller, String customerId) {
@@ -265,7 +264,7 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
 
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        onReturn();     
+        onReturn();
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -279,10 +278,9 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
 
     }//GEN-LAST:event_txtNameActionPerformed
-        
+
     private void onAdd() {
         resetFieldColors();
-
         CustomerFormData data = readForm();
         ValidationResult validation = validateForm(data);
 
@@ -291,16 +289,11 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
             return;
         }
 
-        boolean success = saveCustomer(data);
-
-        if (success) {
+        if (saveCustomer(data)) {
             JOptionPane.showMessageDialog(this, "Cliente guardado exitosamente.");
             this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this,
-                    "Error: El ID ya existe o hubo un problema al guardar.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al guardar: Verifique si el ID ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -363,10 +356,14 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
     private void showValidationErrors(ValidationResult validation) {
         for (Field f : validation.fieldsWithError) {
             switch (f) {
-                case ID -> txtID.setForeground(java.awt.Color.RED);
-                case NAME -> txtName.setForeground(java.awt.Color.RED);
-                case EMAIL -> txtEmail.setForeground(java.awt.Color.RED);
-                case PHONE -> txtPhone.setForeground(java.awt.Color.RED);
+                case ID ->
+                    txtID.setForeground(java.awt.Color.RED);
+                case NAME ->
+                    txtName.setForeground(java.awt.Color.RED);
+                case EMAIL ->
+                    txtEmail.setForeground(java.awt.Color.RED);
+                case PHONE ->
+                    txtPhone.setForeground(java.awt.Color.RED);
             }
         }
 
@@ -389,10 +386,13 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
                 customerIdToEdit, data.name, data.phone, data.email, data.type
         );
     }
-    
-    private enum Field { ID, NAME, EMAIL, PHONE }
+
+    private enum Field {
+        ID, NAME, EMAIL, PHONE
+    }
 
     private static class CustomerFormData {
+
         String id;
         String name;
         String email;
@@ -401,6 +401,7 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
     }
 
     private static class ValidationResult {
+
         boolean isValid = true;
         StringBuilder message = new StringBuilder();
         java.util.EnumSet<Field> fieldsWithError = java.util.EnumSet.noneOf(Field.class);

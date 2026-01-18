@@ -110,6 +110,7 @@ ec\edu\espe\finvory\view\FrmLogin$5.class
 ec\edu\espe\finvory\view\FrmPrices$3.class
 ec\edu\espe\finvory\view\FrmInventorySelector$1.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$2.class
+ec\edu\espe\finvory\view\FrmCustomers$6.class
 ec\edu\espe\finvory\view\FrmCustomers.class
 ec\edu\espe\finvory\model\AdminDetail.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$1.class
@@ -184,6 +185,7 @@ ec\edu\espe\finvory\view\FrmSaleInvoice$11.class
 ec\edu\espe\finvory\view\FrmSuppliers$1.class
 ec\edu\espe\finvory\mongo\LocalFileService$1.class
 ec\edu\espe\finvory\controller\SaleAndInvoiceController.class
+ec\edu\espe\finvory\view\FrmCustomers$5.class
 ec\edu\espe\finvory\view\FrmProfileCompany$2.class
 ec\edu\espe\finvory\view\FrmGrossReport.class
 ec\edu\espe\finvory\view\FrmProfilePersonal.class

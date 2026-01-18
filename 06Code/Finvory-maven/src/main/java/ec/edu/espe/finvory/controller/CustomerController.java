@@ -143,21 +143,13 @@ public class CustomerController implements ICustomerActions {
         }
 
         Customer newCustomer = new Customer(name, id, phone, email, type);
-        List<Customer> currentList = mainController.data.getCustomers();
 
-        try {
-            currentList.add(newCustomer);
-        } catch (UnsupportedOperationException e) {
-            List<Customer> mutableList = new ArrayList<>(currentList);
-            mutableList.add(newCustomer);
-            try {
-                currentList.clear();
-                currentList.addAll(mutableList);
-            } catch (Exception ex) {
-                System.err.println("Error crítico: La lista en FinvoryData es inmutable.");
-                return false;
-            }
-        }
+        List<Customer> currentCustomers = mainController.data.getCustomers();
+
+        ArrayList<Customer> mutableList = new ArrayList<>(currentCustomers);
+        mutableList.add(newCustomer);
+
+        mainController.data.setCustomers(mutableList);
         mainController.saveData();
         return true;
     }

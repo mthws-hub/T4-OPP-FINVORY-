@@ -265,7 +265,7 @@ public class FrmMainMenu extends javax.swing.JFrame {
             System.out.println("Error: El controlador en MainMenu es null");
             return;
         }
-        openAndHide(new FrmCustomers(this.controller.customerController));
+        openAndHide(new FrmCustomers(this.controller.customerController, this.controller));
     }
 
     private void onOpenNewSale() {
