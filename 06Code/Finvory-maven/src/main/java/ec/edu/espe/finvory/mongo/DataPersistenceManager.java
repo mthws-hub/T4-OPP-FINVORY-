@@ -28,14 +28,26 @@ public class DataPersistenceManager {
                     System.err.println("Fallo al subir pendientes: " + e.getMessage());
                 }
             }
+
             FinvoryData cloudData = mongoLoader.loadDataFromCloud(companyUsername);
             if (cloudData != null) {
+ 
+                ec.edu.espe.finvory.model.TaxManager.getInstance().setTaxRate(cloudData.getTaxRate());
+
+
                 localService.saveCompanyDataLocal(cloudData, companyUsername);
                 return cloudData;
             }
         }
+
         System.out.println("Usando modo OFFLINE (Datos locales).");
-        return localService.loadCompanyDataLocal(companyUsername);
+        FinvoryData localData = localService.loadCompanyDataLocal(companyUsername);
+
+        if (localData != null) {
+            ec.edu.espe.finvory.model.TaxManager.getInstance().setTaxRate(localData.getTaxRate());
+        }
+
+        return localData;
     }
 
     public void saveCompanyData(FinvoryData data, String companyUsername) {

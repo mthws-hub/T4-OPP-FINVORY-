@@ -9,7 +9,7 @@
       "streetNumber": "",
       "region": ""
     },
-    "phone": "0963519789",
+    "phone": "0963514785",
     "email": "joseph3elcrac@gmail.com",
     "logoPath": "data\\profiles\\Joseph_profile.jpeg"
   },
@@ -139,7 +139,7 @@
       },
       "productStock": {
         "MP14": 45,
-        "ARM-001": 6,
+        "ARM-001": 3,
         "ARM-002": 5,
         "ARM-003": 23,
         "ARM-004": 49
@@ -151,6 +151,18 @@
         "country": "Ecuador",
         "city": "Quito",
         "street": "Norte",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {}
+    },
+    {
+      "name": "Solanda1",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Solanda",
         "zipCode": "",
         "streetNumber": "",
         "region": ""
@@ -179,8 +191,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-10-25",
-      "paymentDueDate": "2025-10-25",
+      "date": "2025-10-21",
+      "paymentDueDate": "2025-10-21",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -207,8 +219,8 @@
     },
     {
       "invoiceNumber": "F-5",
-      "date": "2025-12-05",
-      "paymentDueDate": "2025-12-05",
+      "date": "2025-12-01",
+      "paymentDueDate": "2025-12-01",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -235,8 +247,8 @@
     },
     {
       "invoiceNumber": "F-3",
-      "date": "2025-10-25",
-      "paymentDueDate": "2025-10-25",
+      "date": "2025-10-21",
+      "paymentDueDate": "2025-10-21",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -270,8 +282,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-10-25",
-      "paymentDueDate": "2025-10-25",
+      "date": "2025-10-21",
+      "paymentDueDate": "2025-10-21",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -305,8 +317,8 @@
     },
     {
       "invoiceNumber": "F-4",
-      "date": "2025-12-03",
-      "paymentDueDate": "2025-12-03",
+      "date": "2025-11-29",
+      "paymentDueDate": "2025-11-29",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -330,6 +342,34 @@
       "taxRate": 0.15,
       "taxAmount": 22.50,
       "total": 172.50
+    },
+    {
+      "invoiceNumber": "FAC-1769181649612",
+      "date": "2026-01-20",
+      "paymentDueDate": "2026-01-20",
+      "customer": {
+        "name": "Olga",
+        "identification": "0017654542312",
+        "phone": "0976787769",
+        "email": "olga@gmail.com",
+        "clientType": "PREMIUM"
+      },
+      "lines": [
+        {
+          "productId": "ARM-001",
+          "productName": "AK-47",
+          "quantity": 3,
+          "priceApplied": 231.0,
+          "lineTotal": 693.00
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 693.00,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.12,
+      "taxAmount": 83.16,
+      "total": 776.16
     }
   ],
   "returns": [
@@ -412,7 +452,7 @@
       "returnDate": "2026-01-23"
     }
   ],
-  "taxRate": 0.15,
+  "taxRate": 0.12,
   "profitPercentage": 1.2,
   "discountStandard": 0.2,
   "discountPremium": 0.3,

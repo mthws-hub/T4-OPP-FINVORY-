@@ -7,6 +7,7 @@ ec\edu\espe\finvory\controller\InventoryController.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$Field.class
 ec\edu\espe\finvory\view\FrmNewAccount.class
 ec\edu\espe\finvory\view\FrmProfileCompany$3.class
+ec\edu\espe\finvory\model\TaxManager.class
 ec\edu\espe\finvory\view\FrmProducts$3.class
 ec\edu\espe\finvory\model\ProductSold.class
 ec\edu\espe\finvory\view\FrmAddNewSupplier$3.class
@@ -204,6 +205,7 @@ ec\edu\espe\finvory\view\FrmSuppliersReport$1.class
 ec\edu\espe\finvory\view\FrmProfileCompany$5.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$3.class
 ec\edu\espe\finvory\view\FrmPrices$2.class
+ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$8.class
 ec\edu\espe\finvory\view\FrmChangePassword.class
 ec\edu\espe\finvory\view\FrmChangePassword$3.class
 ec\edu\espe\finvory\controller\ProductController$ProductDisplayData.class

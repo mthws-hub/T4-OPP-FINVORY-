@@ -32,6 +32,7 @@ public class FrmProducts extends javax.swing.JFrame {
         this.specificInventory = inventory;
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setupTableSelection();
         loadProductTable();
         updateTitle();

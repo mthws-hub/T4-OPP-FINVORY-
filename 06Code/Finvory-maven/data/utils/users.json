@@ -11,7 +11,7 @@
         "region": "Pichincha"
       },
       "ruc": "1790011223001",
-      "phone": "022445566",
+      "phone": "0983249630",
       "email": "admin@frico.com",
       "username": "adminFrico",
       "password": "234"
@@ -27,7 +27,7 @@
         "region": ""
       },
       "ruc": "0011751774793",
-      "phone": "0963519789",
+      "phone": "0963514785",
       "email": "joseph3elcrac@gmail.com",
       "username": "Joseph",
       "password": "2345",
@@ -172,6 +172,11 @@
       "fullName": "Mia Skyla",
       "username": "miaS",
       "password": "236"
+    },
+    {
+      "fullName": "Sofia Mendez",
+      "username": "Sofi",
+      "password": "tpgjb"
     }
   ]
 }

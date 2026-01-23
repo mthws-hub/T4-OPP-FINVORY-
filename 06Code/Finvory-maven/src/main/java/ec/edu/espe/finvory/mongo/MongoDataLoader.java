@@ -76,7 +76,7 @@ public class MongoDataLoader {
         }
     }
 
-    private void loadConfigurationsFromCloud(FinvoryData data, String username) {
+    /*private void loadConfigurationsFromCloud(FinvoryData data, String username) {
         MongoCollection<Document> collection = MongoDBConnection.getCollection("configurations");
         if (collection == null) {
             return;
@@ -84,6 +84,23 @@ public class MongoDataLoader {
         Document doc = collection.find(Filters.eq("companyUsername", username)).first();
         if (doc != null) {
             data.setTaxRate(BigDecimal.valueOf(getDoubleSafe(doc, "taxRate", 0.0)));
+            data.setProfitPercentage(BigDecimal.valueOf(getDoubleSafe(doc, "profitPercentage", 0.0)));
+            data.setDiscountStandard(BigDecimal.valueOf(getDoubleSafe(doc, "discountStandard", 0.0)));
+            data.setDiscountPremium(BigDecimal.valueOf(getDoubleSafe(doc, "discountPremium", 0.0)));
+            data.setDiscountVip(BigDecimal.valueOf(getDoubleSafe(doc, "discountVip", 0.0)));
+        }
+    }*/
+    private void loadConfigurationsFromCloud(FinvoryData data, String username) {
+        MongoCollection<Document> collection = MongoDBConnection.getCollection("configurations");
+        if (collection == null) {
+            return;
+        }
+
+        Document doc = collection.find(Filters.eq("companyUsername", username)).first();
+        if (doc != null) {
+            BigDecimal cloudTax = BigDecimal.valueOf(getDoubleSafe(doc, "taxRate", 0.15));
+            ec.edu.espe.finvory.model.TaxManager.getInstance().setTaxRate(cloudTax);
+            data.setTaxRate(ec.edu.espe.finvory.model.TaxManager.getInstance().getTaxRate());
             data.setProfitPercentage(BigDecimal.valueOf(getDoubleSafe(doc, "profitPercentage", 0.0)));
             data.setDiscountStandard(BigDecimal.valueOf(getDoubleSafe(doc, "discountStandard", 0.0)));
             data.setDiscountPremium(BigDecimal.valueOf(getDoubleSafe(doc, "discountPremium", 0.0)));
@@ -219,9 +236,9 @@ public class MongoDataLoader {
         }
         for (Document doc : collection.find(Filters.eq("companyUsername", username))) {
             String pId = doc.getString("productId");
-            Product p = findProductById(data, pId);
-            if (p != null) {
-                data.addReturn(new ReturnedProduct(p, toInt(doc.get("quantity"), 0), doc.getString("reason")));
+            Product product = findProductById(data, pId);
+            if (product != null) {
+                data.addReturn(new ReturnedProduct(product, toInt(doc.get("quantity"), 0), doc.getString("reason")));
             }
         }
     }
@@ -351,5 +368,16 @@ public class MongoDataLoader {
 
         data.getInventories().clear();
         data.getInventories().addAll(byName.values());
+    }
+
+    public BigDecimal loadTaxRateFromCloud(String companyUsername) {
+        MongoCollection<Document> collection = MongoDBConnection.getCollection("configurations");
+        if (collection != null) {
+            Document doc = collection.find(Filters.eq("companyUsername", companyUsername)).first();
+            if (doc != null && doc.containsKey("taxRate")) {
+                return new BigDecimal(doc.getDouble("taxRate").toString());
+            }
+        }
+        return new BigDecimal("0.15"); 
     }
 }

@@ -2,6 +2,7 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
+import ec.edu.espe.finvory.controller.*;
 import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.model.Product;
 import java.awt.Cursor;
@@ -15,7 +16,6 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
-
 public class FrmInventories extends javax.swing.JFrame {
 
     private FinvoryController controller;
@@ -29,6 +29,7 @@ public class FrmInventories extends javax.swing.JFrame {
         this.controller = controller;
         this.setLocationRelativeTo(null);
         setupTableNonEditable();
+        fillInventoryCombo();
         FinvoryApp.setIcon(this);
     }
 
@@ -61,13 +62,12 @@ public class FrmInventories extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         lblInventoryName = new javax.swing.JLabel();
-        txtName = new javax.swing.JTextField();
         lblCountry = new javax.swing.JLabel();
         lblCity = new javax.swing.JLabel();
         lblProduct = new javax.swing.JLabel();
-        btnFindInventory = new javax.swing.JButton();
         txtCountryInventory = new javax.swing.JLabel();
         txtCityInventory = new javax.swing.JLabel();
+        cmbInventories = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabProducts = new javax.swing.JTable();
@@ -96,14 +96,10 @@ public class FrmInventories extends javax.swing.JFrame {
         lblProduct.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         lblProduct.setText("Productos:");
 
-        btnFindInventory.setBackground(new java.awt.Color(0, 123, 0));
-        btnFindInventory.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        btnFindInventory.setForeground(new java.awt.Color(255, 255, 255));
-        btnFindInventory.setText("BUSCAR");
-        btnFindInventory.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnFindInventory.addActionListener(new java.awt.event.ActionListener() {
+        cmbInventories.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbInventories.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFindInventoryActionPerformed(evt);
+                cmbInventoriesActionPerformed(evt);
             }
         });
 
@@ -125,14 +121,12 @@ public class FrmInventories extends javax.swing.JFrame {
                         .addComponent(lblCity)
                         .addGap(18, 18, 18)
                         .addComponent(txtCityInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(246, 246, 246)
-                        .addComponent(btnFindInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(151, 151, 151))
+                        .addGap(474, 474, 474))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblInventoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addComponent(cmbInventories, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,19 +134,14 @@ public class FrmInventories extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblInventoryName)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblCountry)
-                            .addComponent(lblCity)
-                            .addComponent(txtCountryInventory)
-                            .addComponent(txtCityInventory)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(btnFindInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(cmbInventories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCountry)
+                    .addComponent(lblCity)
+                    .addComponent(txtCountryInventory)
+                    .addComponent(txtCityInventory))
+                .addGap(8, 8, 8)
                 .addComponent(lblProduct)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
@@ -207,7 +196,7 @@ public class FrmInventories extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        mnuHandle.setText("Gestión");
+        mnuHandle.setText("Productos");
 
         itemProducts.setText("Productos");
         itemProducts.addActionListener(new java.awt.event.ActionListener() {
@@ -265,10 +254,6 @@ public class FrmInventories extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnFindInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindInventoryActionPerformed
-        onFindInventory();
-    }//GEN-LAST:event_btnFindInventoryActionPerformed
-
     private void itemProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProductsActionPerformed
         onOpenProducts();
     }//GEN-LAST:event_itemProductsActionPerformed
@@ -284,6 +269,10 @@ public class FrmInventories extends javax.swing.JFrame {
     private void itemPrincipalMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPrincipalMenuActionPerformed
         onClose();
     }//GEN-LAST:event_itemPrincipalMenuActionPerformed
+
+    private void cmbInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbInventoriesActionPerformed
+        onInventoryComboSelection();
+    }//GEN-LAST:event_cmbInventoriesActionPerformed
     private void handleNoMatches() {
         JOptionPane.showMessageDialog(this, "No se encontraron coincidencias.");
         clearFields();
@@ -316,13 +305,18 @@ public class FrmInventories extends javax.swing.JFrame {
         populateTable();
     }
 
-    private void populateTable() {
+    public void populateTable() {
         DefaultTableModel model = (DefaultTableModel) tabProducts.getModel();
         model.setRowCount(0);
+
+        if (currentInventory == null) {
+            return; 
+        }
+        
         List<Object[]> rows = controller.inventoryController.getInventoryTableData(currentInventory);
         for (Object[] row : rows) {
             model.addRow(row);
-            
+
         }
     }
 
@@ -332,24 +326,8 @@ public class FrmInventories extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tabProducts.getModel();
         model.setRowCount(0);
         this.currentInventory = null;
-    
-}
-    
-    private void onFindInventory() {
-    String query = txtName.getText().trim();
-    String errorMsg = ec.edu.espe.finvory.utils.ValidationUtils.getSearchError(query);
-    if (errorMsg != null) {
-        JOptionPane.showMessageDialog(this, errorMsg, "Aviso", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
 
-    try {
-        ArrayList<Inventory> matches = controller.inventoryController.findInventoriesByPartialName(query);
-        handleSearchResult(matches);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
     }
-}
 
     private void handleSearchResult(ArrayList<Inventory> matches) {
         if (matches == null || matches.isEmpty()) {
@@ -406,6 +384,7 @@ public class FrmInventories extends javax.swing.JFrame {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 FrmInventories.this.setVisible(true);
+                fillInventoryCombo();
                 populateTable();
             }
         });
@@ -413,12 +392,37 @@ public class FrmInventories extends javax.swing.JFrame {
         addNewInventory.setVisible(true);
     }
 
+    private void fillInventoryCombo() {
+        if (controller != null && controller.getData() != null) {
+            cmbInventories.removeAllItems();
+            cmbInventories.addItem("Seleccione un inventario...");
+            for (ec.edu.espe.finvory.model.Inventory inv : controller.getData().getInventories()) {
+                cmbInventories.addItem(inv.getName());
+            }
+        }
+    }
+
+    private void onInventoryComboSelection() {
+        String selectedName = (String) cmbInventories.getSelectedItem();
+        controller.inventoryController.handleComboSelection(
+                selectedName,
+                txtCountryInventory,
+                txtCityInventory,
+                tabProducts,
+                this
+        );
+    }
+
+    public void setCurrentInventory(Inventory inventory) {
+        this.currentInventory = inventory;
+    }
+
     private void onClose() {
         this.dispose();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnFindInventory;
+    private javax.swing.JComboBox<String> cmbInventories;
     private javax.swing.JMenuItem itemAddNewInventory;
     private javax.swing.JMenuItem itemObsoleteProducts;
     private javax.swing.JMenuItem itemPrincipalMenu;
@@ -437,6 +441,5 @@ public class FrmInventories extends javax.swing.JFrame {
     private javax.swing.JTable tabProducts;
     private javax.swing.JLabel txtCityInventory;
     private javax.swing.JLabel txtCountryInventory;
-    private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
 }

@@ -3,6 +3,7 @@ package ec.edu.espe.finvory.view;
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.FinvoryData;
+import ec.edu.espe.finvory.model.TaxManager;
 import ec.edu.espe.finvory.utils.ValidationUtils;
 import javax.swing.JOptionPane;
 
@@ -29,12 +30,12 @@ public class FrmPrices extends javax.swing.JFrame {
 
     private void loadCurrentValues() {
         if (controller != null && controller.getData() != null) {
-            FinvoryData data = controller.getData();
+            ec.edu.espe.finvory.model.FinvoryData data = controller.getData();
             ftfProfit.setText(String.valueOf(data.getProfitPercentage()));
             ftfDiscountStd.setText(String.valueOf(data.getDiscountStandard()));
             ftfDiscountPrm.setText(String.valueOf(data.getDiscountPremium()));
             ftfDiscountVip.setText(String.valueOf(data.getDiscountVip()));
-            ftfTax.setText(String.valueOf(data.getTaxRate()));
+            ftfTax.setText(String.valueOf(ec.edu.espe.finvory.model.TaxManager.getInstance().getTaxRate()));
         }
     }
 
@@ -274,7 +275,7 @@ public class FrmPrices extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void ftfDiscountVipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfDiscountVipActionPerformed
-        
+
     }//GEN-LAST:event_ftfDiscountVipActionPerformed
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
@@ -306,7 +307,7 @@ public class FrmPrices extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Error al sincronizar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-}
+    }
 
     private void onCancelUpdate() {
         int option = JOptionPane.showConfirmDialog(

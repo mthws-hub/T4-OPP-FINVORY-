@@ -57,6 +57,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabAllProducts = new javax.swing.JTable();
         btnInfo = new javax.swing.JButton();
+        btnWhatsapp = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         itemProfile = new javax.swing.JMenuItem();
@@ -104,6 +105,17 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             }
         });
 
+        btnWhatsapp.setBackground(new java.awt.Color(0, 123, 0));
+        btnWhatsapp.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        btnWhatsapp.setForeground(new java.awt.Color(242, 242, 242));
+        btnWhatsapp.setText("Whatsapp");
+        btnWhatsapp.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnWhatsapp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnWhatsappActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("Finvory");
 
         itemProfile.setText("Mi Perfil");
@@ -143,11 +155,13 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
                 .addComponent(lblCompany)
                 .addGap(18, 18, 18)
                 .addComponent(txtCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
                 .addComponent(btnFind, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnInfo)
-                .addGap(71, 71, 71))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
+                .addComponent(btnInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnWhatsapp, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1)
@@ -156,16 +170,18 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblCompany)
                         .addComponent(txtCompany, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnFind, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnWhatsapp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(18, 21, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGap(32, 32, 32))
         );
 
         pack();
@@ -190,7 +206,11 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
     private void btnInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         onShowCompanyInfo();
     }//GEN-LAST:event_btnInfoActionPerformed
-    
+
+    private void btnWhatsappActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWhatsappActionPerformed
+        onContactCompany();
+    }//GEN-LAST:event_btnWhatsappActionPerformed
+
     private void updateTable(List<Object[]> rows) {
         DefaultTableModel model = (DefaultTableModel) tabAllProducts.getModel();
         model.setRowCount(0);
@@ -202,7 +222,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             model.addRow(row);
         }
     }
-    
+
     private void onExitToLogin() {
         FrmLogin win = new FrmLogin(this.controller);
         win.setVisible(true);
@@ -266,9 +286,48 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
         }
     }
 
+    private void onContactCompany() {
+        String companyName = txtCompany.getText().trim();
+        if (companyName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Escriba el nombre de una empresa primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        ec.edu.espe.finvory.model.CompanyAccount targetCompany = controller.userController.findCompanyByName(companyName);
+
+        if (targetCompany != null && targetCompany.getPhone() != null) {
+            String rawPhone = targetCompany.getPhone().replaceAll("[^0-9]", "");
+            String finalPhone = "";
+
+            if (rawPhone.length() == 10 && rawPhone.startsWith("0")) {
+                finalPhone = "593" + rawPhone.substring(1);
+            } else if (rawPhone.startsWith("593")) {
+                finalPhone = rawPhone;
+            } else if (rawPhone.length() == 9) {
+                finalPhone = "593" + rawPhone;
+            }
+
+            try {
+                String message = "Hola " + targetCompany.getName() + "!, estoy interesado en los productos que distribuyes.";
+                String encodedMessage = message.replace(" ", "%20");
+                String url = "https://api.whatsapp.com/send?phone=" + finalPhone + "&text=" + encodedMessage;
+
+                if (java.awt.Desktop.isDesktopSupported()) {
+                    java.awt.Desktop.getDesktop().browse(new java.net.URI(url));
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error al abrir el chat: " + e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "La empresa no tiene un número registrado.");
+        }
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFind;
     private javax.swing.JButton btnInfo;
+    private javax.swing.JButton btnWhatsapp;
     private javax.swing.JMenuItem itemExit;
     private javax.swing.JMenuItem itemProfile;
     private javax.swing.JMenu jMenu1;

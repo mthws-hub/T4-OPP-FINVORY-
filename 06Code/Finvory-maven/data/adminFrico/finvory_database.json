@@ -9,7 +9,7 @@
       "streetNumber": "",
       "region": ""
     },
-    "phone": "022445566",
+    "phone": "0983249630",
     "email": "admin@frico.com"
   },
   "customers": [
@@ -199,8 +199,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-12-07",
-      "paymentDueDate": "2025-12-07",
+      "date": "2025-12-05",
+      "paymentDueDate": "2025-12-05",
       "customer": {
         "name": "Rodrigo Delgado",
         "identification": "0012365478963",
@@ -227,8 +227,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-12-07",
-      "paymentDueDate": "2025-12-07",
+      "date": "2025-12-05",
+      "paymentDueDate": "2025-12-05",
       "customer": {
         "name": "Pedro Martin",
         "identification": "1245784512",
@@ -255,8 +255,8 @@
     },
     {
       "invoiceNumber": "FFRI-003",
-      "date": "2025-12-07",
-      "paymentDueDate": "2025-12-07",
+      "date": "2025-12-05",
+      "paymentDueDate": "2025-12-05",
       "customer": {
         "name": "Pedro Paz",
         "identification": "0014785236987",
@@ -283,8 +283,8 @@
     },
     {
       "invoiceNumber": "F-4",
-      "date": "2025-12-17",
-      "paymentDueDate": "2025-12-17",
+      "date": "2025-12-15",
+      "paymentDueDate": "2025-12-15",
       "customer": {
         "name": "Pedro Martin",
         "identification": "1245784512",
@@ -318,8 +318,8 @@
     },
     {
       "invoiceNumber": "F-5",
-      "date": "2025-12-17",
-      "paymentDueDate": "2025-12-17",
+      "date": "2025-12-15",
+      "paymentDueDate": "2025-12-15",
       "customer": {
         "name": "Pedro Paz",
         "identification": "0014785236987",
@@ -364,7 +364,7 @@
       },
       "quantity": 2,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-22"
+      "returnDate": "2026-01-23"
     },
     {
       "product": {
@@ -377,7 +377,7 @@
       },
       "quantity": 2,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-22"
+      "returnDate": "2026-01-23"
     }
   ],
   "taxRate": 0.15,
