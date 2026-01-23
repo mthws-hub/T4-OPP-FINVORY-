@@ -9,11 +9,8 @@
       "streetNumber": "",
       "region": ""
     },
-    "ruc": "0011751774793",
     "phone": "0963519789",
     "email": "joseph3elcrac@gmail.com",
-    "username": "Joseph",
-    "password": "234",
     "logoPath": "data\\profiles\\Joseph_profile.jpeg"
   },
   "customers": [
@@ -145,7 +142,7 @@
         "ARM-001": 6,
         "ARM-002": 5,
         "ARM-003": 23,
-        "ARM-004": 48
+        "ARM-004": 49
       }
     },
     {
@@ -182,8 +179,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-10-29",
-      "paymentDueDate": "2025-10-29",
+      "date": "2025-10-25",
+      "paymentDueDate": "2025-10-25",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -210,8 +207,8 @@
     },
     {
       "invoiceNumber": "F-5",
-      "date": "2025-12-09",
-      "paymentDueDate": "2025-12-09",
+      "date": "2025-12-05",
+      "paymentDueDate": "2025-12-05",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -238,8 +235,8 @@
     },
     {
       "invoiceNumber": "F-3",
-      "date": "2025-10-29",
-      "paymentDueDate": "2025-10-29",
+      "date": "2025-10-25",
+      "paymentDueDate": "2025-10-25",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -273,8 +270,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-10-29",
-      "paymentDueDate": "2025-10-29",
+      "date": "2025-10-25",
+      "paymentDueDate": "2025-10-25",
       "customer": {
         "name": "Sebastian",
         "identification": "0018988987887",
@@ -308,8 +305,8 @@
     },
     {
       "invoiceNumber": "F-4",
-      "date": "2025-12-07",
-      "paymentDueDate": "2025-12-07",
+      "date": "2025-12-03",
+      "paymentDueDate": "2025-12-03",
       "customer": {
         "name": "Olga",
         "identification": "0017654542312",
@@ -347,7 +344,7 @@
       },
       "quantity": 2,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-18"
+      "returnDate": "2026-01-23"
     },
     {
       "product": {
@@ -360,7 +357,7 @@
       },
       "quantity": 1,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-18"
+      "returnDate": "2026-01-23"
     },
     {
       "product": {
@@ -373,7 +370,7 @@
       },
       "quantity": 2,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-18"
+      "returnDate": "2026-01-23"
     },
     {
       "product": {
@@ -386,7 +383,7 @@
       },
       "quantity": 4,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-18"
+      "returnDate": "2026-01-23"
     },
     {
       "product": {
@@ -399,7 +396,7 @@
       },
       "quantity": 1,
       "reason": "Otro",
-      "returnDate": "2026-01-18"
+      "returnDate": "2026-01-23"
     },
     {
       "product": {
@@ -410,9 +407,9 @@
         "baseCostPrice": 145.00,
         "supplierId": "1254784513"
       },
-      "quantity": 4,
+      "quantity": 3,
       "reason": "Otro",
-      "returnDate": "2026-01-18"
+      "returnDate": "2026-01-23"
     }
   ],
   "taxRate": 0.15,

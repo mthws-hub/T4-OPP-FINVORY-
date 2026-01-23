@@ -214,4 +214,36 @@ public class UserController {
         } catch (Exception e) {
         }
     }
+
+    public boolean handlePasswordChange(String currentAttempt, String newPass) {
+        String type = mainController.getUserType();
+
+        if ("COMPANY".equals(type)) {
+            CompanyAccount company = mainController.getData().getCompanyInfo();
+            if (company != null && company.checkPassword(currentAttempt)) {
+                company.setPassword(mainController.caesarCipher(newPass, 1));
+                mainController.saveData();
+                return true;
+            }
+        } else if ("PERSONAL".equals(type)) {
+            PersonalAccount personal = getLoggedInPersonalAccount();
+            if (personal != null && personal.checkPassword(currentAttempt)) {
+                personal.setPassword(mainController.caesarCipher(newPass, 1));
+                mainController.getDataBase().saveUsers(mainController.getUsers());
+                syncUsersToCloud();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void handleUpdatePersonalName(String newFullName) {
+        PersonalAccount account = getLoggedInPersonalAccount();
+        if (account != null) {
+            account.setFullName(newFullName);
+            mainController.getDataBase().saveUsers(mainController.getUsers());
+            syncUsersToCloud();
+            JOptionPane.showMessageDialog(null, "Nombre actualizado correctamente.");
+        }
+    }
 }

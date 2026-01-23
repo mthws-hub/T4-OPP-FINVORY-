@@ -217,7 +217,6 @@ public class ValidationUtils {
         return null;
     }
 
-    
     public static final Pattern REGEX_STREET_NUMBER = Pattern.compile("^[a-zA-Z0-9\\s#\\-\\/\\.]+$");
 
     public static boolean isValidRegion(String region) {
@@ -264,5 +263,18 @@ public class ValidationUtils {
             result.append((char) (character + shift));
         }
         return result.toString();
+    }
+
+    public static String validatePasswordChangeFields(String current, String newPass, String confirm) {
+        if (isEmpty(current) || isEmpty(newPass) || isEmpty(confirm)) {
+            return "Error: Todos los campos son obligatorios.";
+        }
+        if (!newPass.equals(confirm)) {
+            return "Error: La nueva contraseña y la confirmación no coinciden.";
+        }
+        if (newPass.length() < 4) {
+            return "Error: La nueva contraseña debe tener al menos 4 caracteres.";
+        }
+        return null;
     }
 }

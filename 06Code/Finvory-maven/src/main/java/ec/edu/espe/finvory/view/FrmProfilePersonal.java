@@ -33,12 +33,9 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
         if (account != null) {
             txtFullName.setText(account.getFullName());
             txtUserName.setText(account.getUsername());
-            passPersonal.setText(account.getPassword());
             txtUserName.setEditable(false);
             btnUploadPhoto.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
                     getClass().getResource("/upload.png"), btnUploadPhoto.getWidth(), btnUploadPhoto.getHeight()));
-            btnViewPassword.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
-                    getClass().getResource("/eyeClose.png"), 24, 24));
             java.net.URL imgUrl = null;
             try {
                 if (account.getProfilePhotoPath() != null && new java.io.File(account.getProfilePhotoPath()).exists()) {
@@ -72,11 +69,10 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
         lblUser = new javax.swing.JLabel();
         txtUserName = new javax.swing.JTextField();
         lblPassword = new javax.swing.JLabel();
-        passPersonal = new javax.swing.JPasswordField();
-        btnViewPassword = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         btnUploadPhoto = new javax.swing.JButton();
+        btnChangePassword = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -89,15 +85,7 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
         lblUser.setText("Usuario:");
 
         lblPassword.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-        lblPassword.setText("Contraseña:");
-
-        passPersonal.setText("jPasswordField1");
-
-        btnViewPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewPasswordActionPerformed(evt);
-            }
-        });
+        lblPassword.setText("Contraseña");
 
         btnCancel.setBackground(new java.awt.Color(0, 123, 0));
         btnCancel.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
@@ -127,35 +115,42 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
             }
         });
 
+        btnChangePassword.setBackground(new java.awt.Color(0, 123, 0));
+        btnChangePassword.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        btnChangePassword.setForeground(new java.awt.Color(255, 255, 255));
+        btnChangePassword.setText("Cambiar Contraseña");
+        btnChangePassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChangePasswordActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(lblFullName)
-                        .addComponent(txtFullName)
-                        .addComponent(lblUser)
-                        .addComponent(txtUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE))
-                    .addComponent(lblPassword)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(btnSave)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnCancel))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(passPersonal, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnViewPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(27, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(icon, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnUploadPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(181, 181, 181))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnChangePassword)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblFullName)
+                        .addComponent(txtFullName)
+                        .addComponent(lblUser)
+                        .addComponent(txtUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE))
+                    .addComponent(lblPassword)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(280, 280, 280)
+                        .addComponent(btnSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCancel)))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,14 +173,12 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblPassword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(passPersonal)
-                    .addComponent(btnViewPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addComponent(btnChangePassword)
+                .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel)
                     .addComponent(btnSave))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -208,10 +201,6 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnViewPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewPasswordActionPerformed
-        onTogglePasswordVisibility();
-    }//GEN-LAST:event_btnViewPasswordActionPerformed
-
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         onSaveChanges();
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -224,43 +213,20 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
         onUploadPhoto();
     }//GEN-LAST:event_btnUploadPhotoActionPerformed
 
-    private void onTogglePasswordVisibility() {
-        isPasswordVisible = !isPasswordVisible;
-
-        if (isPasswordVisible) {
-            showPassword();
-        } else {
-            hidePassword();
-        }
-    }
-
-    private void showPassword() {
-        passPersonal.setEchoChar((char) 0);
-        setEyeIconOpen();
-    }
-
-    private void hidePassword() {
-        passPersonal.setEchoChar('*');
-        setEyeIconClose();
-    }
-
-    private void setEyeIconOpen() {
-        btnViewPassword.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
-                getClass().getResource("/eyeOpen.png"), 24, 24));
-    }
-
-    private void setEyeIconClose() {
-        btnViewPassword.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
-                getClass().getResource("/eyeClose.png"), 24, 24));
-    }
+    private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
+        FrmChangePassword frmChange = new FrmChangePassword(this, controller);
+        frmChange.setVisible(true);
+    }//GEN-LAST:event_btnChangePasswordActionPerformed
 
     private void onSaveChanges() {
         String name = txtFullName.getText().trim();
-        String pass = new String(passPersonal.getPassword());
 
-        if (!validateFields(name, pass)) return;
+        if (name.isEmpty()) {
+            showWarning("El nombre no puede estar vacío.");
+            return;
+        }
 
-        controller.userController.handleUpdatePersonalProfile(name, pass);
+        controller.userController.handleUpdatePersonalName(name);
         onCloseDialog();
     }
 
@@ -282,7 +248,9 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
 
     private void onUploadPhoto() {
         java.io.File selectedFile = chooseImageFile();
-        if (selectedFile == null) return;
+        if (selectedFile == null) {
+            return;
+        }
 
         PersonalAccount account = controller.userController.getLoggedInPersonalAccount();
         if (account == null) {
@@ -331,15 +299,14 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnChangePassword;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUploadPhoto;
-    private javax.swing.JButton btnViewPassword;
     private javax.swing.JLabel icon;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblFullName;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUser;
-    private javax.swing.JPasswordField passPersonal;
     private javax.swing.JTextField txtFullName;
     private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables

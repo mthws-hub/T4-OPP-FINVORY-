@@ -28,7 +28,6 @@ public class FinvoryController {
     public CustomerController customerController;
     public SupplierController supplierController;
     public ReportController reportcontroller;
-    
 
     public FinvoryController(DataPersistenceManager dataBase) {
         this.dataBase = dataBase;

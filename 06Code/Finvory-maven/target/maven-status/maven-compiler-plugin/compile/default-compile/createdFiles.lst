@@ -115,6 +115,7 @@ ec\edu\espe\finvory\view\FrmCustomers.class
 ec\edu\espe\finvory\model\AdminDetail.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$1.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$CustomerFormData.class
+ec\edu\espe\finvory\view\FrmChangePassword$6.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$7.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$1.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$5.class
@@ -151,6 +152,7 @@ ec\edu\espe\finvory\view\FrmProfileCompany$1.class
 ec\edu\espe\finvory\mongo\MongoDataExporter.class
 ec\edu\espe\finvory\view\FrmCustomerSelector$2.class
 ec\edu\espe\finvory\view\FrmMainMenu$12.class
+ec\edu\espe\finvory\view\FrmChangePassword$1.class
 ec\edu\espe\finvory\view\FrmMainMenu$9.class
 ec\edu\espe\finvory\view\FrmProducts$1.class
 ec\edu\espe\finvory\view\FrmProductReturns$3.class
@@ -162,6 +164,7 @@ ec\edu\espe\finvory\view\FrmSuppliersReport.class
 ec\edu\espe\finvory\view\FrmInventories$9.class
 ec\edu\espe\finvory\view\FrmCustomerSelector.class
 ec\edu\espe\finvory\view\FrmReassignedProduct$1.class
+ec\edu\espe\finvory\view\FrmChangePassword$2.class
 ec\edu\espe\finvory\view\FrmProfilePersonal$1.class
 ec\edu\espe\finvory\view\FrmObsoleteInventories$5.class
 ec\edu\espe\finvory\view\FrmProducts$2.class
@@ -172,6 +175,7 @@ ec\edu\espe\finvory\view\FrmMainMenu$10.class
 ec\edu\espe\finvory\view\FrmNewAccount$3.class
 ec\edu\espe\finvory\view\FrmProductReturns$2.class
 ec\edu\espe\finvory\view\FrmMainMenu$5.class
+ec\edu\espe\finvory\view\FrmChangePassword$5.class
 ec\edu\espe\finvory\view\FrmProductReturns.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$2.class
 ec\edu\espe\finvory\view\FrmSalesReport.class
@@ -200,6 +204,8 @@ ec\edu\espe\finvory\view\FrmSuppliersReport$1.class
 ec\edu\espe\finvory\view\FrmProfileCompany$5.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$3.class
 ec\edu\espe\finvory\view\FrmPrices$2.class
+ec\edu\espe\finvory\view\FrmChangePassword.class
+ec\edu\espe\finvory\view\FrmChangePassword$3.class
 ec\edu\espe\finvory\controller\ProductController$ProductDisplayData.class
 ec\edu\espe\finvory\model\SystemUsers.class
 ec\edu\espe\finvory\controller\UserController.class
@@ -221,6 +227,7 @@ ec\edu\espe\finvory\view\FrmProducts$5.class
 ec\edu\espe\finvory\view\FrmCustomersReport$1.class
 ec\edu\espe\finvory\view\ButtonStyles.class
 ec\edu\espe\finvory\controller\FinvoryController.class
+ec\edu\espe\finvory\view\FrmChangePassword$4.class
 ec\edu\espe\finvory\view\FrmAddNewProduct.class
 ec\edu\espe\finvory\view\FrmFinvorySplash$1.class
 ec\edu\espe\finvory\view\FrmMainMenu$6.class

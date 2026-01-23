@@ -29,7 +29,6 @@ public class FrmProfileCompany extends javax.swing.JFrame {
 
     private void setupDesign() {
         icon.setIcon(UiUtilis.getScaledIcon(getClass().getResource("/personal.jpg"), 161, 140));
-        btnViewPassword.setIcon(UiUtilis.getScaledIcon(getClass().getResource("/eyeClose.png"), 24, 24));
         btnUploadPhoto.setIcon(UiUtilis.getScaledIcon(getClass().getResource("/upload.png"), 17, 17));
         cardLayout.show(pnlCardsContainer, "card2");
     }
@@ -45,7 +44,6 @@ public class FrmProfileCompany extends javax.swing.JFrame {
         txtRuc.setText(company.getRuc());
         txtPhone.setText(company.getPhone());
         txtEmail.setText(company.getEmail());
-        passCompany.setText(company.getPassword());
         txtRuc.setEditable(false);
         txtUserName.setText(company.getUsername());
         txtUserName.setEditable(false);
@@ -119,10 +117,9 @@ public class FrmProfileCompany extends javax.swing.JFrame {
         lblUser = new javax.swing.JLabel();
         txtUserName = new javax.swing.JTextField();
         lblPassword = new javax.swing.JLabel();
-        passCompany = new javax.swing.JPasswordField();
         btnCancel = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
-        btnViewPassword = new javax.swing.JButton();
+        btnChangePassword = new javax.swing.JButton();
         cardAddress = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -257,8 +254,6 @@ public class FrmProfileCompany extends javax.swing.JFrame {
         lblPassword.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
         lblPassword.setText("Contraseña:");
 
-        passCompany.setText("jPasswordField1personal.jpgpersonal.jpgpersonal.jpgpersonal.jpg");
-
         btnCancel.setBackground(new java.awt.Color(0, 123, 0));
         btnCancel.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
         btnCancel.setForeground(new java.awt.Color(242, 242, 242));
@@ -281,9 +276,13 @@ public class FrmProfileCompany extends javax.swing.JFrame {
             }
         });
 
-        btnViewPassword.addActionListener(new java.awt.event.ActionListener() {
+        btnChangePassword.setBackground(new java.awt.Color(0, 123, 0));
+        btnChangePassword.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        btnChangePassword.setForeground(new java.awt.Color(255, 255, 255));
+        btnChangePassword.setText("Cambiar Contraseña");
+        btnChangePassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewPasswordActionPerformed(evt);
+                btnChangePasswordActionPerformed(evt);
             }
         });
 
@@ -294,6 +293,7 @@ public class FrmProfileCompany extends javax.swing.JFrame {
             .addGroup(cardGeneralLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(cardGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnChangePassword)
                     .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblRUC, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCompany)
@@ -301,22 +301,18 @@ public class FrmProfileCompany extends javax.swing.JFrame {
                     .addComponent(lblPhone)
                     .addComponent(lblUser)
                     .addComponent(lblPassword)
-                    .addGroup(cardGeneralLayout.createSequentialGroup()
-                        .addGroup(cardGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(passCompany, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(txtUserName, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPhone, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtRuc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnViewPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(cardGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(txtUserName, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtPhone, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtRuc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblTitle)
                     .addGroup(cardGeneralLayout.createSequentialGroup()
                         .addGap(241, 241, 241)
                         .addComponent(btnSave)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnCancel)))
-                .addContainerGap(123, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
         cardGeneralLayout.setVerticalGroup(
             cardGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -343,13 +339,11 @@ public class FrmProfileCompany extends javax.swing.JFrame {
                 .addComponent(lblUser)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lblPassword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(cardGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passCompany, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnViewPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(btnChangePassword)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(cardGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel)
                     .addComponent(btnSave))
@@ -610,19 +604,6 @@ public class FrmProfileCompany extends javax.swing.JFrame {
         ((java.awt.CardLayout) pnlCardsContainer.getLayout()).show(pnlCardsContainer, "card2");
     }//GEN-LAST:event_btnGeneralActionPerformed
 
-    private void btnViewPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewPasswordActionPerformed
-        if (!isPasswordVisible) {
-            passCompany.setEchoChar((char) 0);
-            btnViewPassword.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
-                    getClass().getResource("/eyeOpen.png"), 24, 24));
-        } else {
-            passCompany.setEchoChar('*');
-            btnViewPassword.setIcon(ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(
-                    getClass().getResource("/eyeClose.png"), 24, 24));
-        }
-        isPasswordVisible = !isPasswordVisible;
-    }//GEN-LAST:event_btnViewPasswordActionPerformed
-
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
@@ -632,14 +613,12 @@ public class FrmProfileCompany extends javax.swing.JFrame {
         String ruc = txtRuc.getText().trim();
         String phone = txtPhone.getText().trim();
         String email = txtEmail.getText().trim();
-        String pass = new String(passCompany.getPassword());
         String error = ValidationUtils.validateCustomerFields(name, ruc, phone, email, "COMPANY");
         if (error == null) {
             CompanyAccount company = controller.getData().getCompanyInfo();
             company.setName(name);
             company.setPhone(phone);
             company.setEmail(email);
-            company.setPassword(pass);
             controller.saveData();
             JOptionPane.showMessageDialog(this, "Perfil de empresa actualizado con éxito.");
             this.dispose();
@@ -722,7 +701,6 @@ public class FrmProfileCompany extends javax.swing.JFrame {
         company.setName(txtCompanyName.getText().trim());
         company.setPhone(txtPhone.getText().trim());
         company.setEmail(txtEmail.getText().trim());
-        company.setPassword(new String(passCompany.getPassword()));
 
         javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
 
@@ -741,15 +719,20 @@ public class FrmProfileCompany extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnUploadPhotoActionPerformed
 
+    private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
+        FrmChangePassword frmChange = new FrmChangePassword(this, controller);
+        frmChange.setVisible(true);
+    }//GEN-LAST:event_btnChangePasswordActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCancel1;
     private javax.swing.JButton btnCancel2;
+    private javax.swing.JButton btnChangePassword;
     private javax.swing.JButton btnGeneral;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSave1;
     private javax.swing.JButton btnUploadPhoto;
-    private javax.swing.JButton btnViewPassword;
     private javax.swing.JPanel cardAddress;
     private javax.swing.JPanel cardGeneral;
     private javax.swing.JPanel cardPrices;
@@ -777,7 +760,6 @@ public class FrmProfileCompany extends javax.swing.JFrame {
     private javax.swing.JLabel lblRUC;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblUser;
-    private javax.swing.JPasswordField passCompany;
     private javax.swing.JPanel pnlCardsContainer;
     private javax.swing.JPanel pnlSlidebar;
     private javax.swing.JTextField txtCity;
