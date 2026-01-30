@@ -12,6 +12,7 @@ public class PersonalAccount {
     private String username;
     private String password;
     private String profilePhotoPath;
+    private String twoFactorKey; 
 
     public PersonalAccount() {
     }
@@ -60,6 +61,14 @@ public class PersonalAccount {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getTwoFactorKey() {
+        return twoFactorKey;
+    }
+
+    public void setTwoFactorKey(String twoFactorKey) {
+        this.twoFactorKey = twoFactorKey;
     }
 
 }

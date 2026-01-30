@@ -1,9 +1,11 @@
 package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
+import ec.edu.espe.finvory.controller.AuthenticatorController;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Address;
 import ec.edu.espe.finvory.utils.ValidationUtils;
+import ec.edu.espe.finvory.utils.GoogleAuthService;
 import java.awt.Color;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -452,7 +454,7 @@ public class FrmNewAccount extends javax.swing.JFrame {
         lblPersonalUser.setForeground(DEFAULT_COLOR);
         lblPersonalPassword.setForeground(DEFAULT_COLOR);
     }
-    
+
     private void onRegisterPersonal() {
         resetColors();
 
@@ -466,8 +468,11 @@ public class FrmNewAccount extends javax.swing.JFrame {
             return;
         }
 
+        String secretKey = controller.authenticatorcontroller.generateAndShowKey(this, username);
+
         HashMap<String, String> personalData = buildPersonalData(username, password, name);
 
+        personalData.put("twoFactorKey", secretKey);
         boolean success = controller.userController.registerPersonalGUI(personalData);
         handleRegisterResult(success, "Cuenta Personal creada exitosamente!");
     }
@@ -491,7 +496,12 @@ public class FrmNewAccount extends javax.swing.JFrame {
             return;
         }
 
+        String secretKey = controller.authenticatorcontroller.generateAndShowKey(this, username); 
+
         HashMap<String, String> companyData = buildCompanyData(username, password, name, ruc, phone, email);
+
+        companyData.put("twoFactorKey", secretKey);
+
         Address address = new Address(country, city, street);
 
         boolean success = controller.userController.registerCompanyGUI(companyData, address);
@@ -575,8 +585,8 @@ public class FrmNewAccount extends javax.swing.JFrame {
     }
 
     private String validateCompanyForm(String name, String ruc, String phone, String email,
-                                      String country, String city, String street,
-                                      String username, String password) {
+            String country, String city, String street,
+            String username, String password) {
 
         StringBuilder errors = new StringBuilder();
 
@@ -643,8 +653,8 @@ public class FrmNewAccount extends javax.swing.JFrame {
     }
 
     private HashMap<String, String> buildCompanyData(String username, String password,
-                                                    String companyName, String ruc,
-                                                    String phone, String email) {
+            String companyName, String ruc,
+            String phone, String email) {
         HashMap<String, String> companyData = new HashMap<>();
         companyData.put("username", username);
         companyData.put("password", password);

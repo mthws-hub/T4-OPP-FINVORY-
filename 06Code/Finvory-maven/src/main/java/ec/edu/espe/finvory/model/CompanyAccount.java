@@ -1,6 +1,7 @@
 package ec.edu.espe.finvory.model;
 
 import ec.edu.espe.finvory.utils.ValidationUtils;
+
 /**
  *
  * @author Arelys Otavalo, The POOwer Rangers of Programming
@@ -15,6 +16,7 @@ public class CompanyAccount {
     private String username;
     private String password;
     private String logoPath;
+    private String twoFactorKey; 
 
     public CompanyAccount() {
     }
@@ -99,6 +101,14 @@ public class CompanyAccount {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getTwoFactorKey() {
+        return twoFactorKey;
+    }
+
+    public void setTwoFactorKey(String twoFactorKey) {
+        this.twoFactorKey = twoFactorKey;
     }
 
 }

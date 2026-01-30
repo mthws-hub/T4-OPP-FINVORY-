@@ -113,70 +113,48 @@
       "username": "Mathews",
       "password": "Nbuifxt234",
       "logoPath": "data\\profiles\\Mathews_profile.jpeg"
+    },
+    {
+      "name": "KFC",
+      "address": {
+        "country": "Ecuadodr",
+        "city": "Quito",
+        "street": "Av. General Rumiñahui",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0011758903782",
+      "phone": "0999713923",
+      "email": "kfc@gmail.com",
+      "username": "KFC",
+      "password": "qpmmpgsjup",
+      "twoFactorKey": "XR2FWKE5OAALQ6TS2YEINUMB4FZEGZ5L"
+    },
+    {
+      "name": "PolloGus",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Rumiñahui",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0010976768967",
+      "phone": "0982670989",
+      "email": "pollogus@hotmail.com",
+      "username": "PolloGus",
+      "password": "qpmmpipsofbep",
+      "twoFactorKey": "MTRI7SLJVUSXI3WXCFLQ67JSJXNFUDF6"
     }
   ],
   "personalAccounts": [
     {
-      "fullName": "Juan Perez",
-      "username": "juanp",
-      "password": "234"
-    },
-    {
-      "fullName": "Pedro Pascal",
-      "username": "pedrito",
-      "password": "2347"
-    },
-    {
-      "fullName": "Moisés Isaac Caicedo Corozo",
-      "username": "niñoMoi",
-      "password": "Npj234",
-      "profilePhotoPath": "data\\profiles\\niñoMoi_profile.png"
-    },
-    {
-      "fullName": "Pepito",
-      "username": "pepito",
-      "password": "234"
-    },
-    {
-      "fullName": "asdas",
-      "username": "prueba@",
-      "password": "234"
-    },
-    {
-      "fullName": "",
-      "username": "",
-      "password": ""
-    },
-    {
-      "fullName": "Said Pastor",
-      "username": "21212",
-      "password": "3223"
-    },
-    {
-      "fullName": "Kylian Mbappé Lottin",
-      "username": "Mbappe",
-      "password": "Mpuujo",
-      "profilePhotoPath": "data\\profiles\\Mbappe_profile.jpg"
-    },
-    {
-      "fullName": "Florencia Aguilar",
-      "username": "Flor",
-      "password": "2345"
-    },
-    {
-      "fullName": "Lucas Martines Rodriguez Paz",
-      "username": "Luca",
-      "password": "456"
-    },
-    {
-      "fullName": "Mia Skyla",
-      "username": "miaS",
-      "password": "236"
-    },
-    {
-      "fullName": "Sofia Mendez",
-      "username": "Sofi",
-      "password": "tpgjb"
+      "fullName": "Mhya Villarreal",
+      "username": "Mhya",
+      "password": "nizb",
+      "twoFactorKey": "VPVSLPIKF4765CJC7DRTFUZFU53FVJCE"
     }
   ]
 }

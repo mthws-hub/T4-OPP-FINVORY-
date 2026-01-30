@@ -25,6 +25,10 @@ public class UserController {
         for (CompanyAccount company : users.getCompanyAccounts()) {
             if (company.getUsername().equals(username) && company.checkPassword(password)) {
 
+                if (!verifyTwoFactor(company.getTwoFactorKey())) {
+                    return false;
+                }  
+
                 mainController.setCurrentCompanyUsername(username);
                 mainController.setUserType("COMPANY");
 
@@ -42,6 +46,11 @@ public class UserController {
 
         for (PersonalAccount personal : users.getPersonalAccounts()) {
             if (personal.getUsername().equals(username) && personal.checkPassword(password)) {
+                
+                if (!verifyTwoFactor(personal.getTwoFactorKey())) {
+                    return false;
+                }
+
                 mainController.setCurrentCompanyUsername(username);
                 mainController.setUserType("PERSONAL");
                 mainController.setData(null);
@@ -49,6 +58,22 @@ public class UserController {
             }
         }
         return false;
+    }
+
+    private boolean verifyTwoFactor(String secretKey) {
+        if (secretKey == null || secretKey.isEmpty()) {
+            return true;
+        }
+
+        String codeString = JOptionPane.showInputDialog(null,
+                "Ingrese el código de 6 dígitos de Google Authenticator:",
+                "Verificación de Seguridad (2FA)",
+                JOptionPane.QUESTION_MESSAGE);
+        if (codeString == null) {
+            return false;
+        }
+
+        return mainController.authenticatorcontroller.verifyCode(secretKey, codeString);
     }
 
     public void startMainMenuPublic() {
@@ -74,6 +99,8 @@ public class UserController {
                 data.get("phone"), data.get("email"), username, encryptedPass
         );
 
+        newCompany.setTwoFactorKey(data.get("twoFactorKey"));
+
         mainController.getUsers().getCompanyAccounts().add(newCompany);
         mainController.getDataBase().saveUsers(mainController.getUsers());
 
@@ -93,6 +120,8 @@ public class UserController {
 
         String encryptedPass = mainController.caesarCipher(data.get("password"), 1);
         PersonalAccount newPersonal = new PersonalAccount(data.get("fullName"), username, encryptedPass);
+
+        newPersonal.setTwoFactorKey(data.get("twoFactorKey")); 
 
         mainController.getUsers().getPersonalAccounts().add(newPersonal);
         mainController.getDataBase().saveUsers(mainController.getUsers());

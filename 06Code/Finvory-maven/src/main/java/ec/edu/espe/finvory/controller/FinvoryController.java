@@ -28,6 +28,7 @@ public class FinvoryController {
     public CustomerController customerController;
     public SupplierController supplierController;
     public ReportController reportcontroller;
+    public AuthenticatorController authenticatorcontroller; 
 
     public FinvoryController(DataPersistenceManager dataBase) {
         this.dataBase = dataBase;
@@ -42,6 +43,7 @@ public class FinvoryController {
         this.customerController = new CustomerController(this);
         this.supplierController = new SupplierController(this);
         this.reportcontroller = new ReportController(this);
+        this.authenticatorcontroller = new AuthenticatorController(this);
     }
 
     public FinvoryData getData() {
