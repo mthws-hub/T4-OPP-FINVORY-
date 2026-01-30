@@ -2,6 +2,7 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  *
@@ -15,7 +16,7 @@ public class FrmCustomersReport extends javax.swing.JFrame {
     public FrmCustomersReport() {
         initComponents();
         btnSearch.setEnabled(false);
-        btnExportCSV.setEnabled(false);
+        btnExport.setEnabled(false);
     }
 
     public FrmCustomersReport(FinvoryController controller) {
@@ -65,7 +66,7 @@ public class FrmCustomersReport extends javax.swing.JFrame {
         cmbMonth = new javax.swing.JComboBox<>();
         btnSearch = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        btnExportCSV = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -162,13 +163,13 @@ public class FrmCustomersReport extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnExportCSV.setBackground(new java.awt.Color(0, 123, 0));
-        btnExportCSV.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        btnExportCSV.setForeground(new java.awt.Color(255, 255, 255));
-        btnExportCSV.setText("Exportar a CSV");
-        btnExportCSV.addActionListener(new java.awt.event.ActionListener() {
+        btnExport.setBackground(new java.awt.Color(0, 123, 0));
+        btnExport.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        btnExport.setForeground(new java.awt.Color(255, 255, 255));
+        btnExport.setText("Exportar");
+        btnExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportCSVActionPerformed(evt);
+                btnExportActionPerformed(evt);
             }
         });
 
@@ -177,15 +178,15 @@ public class FrmCustomersReport extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(410, Short.MAX_VALUE)
-                .addComponent(btnExportCSV)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnExport)
                 .addGap(37, 37, 37))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(btnExportCSV)
+                .addComponent(btnExport)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -215,9 +216,9 @@ public class FrmCustomersReport extends javax.swing.JFrame {
         onSearch();
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void btnExportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCSVActionPerformed
-        onExportCSV();
-    }//GEN-LAST:event_btnExportCSVActionPerformed
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
+        onExportReport();
+    }//GEN-LAST:event_btnExportActionPerformed
 
     /**
      * @param args the command line arguments
@@ -251,8 +252,48 @@ public class FrmCustomersReport extends javax.swing.JFrame {
         );
     }
 
+    private void onExportReport() {
+        var format = ec.edu.espe.finvory.controller.report.ReportUiHelper.askFormat(this);
+        if (format == null) {
+            return;
+        }
+
+        String path = ec.edu.espe.finvory.controller.report.ReportUiHelper.askSavePath(
+                this,
+                "Guardar Reporte de Clientes",
+                format
+        );
+        if (path == null) {
+            return;
+        }
+
+        String reportTitle = "REPORTE DE ACTIVIDAD DE CLIENTES: "
+                + cmbMonth.getSelectedItem().toString().toUpperCase() + " "
+                + cmbYear.getSelectedItem().toString();
+
+        String[] headers = ec.edu.espe.finvory.controller.report.ReportUiHelper.extractHeaders(tblInformation);
+        java.util.List<Object[]> rows = ec.edu.espe.finvory.controller.report.ReportUiHelper.extractRows(tblInformation);
+
+        ec.edu.espe.finvory.controller.report.ReportExporter exporter
+                = new ec.edu.espe.finvory.controller.report.ReportExporter(null);
+
+        try {
+            if (format == ec.edu.espe.finvory.controller.report.ReportUiHelper.Format.CSV) {
+                exporter.setStrategy(new ec.edu.espe.finvory.controller.report.CsvReportExportStrategy(controller.exportController));
+            } else {
+                exporter.setStrategy(new ec.edu.espe.finvory.controller.report.PdfReportExportStrategy());
+            }
+
+            exporter.export(path, reportTitle, headers, rows);
+            javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al exportar: " + ex.getMessage());
+            logger.log(java.util.logging.Level.SEVERE, "Error exportando reporte", ex);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnExportCSV;
+    private javax.swing.JButton btnExport;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cmbMonth;
     private javax.swing.JComboBox<String> cmbYear;

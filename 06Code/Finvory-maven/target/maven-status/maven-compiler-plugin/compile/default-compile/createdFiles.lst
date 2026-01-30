@@ -106,8 +106,10 @@ ec\edu\espe\finvory\view\FrmAddNewSupplier$1.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$ValidationResult.class
 ec\edu\espe\finvory\view\FrmInventories$2.class
 ec\edu\espe\finvory\view\FrmNewAccount$7.class
+ec\edu\espe\finvory\controller\report\ReportExportStrategy.class
 ec\edu\espe\finvory\view\FrmProducts$6.class
 ec\edu\espe\finvory\view\FrmLogin$5.class
+ec\edu\espe\finvory\controller\report\PdfReportExportStrategy.class
 ec\edu\espe\finvory\view\FrmPrices$3.class
 ec\edu\espe\finvory\view\FrmInventorySelector$1.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$2.class
@@ -132,6 +134,7 @@ ec\edu\espe\finvory\view\FrmGrossReport$6.class
 ec\edu\espe\finvory\controller\ISupplierActions.class
 ec\edu\espe\finvory\view\FrmAddNewInventory$2.class
 ec\edu\espe\finvory\view\FrmMainMenu$11.class
+ec\edu\espe\finvory\controller\report\CsvReportExportStrategy.class
 ec\edu\espe\finvory\view\FrmAbout$1.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$3.class
 ec\edu\espe\finvory\view\FrmSuppliers$4.class
@@ -154,11 +157,13 @@ ec\edu\espe\finvory\mongo\MongoDataExporter.class
 ec\edu\espe\finvory\view\FrmCustomerSelector$2.class
 ec\edu\espe\finvory\view\FrmMainMenu$12.class
 ec\edu\espe\finvory\view\FrmChangePassword$1.class
+ec\edu\espe\finvory\controller\report\ReportUiHelper.class
 ec\edu\espe\finvory\view\FrmMainMenu$9.class
 ec\edu\espe\finvory\view\FrmProducts$1.class
 ec\edu\espe\finvory\view\FrmProductReturns$3.class
 ec\edu\espe\finvory\view\FrmInventorySelector.class
 ec\edu\espe\finvory\view\FrmInventorySelector$2.class
+ec\edu\espe\finvory\controller\report\ReportExporter.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$6.class
 ec\edu\espe\finvory\view\FrmPrices$4.class
 ec\edu\espe\finvory\view\FrmSuppliersReport.class
@@ -208,6 +213,7 @@ ec\edu\espe\finvory\view\FrmPrices$2.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$8.class
 ec\edu\espe\finvory\view\FrmChangePassword.class
 ec\edu\espe\finvory\view\FrmChangePassword$3.class
+ec\edu\espe\finvory\controller\report\ReportUiHelper$Format.class
 ec\edu\espe\finvory\controller\ProductController$ProductDisplayData.class
 ec\edu\espe\finvory\model\SystemUsers.class
 ec\edu\espe\finvory\controller\UserController.class

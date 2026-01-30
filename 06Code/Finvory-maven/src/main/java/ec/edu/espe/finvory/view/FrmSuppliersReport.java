@@ -2,6 +2,7 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  *
@@ -65,7 +66,7 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         tblSuppliers = new javax.swing.JTable();
         btnSearch = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        btnExportCSV = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -168,13 +169,13 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
-        btnExportCSV.setBackground(new java.awt.Color(0, 123, 0));
-        btnExportCSV.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
-        btnExportCSV.setForeground(new java.awt.Color(255, 255, 255));
-        btnExportCSV.setText("Exportar a CSV");
-        btnExportCSV.addActionListener(new java.awt.event.ActionListener() {
+        btnExport.setBackground(new java.awt.Color(0, 123, 0));
+        btnExport.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 12)); // NOI18N
+        btnExport.setForeground(new java.awt.Color(255, 255, 255));
+        btnExport.setText("Exportar");
+        btnExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportCSVActionPerformed(evt);
+                btnExportActionPerformed(evt);
             }
         });
 
@@ -184,14 +185,14 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnExportCSV)
+                .addComponent(btnExport)
                 .addGap(68, 68, 68))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(26, Short.MAX_VALUE)
-                .addComponent(btnExportCSV)
+                .addComponent(btnExport)
                 .addGap(17, 17, 17))
         );
 
@@ -221,9 +222,9 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         onSearchSuppliersReport();
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void btnExportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCSVActionPerformed
-        onExportSuppliersReportCsv();
-    }//GEN-LAST:event_btnExportCSVActionPerformed
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
+        onExportReport();
+    }//GEN-LAST:event_btnExportActionPerformed
 
     /**
      * @param args the command line arguments
@@ -249,41 +250,40 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrmSuppliersReport().setVisible(true));
     }
-    
+
     private void onSearchSuppliersReport() {
-    int year = getSelectedYear();
-    int month = getSelectedMonthIndex();
+        int year = getSelectedYear();
+        int month = getSelectedMonthIndex();
 
-    clearSuppliersTable();
+        clearSuppliersTable();
 
-    java.util.List<Object[]> reportData = controller.supplierController
-            .getSupplierPerformanceFlexibleData(year, month);
+        java.util.List<Object[]> reportData = controller.supplierController
+                .getSupplierPerformanceFlexibleData(year, month);
 
-    fillSuppliersTable(reportData);
-}
+        fillSuppliersTable(reportData);
+    }
 
-private int getSelectedYear() {
-    return Integer.parseInt(cmbYear.getSelectedItem().toString());
-}
+    private int getSelectedYear() {
+        return Integer.parseInt(cmbYear.getSelectedItem().toString());
+    }
 
-/**
- * Mes:
- * 0 = "Todos los meses"
- * 1..12 = Enero..Diciembre (porque el combo tiene "Todos" primero)
- */
+    /**
+     * Mes: 0 = "Todos los meses" 1..12 = Enero..Diciembre (porque el combo
+     * tiene "Todos" primero)
+     */
     private int getSelectedMonthIndex() {
         return cmbMonth.getSelectedIndex();
     }
 
     private void clearSuppliersTable() {
-        javax.swing.table.DefaultTableModel model =
-                (javax.swing.table.DefaultTableModel) tblSuppliers.getModel();
+        javax.swing.table.DefaultTableModel model
+                = (javax.swing.table.DefaultTableModel) tblSuppliers.getModel();
         model.setRowCount(0);
     }
 
     private void fillSuppliersTable(java.util.List<Object[]> reportData) {
-        javax.swing.table.DefaultTableModel model =
-                (javax.swing.table.DefaultTableModel) tblSuppliers.getModel();
+        javax.swing.table.DefaultTableModel model
+                = (javax.swing.table.DefaultTableModel) tblSuppliers.getModel();
 
         if (reportData == null) {
             return;
@@ -329,8 +329,8 @@ private int getSelectedYear() {
     }
 
     private java.util.List<Object[]> extractTableRows(javax.swing.JTable table) {
-        javax.swing.table.DefaultTableModel model =
-                (javax.swing.table.DefaultTableModel) table.getModel();
+        javax.swing.table.DefaultTableModel model
+                = (javax.swing.table.DefaultTableModel) table.getModel();
 
         java.util.List<Object[]> dataRows = new java.util.ArrayList<>();
 
@@ -345,8 +345,45 @@ private int getSelectedYear() {
         return dataRows;
     }
 
+    private void onExportReport() {
+        var format = ec.edu.espe.finvory.controller.report.ReportUiHelper.askFormat(this);
+        if (format == null) {
+            return;
+        }
+
+        String path = ec.edu.espe.finvory.controller.report.ReportUiHelper.askSavePath(
+                this,
+                "Guardar Reporte de Proveedores",
+                format
+        );
+        if (path == null) {
+            return;
+        }
+
+        String reportTitle = buildReportTitle();
+        String[] headers = ec.edu.espe.finvory.controller.report.ReportUiHelper.extractHeaders(tblSuppliers);
+        java.util.List<Object[]> rows = ec.edu.espe.finvory.controller.report.ReportUiHelper.extractRows(tblSuppliers);
+
+        ec.edu.espe.finvory.controller.report.ReportExporter exporter
+                = new ec.edu.espe.finvory.controller.report.ReportExporter(null);
+
+        try {
+            if (format == ec.edu.espe.finvory.controller.report.ReportUiHelper.Format.CSV) {
+                exporter.setStrategy(new ec.edu.espe.finvory.controller.report.CsvReportExportStrategy(controller.exportController));
+            } else {
+                exporter.setStrategy(new ec.edu.espe.finvory.controller.report.PdfReportExportStrategy());
+            }
+
+            exporter.export(path, reportTitle, headers, rows);
+            javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al exportar: " + ex.getMessage());
+            logger.log(java.util.logging.Level.SEVERE, "Error exportando reporte", ex);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnExportCSV;
+    private javax.swing.JButton btnExport;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cmbMonth;
     private javax.swing.JComboBox<String> cmbYear;
