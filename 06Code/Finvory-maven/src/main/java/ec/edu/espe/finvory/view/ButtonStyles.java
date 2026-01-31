@@ -56,4 +56,12 @@ public final class ButtonStyles {
                 new EmptyBorder(6, 12, 6, 12)
         ));
     }
+
+    public static void sidebar(JButton button) {
+        applyBase(button);
+        button.setBackground(new java.awt.Color(50, 50, 50));
+        button.setForeground(java.awt.Color.WHITE);
+        button.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        button.setBorder(new javax.swing.border.EmptyBorder(10, 20, 10, 10));
+    }
 }

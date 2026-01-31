@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
  * @author Mathews Pastor, The POOwer Rangers Of Programming
  */
 public class UiUtilis {
-    
+
     public static javax.swing.ImageIcon getScaledIcon(java.net.URL url, int containerWidth, int containerHeight) {
         if (url == null) {
             return null;

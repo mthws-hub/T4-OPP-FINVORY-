@@ -75,6 +75,7 @@ ec\edu\espe\finvory\model\CompanyAccount.class
 ec\edu\espe\finvory\view\FrmCustomers$2.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$Field.class
 ec\edu\espe\finvory\view\FrmLogin$1.class
+ec\edu\espe\finvory\view\FrmInventories$11.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$1.class
 ec\edu\espe\finvory\view\FrmCustomerSelector$1.class
 ec\edu\espe\finvory\view\FrmFinvorySplash.class

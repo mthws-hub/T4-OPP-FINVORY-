@@ -147,6 +147,23 @@
       "username": "PolloGus",
       "password": "qpmmpipsofbep",
       "twoFactorKey": "MTRI7SLJVUSXI3WXCFLQ67JSJXNFUDF6"
+    },
+    {
+      "name": "Maryuri",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Av Maldonado",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0011755342839",
+      "phone": "0985876242",
+      "email": "maryuri@gmail.com",
+      "username": "maryuri",
+      "password": "2345",
+      "twoFactorKey": "XX7UUXZNV4PDZKAFAXTQRHM3C6PMNCOV"
     }
   ],
   "personalAccounts": [
@@ -155,6 +172,18 @@
       "username": "Mhya",
       "password": "nizb",
       "twoFactorKey": "VPVSLPIKF4765CJC7DRTFUZFU53FVJCE"
+    },
+    {
+      "fullName": "Maryuri Quiña",
+      "username": "Maryuri3",
+      "password": "2345",
+      "twoFactorKey": "H3KGL47WEOAFSIUVABYEQSUSRW6GJQWU"
+    },
+    {
+      "fullName": "Salome Molina",
+      "username": "Salome",
+      "password": "2345",
+      "twoFactorKey": "ES4XMYRW6LN34XDDPWKWAR2K7QFYGNHN"
     }
   ]
 }

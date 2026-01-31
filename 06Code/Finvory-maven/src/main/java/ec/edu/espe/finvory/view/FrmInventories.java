@@ -29,6 +29,7 @@ public class FrmInventories extends javax.swing.JFrame {
         this.controller = controller;
         this.setLocationRelativeTo(null);
         setupTableNonEditable();
+        setupHomeLogo();
         fillInventoryCombo();
         FinvoryApp.setIcon(this);
     }
@@ -51,6 +52,16 @@ public class FrmInventories extends javax.swing.JFrame {
         tabProducts.setModel(model);
     }
 
+   private void setupHomeLogo() {
+        java.net.URL logoUrl = getClass().getResource("/FinvoryCorner.jpeg");
+        if (logoUrl != null) {
+            javax.swing.ImageIcon logoIcon = ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(logoUrl, 45, 45);
+            lblHomeLogo.setIcon(logoIcon);
+            lblHomeLogo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            lblHomeLogo.setText("");
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,16 +82,14 @@ public class FrmInventories extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabProducts = new javax.swing.JTable();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        itemPrincipalMenu = new javax.swing.JMenuItem();
-        mnuHandle = new javax.swing.JMenu();
-        itemProducts = new javax.swing.JMenuItem();
-        itemObsoleteProducts = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        itemAddNewInventory = new javax.swing.JMenuItem();
+        pnlSidebar = new javax.swing.JPanel();
+        lblHomeLogo = new javax.swing.JLabel();
+        btnHandle = new javax.swing.JButton();
+        btnAddNewInventory = new javax.swing.JButton();
+        btnProducts = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel1.setBackground(new java.awt.Color(224, 224, 224));
 
@@ -117,15 +126,15 @@ public class FrmInventories extends javax.swing.JFrame {
                         .addComponent(lblCountry, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCountryInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                         .addComponent(lblCity)
                         .addGap(18, 18, 18)
                         .addComponent(txtCityInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(474, 474, 474))
+                        .addGap(604, 604, 604))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblInventoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbInventories, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbInventories, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -141,9 +150,9 @@ public class FrmInventories extends javax.swing.JFrame {
                     .addComponent(lblCity)
                     .addComponent(txtCountryInventory)
                     .addComponent(txtCityInventory))
-                .addGap(8, 8, 8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblProduct)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(224, 224, 224));
@@ -174,61 +183,72 @@ public class FrmInventories extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 945, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jMenu1.setText("Finvory");
-
-        itemPrincipalMenu.setText("Menu Principal");
-        itemPrincipalMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemPrincipalMenuActionPerformed(evt);
+        pnlSidebar.setMinimumSize(new java.awt.Dimension(60, 500));
+        pnlSidebar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pnlSidebarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                pnlSidebarMouseExited(evt);
             }
         });
-        jMenu1.add(itemPrincipalMenu);
+        pnlSidebar.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jMenuBar1.add(jMenu1);
-
-        mnuHandle.setText("Productos");
-
-        itemProducts.setText("Productos");
-        itemProducts.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemProductsActionPerformed(evt);
+        lblHomeLogo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblHomeLogoMouseClicked(evt);
             }
         });
-        mnuHandle.add(itemProducts);
+        pnlSidebar.add(lblHomeLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 70, 70));
 
-        itemObsoleteProducts.setText("Productos Obsoletos");
-        itemObsoleteProducts.addActionListener(new java.awt.event.ActionListener() {
+        btnHandle.setBackground(new java.awt.Color(0, 123, 0));
+        btnHandle.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 13)); // NOI18N
+        btnHandle.setForeground(new java.awt.Color(255, 255, 255));
+        btnHandle.setText("Ver Obsoletos");
+        btnHandle.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnHandle.setIconTextGap(15);
+        btnHandle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemObsoleteProductsActionPerformed(evt);
+                btnHandleActionPerformed(evt);
             }
         });
-        mnuHandle.add(itemObsoleteProducts);
+        pnlSidebar.add(btnHandle, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 160, 30));
 
-        jMenuBar1.add(mnuHandle);
-
-        jMenu2.setText("Inventarios");
-
-        itemAddNewInventory.setText("Añadir Nuevo Inventario");
-        itemAddNewInventory.addActionListener(new java.awt.event.ActionListener() {
+        btnAddNewInventory.setBackground(new java.awt.Color(0, 123, 0));
+        btnAddNewInventory.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 13)); // NOI18N
+        btnAddNewInventory.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddNewInventory.setText("Nuevo Inventario");
+        btnAddNewInventory.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAddNewInventory.setIconTextGap(15);
+        btnAddNewInventory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemAddNewInventoryActionPerformed(evt);
+                btnAddNewInventoryActionPerformed(evt);
             }
         });
-        jMenu2.add(itemAddNewInventory);
+        pnlSidebar.add(btnAddNewInventory, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 160, 30));
 
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
+        btnProducts.setBackground(new java.awt.Color(0, 123, 0));
+        btnProducts.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 13)); // NOI18N
+        btnProducts.setForeground(new java.awt.Color(255, 255, 255));
+        btnProducts.setText("Añadir Producto");
+        btnProducts.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnProducts.setIconTextGap(15);
+        btnProducts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProductsActionPerformed(evt);
+            }
+        });
+        pnlSidebar.add(btnProducts, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 160, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -236,43 +256,63 @@ public class FrmInventories extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(pnlSidebar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, 0)
+                        .addComponent(pnlSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void itemProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProductsActionPerformed
-        onOpenProducts();
-    }//GEN-LAST:event_itemProductsActionPerformed
-
-    private void itemObsoleteProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemObsoleteProductsActionPerformed
-        onOpenObsoleteProducts();
-    }//GEN-LAST:event_itemObsoleteProductsActionPerformed
-
-    private void itemAddNewInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAddNewInventoryActionPerformed
-        onAddNewInventory();
-    }//GEN-LAST:event_itemAddNewInventoryActionPerformed
-
-    private void itemPrincipalMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPrincipalMenuActionPerformed
-        onClose();
-    }//GEN-LAST:event_itemPrincipalMenuActionPerformed
-
     private void cmbInventoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbInventoriesActionPerformed
         onInventoryComboSelection();
     }//GEN-LAST:event_cmbInventoriesActionPerformed
+
+    private void btnAddNewInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewInventoryActionPerformed
+        onAddNewInventory();
+    }//GEN-LAST:event_btnAddNewInventoryActionPerformed
+
+    private void lblHomeLogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHomeLogoMouseClicked
+        onClose();
+    }//GEN-LAST:event_lblHomeLogoMouseClicked
+
+    private void btnHandleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHandleActionPerformed
+        onOpenObsoleteProducts();
+    }//GEN-LAST:event_btnHandleActionPerformed
+
+    private void btnProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductsActionPerformed
+        onAddProduct();
+    }//GEN-LAST:event_btnProductsActionPerformed
+
+    private void pnlSidebarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlSidebarMouseEntered
+  
+    }//GEN-LAST:event_pnlSidebarMouseEntered
+
+    private void pnlSidebarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlSidebarMouseExited
+       
+    }//GEN-LAST:event_pnlSidebarMouseExited
+
+    private void onReturnToMain() {
+        onClose();
+    }
+
     private void handleNoMatches() {
         JOptionPane.showMessageDialog(this, "No se encontraron coincidencias.");
         clearFields();
@@ -310,9 +350,9 @@ public class FrmInventories extends javax.swing.JFrame {
         model.setRowCount(0);
 
         if (currentInventory == null) {
-            return; 
+            return;
         }
-        
+
         List<Object[]> rows = controller.inventoryController.getInventoryTableData(currentInventory);
         for (Object[] row : rows) {
             model.addRow(row);
@@ -339,24 +379,6 @@ public class FrmInventories extends javax.swing.JFrame {
             return;
         }
         handleMultipleMatches(matches);
-    }
-
-    private void onOpenProducts() {
-        if (currentInventory == null) {
-            JOptionPane.showMessageDialog(this, "Primero debe buscar y seleccionar un inventario.");
-            return;
-        }
-
-        FrmProducts products = new FrmProducts(controller.productController, controller, currentInventory);
-        products.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent e) {
-                FrmInventories.this.setVisible(true);
-            }
-        });
-
-        products.setVisible(true);
-        this.setVisible(false);
     }
 
     private void onOpenObsoleteProducts() {
@@ -421,23 +443,46 @@ public class FrmInventories extends javax.swing.JFrame {
         this.dispose();
     }
 
+    private void onAddProduct() {
+        String selectedName = (String) cmbInventories.getSelectedItem();
+        Inventory selectedInventory = controller.inventoryController.handleInventorySelection(selectedName);
+
+        if (selectedInventory == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, seleccione un inventario válido antes de añadir un producto.",
+                    "Inventario Requerido",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        FrmAddNewProduct frmAdd = new FrmAddNewProduct(controller, selectedInventory);
+
+        frmAdd.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                onInventoryComboSelection();
+            }
+        });
+
+        frmAdd.setVisible(true);
+    }
+
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddNewInventory;
+    private javax.swing.JButton btnHandle;
+    private javax.swing.JButton btnProducts;
     private javax.swing.JComboBox<String> cmbInventories;
-    private javax.swing.JMenuItem itemAddNewInventory;
-    private javax.swing.JMenuItem itemObsoleteProducts;
-    private javax.swing.JMenuItem itemPrincipalMenu;
-    private javax.swing.JMenuItem itemProducts;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCity;
     private javax.swing.JLabel lblCountry;
+    private javax.swing.JLabel lblHomeLogo;
     private javax.swing.JLabel lblInventoryName;
     private javax.swing.JLabel lblProduct;
-    private javax.swing.JMenu mnuHandle;
+    private javax.swing.JPanel pnlSidebar;
     private javax.swing.JTable tabProducts;
     private javax.swing.JLabel txtCityInventory;
     private javax.swing.JLabel txtCountryInventory;
