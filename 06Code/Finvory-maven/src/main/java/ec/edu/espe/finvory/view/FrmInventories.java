@@ -52,7 +52,7 @@ public class FrmInventories extends javax.swing.JFrame {
         tabProducts.setModel(model);
     }
 
-   private void setupHomeLogo() {
+    private void setupHomeLogo() {
         java.net.URL logoUrl = getClass().getResource("/FinvoryCorner.jpeg");
         if (logoUrl != null) {
             javax.swing.ImageIcon logoIcon = ec.edu.espe.finvory.utils.UiUtilis.getScaledIcon(logoUrl, 45, 45);
@@ -86,7 +86,7 @@ public class FrmInventories extends javax.swing.JFrame {
         lblHomeLogo = new javax.swing.JLabel();
         btnHandle = new javax.swing.JButton();
         btnAddNewInventory = new javax.swing.JButton();
-        btnProducts = new javax.swing.JButton();
+        btnProduct = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -120,9 +120,6 @@ public class FrmInventories extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblProduct)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblCountry, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCountryInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -132,9 +129,12 @@ public class FrmInventories extends javax.swing.JFrame {
                         .addComponent(txtCityInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(604, 604, 604))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblInventoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbInventories, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblProduct)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lblInventoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbInventories, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -194,14 +194,6 @@ public class FrmInventories extends javax.swing.JFrame {
         );
 
         pnlSidebar.setMinimumSize(new java.awt.Dimension(60, 500));
-        pnlSidebar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                pnlSidebarMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                pnlSidebarMouseExited(evt);
-            }
-        });
         pnlSidebar.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblHomeLogo.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -214,7 +206,7 @@ public class FrmInventories extends javax.swing.JFrame {
         btnHandle.setBackground(new java.awt.Color(0, 123, 0));
         btnHandle.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 13)); // NOI18N
         btnHandle.setForeground(new java.awt.Color(255, 255, 255));
-        btnHandle.setText("Ver Obsoletos");
+        btnHandle.setText("    Ver Obsoletos");
         btnHandle.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHandle.setIconTextGap(15);
         btnHandle.addActionListener(new java.awt.event.ActionListener() {
@@ -227,7 +219,7 @@ public class FrmInventories extends javax.swing.JFrame {
         btnAddNewInventory.setBackground(new java.awt.Color(0, 123, 0));
         btnAddNewInventory.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 13)); // NOI18N
         btnAddNewInventory.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddNewInventory.setText("Nuevo Inventario");
+        btnAddNewInventory.setText(" Nuevo Inventario");
         btnAddNewInventory.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAddNewInventory.setIconTextGap(15);
         btnAddNewInventory.addActionListener(new java.awt.event.ActionListener() {
@@ -235,20 +227,18 @@ public class FrmInventories extends javax.swing.JFrame {
                 btnAddNewInventoryActionPerformed(evt);
             }
         });
-        pnlSidebar.add(btnAddNewInventory, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 160, 30));
+        pnlSidebar.add(btnAddNewInventory, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 160, 30));
 
-        btnProducts.setBackground(new java.awt.Color(0, 123, 0));
-        btnProducts.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 13)); // NOI18N
-        btnProducts.setForeground(new java.awt.Color(255, 255, 255));
-        btnProducts.setText("Añadir Producto");
-        btnProducts.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnProducts.setIconTextGap(15);
-        btnProducts.addActionListener(new java.awt.event.ActionListener() {
+        btnProduct.setBackground(new java.awt.Color(0, 123, 0));
+        btnProduct.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 13)); // NOI18N
+        btnProduct.setForeground(new java.awt.Color(255, 255, 255));
+        btnProduct.setText("Porductos");
+        btnProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnProductsActionPerformed(evt);
+                btnProductActionPerformed(evt);
             }
         });
-        pnlSidebar.add(btnProducts, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 160, 30));
+        pnlSidebar.add(btnProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 160, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -272,9 +262,7 @@ public class FrmInventories extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addComponent(pnlSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(pnlSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -297,17 +285,9 @@ public class FrmInventories extends javax.swing.JFrame {
         onOpenObsoleteProducts();
     }//GEN-LAST:event_btnHandleActionPerformed
 
-    private void btnProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductsActionPerformed
-        onAddProduct();
-    }//GEN-LAST:event_btnProductsActionPerformed
-
-    private void pnlSidebarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlSidebarMouseEntered
-  
-    }//GEN-LAST:event_pnlSidebarMouseEntered
-
-    private void pnlSidebarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlSidebarMouseExited
-       
-    }//GEN-LAST:event_pnlSidebarMouseExited
+    private void btnProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductActionPerformed
+        onOpenProducts();
+    }//GEN-LAST:event_btnProductActionPerformed
 
     private void onReturnToMain() {
         onClose();
@@ -443,36 +423,33 @@ public class FrmInventories extends javax.swing.JFrame {
         this.dispose();
     }
 
-    private void onAddProduct() {
-        String selectedName = (String) cmbInventories.getSelectedItem();
-        Inventory selectedInventory = controller.inventoryController.handleInventorySelection(selectedName);
-
-        if (selectedInventory == null) {
+    private void onOpenProducts() {
+        if (currentInventory == null) {
             JOptionPane.showMessageDialog(this,
-                    "Por favor, seleccione un inventario válido antes de añadir un producto.",
+                    "Por favor, seleccione un inventario válido antes de ver sus productos.",
                     "Inventario Requerido",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        FrmAddNewProduct frmAdd = new FrmAddNewProduct(controller, selectedInventory);
-
-        frmAdd.addWindowListener(new java.awt.event.WindowAdapter() {
+        FrmProducts frmProducts = new FrmProducts(controller.productController, controller, currentInventory);
+        this.setVisible(false);
+        frmProducts.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
+                FrmInventories.this.setVisible(true);
                 onInventoryComboSelection();
             }
         });
 
-        frmAdd.setVisible(true);
+        frmProducts.setVisible(true);
     }
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddNewInventory;
     private javax.swing.JButton btnHandle;
-    private javax.swing.JButton btnProducts;
+    private javax.swing.JButton btnProduct;
     private javax.swing.JComboBox<String> cmbInventories;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
