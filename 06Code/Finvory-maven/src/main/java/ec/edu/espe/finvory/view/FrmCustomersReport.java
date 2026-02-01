@@ -15,6 +15,8 @@ public class FrmCustomersReport extends javax.swing.JFrame {
 
     public FrmCustomersReport() {
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnExport);
+        ButtonStyles.applyPrimaryStyle(btnSearch);
         btnSearch.setEnabled(false);
         btnExport.setEnabled(false);
     }
@@ -22,6 +24,8 @@ public class FrmCustomersReport extends javax.swing.JFrame {
     public FrmCustomersReport(FinvoryController controller) {
         this.controller = controller;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnExport);
+        ButtonStyles.applyPrimaryStyle(btnSearch);
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         setupDateSelectors();

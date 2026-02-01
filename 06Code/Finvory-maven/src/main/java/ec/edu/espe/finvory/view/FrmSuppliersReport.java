@@ -18,11 +18,15 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
      */
     public FrmSuppliersReport() {
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnExport);
+        ButtonStyles.applyPrimaryStyle(btnSearch);
     }
 
     public FrmSuppliersReport(FinvoryController controller) {
         this.controller = controller;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnExport);
+        ButtonStyles.applyPrimaryStyle(btnSearch);
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         setupDateSelectors();
@@ -190,10 +194,10 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(btnExport)
-                .addGap(17, 17, 17))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

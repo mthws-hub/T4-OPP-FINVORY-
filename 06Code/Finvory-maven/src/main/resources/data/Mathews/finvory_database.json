@@ -1,0 +1,228 @@
+{
+  "companyInfo": {
+    "name": "BlockBuster",
+    "address": {
+      "country": "Ecuador",
+      "city": "Cuenca",
+      "street": "Av. 6 de Diciembre",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "phone": "0983249630",
+    "email": "blockbuster@hotmail.com",
+    "logoPath": "data\\profiles\\Mathews_profile.jpeg"
+  },
+  "customers": [
+    {
+      "name": "Lucas Rodriguez",
+      "identification": "1547845125",
+      "phone": "0987845125",
+      "email": "lrodriguez@gmail.com",
+      "clientType": "STANDARD"
+    },
+    {
+      "name": "Juan Miguel Zunzunegui",
+      "identification": "1457845120",
+      "phone": "0987855441",
+      "email": "jmzun@gmail.com",
+      "clientType": "PREMIUM"
+    }
+  ],
+  "products": [
+    {
+      "id": "BB-002",
+      "name": "Pulp Fiction",
+      "description": "In the realm of underworld, a series of incidents intertwines the lives of two Los Angeles mobsters, a gangster\u0027s wife, a boxer and two small-time criminals.",
+      "barcode": "548754122",
+      "baseCostPrice": 5.00,
+      "supplierId": "0014578412547"
+    },
+    {
+      "id": "BB-003",
+      "name": "28 Days Later",
+      "description": "Twenty-eight days after the outbreak of a deadly virus in London, which infects everyone and turns them into braindead killers, the survivors try to cope with their losses and find sanctuary.",
+      "barcode": "1212554487",
+      "baseCostPrice": 5.00,
+      "supplierId": "0011254869874"
+    },
+    {
+      "id": "BB-001",
+      "name": "Frankenstein",
+      "description": "A brilliant but egotistical scientist brings a monstrous creature to life in a daring experiment that ultimately leads to the undoing of both the creator and his tragic creation.",
+      "barcode": "1222121212",
+      "baseCostPrice": 4.50,
+      "supplierId": "0011452487541"
+    }
+  ],
+  "suppliers": [
+    {
+      "fullName": "Guillermo del Toro Gómez",
+      "id1": "0011452487541",
+      "id2": "",
+      "phone": "0987451478",
+      "email": "guillermo@yahoo.com",
+      "description": "Que buen director"
+    },
+    {
+      "fullName": "Daniel Francis Boyle",
+      "id1": "0011254869874",
+      "id2": "",
+      "phone": "0987451336",
+      "email": "dfboyle@hotmail.com",
+      "description": "He has been described by the British Film Institute as \"one of the liveliest and most unpredictable of British directors, adept at shifting genres and bringing a personal quality to whatever he tackles"
+    },
+    {
+      "fullName": "Quentin Jerome Tarantino",
+      "id1": "0014578412547",
+      "id2": "",
+      "phone": "0998745124",
+      "email": "jerome@hotmail.com",
+      "description": ""
+    }
+  ],
+  "inventories": [
+    {
+      "name": "Central",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Av seis de Diciembre",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {
+        "BB-003": 4,
+        "BB-002": 11,
+        "BB-001": 9
+      }
+    }
+  ],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Bodega Obsoletos",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "productStock": {
+      "BB-001": 3
+    }
+  },
+  "invoices": [
+    {
+      "invoiceNumber": "FAC-1768602082572",
+      "date": "2026-01-13",
+      "paymentDueDate": "2026-01-13",
+      "customer": {
+        "name": "Juan Miguel Zunzunegui",
+        "identification": "1457845120",
+        "phone": "0987855441",
+        "email": "jmzun@gmail.com",
+        "clientType": "PREMIUM"
+      },
+      "lines": [
+        {
+          "productId": "BB-001",
+          "productName": "Frankenstein",
+          "quantity": 1,
+          "priceApplied": 5.4,
+          "lineTotal": 5.40
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 5.40,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 0.81,
+      "total": 6.21
+    },
+    {
+      "invoiceNumber": "FAC-1768606076519",
+      "date": "2026-01-14",
+      "paymentDueDate": "2026-01-14",
+      "customer": {
+        "name": "Lucas Rodriguez",
+        "identification": "1547845125",
+        "phone": "0987845125",
+        "email": "lrodriguez@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "BB-001",
+          "productName": "Frankenstein",
+          "quantity": 1,
+          "priceApplied": 6.08,
+          "lineTotal": 6.08
+        },
+        {
+          "productId": "BB-002",
+          "productName": "Pulp Fiction",
+          "quantity": 1,
+          "priceApplied": 6.75,
+          "lineTotal": 6.75
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 12.83,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 1.92,
+      "total": 14.75
+    },
+    {
+      "invoiceNumber": "FAC-1768610446517",
+      "date": "2026-01-15",
+      "paymentDueDate": "2026-01-15",
+      "customer": {
+        "name": "Juan Miguel Zunzunegui",
+        "identification": "1457845120",
+        "phone": "0987855441",
+        "email": "jmzun@gmail.com",
+        "clientType": "PREMIUM"
+      },
+      "lines": [
+        {
+          "productId": "BB-001",
+          "productName": "Frankenstein",
+          "quantity": 1,
+          "priceApplied": 5.4,
+          "lineTotal": 5.40
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 5.40,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 0.81,
+      "total": 6.21
+    }
+  ],
+  "returns": [
+    {
+      "product": {
+        "id": "BB-001",
+        "name": "Frankenstein",
+        "description": "A brilliant but egotistical scientist brings a monstrous creature to life in a daring experiment that ultimately leads to the undoing of both the creator and his tragic creation.",
+        "barcode": "1222121212",
+        "baseCostPrice": 4.50,
+        "supplierId": "0011452487541"
+      },
+      "quantity": 1,
+      "reason": "Compra Incorrecta",
+      "returnDate": "2026-01-16"
+    }
+  ],
+  "taxRate": 0.15,
+  "profitPercentage": 0.5,
+  "discountStandard": 0.1,
+  "discountPremium": 0.2,
+  "discountVip": 0.3
+}

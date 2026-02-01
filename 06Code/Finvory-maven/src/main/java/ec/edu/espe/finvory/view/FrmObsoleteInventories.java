@@ -21,6 +21,7 @@ public class FrmObsoleteInventories extends JDialog {
         super(parent, modal);
         this.controller = controller;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnFindProduct);
         this.setLocationRelativeTo(null);
 
         loadObsoleteTable();

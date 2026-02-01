@@ -44,6 +44,8 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         this.controller = controller;
         this.targetInventory = inventory;
         this.productIdToEdit = productId;
+        ButtonStyles.applyPrimaryStyle(btnAdd);
+        ButtonStyles.applyPrimaryStyle(btnCancel);
 
         initializeComboBoxes();
         setupFormMode();

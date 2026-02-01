@@ -22,6 +22,10 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
 
     public FrmSaleInvoice() {
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnFind);
+        ButtonStyles.applyPrimaryStyle(btnCancelSale);
+        ButtonStyles.applyPrimaryStyle(btnConfirmSale);
+        ButtonStyles.applyPrimaryStyle(btnHandleList);
         FinvoryApp.setIcon(this);
 
     }
@@ -29,6 +33,10 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
     public FrmSaleInvoice(FinvoryController controller) {
         this.controller = controller;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnFind);
+        ButtonStyles.applyPrimaryStyle(btnCancelSale);
+        ButtonStyles.applyPrimaryStyle(btnConfirmSale);
+        ButtonStyles.applyPrimaryStyle(btnHandleList);
         this.setLocationRelativeTo(null);
         initializeInvoiceData();
         setupFieldsState();
@@ -181,7 +189,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         btnFind.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         btnFind.setForeground(new java.awt.Color(242, 242, 242));
         btnFind.setText("BUSCAR");
-        btnFind.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnFind.setBorder(null);
         btnFind.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFindActionPerformed(evt);
@@ -322,7 +330,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         btnHandleList.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         btnHandleList.setForeground(new java.awt.Color(255, 255, 255));
         btnHandleList.setText("GESTIONAR LISTA");
-        btnHandleList.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnHandleList.setBorder(null);
         btnHandleList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHandleListActionPerformed(evt);
@@ -333,7 +341,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         btnConfirmSale.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         btnConfirmSale.setForeground(new java.awt.Color(255, 255, 255));
         btnConfirmSale.setText("CONFIRMAR");
-        btnConfirmSale.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnConfirmSale.setBorder(null);
         btnConfirmSale.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmSaleActionPerformed(evt);
@@ -344,7 +352,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
         btnCancelSale.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
         btnCancelSale.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelSale.setText("CANCELAR");
-        btnCancelSale.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCancelSale.setBorder(null);
         btnCancelSale.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelSaleActionPerformed(evt);
@@ -375,7 +383,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCancelSale))
                     .addComponent(btnHandleList))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 128, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTotalSub)
                     .addComponent(lblTax)
@@ -392,7 +400,7 @@ public class FrmSaleInvoice extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(77, 77, 77)
                         .addComponent(txtTax, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addContainerGap(135, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)

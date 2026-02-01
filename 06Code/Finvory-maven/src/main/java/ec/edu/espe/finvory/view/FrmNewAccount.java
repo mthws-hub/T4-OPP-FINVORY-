@@ -26,6 +26,9 @@ public class FrmNewAccount extends javax.swing.JFrame {
     public FrmNewAccount(FinvoryController controller) {
         this.controller = controller;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnCancelCompany);
+        ButtonStyles.applyPrimaryStyle(btnRegisterCompany);
+        ButtonStyles.applyPrimaryStyle(btnRegisterPersonal);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         FinvoryApp.setIcon(this);
@@ -62,7 +65,7 @@ public class FrmNewAccount extends javax.swing.JFrame {
         txtPhone = new javax.swing.JTextField();
         lblEmail = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnCancelCompany = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         lblPersonalFullName = new javax.swing.JLabel();
         txtPersonalFullName = new javax.swing.JTextField();
@@ -153,14 +156,14 @@ public class FrmNewAccount extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(0, 123, 0));
-        jButton1.setFont(new java.awt.Font("Perpetua", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(242, 242, 242));
-        jButton1.setText("CANCELAR");
-        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelCompany.setBackground(new java.awt.Color(0, 123, 0));
+        btnCancelCompany.setFont(new java.awt.Font("Perpetua", 1, 14)); // NOI18N
+        btnCancelCompany.setForeground(new java.awt.Color(242, 242, 242));
+        btnCancelCompany.setText("CANCELAR");
+        btnCancelCompany.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCancelCompany.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnCancelCompanyActionPerformed(evt);
             }
         });
 
@@ -206,7 +209,7 @@ public class FrmNewAccount extends javax.swing.JFrame {
                             .addGap(101, 101, 101)
                             .addComponent(btnRegisterCompany)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                            .addComponent(jButton1))
+                            .addComponent(btnCancelCompany))
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addContainerGap()
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,7 +263,7 @@ public class FrmNewAccount extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegisterCompany)
-                    .addComponent(jButton1))
+                    .addComponent(btnCancelCompany))
                 .addGap(49, 49, 49))
         );
 
@@ -408,9 +411,9 @@ public class FrmNewAccount extends javax.swing.JFrame {
         onRegisterCompany();
     }//GEN-LAST:event_btnRegisterCompanyActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnCancelCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelCompanyActionPerformed
         onCancel();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnCancelCompanyActionPerformed
 
     private void txtPersonalFullNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPersonalFullNameActionPerformed
         // TODO add your handling code here: Validar que halla por lo menos un espacio (Apellido Nombre)
@@ -684,9 +687,9 @@ public class FrmNewAccount extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelCompany;
     private javax.swing.JButton btnRegisterCompany;
     private javax.swing.JButton btnRegisterPersonal;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

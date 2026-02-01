@@ -21,6 +21,17 @@ public class FrmProfileCompany extends javax.swing.JFrame {
     public FrmProfileCompany(FinvoryController controller) {
         this.controller = controller;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnCancel);
+        ButtonStyles.applyPrimaryStyle(btnCancel1);
+        ButtonStyles.applyPrimaryStyle(btnCancel2);
+        ButtonStyles.applyPrimaryStyle(btnChangePassword);
+        ButtonStyles.applyPrimaryStyle(btnSave1);
+        ButtonStyles.applyPrimaryStyle(btnChangePassword);
+        ButtonStyles.applyPrimaryStyle(jButton2);
+        ButtonStyles.applyPrimaryStyle(btnGeneral);
+        ButtonStyles.applyPrimaryStyle(jButton3);
+        ButtonStyles.applyPrimaryStyle(btnSave);
+        
         this.setLocationRelativeTo(null);
         this.cardLayout = (CardLayout) pnlCardsContainer.getLayout();
         setupDesign();

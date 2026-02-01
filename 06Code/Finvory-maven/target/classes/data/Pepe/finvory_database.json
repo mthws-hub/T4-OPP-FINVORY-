@@ -1,0 +1,40 @@
+{
+  "companyInfo": {
+    "name": "KFC",
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Solanda",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "ruc": "001245878874q",
+    "phone": "0098745127",
+    "email": "lm@gmail.com",
+    "username": "Pepe",
+    "password": "123"
+  },
+  "customers": [],
+  "products": [],
+  "suppliers": [],
+  "inventories": [],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Bodega Obsoletos",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "productStock": {}
+  },
+  "invoices": [],
+  "returns": [],
+  "taxRate": 0.15,
+  "profitPercentage": 0,
+  "discountStandard": 0,
+  "discountPremium": 0,
+  "discountVip": 0
+}

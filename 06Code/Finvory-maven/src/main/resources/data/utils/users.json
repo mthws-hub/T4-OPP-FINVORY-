@@ -1,0 +1,195 @@
+{
+  "companyAccounts": [
+    {
+      "name": "Frico Autopartes S.A.",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Av. 10 de Agosto N45",
+        "zipCode": "170504",
+        "streetNumber": "N45-23",
+        "region": "Pichincha"
+      },
+      "ruc": "1790011223001",
+      "phone": "0983249630",
+      "email": "admin@frico.com",
+      "username": "adminFrico",
+      "password": "234"
+    },
+    {
+      "name": "McDonalds",
+      "address": {
+        "country": "Ecuador",
+        "city": "QUITO",
+        "street": "Solanda",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0011751774793",
+      "phone": "0963514785",
+      "email": "joseph3elcrac@gmail.com",
+      "username": "Joseph",
+      "password": "2345",
+      "logoPath": "data\\profiles\\Joseph_profile.jpeg"
+    },
+    {
+      "name": "TropiBurger",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Dr. José Peralta",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "001751132869",
+      "phone": "0983249630",
+      "email": "tropi@gmail.com",
+      "username": "Said",
+      "password": "234"
+    },
+    {
+      "name": "Repuestos",
+      "address": {
+        "country": "545454",
+        "city": "4545",
+        "street": "54545",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "17545454",
+      "phone": "5454454",
+      "email": "455454",
+      "username": "adminPrueba",
+      "password": "234"
+    },
+    {
+      "name": "KFC",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Solanda",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "001245878874q",
+      "phone": "0098745127",
+      "email": "lm@gmail.com",
+      "username": "Pepe",
+      "password": "234"
+    },
+    {
+      "name": "CompanyTest",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Solanda",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0012365478451",
+      "phone": "0987541020",
+      "email": "a@a.com",
+      "username": "licas",
+      "password": "234"
+    },
+    {
+      "name": "BlockBuster",
+      "address": {
+        "country": "Ecuador",
+        "city": "Cuenca",
+        "street": "Av. 6 de Diciembre",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0011751132869",
+      "phone": "0983249630",
+      "email": "blockbuster@hotmail.com",
+      "username": "Mathews",
+      "password": "Nbuifxt234",
+      "logoPath": "data\\profiles\\Mathews_profile.jpeg"
+    },
+    {
+      "name": "KFC",
+      "address": {
+        "country": "Ecuadodr",
+        "city": "Quito",
+        "street": "Av. General Rumiñahui",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0011758903782",
+      "phone": "0999713923",
+      "email": "kfc@gmail.com",
+      "username": "KFC",
+      "password": "qpmmpgsjup",
+      "twoFactorKey": "XR2FWKE5OAALQ6TS2YEINUMB4FZEGZ5L"
+    },
+    {
+      "name": "PolloGus",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Rumiñahui",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0010976768967",
+      "phone": "0982670989",
+      "email": "pollogus@hotmail.com",
+      "username": "PolloGus",
+      "password": "qpmmpipsofbep",
+      "twoFactorKey": "MTRI7SLJVUSXI3WXCFLQ67JSJXNFUDF6"
+    },
+    {
+      "name": "Maryuri",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Av Maldonado",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0011755342839",
+      "phone": "0985876242",
+      "email": "maryuri@gmail.com",
+      "username": "maryuri",
+      "password": "2345",
+      "twoFactorKey": "XX7UUXZNV4PDZKAFAXTQRHM3C6PMNCOV"
+    }
+  ],
+  "personalAccounts": [
+    {
+      "fullName": "Mhya Villarreal",
+      "username": "Mhya",
+      "password": "nizb",
+      "twoFactorKey": "VPVSLPIKF4765CJC7DRTFUZFU53FVJCE"
+    },
+    {
+      "fullName": "Maryuri Quiña",
+      "username": "Maryuri3",
+      "password": "2345",
+      "twoFactorKey": "H3KGL47WEOAFSIUVABYEQSUSRW6GJQWU"
+    },
+    {
+      "fullName": "Salome Molina",
+      "username": "Salome",
+      "password": "2345",
+      "twoFactorKey": "ES4XMYRW6LN34XDDPWKWAR2K7QFYGNHN"
+    },
+    {
+      "fullName": "Roberto Rodriguez",
+      "username": "roberto",
+      "password": "258",
+      "twoFactorKey": "A6UFWGUF3IEYVAU4IOSMYMIG7QP4RYTQ"
+    }
+  ]
+}

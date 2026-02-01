@@ -30,6 +30,8 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         setupFormMode();
         FinvoryApp.setIcon(this);
+        ButtonStyles.applyPrimaryStyle(btnAdd);
+        ButtonStyles.applyPrimaryStyle(btnCancel);
     }
 
     private void setupFormMode() {

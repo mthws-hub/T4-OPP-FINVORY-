@@ -1,0 +1,50 @@
+{
+  "companyInfo": {
+    "name": "Maryuri",
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Av Maldonado",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "phone": "0985876242",
+    "email": "maryuri@gmail.com"
+  },
+  "customers": [],
+  "products": [],
+  "suppliers": [],
+  "inventories": [
+    {
+      "name": "Bodega Sur",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Av Amazonas",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {}
+    }
+  ],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Bodega Obsoletos",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "productStock": {}
+  },
+  "invoices": [],
+  "returns": [],
+  "taxRate": 0.15,
+  "profitPercentage": 0,
+  "discountStandard": 0,
+  "discountPremium": 0,
+  "discountVip": 0
+}

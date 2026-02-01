@@ -23,6 +23,9 @@ public class FrmCustomers extends javax.swing.JFrame {
         this.customerActionProcessor = customerActionProcessor;
         this.mainController = mainController;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnAdd);
+        ButtonStyles.applyPrimaryStyle(btnDelete);
+        ButtonStyles.applyPrimaryStyle(btnEdit);
         this.setLocationRelativeTo(null);
         setupTableSelection();
         loadCustomerTable();

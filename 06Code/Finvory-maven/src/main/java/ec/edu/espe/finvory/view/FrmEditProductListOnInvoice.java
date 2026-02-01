@@ -24,6 +24,8 @@ public class FrmEditProductListOnInvoice extends JDialog {
             this.parentInvoice = (FrmSaleInvoice) parent;
         }
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnAdd);
+        ButtonStyles.applyPrimaryStyle(btnDelete);
         this.setLocationRelativeTo(parent);
         loadInventories();
     }

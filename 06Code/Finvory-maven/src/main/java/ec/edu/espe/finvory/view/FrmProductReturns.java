@@ -19,6 +19,8 @@ public class FrmProductReturns extends JDialog {
         super(parent, modal);
         this.controller = controller;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnReturn);
+        ButtonStyles.applyPrimaryStyle(btnConfirm);
         lblDateValue.setText(java.time.LocalDate.now().toString());
         this.setLocationRelativeTo(parent);
 

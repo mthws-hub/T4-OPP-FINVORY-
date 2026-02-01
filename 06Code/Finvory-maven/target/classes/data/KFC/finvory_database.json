@@ -1,0 +1,37 @@
+{
+  "companyInfo": {
+    "name": "KFC",
+    "address": {
+      "country": "Ecuadodr",
+      "city": "Quito",
+      "street": "Av. General Rumiñahui",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "phone": "0999713923",
+    "email": "kfc@gmail.com"
+  },
+  "customers": [],
+  "products": [],
+  "suppliers": [],
+  "inventories": [],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Bodega Obsoletos",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "productStock": {}
+  },
+  "invoices": [],
+  "returns": [],
+  "taxRate": 0.15,
+  "profitPercentage": 0,
+  "discountStandard": 0,
+  "discountPremium": 0,
+  "discountVip": 0
+}

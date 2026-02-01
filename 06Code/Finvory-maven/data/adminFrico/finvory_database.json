@@ -40,6 +40,13 @@
       "phone": "0983249630",
       "email": "l@gmail.com",
       "clientType": "VIP"
+    },
+    {
+      "name": "Henry Sanchez",
+      "identification": "0201112661",
+      "phone": "0984678889",
+      "email": "manoloribadeneira@gmail.com",
+      "clientType": "STANDARD"
     }
   ],
   "products": [
@@ -114,6 +121,14 @@
       "barcode": "1025487888",
       "baseCostPrice": 10.25,
       "supplierId": "0011751774793"
+    },
+    {
+      "id": "P002",
+      "name": "Pastillas de Frenos",
+      "description": "Para Aveo",
+      "barcode": "",
+      "baseCostPrice": 12.00,
+      "supplierId": "0011751774793"
     }
   ],
   "suppliers": [
@@ -146,7 +161,6 @@
         "region": ""
       },
       "productStock": {
-        "DLLA123": 9,
         "P00-11": 20,
         "POO-123": 20
       }
@@ -179,6 +193,18 @@
       "productStock": {
         "DSSA": 4
       }
+    },
+    {
+      "name": "Aveo",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Av Amazonas",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {}
     }
   ],
   "obsoleteInventory": {
@@ -192,6 +218,7 @@
     },
     "productStock": {
       "P00-11": 1,
+      "P002": 1,
       "dlla123": 2,
       "DSSA": 8
     }
@@ -199,8 +226,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-12-05",
-      "paymentDueDate": "2025-12-05",
+      "date": "2025-12-02",
+      "paymentDueDate": "2025-12-02",
       "customer": {
         "name": "Rodrigo Delgado",
         "identification": "0012365478963",
@@ -227,8 +254,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-12-05",
-      "paymentDueDate": "2025-12-05",
+      "date": "2025-12-02",
+      "paymentDueDate": "2025-12-02",
       "customer": {
         "name": "Pedro Martin",
         "identification": "1245784512",
@@ -255,8 +282,8 @@
     },
     {
       "invoiceNumber": "FFRI-003",
-      "date": "2025-12-05",
-      "paymentDueDate": "2025-12-05",
+      "date": "2025-12-02",
+      "paymentDueDate": "2025-12-02",
       "customer": {
         "name": "Pedro Paz",
         "identification": "0014785236987",
@@ -283,8 +310,8 @@
     },
     {
       "invoiceNumber": "F-4",
-      "date": "2025-12-15",
-      "paymentDueDate": "2025-12-15",
+      "date": "2025-12-12",
+      "paymentDueDate": "2025-12-12",
       "customer": {
         "name": "Pedro Martin",
         "identification": "1245784512",
@@ -318,8 +345,8 @@
     },
     {
       "invoiceNumber": "F-5",
-      "date": "2025-12-15",
-      "paymentDueDate": "2025-12-15",
+      "date": "2025-12-12",
+      "paymentDueDate": "2025-12-12",
       "customer": {
         "name": "Pedro Paz",
         "identification": "0014785236987",
@@ -350,6 +377,69 @@
       "taxRate": 0.15,
       "taxAmount": 21.83,
       "total": 167.36
+    },
+    {
+      "invoiceNumber": "FAC-1769869845381",
+      "date": "2026-01-28",
+      "paymentDueDate": "2026-01-28",
+      "customer": {
+        "name": "Pedro Paz",
+        "identification": "0014785236987",
+        "phone": "0994896354",
+        "email": "k@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "DLLA123",
+          "productName": "Frenos BMW",
+          "quantity": 8,
+          "priceApplied": 127.08,
+          "lineTotal": 1016.64
+        },
+        {
+          "productId": "P002",
+          "productName": "Pastillas de Frenos",
+          "quantity": 1,
+          "priceApplied": 21.6,
+          "lineTotal": 21.60
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 1038.24,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 155.74,
+      "total": 1193.98
+    },
+    {
+      "invoiceNumber": "FAC-1769870426948",
+      "date": "2026-01-29",
+      "paymentDueDate": "2026-01-29",
+      "customer": {
+        "name": "Henry Sanchez",
+        "identification": "0201112661",
+        "phone": "0984678889",
+        "email": "manoloribadeneira@gmail.com",
+        "clientType": "STANDARD"
+      },
+      "lines": [
+        {
+          "productId": "DLLA123",
+          "productName": "Frenos BMW",
+          "quantity": 1,
+          "priceApplied": 127.08,
+          "lineTotal": 127.08
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 127.08,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 19.06,
+      "total": 146.14
     }
   ],
   "returns": [
@@ -362,9 +452,9 @@
         "baseCostPrice": 23.00,
         "supplierId": "1234315652001"
       },
-      "quantity": 2,
+      "quantity": 1,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-01-30"
+      "returnDate": "2026-02-01"
     },
     {
       "product": {
@@ -377,7 +467,7 @@
       },
       "quantity": 2,
       "reason": "Defectuoso",
-      "returnDate": "2026-01-30"
+      "returnDate": "2026-02-01"
     }
   ],
   "taxRate": 0.15,

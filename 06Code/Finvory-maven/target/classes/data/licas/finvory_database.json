@@ -1,0 +1,40 @@
+{
+  "companyInfo": {
+    "name": "CompanyTest",
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Solanda",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "ruc": "0012365478451",
+    "phone": "0987541020",
+    "email": "a@a.com",
+    "username": "licas",
+    "password": "123"
+  },
+  "customers": [],
+  "products": [],
+  "suppliers": [],
+  "inventories": [],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Bodega Obsoletos",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "productStock": {}
+  },
+  "invoices": [],
+  "returns": [],
+  "taxRate": 0.15,
+  "profitPercentage": 0,
+  "discountStandard": 0,
+  "discountPremium": 0,
+  "discountVip": 0
+}

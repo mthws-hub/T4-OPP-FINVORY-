@@ -40,6 +40,9 @@ public class FrmGrossReport extends javax.swing.JFrame {
         this.controller = controller;
         initComponents();
 
+        ButtonStyles.applyPrimaryStyle(btnFilter);
+        ButtonStyles.applyPrimaryStyle(btnExportCsv);
+        ButtonStyles.applyPrimaryStyle(btnRefresh);
         spnFromDate.setEditor(new javax.swing.JSpinner.DateEditor(spnFromDate, "dd/MM/yyyy"));
         spnToDate.setEditor(new javax.swing.JSpinner.DateEditor(spnToDate, "dd/MM/yyyy"));
         ((javax.swing.JSpinner.DefaultEditor) spnFromDate.getEditor()).getTextField().setColumns(10);
@@ -53,10 +56,6 @@ public class FrmGrossReport extends javax.swing.JFrame {
         grp.add(radioButtonPerDay);
         grp.add(radioButtonperInvoice);
         radioButtonPerDay.setSelected(true);
-
-        styleGreenButton(btnFilter);
-        styleGreenButton(btnRefresh);
-        styleGreenButton(btnExportCsv);
 
         pack();
         setMinimumSize(getSize());

@@ -1,0 +1,87 @@
+{
+  "companyInfo": {
+    "name": "TropiBurger",
+    "address": {
+      "country": "Ecuador",
+      "city": "Cuenca",
+      "street": "Dr. José Peralta",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "ruc": "001751132869",
+    "phone": "0983249630",
+    "email": "tropi@gmail.com",
+    "username": "Said",
+    "password": "123"
+  },
+  "customers": [],
+  "products": [
+    {
+      "id": "S00-1",
+      "name": "Camisa Polo",
+      "description": "No descripcion",
+      "barcode": "1478458745124",
+      "baseCostPrice": 12.00,
+      "supplierId": "0011245784523"
+    },
+    {
+      "id": "S00-2",
+      "name": "Producto Prueba",
+      "description": "No descripción",
+      "barcode": "sadsaa",
+      "baseCostPrice": 10.50,
+      "supplierId": "0011245784523"
+    }
+  ],
+  "suppliers": [
+    {
+      "fullName": "Joseph Benjamin Medina",
+      "id1": "0011245784523",
+      "id2": "5454545",
+      "phone": "0998374512",
+      "email": "jsm@gmail.com",
+      "description": "No descripción"
+    },
+    {
+      "fullName": "Said Pastor",
+      "id1": "0011254874512",
+      "id2": "112112",
+      "phone": "0997845121",
+      "email": "sp@espe.edu.ec",
+      "description": "21212"
+    }
+  ],
+  "inventories": [
+    {
+      "name": "Prueba",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "L",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {}
+    }
+  ],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Bodega Obsoletos",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "productStock": {}
+  },
+  "invoices": [],
+  "returns": [],
+  "taxRate": 0.15,
+  "profitPercentage": 0.0,
+  "discountStandard": 0.0,
+  "discountPremium": 0.0,
+  "discountVip": 0.0
+}

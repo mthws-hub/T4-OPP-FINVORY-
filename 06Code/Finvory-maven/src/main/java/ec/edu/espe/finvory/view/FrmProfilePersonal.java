@@ -24,6 +24,9 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
         super(parent, modal);
         this.controller = controller;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnSave);
+        ButtonStyles.applyPrimaryStyle(btnCancel);
+        ButtonStyles.applyPrimaryStyle(btnChangePassword);
         this.setLocationRelativeTo(null);
         loadUserData();
     }

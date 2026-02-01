@@ -25,7 +25,9 @@ public class FrmSalesReport extends javax.swing.JFrame {
     public FrmSalesReport(FinvoryController controller) {
         this.controller = controller;
         initComponents();
-
+        ButtonStyles.applyPrimaryStyle(btnExport);
+        ButtonStyles.applyPrimaryStyle(btnFilter);
+        ButtonStyles.applyPrimaryStyle(btnRefresh);
         this.setLocationRelativeTo(null);
         loadSalesTable();
         FinvoryApp.setIcon(this);

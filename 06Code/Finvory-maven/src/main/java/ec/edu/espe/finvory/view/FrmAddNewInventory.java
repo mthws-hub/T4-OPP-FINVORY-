@@ -22,7 +22,8 @@ public class FrmAddNewInventory extends JDialog {
         initComponents();
         this.setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        
+        ButtonStyles.applyPrimaryStyle(btnAdd);
+        ButtonStyles.applyPrimaryStyle(btnCancel);
     }
 
     public FrmAddNewInventory(java.awt.Frame parent, boolean modal) {

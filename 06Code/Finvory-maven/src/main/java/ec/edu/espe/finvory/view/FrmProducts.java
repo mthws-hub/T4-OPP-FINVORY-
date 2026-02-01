@@ -31,6 +31,10 @@ public class FrmProducts extends javax.swing.JFrame {
         this.controller = mainController;
         this.specificInventory = inventory;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnAdd);
+        ButtonStyles.applyPrimaryStyle(btnDelete);
+        ButtonStyles.applyPrimaryStyle(btnEdit);
+        ButtonStyles.applyPrimaryStyle(btnMoveProduct);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setupTableSelection();

@@ -18,6 +18,8 @@ public class FrmReassignedProduct extends JDialog{
         super(parent, modal);
         this.controller = controller;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnReturn);
+        ButtonStyles.applyPrimaryStyle(btnReassing);
         this.setLocationRelativeTo(null);
     }
 

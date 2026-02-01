@@ -20,6 +20,8 @@ public class FrmInventorySelector extends javax.swing.JDialog {
         super(parent, modal);
         this.inventories = inventories;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnCancel);
+        ButtonStyles.applyPrimaryStyle(btnSelect);
         this.setLocationRelativeTo(parent);
         loadTable();
         

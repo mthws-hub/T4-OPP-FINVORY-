@@ -3,7 +3,9 @@ package ec.edu.espe.finvory;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.mongo.DataPersistenceManager;
 import ec.edu.espe.finvory.mongo.MongoDBConnection;
+import ec.edu.espe.finvory.view.ButtonStyles;
 import ec.edu.espe.finvory.view.FrmFinvorySplash;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
@@ -16,10 +18,13 @@ import javax.swing.SwingUtilities;
 public class FinvoryApp {
 
     private static MongoDBConnection mongoConnection;
-    
+
     private static final Image APP_ICON = Toolkit.getDefaultToolkit().getImage(FinvoryApp.class.getResource("/FinvoryCorner.jpeg"));
 
     public static void main(String[] args) {
+
+        ButtonStyles.initializeComponents();
+        
         setupTaskbarIcon();
 
         mongoConnection = new MongoDBConnection();
@@ -30,7 +35,7 @@ public class FinvoryApp {
             @Override
             public void run() {
                 FrmFinvorySplash splash = new FrmFinvorySplash(controller);
-                setIcon(splash); 
+                setIcon(splash);
                 splash.setVisible(true);
             }
         });
@@ -39,7 +44,6 @@ public class FinvoryApp {
     public static MongoDBConnection getMongoDBConnection() {
         return mongoConnection;
     }
-
 
     public static void setIcon(JFrame frame) {
         if (APP_ICON != null) {

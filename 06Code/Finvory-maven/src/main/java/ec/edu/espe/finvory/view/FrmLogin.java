@@ -18,6 +18,8 @@ public class FrmLogin extends javax.swing.JFrame {
     public FrmLogin(FinvoryController controller) {
         this.controller = controller;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnLogIn);
+        ButtonStyles.applyPrimaryStyle(btnAboutTo1);
         this.setLocationRelativeTo(null);
         this.getRootPane().setDefaultButton(btnLogIn);
         setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage(getClass().getResource("/FinvoryCorner.jpeg")));

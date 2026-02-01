@@ -26,6 +26,9 @@ public class FrmInventories extends javax.swing.JFrame {
      */
     public FrmInventories(FinvoryController controller) {
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnHandle);
+        ButtonStyles.applyPrimaryStyle(btnAddNewInventory);
+        ButtonStyles.applyPrimaryStyle(btnProduct);
         this.controller = controller;
         this.setLocationRelativeTo(null);
         setupTableNonEditable();
@@ -36,6 +39,9 @@ public class FrmInventories extends javax.swing.JFrame {
 
     public FrmInventories() {
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnHandle);
+        ButtonStyles.applyPrimaryStyle(btnAddNewInventory);
+        ButtonStyles.applyPrimaryStyle(btnProduct);
         FinvoryApp.setIcon(this);
     }
 
@@ -206,7 +212,7 @@ public class FrmInventories extends javax.swing.JFrame {
         btnHandle.setBackground(new java.awt.Color(0, 123, 0));
         btnHandle.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 13)); // NOI18N
         btnHandle.setForeground(new java.awt.Color(255, 255, 255));
-        btnHandle.setText("    Ver Obsoletos");
+        btnHandle.setText("Ver Obsoletos");
         btnHandle.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHandle.setIconTextGap(15);
         btnHandle.addActionListener(new java.awt.event.ActionListener() {
@@ -219,7 +225,7 @@ public class FrmInventories extends javax.swing.JFrame {
         btnAddNewInventory.setBackground(new java.awt.Color(0, 123, 0));
         btnAddNewInventory.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 13)); // NOI18N
         btnAddNewInventory.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddNewInventory.setText(" Nuevo Inventario");
+        btnAddNewInventory.setText("Nuevo Inventario");
         btnAddNewInventory.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAddNewInventory.setIconTextGap(15);
         btnAddNewInventory.addActionListener(new java.awt.event.ActionListener() {
@@ -232,7 +238,7 @@ public class FrmInventories extends javax.swing.JFrame {
         btnProduct.setBackground(new java.awt.Color(0, 123, 0));
         btnProduct.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 13)); // NOI18N
         btnProduct.setForeground(new java.awt.Color(255, 255, 255));
-        btnProduct.setText("Porductos");
+        btnProduct.setText("Productos");
         btnProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProductActionPerformed(evt);

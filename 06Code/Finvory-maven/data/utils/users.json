@@ -184,6 +184,18 @@
       "username": "Salome",
       "password": "2345",
       "twoFactorKey": "ES4XMYRW6LN34XDDPWKWAR2K7QFYGNHN"
+    },
+    {
+      "fullName": "Roberto Rodriguez",
+      "username": "roberto",
+      "password": "258",
+      "twoFactorKey": "A6UFWGUF3IEYVAU4IOSMYMIG7QP4RYTQ"
+    },
+    {
+      "fullName": "Usuario Generico",
+      "username": "usuario",
+      "password": "dpousbtfòb",
+      "twoFactorKey": "PCUITB3JCAXGUQTCZHM7P2D2YMNKFBPG"
     }
   ]
 }

@@ -18,12 +18,18 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
 
     public FrmMainMenuPersonalAccount() {
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnFind);
+        ButtonStyles.applyPrimaryStyle(btnInfo);
+        ButtonStyles.applyPrimaryStyle(btnWhatsapp);
         FinvoryApp.setIcon(this);
     }
 
     public FrmMainMenuPersonalAccount(FinvoryController controller) {
         this.controller = controller;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnFind);
+        ButtonStyles.applyPrimaryStyle(btnInfo);
+        ButtonStyles.applyPrimaryStyle(btnWhatsapp);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         setupTable();

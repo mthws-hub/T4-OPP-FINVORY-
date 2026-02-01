@@ -28,6 +28,9 @@ public class FrmAddNewCustomer extends javax.swing.JFrame {
         this.requestFocus();
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         FinvoryApp.setIcon(this);
+        ButtonStyles.applyPrimaryStyle(btnAdd);
+        ButtonStyles.applyPrimaryStyle(btnCancel);
+        ButtonStyles.applyPrimaryStyle(btnReturn);
     }
 
     public FrmAddNewCustomer(FinvoryController controller, String customerId) {

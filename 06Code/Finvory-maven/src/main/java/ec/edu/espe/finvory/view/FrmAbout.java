@@ -27,6 +27,7 @@ public class FrmAbout extends javax.swing.JFrame {
         ButtonStyles.neutral(closeAboutTo);
         closeAboutTo.revalidate();
         closeAboutTo.repaint();
+        ButtonStyles.applyPrimaryStyle(closeAboutTo);
     }
 
     FrmAbout(FrmMainMenu aThis, boolean b) {
@@ -52,6 +53,7 @@ public class FrmAbout extends javax.swing.JFrame {
         closeAboutTo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/finvoryLogoForAboutTo.jpeg"))); // NOI18N
 
@@ -76,6 +78,7 @@ public class FrmAbout extends javax.swing.JFrame {
 
         closeAboutTo.setBackground(new java.awt.Color(0, 153, 0));
         closeAboutTo.setText("Cerrar");
+        closeAboutTo.setBorder(null);
         closeAboutTo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 closeAboutToActionPerformed(evt);
@@ -126,7 +129,7 @@ public class FrmAbout extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(44, 44, 44)
                 .addComponent(closeAboutTo)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();

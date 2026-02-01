@@ -7,20 +7,24 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import ec.edu.espe.finvory.model.Customer;
 import ec.edu.espe.finvory.model.SystemUsers;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
 import ec.edu.espe.finvory.model.FinvoryData;
 import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.model.InvoiceSim;
 import ec.edu.espe.finvory.model.Product;
 import ec.edu.espe.finvory.model.Supplier;
+
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,9 +38,11 @@ import java.util.UUID;
  */
 public class LocalFileService {
 
-    private static final String ROOT_DATA_FOLDER = "data";
+    private static final Path ROOT_DATA_FOLDER = resolveDataRoot();
+
     private static final String UTILS_FOLDER = "utils";
-    private static final String USERS_FILE = UTILS_FOLDER + File.separator + "users.json";
+    private static final String USERS_JSON_NAME = "users.json";
+
     private static final String DELIMITER = ";";
     private static final String PENDING_FILE = ".pending_offline_upload";
 
@@ -61,25 +67,28 @@ public class LocalFileService {
     }
 
     private void checkAndCreateDataFolder() {
-        File root = new File(ROOT_DATA_FOLDER);
-        if (!root.exists()) {
-            root.mkdir();
-        }
-        File utils = new File(ROOT_DATA_FOLDER + File.separator + UTILS_FOLDER);
-        if (!utils.exists()) {
-            utils.mkdirs();
+        try {
+            Files.createDirectories(ROOT_DATA_FOLDER);
+            Files.createDirectories(ROOT_DATA_FOLDER.resolve(UTILS_FOLDER));
+        } catch (IOException e) {
+            System.err.println("Error creando carpetas data/utils: " + e.getMessage());
         }
     }
 
-    public SystemUsers loadUsers() {
-        File file = new File(ROOT_DATA_FOLDER + File.separator + USERS_FILE);
+    private Path usersFilePath() {
+        return ROOT_DATA_FOLDER.resolve(UTILS_FOLDER).resolve(USERS_JSON_NAME);
+    }
 
-        if (!file.exists()) {
+    public SystemUsers loadUsers() {
+        Path path = usersFilePath();
+        if (!Files.exists(path)) {
             System.err.println("ERROR CRÍTICO: No se encuentra el archivo de usuarios.");
+            System.err.println("Ruta buscada: " + path.toAbsolutePath());
+            System.err.println("user.dir = " + System.getProperty("user.dir"));
             return new SystemUsers();
         }
 
-        try (Reader reader = new FileReader(file)) {
+        try (Reader reader = new FileReader(path.toFile())) {
             SystemUsers users = gson.fromJson(reader, SystemUsers.class);
             if (users == null) {
                 System.err.println("El archivo existe pero está vacío o corrupto.");
@@ -93,7 +102,8 @@ public class LocalFileService {
     }
 
     public void saveUsers(SystemUsers users) {
-        try (Writer writer = new FileWriter(ROOT_DATA_FOLDER + File.separator + USERS_FILE)) {
+        Path path = usersFilePath();
+        try (Writer writer = new FileWriter(path.toFile())) {
             gson.toJson(users, writer);
         } catch (IOException e) {
             System.err.println("Error guardando usuarios: " + e.getMessage());
@@ -101,7 +111,7 @@ public class LocalFileService {
     }
 
     public FinvoryData loadCompanyDataLocal(String companyUsername) {
-        String folder = companyFolder(companyUsername);
+        Path folder = companyFolder(companyUsername);
         FinvoryData localData = loadJson(folder);
 
         mergeCustomersFromCsv(localData, folder);
@@ -117,8 +127,8 @@ public class LocalFileService {
     }
 
     public void saveCompanyDataLocal(FinvoryData data, String companyUsername) {
-        String folder = companyFolder(companyUsername);
-        new File(folder).mkdirs();
+        Path folder = companyFolder(companyUsername);
+        folder.toFile().mkdirs();
         saveJson(data, folder);
         saveCustomersCsv(data.getCustomers(), folder);
         saveSuppliersCsv(data.getSuppliers(), folder);
@@ -126,10 +136,10 @@ public class LocalFileService {
 
     public void markPendingOffline(String companyUsername) {
         try {
-            String folder = companyFolder(companyUsername);
-            new File(folder).mkdirs();
-            File flag = new File(folder + File.separator + PENDING_FILE);
-            try (Writer writer = new FileWriter(flag)) {
+            Path folder = companyFolder(companyUsername);
+            folder.toFile().mkdirs();
+            Path flag = folder.resolve(PENDING_FILE);
+            try (Writer writer = new FileWriter(flag.toFile())) {
                 writer.write("pending");
             }
         } catch (IOException ignored) {
@@ -137,35 +147,37 @@ public class LocalFileService {
     }
 
     public boolean hasPendingOffline(String companyUsername) {
-        File flag = new File(companyFolder(companyUsername) + File.separator + PENDING_FILE);
-        return flag.exists();
+        Path flag = companyFolder(companyUsername).resolve(PENDING_FILE);
+        return flag.toFile().exists();
     }
 
     public void clearPendingOffline(String companyUsername) {
-        File flag = new File(companyFolder(companyUsername) + File.separator + PENDING_FILE);
-        if (flag.exists()) {
-            flag.delete();
+        Path flag = companyFolder(companyUsername).resolve(PENDING_FILE);
+        File f = flag.toFile();
+        if (f.exists()) {
+            f.delete();
         }
     }
 
-    private String companyFolder(String companyUsername) {
-        return ROOT_DATA_FOLDER + File.separator + companyUsername;
+    private Path companyFolder(String companyUsername) {
+        return ROOT_DATA_FOLDER.resolve(companyUsername);
     }
 
-    private void saveJson(FinvoryData data, String folder) {
-        try (Writer writer = new FileWriter(folder + File.separator + "finvory_database.json")) {
+    private void saveJson(FinvoryData data, Path folder) {
+        Path file = folder.resolve("finvory_database.json");
+        try (Writer writer = new FileWriter(file.toFile())) {
             gson.toJson(data, writer);
         } catch (IOException e) {
             System.err.println("Error guardando JSON local: " + e.getMessage());
         }
     }
 
-    private FinvoryData loadJson(String folder) {
-        File file = new File(folder + File.separator + "finvory_database.json");
-        if (!file.exists()) {
+    private FinvoryData loadJson(Path folder) {
+        Path file = folder.resolve("finvory_database.json");
+        if (!file.toFile().exists()) {
             return new FinvoryData();
         }
-        try (Reader reader = new FileReader(file)) {
+        try (Reader reader = new FileReader(file.toFile())) {
             FinvoryData data = gson.fromJson(reader, FinvoryData.class);
             return data != null ? data : new FinvoryData();
         } catch (IOException e) {
@@ -173,8 +185,9 @@ public class LocalFileService {
         }
     }
 
-    private void saveCustomersCsv(List<Customer> customers, String folder) {
-        try (PrintWriter printWriter = new PrintWriter(new FileWriter(folder + File.separator + "clients.csv"))) {
+    private void saveCustomersCsv(List<Customer> customers, Path folder) {
+        Path file = folder.resolve("clients.csv");
+        try (PrintWriter printWriter = new PrintWriter(new FileWriter(file.toFile()))) {
             printWriter.println("Identification" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "ClientType");
             if (customers != null) {
                 for (Customer c : customers) {
@@ -189,14 +202,14 @@ public class LocalFileService {
         }
     }
 
-    private ArrayList<Customer> loadCustomersCsv(String folder) {
+    private ArrayList<Customer> loadCustomersCsv(Path folder) {
         ArrayList<Customer> list = new ArrayList<>();
-        File file = new File(folder + File.separator + "clients.csv");
-        if (!file.exists()) {
+        Path file = folder.resolve("clients.csv");
+        if (!file.toFile().exists()) {
             return list;
         }
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file.toFile()))) {
             bufferedReader.readLine();
             String line;
             while ((line = bufferedReader.readLine()) != null) {
@@ -211,8 +224,9 @@ public class LocalFileService {
         return list;
     }
 
-    private void saveSuppliersCsv(List<Supplier> suppliers, String folder) {
-        try (PrintWriter printWriter = new PrintWriter(new FileWriter(folder + File.separator + "suppliers.csv"))) {
+    private void saveSuppliersCsv(List<Supplier> suppliers, Path folder) {
+        Path file = folder.resolve("suppliers.csv");
+        try (PrintWriter printWriter = new PrintWriter(new FileWriter(file.toFile()))) {
             printWriter.println("ID1" + DELIMITER + "ID2" + DELIMITER + "FullName" + DELIMITER + "Phone" + DELIMITER + "Email" + DELIMITER + "Description");
             if (suppliers != null) {
                 for (Supplier s : suppliers) {
@@ -227,14 +241,14 @@ public class LocalFileService {
         }
     }
 
-    private ArrayList<Supplier> loadSuppliersCsv(String folder) {
+    private ArrayList<Supplier> loadSuppliersCsv(Path folder) {
         ArrayList<Supplier> list = new ArrayList<>();
-        File file = new File(folder + File.separator + "suppliers.csv");
-        if (!file.exists()) {
+        Path file = folder.resolve("suppliers.csv");
+        if (!file.toFile().exists()) {
             return list;
         }
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file.toFile()))) {
             bufferedReader.readLine();
             String line;
             while ((line = bufferedReader.readLine()) != null) {
@@ -251,7 +265,7 @@ public class LocalFileService {
         return list;
     }
 
-    private void mergeCustomersFromCsv(FinvoryData localData, String folder) {
+    private void mergeCustomersFromCsv(FinvoryData localData, Path folder) {
         for (Customer customer : loadCustomersCsv(folder)) {
             if (!existsCustomer(localData.getCustomers(), customer.getIdentification())) {
                 localData.addCustomer(customer);
@@ -259,7 +273,7 @@ public class LocalFileService {
         }
     }
 
-    private void mergeSuppliersFromCsv(FinvoryData localData, String folder) {
+    private void mergeSuppliersFromCsv(FinvoryData localData, Path folder) {
         for (Supplier supplier : loadSuppliersCsv(folder)) {
             if (!existsSupplier(localData.getSuppliers(), supplier.getId1())) {
                 localData.addSupplier(supplier);
@@ -381,5 +395,26 @@ public class LocalFileService {
 
         data.getInvoices().clear();
         data.getInvoices().addAll(byId.values());
+    }
+
+    private static Path resolveDataRoot() {
+        try {
+            Path jarDir = Paths.get(LocalFileService.class.getProtectionDomain()
+                    .getCodeSource().getLocation().toURI()).getParent();
+
+            Path p1 = jarDir.resolve("data");
+            Path p2 = jarDir.getParent().resolve("data");
+
+            if (Files.exists(p1)) {
+                return p1;
+            }
+            if (Files.exists(p2)) {
+                return p2;
+            }
+
+            return Paths.get("data").toAbsolutePath();
+        } catch (Exception e) {
+            return Paths.get("data").toAbsolutePath();
+        }
     }
 }

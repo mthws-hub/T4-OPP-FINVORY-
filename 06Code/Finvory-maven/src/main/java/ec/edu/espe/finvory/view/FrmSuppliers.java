@@ -26,6 +26,9 @@ public class FrmSuppliers extends javax.swing.JFrame {
         this.supplierActionProcessor = processor;
         this.controller = mainController;
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnAdd);
+        ButtonStyles.applyPrimaryStyle(btnDelete);
+        ButtonStyles.applyPrimaryStyle(btnEdit);
         this.setLocationRelativeTo(null);
         setupTableSelection();
         loadSupplierTable();

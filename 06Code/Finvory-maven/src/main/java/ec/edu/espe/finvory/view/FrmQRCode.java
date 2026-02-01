@@ -17,6 +17,7 @@ public class FrmQRCode extends javax.swing.JDialog {
     public FrmQRCode(java.awt.Frame parent, boolean modal, String username, String secret) {
         super(parent, modal);
         initComponents();
+        ButtonStyles.applyPrimaryStyle(btnAccept);
         this.setLocationRelativeTo(null);
 
         jLabel1.setText("Configuración de Seguridad 2FA");
