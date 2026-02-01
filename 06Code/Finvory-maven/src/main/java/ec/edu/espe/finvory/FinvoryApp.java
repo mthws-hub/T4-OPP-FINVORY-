@@ -24,7 +24,7 @@ public class FinvoryApp {
     public static void main(String[] args) {
 
         ButtonStyles.initializeComponents();
-        
+
         setupTaskbarIcon();
 
         mongoConnection = new MongoDBConnection();

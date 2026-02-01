@@ -106,6 +106,7 @@ ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$3.class
 ec\edu\espe\finvory\view\FrmNewAccount$9.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$ValidationResult.class
 ec\edu\espe\finvory\view\FrmAddNewSupplier$1.class
+ec\edu\espe\finvory\mongo\MongoAuthService.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$ValidationResult.class
 ec\edu\espe\finvory\view\FrmInventories$2.class
 ec\edu\espe\finvory\view\FrmNewAccount$7.class
