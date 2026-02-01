@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: ec.edu.espe.finvory.utils.ObsoleteInventoryTest
 -------------------------------------------------------------------------------
+<<<<<<< Updated upstream
 Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.028 s -- in ec.edu.espe.finvory.utils.ObsoleteInventoryTest
+=======
+Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.049 s -- in ec.edu.espe.finvory.utils.ObsoleteInventoryTest
+>>>>>>> Stashed changes

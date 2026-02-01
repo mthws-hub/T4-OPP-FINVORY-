@@ -417,4 +417,9 @@ public class LocalFileService {
             return Paths.get("data").toAbsolutePath();
         }
     }
+
+    public String getCompanyFolderPath(String companyUsername) {
+        return ROOT_DATA_FOLDER.resolve(companyUsername).toString();
+    }
+
 }

@@ -32,7 +32,6 @@ public class FinvoryController {
 
     public FinvoryController(DataPersistenceManager dataBase) {
         this.dataBase = dataBase;
-        this.users = dataBase.loadUsers();
         this.userController = new UserController(this);
         this.productController = new ProductController(this);
         this.inventoryController = new InventoryController(this);
@@ -97,7 +96,6 @@ public class FinvoryController {
     public void saveData() {
         if (currentCompanyUsername != null && data != null && data.getCompanyInfo() != null) {
             dataBase.saveCompanyData(data, currentCompanyUsername);
-            dataBase.saveUsers(users);
             syncUsersToCloud();
         }
     }

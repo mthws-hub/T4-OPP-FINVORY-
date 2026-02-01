@@ -277,7 +277,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             return;
         }
 
-        CompanyAccount targetCompany = controller.userController.findCompanyByName(companyName);
+        CompanyAccount targetCompany = controller.userController.findCompanyByUsername(companyName);
 
         if (targetCompany != null) {
             String phone = targetCompany.getPhone();
@@ -299,7 +299,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             return;
         }
 
-        ec.edu.espe.finvory.model.CompanyAccount targetCompany = controller.userController.findCompanyByName(companyName);
+        ec.edu.espe.finvory.model.CompanyAccount targetCompany = controller.userController.findCompanyByUsername(companyName);
 
         if (targetCompany != null && targetCompany.getPhone() != null) {
             String rawPhone = targetCompany.getPhone().replaceAll("[^0-9]", "");
