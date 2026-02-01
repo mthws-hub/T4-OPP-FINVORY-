@@ -376,7 +376,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
 
         btnExportCsv.setBackground(new java.awt.Color(0, 123, 0));
         btnExportCsv.setForeground(new java.awt.Color(255, 255, 255));
-        btnExportCsv.setText("Exportar CSV");
+        btnExportCsv.setText("Exportar");
         btnExportCsv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportCsvActionPerformed(evt);
@@ -515,7 +515,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnExportCsvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCsvActionPerformed
-        onExportCsv();
+        onExportReport();
     }//GEN-LAST:event_btnExportCsvActionPerformed
 
     private void radioButtonPerDayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonPerDayActionPerformed
@@ -592,6 +592,43 @@ public class FrmGrossReport extends javax.swing.JFrame {
         return value.toString().replace(",", ".");
     }
 
+    private void onExportReport() {
+        var format = ec.edu.espe.finvory.controller.report.ReportUiHelper.askFormat(this);
+        if (format == null) {
+            return;
+        }
+
+        String path = ec.edu.espe.finvory.controller.report.ReportUiHelper.askSavePath(
+                this,
+                "Guardar Reporte de Ventas Brutas",
+                format
+        );
+        if (path == null) {
+            return;
+        }
+
+        String reportTitle = "REPORTE DE VENTAS BRUTAS";
+
+        String[] headers = ec.edu.espe.finvory.controller.report.ReportUiHelper.extractHeaders(scrGrossTable);
+        java.util.List<Object[]> rows = ec.edu.espe.finvory.controller.report.ReportUiHelper.extractRows(scrGrossTable);
+
+        ec.edu.espe.finvory.controller.report.ReportExporter exporter
+                = new ec.edu.espe.finvory.controller.report.ReportExporter(null);
+
+        try {
+            if (format == ec.edu.espe.finvory.controller.report.ReportUiHelper.Format.CSV) {
+                exporter.setStrategy(new ec.edu.espe.finvory.controller.report.CsvReportExportStrategy(controller.exportController));
+            } else {
+                exporter.setStrategy(new ec.edu.espe.finvory.controller.report.PdfReportExportStrategy());
+            }
+
+            exporter.export(path, reportTitle, headers, rows);
+            javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al exportar: " + ex.getMessage());
+            logger.log(java.util.logging.Level.SEVERE, "Error exportando reporte", ex);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCsv;
