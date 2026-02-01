@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: ec.edu.espe.finvory.utils.PriceValidationTest
 -------------------------------------------------------------------------------
-Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.067 s -- in ec.edu.espe.finvory.utils.PriceValidationTest
+Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.033 s -- in ec.edu.espe.finvory.utils.PriceValidationTest

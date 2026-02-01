@@ -196,6 +196,25 @@
       "username": "usuario",
       "password": "dpousbtfòb",
       "twoFactorKey": "PCUITB3JCAXGUQTCZHM7P2D2YMNKFBPG"
+    },
+    {
+      "fullName": "Arelys Otavalo",
+      "username": "Arelys",
+      "password": "bsfmzt",
+      "profilePhotoPath": "data\\profiles\\Arelys_profile.png",
+      "twoFactorKey": "CS3WLEOAZSJXHCIBRPGUV4OB74EZNXDO"
+    },
+    {
+      "fullName": "Maholy Villarreal",
+      "username": "maholy",
+      "password": "nbipmz",
+      "twoFactorKey": "LF7JMVCT7UZFIYCAFOHUTB6XOW6DR25F"
+    },
+    {
+      "fullName": "Juan Pasmiñño",
+      "username": "Juanito",
+      "password": "kvbojup",
+      "twoFactorKey": "SSMPS5XTCO4WPB6AKSW6WYGOQSFBJ5NI"
     }
   ]
 }

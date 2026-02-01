@@ -184,4 +184,21 @@ public class CompanyAccountTest {
         assertNotNull(error, "An error should be returned for numeric locations");
         assertEquals("País y Ciudad solo deben contener letras.", error, "The error message must match the validation rule for alphabetic locations");
     }
+    
+    @Test
+    public void testCompanyName_HasAtLeastTwoWords() {
+        String singleWord = "Application";
+        String twoWords = "Applications Solutions";
+        
+        assertFalse(ValidationUtils.hasTwoWords(singleWord), "The company name should have at least two words to be formal");
+        assertTrue(ValidationUtils.hasTwoWords(twoWords), "It should accept compound names");
+    }
+    
+    @Test
+    public void testCompanyFields_Whitespace() {
+        String whitespace = "   ";
+        
+        assertTrue(ValidationUtils.isEmpty(whitespace), 
+                   "A field with only spaces must be considered empty");
+    }
 }
