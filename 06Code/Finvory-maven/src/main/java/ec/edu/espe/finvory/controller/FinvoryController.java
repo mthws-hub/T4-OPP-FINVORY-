@@ -32,6 +32,7 @@ public class FinvoryController {
 
     public FinvoryController(DataPersistenceManager dataBase) {
         this.dataBase = dataBase;
+        this.users = new SystemUsers();
         this.userController = new UserController(this);
         this.productController = new ProductController(this);
         this.inventoryController = new InventoryController(this);

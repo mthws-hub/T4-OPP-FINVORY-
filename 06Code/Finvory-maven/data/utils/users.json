@@ -164,6 +164,23 @@
       "username": "maryuri",
       "password": "2345",
       "twoFactorKey": "XX7UUXZNV4PDZKAFAXTQRHM3C6PMNCOV"
+    },
+    {
+      "name": "Frico Autopartes",
+      "address": {
+        "country": "Ecuador",
+        "city": "Quito",
+        "street": "Oswaldo Guayasamín",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "ruc": "0011754398189",
+      "phone": "0983249630",
+      "email": "frico@gmail.com",
+      "username": "Manolo",
+      "password": "nbopmp",
+      "twoFactorKey": "54GELZSRC6GSHL2Y6EBK2WXQUCG2UKYQ"
     }
   ],
   "personalAccounts": [

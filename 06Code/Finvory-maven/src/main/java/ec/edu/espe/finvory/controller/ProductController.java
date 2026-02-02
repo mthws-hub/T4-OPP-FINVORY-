@@ -1,6 +1,7 @@
 package ec.edu.espe.finvory.controller;
 
 import ec.edu.espe.finvory.model.*;
+import ec.edu.espe.finvory.mongo.MongoAuthService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -19,7 +20,9 @@ public class ProductController implements IProductActions {
 
     @Override
     public Product findProductById(String productId) {
-        if (productId == null || mainController.data == null) return null;
+        if (productId == null || mainController.data == null) {
+            return null;
+        }
         for (Product product : mainController.data.getProducts()) {
             if (productId.equalsIgnoreCase(product.getId())) {
                 return product;
@@ -200,16 +203,31 @@ public class ProductController implements IProductActions {
         List<Object[]> rows = new ArrayList<>();
         String query = companyNameQuery.toLowerCase().trim();
         String targetUsername = null;
+        CompanyAccount selectedCompany = null; 
+
+        List<CompanyAccount> allCompanies = mainController.dataBase.auth().findAllCompanies();
+        mainController.users.setCompanyAccounts((ArrayList<CompanyAccount>) allCompanies);
 
         for (CompanyAccount company : mainController.users.getCompanyAccounts()) {
             if (company.getName() != null && company.getName().toLowerCase().contains(query)) {
                 targetUsername = company.getUsername();
-                break;
+
+                mainController.setCurrentCompanyUsername(targetUsername);
+                mainController.data = mainController.dataBase.loadCompanyData(targetUsername);
+                if (mainController.data != null) {
+                    mainController.data.setCompanyInfo(company); 
+                }
+                break;  
             }
         }
 
-        if (targetUsername == null) {
-            return rows;
+        if (targetUsername != null) {
+
+            mainController.data = mainController.dataBase.loadCompanyData(targetUsername);
+            mainController.setCurrentCompanyUsername(targetUsername);
+            if (mainController.data != null && selectedCompany != null) {
+                mainController.data.setCompanyInfo(selectedCompany);
+            }
         }
 
         FinvoryData targetData = mainController.dataBase.loadCompanyData(targetUsername);
@@ -244,7 +262,7 @@ public class ProductController implements IProductActions {
         rows.sort((rowA, rowB) -> ((Integer) rowB[1]).compareTo((Integer) rowA[1]));
         return rows;
     }
-    
+
     @Override
     public List<Object[]> getProductTableData(Inventory specificInventory) {
         List<Object[]> rows = new ArrayList<>();

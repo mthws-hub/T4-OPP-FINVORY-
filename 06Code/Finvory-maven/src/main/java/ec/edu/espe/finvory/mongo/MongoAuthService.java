@@ -135,8 +135,8 @@ public class MongoAuthService {
         );
     }
 
-    public void upsertPersonalAccount(PersonalAccount p) {
-        if (p == null || p.getUsername() == null || p.getUsername().isBlank()) {
+    public void upsertPersonalAccount(PersonalAccount personal) {
+        if (personal == null || personal.getUsername() == null || personal.getUsername().isBlank()) {
             return;
         }
         MongoCollection<Document> col = personalAccounts();
@@ -145,16 +145,32 @@ public class MongoAuthService {
         }
 
         Document set = new Document()
-                .append("username", p.getUsername())
-                .append("password", p.getPassword())
-                .append("twoFactorKey", p.getTwoFactorKey())
-                .append("fullName", p.getFullName())
-                .append("profilePhotoPath", p.getProfilePhotoPath());
+                .append("username", personal.getUsername())
+                .append("password", personal.getPassword())
+                .append("twoFactorKey", personal.getTwoFactorKey())
+                .append("fullName", personal.getFullName())
+                .append("profilePhotoPath", personal.getProfilePhotoPath());
 
-        col.updateOne(
-                Filters.eq("username", p.getUsername()),
+        col.updateOne(Filters.eq("username", personal.getUsername()),
                 new Document("$set", set),
                 new UpdateOptions().upsert(true)
         );
+    }
+
+    public java.util.List<ec.edu.espe.finvory.model.CompanyAccount> findAllCompanies() {
+        java.util.List<ec.edu.espe.finvory.model.CompanyAccount> companiesList = new java.util.ArrayList<>();
+        com.mongodb.client.MongoCollection<org.bson.Document> col = companies();
+
+        if (col != null) {
+            for (org.bson.Document doc : col.find()) {
+                ec.edu.espe.finvory.model.CompanyAccount c = new ec.edu.espe.finvory.model.CompanyAccount();
+                c.setUsername(doc.getString("companyUsername"));
+                c.setName(doc.getString("name"));
+                c.setPhone(doc.getString("phone"));
+                c.setEmail(doc.getString("email"));
+                companiesList.add(c);
+            }
+        }
+        return companiesList;
     }
 }

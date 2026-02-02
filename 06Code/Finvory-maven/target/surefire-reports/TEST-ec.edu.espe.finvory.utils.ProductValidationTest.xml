@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< Updated upstream
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.012" tests="14" errors="0" skipped="0" failures="0">
-=======
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.024" tests="14" errors="0" skipped="0" failures="0">
->>>>>>> Stashed changes
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.021" tests="14" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="24"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -19,11 +15,7 @@
     <property name="user.country" value="EC"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Apache NetBeans\jdk\bin"/>
-<<<<<<< Updated upstream
-    <property name="sun.java.command" value="C:\Users\Arelys\AppData\Local\Temp\surefire11282537275982677143\surefirebooter-20260201133322008_3.jar C:\Users\Arelys\AppData\Local\Temp\surefire11282537275982677143 2026-02-01T13-33-21_857-jvmRun1 surefire-20260201133322008_1tmp surefire_0-20260201133322008_2tmp"/>
-=======
-    <property name="sun.java.command" value="C:\Users\USER\AppData\Local\Temp\surefire3617937032460936596\surefirebooter-20260201150608457_3.jar C:\Users\USER\AppData\Local\Temp\surefire3617937032460936596 2026-02-01T15-06-08_087-jvmRun1 surefire-20260201150608457_1tmp surefire_0-20260201150608457_2tmp"/>
->>>>>>> Stashed changes
+    <property name="sun.java.command" value="C:\Users\Arelys\AppData\Local\Temp\surefire5831857846720523871\surefirebooter-20260201211303975_3.jar C:\Users\Arelys\AppData\Local\Temp\surefire5831857846720523871 2026-02-01T21-13-03_804-jvmRun1 surefire-20260201211303975_1tmp surefire_0-20260201211303975_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\Arelys\T4-OPP-FINVORY-\06Code\Finvory-maven\target\test-classes;C:\Users\Arelys\T4-OPP-FINVORY-\06Code\Finvory-maven\target\classes;C:\Users\Arelys\.m2\repository\com\warrenstrange\googleauth\1.5.0\googleauth-1.5.0.jar;C:\Users\Arelys\.m2\repository\org\apache\httpcomponents\httpclient\4.5.12\httpclient-4.5.12.jar;C:\Users\Arelys\.m2\repository\org\apache\httpcomponents\httpcore\4.4.13\httpcore-4.4.13.jar;C:\Users\Arelys\.m2\repository\commons-codec\commons-codec\1.15\commons-codec-1.15.jar;C:\Users\Arelys\.m2\repository\com\google\zxing\core\3.5.3\core-3.5.3.jar;C:\Users\Arelys\.m2\repository\com\google\zxing\javase\3.5.3\javase-3.5.3.jar;C:\Users\Arelys\.m2\repository\com\beust\jcommander\1.82\jcommander-1.82.jar;C:\Users\Arelys\.m2\repository\com\github\jai-imageio\jai-imageio-core\1.4.0\jai-imageio-core-1.4.0.jar;C:\Users\Arelys\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar;C:\Users\Arelys\.m2\repository\org\netbeans\external\AbsoluteLayout\RELEASE140\AbsoluteLayout-RELEASE140.jar;C:\Users\Arelys\.m2\repository\org\mongodb\mongodb-driver-sync\5.2.1\mongodb-driver-sync-5.2.1.jar;C:\Users\Arelys\.m2\repository\org\mongodb\bson\5.2.1\bson-5.2.1.jar;C:\Users\Arelys\.m2\repository\org\mongodb\mongodb-driver-core\5.2.1\mongodb-driver-core-5.2.1.jar;C:\Users\Arelys\.m2\repository\org\mongodb\bson-record-codec\5.2.1\bson-record-codec-5.2.1.jar;C:\Users\Arelys\.m2\repository\com\toedter\jcalendar\1.4\jcalendar-1.4.jar;C:\Users\Arelys\.m2\repository\org\apache\pdfbox\pdfbox\2.0.29\pdfbox-2.0.29.jar;C:\Users\Arelys\.m2\repository\org\apache\pdfbox\fontbox\2.0.29\fontbox-2.0.29.jar;C:\Users\Arelys\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\Arelys\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.3\junit-jupiter-api-5.10.3.jar;C:\Users\Arelys\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Arelys\.m2\repository\org\junit\platform\junit-platform-commons\1.10.3\junit-platform-commons-1.10.3.jar;C:\Users\Arelys\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Arelys\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.3\junit-jupiter-engine-5.10.3.jar;C:\Users\Arelys\.m2\repository\org\junit\platform\junit-platform-engine\1.10.3\junit-platform-engine-1.10.3.jar;C:\Users\Arelys\.m2\repository\com\formdev\flatlaf\3.6\flatlaf-3.6.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -38,11 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-<<<<<<< Updated upstream
-    <property name="surefire.real.class.path" value="C:\Users\Arelys\AppData\Local\Temp\surefire11282537275982677143\surefirebooter-20260201133322008_3.jar"/>
-=======
-    <property name="surefire.real.class.path" value="C:\Users\USER\AppData\Local\Temp\surefire3617937032460936596\surefirebooter-20260201150608457_3.jar"/>
->>>>>>> Stashed changes
+    <property name="surefire.real.class.path" value="C:\Users\Arelys\AppData\Local\Temp\surefire5831857846720523871\surefirebooter-20260201211303975_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="24.0.2+12"/>
@@ -64,11 +52,7 @@
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="sun.os.patch.level" value=""/>
     <property name="native.encoding" value="Cp1252"/>
-<<<<<<< Updated upstream
     <property name="java.library.path" value="C:\Program Files\Apache NetBeans\jdk\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\; (x86)\NVIDIA Corporation\PhysX\Common;NVIDIA Corporation\NVIDIA NvDLISR;Git\cmd;C:\ProgramData\chocolatey\bin;C:\Users\Arelys\AppData\Local\nvm;C:\nvm4w\nodejs;Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\; (x86)\NVIDIA Corporation\PhysX\Common;NVIDIA Corporation\NVIDIA NvDLISR;Git\cmd;C:\ProgramData\chocolatey\bin;C:\Users\Arelys\AppData\Local\nvm;C:\nvm4w\nodejs;C:\Users\Arelys\AppData\Local\Programs\Python\Python311\Scripts\;C:\Users\Arelys\AppData\Local\Programs\Python\Python311\;C:\Users\Arelys\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\Arelys\AppData\Local\Programs\Python\Python313\;C:\Users\Arelys\AppData\Local\Microsoft\WindowsApps;C:\Users\Arelys\Downloads;C:\MinGW\bin;C:\Users\Arelys\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Arelys\AppData\Roaming\npm;Apache NetBeans\bin;C:\Users\Arelys\AppData\Local\Programs\mongosh\;C:\Users\Arelys\AppData\Local\nvm;C:\nvm4w\nodejs;C:\Program Files\Git\cmd;."/>
-=======
-    <property name="java.library.path" value="C:\Program Files\Apache NetBeans\jdk\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files\WiX Toolset v6.0\bin\;C:\Users\USER\AppData\Local\Programs\Python\Launcher\;C:\Users\USER\AppData\Local\Microsoft\WindowsApps;C:\Users\USER\AppData\Local\Programs\Microsoft VS Code\bin;C:\MinGW\bin;C:\Users\USER\AppData\Roaming\npm;C:\Users\USER\AppData\Local\Programs\mongosh\;."/>
->>>>>>> Stashed changes
     <property name="java.vm.info" value="mixed mode, sharing"/>
     <property name="stderr.encoding" value="Cp1252"/>
     <property name="java.vendor" value="Azul Systems, Inc."/>
@@ -77,29 +61,17 @@
     <property name="java.class.version" value="68.0"/>
   </properties>
   <testcase name="testStockOnlyIntegers" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.002"/>
-<<<<<<< Updated upstream
   <testcase name="testPriceWithLeadingZero" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
   <testcase name="testStockNoNegatives" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
   <testcase name="testValidateProductFields_StockDependency" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
-  <testcase name="testSupplierField_EmptyCheck" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
-  <testcase name="testPriceWithMultipleDots" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.002"/>
+  <testcase name="testSupplierField_EmptyCheck" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.002"/>
+  <testcase name="testPriceWithMultipleDots" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
   <testcase name="testPriceNoNegatives" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
   <testcase name="testPriceNoCommasAllowed" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
   <testcase name="testPriceWithCurrencySymbol_ShouldFail" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
-  <testcase name="testProductFields_WhitespaceTrimming" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
-=======
-  <testcase name="testPriceWithLeadingZero" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
-  <testcase name="testStockNoNegatives" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
-  <testcase name="testValidateProductFields_StockDependency" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
-  <testcase name="testSupplierField_EmptyCheck" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
-  <testcase name="testPriceWithMultipleDots" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
-  <testcase name="testPriceNoNegatives" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
-  <testcase name="testPriceNoCommasAllowed" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
-  <testcase name="testPriceWithCurrencySymbol_ShouldFail" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
   <testcase name="testProductFields_WhitespaceTrimming" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
->>>>>>> Stashed changes
   <testcase name="testProductNameWithSpecialSymbols" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
-  <testcase name="testStockExtremeValue_LargeInput" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
-  <testcase name="testBarcodeLengthBoundary_TooShort" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
-  <testcase name="testBarcodeOnlyNumbers" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.0"/>
+  <testcase name="testStockExtremeValue_LargeInput" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
+  <testcase name="testBarcodeLengthBoundary_TooShort" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.001"/>
+  <testcase name="testBarcodeOnlyNumbers" classname="ec.edu.espe.finvory.utils.ProductValidationTest" time="0.002"/>
 </testsuite>

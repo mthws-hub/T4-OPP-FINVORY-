@@ -270,6 +270,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
     }
 
     private void onShowCompanyInfo() {
+        
         String companyName = txtCompany.getText().trim();
 
         if (ValidationUtils.isEmpty(companyName)) {
@@ -277,8 +278,7 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             return;
         }
 
-        CompanyAccount targetCompany = controller.userController.findCompanyByUsername(companyName);
-
+        ec.edu.espe.finvory.model.CompanyAccount targetCompany = controller.data.getCompanyInfo();
         if (targetCompany != null) {
             String phone = targetCompany.getPhone();
             String email = targetCompany.getEmail();
@@ -299,8 +299,8 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
             return;
         }
 
-        ec.edu.espe.finvory.model.CompanyAccount targetCompany = controller.userController.findCompanyByUsername(companyName);
-
+        ec.edu.espe.finvory.model.CompanyAccount targetCompany = controller.data.getCompanyInfo();
+        
         if (targetCompany != null && targetCompany.getPhone() != null) {
             String rawPhone = targetCompany.getPhone().replaceAll("[^0-9]", "");
             String finalPhone = "";

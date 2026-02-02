@@ -28,7 +28,6 @@ public class UserController {
     public boolean handleLoginGUI(String username, String password) {
         var auth = mainController.getDataBase().auth();
 
-        // 1) LOGIN COMPANY desde Mongo
         CompanyAccount company = auth.findCompanyByUsername(username);
         if (company != null && company.checkPassword(password)) {
 
@@ -41,14 +40,11 @@ public class UserController {
 
             FinvoryData loadedData = mainController.getDataBase().loadCompanyData(company.getUsername());
             mainController.setData(loadedData != null ? loadedData : new FinvoryData());
-
-            // Asegura que company info esté en memoria
             mainController.getData().setCompanyInfo(company);
 
             return true;
         }
 
-        // 2) LOGIN PERSONAL desde Mongo
         PersonalAccount personal = auth.findPersonalByUsername(username);
         if (personal != null && personal.checkPassword(password)) {
 
@@ -56,7 +52,6 @@ public class UserController {
                 return false;
             }
 
-            // tu controller no tiene currentPersonalUsername, así que reutilizamos este campo
             mainController.setCurrentCompanyUsername(personal.getUsername());
             mainController.setUserType("PERSONAL");
             return true;
@@ -115,10 +110,7 @@ public class UserController {
 
         newCompany.setTwoFactorKey(data.get("twoFactorKey"));
 
-        // Guardar credenciales y perfil en Mongo
         mainController.getDataBase().auth().upsertCompanyAccount(newCompany);
-
-        // Crear data inicial y guardarla (local + nube si hay internet)
         FinvoryData initialData = new FinvoryData();
         initialData.setCompanyInfo(newCompany);
         mainController.getDataBase().saveCompanyData(initialData, username);
@@ -136,15 +128,11 @@ public class UserController {
         PersonalAccount newPersonal = new PersonalAccount(data.get("fullName"), username, encryptedPass);
         newPersonal.setTwoFactorKey(data.get("twoFactorKey"));
 
-        // Guardar en Mongo
         mainController.getDataBase().auth().upsertPersonalAccount(newPersonal);
 
         return true;
     }
 
-    /**
-     * Búsqueda simple: por username (desde Mongo)
-     */
     public CompanyAccount findCompanyByUsername(String userName) {
         if (userName == null) {
             return null;
@@ -159,9 +147,6 @@ public class UserController {
         return mainController.getDataBase().auth().findPersonalByUsername(userName);
     }
 
-    /**
-     * Mantengo este método por compatibilidad con tu código actual
-     */
     public PersonalAccount getLoggedInPersonalAccount() {
         if (!"PERSONAL".equals(mainController.getUserType())) {
             return null;
@@ -178,8 +163,6 @@ public class UserController {
         if (account != null) {
             account.setFullName(newFullName);
             account.setPassword(mainController.caesarCipher(newPassword, 1));
-
-            // Persistir en Mongo
             mainController.getDataBase().auth().upsertPersonalAccount(account);
 
             JOptionPane.showMessageDialog(null, "Perfil actualizado.");
@@ -190,9 +173,6 @@ public class UserController {
         return mainController.getDataBase().auth().isUsernameTaken(username);
     }
 
-    /**
-     * Guarda fotos en carpeta del usuario, no en "data/" del proyecto.
-     */
     public String handleUploadPhoto(java.io.File sourceFile, String username, String oldPath) {
         try {
             if (oldPath != null) {
@@ -226,12 +206,10 @@ public class UserController {
     }
 
     private Path getProfilesDir() {
-        // Windows: LOCALAPPDATA\Finvory\profiles
         String localAppData = System.getenv("LOCALAPPDATA");
         if (localAppData != null && !localAppData.isBlank()) {
             return Paths.get(localAppData, "Finvory", "profiles");
         }
-        // Fallback: user.home/.finvory/profiles
         return Paths.get(System.getProperty("user.home"), ".finvory", "profiles");
     }
 
@@ -243,10 +221,7 @@ public class UserController {
             if (company != null && company.checkPassword(currentAttempt)) {
                 company.setPassword(mainController.caesarCipher(newPass, 1));
 
-                // Persistir credenciales en Mongo
                 mainController.getDataBase().auth().upsertCompanyAccount(company);
-
-                // Persistir data (local + nube si online)
                 mainController.saveData();
                 return true;
             }
@@ -255,7 +230,6 @@ public class UserController {
             if (personal != null && personal.checkPassword(currentAttempt)) {
                 personal.setPassword(mainController.caesarCipher(newPass, 1));
 
-                // Persistir en Mongo
                 mainController.getDataBase().auth().upsertPersonalAccount(personal);
 
                 return true;
@@ -269,7 +243,6 @@ public class UserController {
         if (account != null) {
             account.setFullName(newFullName);
 
-            // Persistir en Mongo
             mainController.getDataBase().auth().upsertPersonalAccount(account);
 
             JOptionPane.showMessageDialog(null, "Nombre actualizado correctamente.");
