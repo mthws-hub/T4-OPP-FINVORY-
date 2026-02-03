@@ -14,6 +14,7 @@
     "email": "manolo@gmail.com",
     "username": "Manolo",
     "password": "nbopmp",
+    "logoPath": "C:\\Users\\USER\\AppData\\Local\\Finvory\\profiles\\Manolo_profile.png",
     "twoFactorKey": "VBPXHQ45GMVJNR4RKPJMDNMT7M5MY2FO"
   },
   "customers": [
@@ -29,6 +30,13 @@
       "identification": "0018967489377",
       "phone": "09986333765",
       "email": "joseph@gmail.com",
+      "clientType": "PREMIUM"
+    },
+    {
+      "name": "Mathews Pastor",
+      "identification": "1751132869",
+      "phone": "0983249630",
+      "email": "mspastor@espe.edu.ec",
       "clientType": "PREMIUM"
     }
   ],
@@ -55,6 +63,14 @@
       "description": "",
       "barcode": "8767543699",
       "baseCostPrice": 20.45,
+      "supplierId": "0011749876445"
+    },
+    {
+      "id": "DLLA852",
+      "name": "Tobera Chevrolet",
+      "description": "",
+      "barcode": "",
+      "baseCostPrice": 25.00,
       "supplierId": "0011749876445"
     }
   ],
@@ -84,11 +100,11 @@
         "city": "Quito",
         "street": "Hugo Ortiz",
         "zipCode": "",
-        "streetNumber": "27",
-        "region": "Sierra"
+        "streetNumber": "",
+        "region": ""
       },
       "productStock": {
-        "DLLA246": 50,
+        "DLLA246": 0,
         "DLLA135": 13
       }
     },
@@ -99,10 +115,11 @@
         "city": "Quito",
         "street": "Amazonas",
         "zipCode": "",
-        "streetNumber": "8",
-        "region": "Sierra"
+        "streetNumber": "",
+        "region": ""
       },
       "productStock": {
+        "DLLA852": 10,
         "DLLA777": 30
       }
     }
@@ -123,8 +140,8 @@
   "invoices": [
     {
       "invoiceNumber": "FAC-1769999164665",
-      "date": "2026-02-01",
-      "paymentDueDate": "2026-02-01",
+      "date": "2026-01-29",
+      "paymentDueDate": "2026-01-29",
       "customer": {
         "name": "Maryuri Quiña",
         "identification": "1756782547",
@@ -137,29 +154,29 @@
           "productId": "DLLA777",
           "productName": "Tobera SWM",
           "quantity": 10,
-          "priceApplied": 35.99,
+          "priceApplied": 35.989999999999995,
           "lineTotal": 359.90
         },
         {
           "productId": "DLLA135",
           "productName": "Tobera Aveo",
           "quantity": 12,
-          "priceApplied": 33.00,
+          "priceApplied": 33.0,
           "lineTotal": 396.00
         }
       ],
       "status": "COMPLETED",
       "subtotal": 755.90,
-      "discountRate": 0.2,
-      "discountAmount": 151.18,
+      "discountRate": 0,
+      "discountAmount": 0.00,
       "taxRate": 0.15,
-      "taxAmount": 90.71,
-      "total": 695.43
+      "taxAmount": 113.39,
+      "total": 869.29
     },
     {
       "invoiceNumber": "FAC-1769999195283",
-      "date": "2026-02-01",
-      "paymentDueDate": "2026-02-01",
+      "date": "2026-01-29",
+      "paymentDueDate": "2026-01-29",
       "customer": {
         "name": "Joseph Medina",
         "identification": "0018967489377",
@@ -172,17 +189,101 @@
           "productId": "DLLA135",
           "productName": "Tobera Aveo",
           "quantity": 10,
-          "priceApplied": 28.88,
+          "priceApplied": 28.880000000000003,
           "lineTotal": 288.80
         }
       ],
       "status": "COMPLETED",
       "subtotal": 288.80,
-      "discountRate": 0.3,
-      "discountAmount": 86.64,
+      "discountRate": 0,
+      "discountAmount": 0.00,
       "taxRate": 0.15,
-      "taxAmount": 30.32,
-      "total": 232.48
+      "taxAmount": 43.32,
+      "total": 332.12
+    },
+    {
+      "invoiceNumber": "FAC-1770003574842",
+      "date": "2026-01-30",
+      "paymentDueDate": "2026-01-30",
+      "customer": {
+        "name": "Mathews Pastor",
+        "identification": "1751132869",
+        "phone": "0983249630",
+        "email": "mspastor@espe.edu.ec",
+        "clientType": "PREMIUM"
+      },
+      "lines": [
+        {
+          "productId": "DLLA852",
+          "productName": "Tobera Chevrolet",
+          "quantity": 1,
+          "priceApplied": 38.5,
+          "lineTotal": 38.50
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 38.50,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 5.78,
+      "total": 44.28
+    },
+    {
+      "invoiceNumber": "FAC-1770003890029",
+      "date": "2026-01-30",
+      "paymentDueDate": "2026-01-30",
+      "customer": {
+        "name": "Joseph Medina",
+        "identification": "0018967489377",
+        "phone": "09986333765",
+        "email": "joseph@gmail.com",
+        "clientType": "PREMIUM"
+      },
+      "lines": [
+        {
+          "productId": "DLLA852",
+          "productName": "Tobera Chevrolet",
+          "quantity": 1,
+          "priceApplied": 38.5,
+          "lineTotal": 38.50
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 38.50,
+      "discountRate": 0,
+      "discountAmount": 0.00,
+      "taxRate": 0.15,
+      "taxAmount": 5.78,
+      "total": 44.28
+    },
+    {
+      "invoiceNumber": "FAC-1770052407462",
+      "date": "2026-02-02",
+      "paymentDueDate": "2026-02-02",
+      "customer": {
+        "name": "Joseph Medina",
+        "identification": "0018967489377",
+        "phone": "09986333765",
+        "email": "joseph@gmail.com",
+        "clientType": "PREMIUM"
+      },
+      "lines": [
+        {
+          "productId": "DLLA246",
+          "productName": "Tobera Toyota",
+          "quantity": 50,
+          "priceApplied": 39.70,
+          "lineTotal": 1985.00
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 1985.00,
+      "discountRate": 0.3,
+      "discountAmount": 595.50,
+      "taxRate": 0.15,
+      "taxAmount": 208.43,
+      "total": 1597.93
     }
   ],
   "returns": [
@@ -197,7 +298,7 @@
       },
       "quantity": 4,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-02-01"
+      "returnDate": "2026-02-02"
     }
   ],
   "taxRate": 0.15,

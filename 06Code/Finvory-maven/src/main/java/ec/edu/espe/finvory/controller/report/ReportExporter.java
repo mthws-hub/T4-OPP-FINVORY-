@@ -10,19 +10,18 @@ public class ReportExporter {
 
     private ReportExportStrategy strategy;
 
-    public ReportExporter(ReportExportStrategy strategy) {
-        this.strategy = strategy;
-    }
-
     public void setStrategy(ReportExportStrategy strategy) {
         this.strategy = strategy;
     }
 
-    public void export(String path, String reportTitle, String[] headers, List<Object[]> dataRows) throws Exception {
-        if (strategy == null) {
-            throw new IllegalStateException("No hay estrategia de exportación definida.");
-        }
-        strategy.export(path, reportTitle, headers, dataRows);
+    public ReportExportStrategy getStrategy() {
+        return strategy;
     }
 
+    public void export(String path, String title, String[] headers, List<Object[]> rows) throws Exception {
+        if (strategy == null) {
+            throw new IllegalStateException("Export strategy not defined");
+        }
+        strategy.export(path, title, headers, rows);
+    }
 }

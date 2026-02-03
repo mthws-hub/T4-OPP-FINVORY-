@@ -26,11 +26,13 @@ ec\edu\espe\finvory\view\FrmGrossReport$3.class
 ec\edu\espe\finvory\view\FrmNewAccount$4.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$1.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$8.class
+ec\edu\espe\finvory\controller\report\PdfReportGenerator.class
 ec\edu\espe\finvory\view\FrmLogin.class
 ec\edu\espe\finvory\view\FrmSalesReport$1.class
 ec\edu\espe\finvory\controller\ExportController.class
 ec\edu\espe\finvory\view\FrmInventories$4.class
 ec\edu\espe\finvory\view\FrmNewAccount$5.class
+ec\edu\espe\finvory\controller\report\ReportStrategyResolver.class
 ec\edu\espe\finvory\mongo\LocalFileService.class
 ec\edu\espe\finvory\view\FrmSaleInvoice$7.class
 ec\edu\espe\finvory\view\FrmInventories$10.class
@@ -72,6 +74,7 @@ ec\edu\espe\finvory\mongo\DataPersistenceManager.class
 ec\edu\espe\finvory\controller\IProductActions.class
 ec\edu\espe\finvory\view\FrmAbout.class
 ec\edu\espe\finvory\model\CompanyAccount.class
+ec\edu\espe\finvory\controller\report\ReportType.class
 ec\edu\espe\finvory\view\FrmCustomers$2.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$Field.class
 ec\edu\espe\finvory\view\FrmLogin$1.class
@@ -106,6 +109,7 @@ ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$3.class
 ec\edu\espe\finvory\view\FrmNewAccount$9.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$ValidationResult.class
 ec\edu\espe\finvory\view\FrmAddNewSupplier$1.class
+ec\edu\espe\finvory\controller\report\ReportFlow.class
 ec\edu\espe\finvory\mongo\MongoAuthService.class
 ec\edu\espe\finvory\view\FrmAddNewProduct$ValidationResult.class
 ec\edu\espe\finvory\view\FrmInventories$2.class
@@ -167,6 +171,7 @@ ec\edu\espe\finvory\view\FrmMainMenu$9.class
 ec\edu\espe\finvory\view\FrmProducts$1.class
 ec\edu\espe\finvory\view\FrmProductReturns$3.class
 ec\edu\espe\finvory\view\FrmInventorySelector.class
+ec\edu\espe\finvory\controller\report\ReportFormat.class
 ec\edu\espe\finvory\view\FrmInventorySelector$2.class
 ec\edu\espe\finvory\controller\report\ReportExporter.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$6.class
@@ -187,6 +192,7 @@ ec\edu\espe\finvory\view\FrmNewAccount$3.class
 ec\edu\espe\finvory\view\FrmProductReturns$2.class
 ec\edu\espe\finvory\view\FrmMainMenu$5.class
 ec\edu\espe\finvory\view\FrmChangePassword$5.class
+ec\edu\espe\finvory\view\FrmPopularProducts$1.class
 ec\edu\espe\finvory\view\FrmProductReturns.class
 ec\edu\espe\finvory\view\FrmAddNewCustomer$2.class
 ec\edu\espe\finvory\view\FrmSalesReport.class
@@ -218,7 +224,6 @@ ec\edu\espe\finvory\view\FrmPrices$2.class
 ec\edu\espe\finvory\view\FrmMainMenuPersonalAccount$8.class
 ec\edu\espe\finvory\view\FrmChangePassword.class
 ec\edu\espe\finvory\view\FrmChangePassword$3.class
-ec\edu\espe\finvory\controller\report\ReportUiHelper$Format.class
 ec\edu\espe\finvory\controller\ProductController$ProductDisplayData.class
 ec\edu\espe\finvory\model\SystemUsers.class
 ec\edu\espe\finvory\controller\UserController.class
