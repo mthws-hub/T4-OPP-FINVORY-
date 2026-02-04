@@ -104,7 +104,7 @@
         "region": ""
       },
       "productStock": {
-        "DLLA246": 50,
+        "DLLA246": 0,
         "DLLA135": 13
       }
     },
@@ -140,8 +140,6 @@
   "invoices": [
     {
       "invoiceNumber": "FAC-1769999164665",
-      "date": "2026-01-30",
-      "paymentDueDate": "2026-01-30",
       "customer": {
         "name": "Maryuri Quiña",
         "identification": "1756782547",
@@ -256,6 +254,34 @@
       "taxRate": 0.15,
       "taxAmount": 5.78,
       "total": 44.28
+    },
+    {
+      "invoiceNumber": "FAC-1770052407462",
+      "date": "2026-02-02",
+      "paymentDueDate": "2026-02-02",
+      "customer": {
+        "name": "Joseph Medina",
+        "identification": "0018967489377",
+        "phone": "09986333765",
+        "email": "joseph@gmail.com",
+        "clientType": "PREMIUM"
+      },
+      "lines": [
+        {
+          "productId": "DLLA246",
+          "productName": "Tobera Toyota",
+          "quantity": 50,
+          "priceApplied": 39.7,
+          "lineTotal": 1985.0
+        }
+      ],
+      "status": "COMPLETED",
+      "subtotal": 1985.0,
+      "discountRate": 0.3,
+      "discountAmount": 595.5,
+      "taxRate": 0.15,
+      "taxAmount": 208.43,
+      "total": 1597.93
     }
   ],
   "returns": [
@@ -270,7 +296,7 @@
       },
       "quantity": 4,
       "reason": "Compra Incorrecta",
-      "returnDate": "2026-02-01"
+      "returnDate": "2026-02-02"
     }
   ],
   "taxRate": 0.15,

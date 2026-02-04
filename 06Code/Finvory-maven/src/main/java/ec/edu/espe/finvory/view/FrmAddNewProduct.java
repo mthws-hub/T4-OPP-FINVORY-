@@ -500,8 +500,7 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         } else if (!ValidationUtils.isNonNegativeInteger(data.stockStr)) {
             result.add(Field.STOCK, "- El stock debe ser un número entero positivo (ej: 10).\n");
         }
-
-        // Si barcode está vacío, lo dejo pasar; si tiene algo, debe ser numérico
+       
         if (!ValidationUtils.isEmpty(data.barcode) && !ValidationUtils.isNumeric(data.barcode)) {
             result.add(Field.BARCODE, "- El código de barras solo puede contener números.\n");
         }
@@ -549,8 +548,6 @@ public class FrmAddNewProduct extends javax.swing.JFrame {
         }
         return controller.productController.handleUpdateProductGUI(productIdToEdit, productData, inv);
     }
-
-    /* ===== Helpers internos (OOP) ===== */
 
     private enum Field { ID, BARCODE, NAME, DESCRIPTION, PRICE, STOCK, SUPPLIER, INVENTORY }
 

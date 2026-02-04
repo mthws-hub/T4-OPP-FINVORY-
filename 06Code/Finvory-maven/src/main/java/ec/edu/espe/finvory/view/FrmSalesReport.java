@@ -19,9 +19,6 @@ public class FrmSalesReport extends javax.swing.JFrame {
     private FinvoryController controller;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmSalesReport.class.getName());
 
-    /**
-     * Creates new form FrmSalesReport
-     */
     public FrmSalesReport(FinvoryController controller) {
         this.controller = controller;
         initComponents();
@@ -472,10 +469,8 @@ public class FrmSalesReport extends javax.swing.JFrame {
     }
 
     private void onExportReport() {
-        var format = ec.edu.espe.finvory.controller.report.ReportUiHelper.askFormat(this);
-        if (format == null) {
-            return;
-        }
+        ec.edu.espe.finvory.controller.report.ReportFormat format
+                = ec.edu.espe.finvory.controller.report.ReportFormat.CSV;
 
         String path = ec.edu.espe.finvory.controller.report.ReportUiHelper.askSavePath(
                 this,
@@ -491,16 +486,12 @@ public class FrmSalesReport extends javax.swing.JFrame {
         java.util.List<Object[]> rows = ec.edu.espe.finvory.controller.report.ReportUiHelper.extractRows(tblSales);
 
         ec.edu.espe.finvory.controller.report.ReportExporter exporter
-                = new ec.edu.espe.finvory.controller.report.ReportExporter(null);
+                = new ec.edu.espe.finvory.controller.report.ReportExporter();
 
         try {
-            if (format == ec.edu.espe.finvory.controller.report.ReportUiHelper.Format.CSV) {
-                exporter.setStrategy(new ec.edu.espe.finvory.controller.report.CsvReportExportStrategy(controller.exportController));
-            } else {
-                exporter.setStrategy(new ec.edu.espe.finvory.controller.report.PdfReportExportStrategy());
-            }
-
+            exporter.setStrategy(new ec.edu.espe.finvory.controller.report.CsvReportExportStrategy(controller.exportController));
             exporter.export(path, reportTitle, headers, rows);
+
             javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
         } catch (Exception ex) {
             javax.swing.JOptionPane.showMessageDialog(this, "Error al exportar: " + ex.getMessage());

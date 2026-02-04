@@ -104,8 +104,8 @@ public class PriceAndTaxController {
     }
 
     private void syncToMongo(BigDecimal profit, BigDecimal tax, BigDecimal discountStandard, BigDecimal discountPremium, BigDecimal discountVip) {
-        MongoDatabase db = ec.edu.espe.finvory.mongo.MongoDBConnection.getDatabaseStatic();
-        if (db != null) {
+        MongoDatabase database = ec.edu.espe.finvory.mongo.MongoDBConnection.getDatabaseStatic();
+        if (database != null) {
             Document configDoc = new Document()
                     .append("companyUsername", mainController.currentCompanyUsername)
                     .append("taxRate", tax.doubleValue())
@@ -114,7 +114,7 @@ public class PriceAndTaxController {
                     .append("discountPremium", discountPremium.doubleValue())
                     .append("discountVip", discountVip.doubleValue());
 
-            db.getCollection("configurations").replaceOne(
+            database.getCollection("configurations").replaceOne(
                     Filters.eq("companyUsername", mainController.currentCompanyUsername),
                     configDoc,
                     new ReplaceOptions().upsert(true)

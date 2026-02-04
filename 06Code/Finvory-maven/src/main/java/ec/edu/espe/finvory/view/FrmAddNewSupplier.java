@@ -410,8 +410,6 @@ public class FrmAddNewSupplier extends javax.swing.JFrame {
         return data;
     }
 
-    /* ===== Helpers internos (OOP) ===== */
-
     private static class SupplierFormData {
         String id1;
         String id2;

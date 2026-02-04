@@ -31,8 +31,8 @@ public class ReportController {
 
     public Map<String, Integer> getProductDemandData() {
         Map<String, Integer> demand = new HashMap<>();
-        for (InvoiceSim inv : mainController.getData().getInvoices()) {
-            for (InvoiceLineSim line : inv.getLines()) {
+        for (InvoiceSim invoiceSim : mainController.getData().getInvoices()) {
+            for (InvoiceLineSim line : invoiceSim.getLines()) {
                 demand.put(line.getProductName(), demand.getOrDefault(line.getProductName(), 0) + line.getQuantity());
             }
         }

@@ -11,11 +11,6 @@ public class FrmMainMenu extends javax.swing.JFrame {
 
     FinvoryController controller;
 
-    /**
-     * Creates new form FrmMainMenu
-     *
-     * @param controller
-     */
     public FrmMainMenu(FinvoryController controller) {
         initComponents();
         this.controller = controller;

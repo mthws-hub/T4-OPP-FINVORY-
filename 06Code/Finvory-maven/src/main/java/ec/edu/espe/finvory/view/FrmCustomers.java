@@ -16,9 +16,6 @@ public class FrmCustomers extends javax.swing.JFrame {
     private final ICustomerActions customerActionProcessor;
     private final FinvoryController mainController;
 
-    /**
-     * Creates new form FrmSuppliers
-     */
     public FrmCustomers(ICustomerActions customerActionProcessor, FinvoryController mainController) {
         this.customerActionProcessor = customerActionProcessor;
         this.mainController = mainController;

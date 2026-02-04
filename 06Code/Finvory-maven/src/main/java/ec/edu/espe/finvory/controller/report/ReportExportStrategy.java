@@ -8,6 +8,6 @@ import java.util.List;
  */
 public interface ReportExportStrategy {
     
-    void export(String path, String reportTitle, String[] headers, List<Object[]> dataRows) throws Exception;
-    
+    void export(String path, String title, String[] headers, List<Object[]> rows) throws Exception;
+    ReportFormat format();
 }

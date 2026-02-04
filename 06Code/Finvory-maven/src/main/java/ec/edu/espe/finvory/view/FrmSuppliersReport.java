@@ -13,9 +13,6 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
     private FinvoryController controller;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmSuppliersReport.class.getName());
 
-    /**
-     * Creates new form FrmSuppliersReport
-     */
     public FrmSuppliersReport() {
         initComponents();
         ButtonStyles.applyPrimaryStyle(btnExport);
@@ -230,9 +227,6 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         onExportReport();
     }//GEN-LAST:event_btnExportActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -271,10 +265,6 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         return Integer.parseInt(cmbYear.getSelectedItem().toString());
     }
 
-    /**
-     * Mes: 0 = "Todos los meses" 1..12 = Enero..Diciembre (porque el combo
-     * tiene "Todos" primero)
-     */
     private int getSelectedMonthIndex() {
         return cmbMonth.getSelectedIndex();
     }
@@ -350,10 +340,8 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
     }
 
     private void onExportReport() {
-        var format = ec.edu.espe.finvory.controller.report.ReportUiHelper.askFormat(this);
-        if (format == null) {
-            return;
-        }
+        ec.edu.espe.finvory.controller.report.ReportFormat format
+                = ec.edu.espe.finvory.controller.report.ReportFormat.CSV;
 
         String path = ec.edu.espe.finvory.controller.report.ReportUiHelper.askSavePath(
                 this,
@@ -369,16 +357,12 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         java.util.List<Object[]> rows = ec.edu.espe.finvory.controller.report.ReportUiHelper.extractRows(tblSuppliers);
 
         ec.edu.espe.finvory.controller.report.ReportExporter exporter
-                = new ec.edu.espe.finvory.controller.report.ReportExporter(null);
+                = new ec.edu.espe.finvory.controller.report.ReportExporter();
 
         try {
-            if (format == ec.edu.espe.finvory.controller.report.ReportUiHelper.Format.CSV) {
-                exporter.setStrategy(new ec.edu.espe.finvory.controller.report.CsvReportExportStrategy(controller.exportController));
-            } else {
-                exporter.setStrategy(new ec.edu.espe.finvory.controller.report.PdfReportExportStrategy());
-            }
-
+            exporter.setStrategy(new ec.edu.espe.finvory.controller.report.CsvReportExportStrategy(controller.exportController));
             exporter.export(path, reportTitle, headers, rows);
+
             javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
         } catch (Exception ex) {
             javax.swing.JOptionPane.showMessageDialog(this, "Error al exportar: " + ex.getMessage());

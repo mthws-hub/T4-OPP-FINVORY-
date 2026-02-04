@@ -26,21 +26,13 @@ public class DataPersistenceManager {
     }
 
     public FinvoryData loadCompanyData(String companyUsername) {
-        // 1) intentar nube
         FinvoryData cloud = mongoLoader.loadDataFromCloud(companyUsername);
         if (cloud != null) {
-            // si había pendiente offline, lo intentamos subir luego (opcional)
             return cloud;
         }
-
-        // 2) fallback local
         return localService.loadCompanyDataLocal(companyUsername);
     }
 
-    /**
-     * Guarda local SIEMPRE. Si hay internet, exporta a Mongo. Si falla la
-     * exportación o no hay internet, marca "pending" para subir luego.
-     */
     public void saveCompanyData(FinvoryData data, String companyUsername) {
         localService.saveCompanyDataLocal(data, companyUsername);
 
@@ -58,10 +50,6 @@ public class DataPersistenceManager {
         }
     }
 
-    /**
-     * Si hay flag pending, intenta subir la data local a Mongo. Útil para
-     * llamar después de login, o al abrir el menú.
-     */
     public void syncPendingCompanyData(String companyUsername) {
         if (!hasPendingOffline(companyUsername)) {
             return;
@@ -80,7 +68,7 @@ public class DataPersistenceManager {
 
     private void markPendingOffline(String companyUsername) {
         try {
-            String folder = localService.getCompanyFolderPath(companyUsername); // necesitas este método (abajo te digo)
+            String folder = localService.getCompanyFolderPath(companyUsername); 
             new File(folder).mkdirs();
             File flag = new File(folder + File.separator + PENDING_FILE);
             try (Writer writer = new FileWriter(flag)) {

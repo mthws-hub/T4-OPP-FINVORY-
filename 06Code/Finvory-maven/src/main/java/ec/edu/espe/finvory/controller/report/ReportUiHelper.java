@@ -17,44 +17,18 @@ public final class ReportUiHelper {
     private ReportUiHelper() {
     }
 
-    public enum Format {
-        CSV, PDF
-    }
+    public static String askSavePath(java.awt.Component parent, String title, ReportFormat format) {
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle(title);
 
-    public static Format askFormat(java.awt.Component parent) {
-        Object[] options = {"CSV", "PDF"};
-        int choice = JOptionPane.showOptionDialog(
-                parent,
-                "¿En qué formato deseas guardar el reporte?",
-                "Exportar reporte",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]
-        );
-
-        if (choice == 0) {
-            return Format.CSV;
-        }
-        if (choice == 1) {
-            return Format.PDF;
-        }
-        return null;
-    }
-
-    public static String askSavePath(java.awt.Component parent, String dialogTitle, Format format) {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle(dialogTitle);
-
-        if (chooser.showSaveDialog(parent) != JFileChooser.APPROVE_OPTION) {
+        if (fc.showSaveDialog(parent) != JFileChooser.APPROVE_OPTION) {
             return null;
         }
 
-        File file = chooser.getSelectedFile();
-        String path = file.getAbsolutePath();
+        File f = fc.getSelectedFile();
+        String ext = format == ReportFormat.PDF ? ".pdf" : ".csv";
+        String path = f.getAbsolutePath();
 
-        String ext = (format == Format.CSV) ? ".csv" : ".pdf";
         if (!path.toLowerCase().endsWith(ext)) {
             path += ext;
         }
@@ -62,26 +36,24 @@ public final class ReportUiHelper {
     }
 
     public static String[] extractHeaders(JTable table) {
-        TableModel model = table.getModel();
-        String[] headers = new String[model.getColumnCount()];
-        for (int c = 0; c < model.getColumnCount(); c++) {
-            headers[c] = model.getColumnName(c);
+        TableModel m = table.getModel();
+        String[] headers = new String[m.getColumnCount()];
+        for (int i = 0; i < m.getColumnCount(); i++) {
+            headers[i] = m.getColumnName(i);
         }
         return headers;
     }
 
     public static List<Object[]> extractRows(JTable table) {
-        TableModel model = table.getModel();
+        TableModel m = table.getModel();
         List<Object[]> rows = new ArrayList<>();
-
-        for (int r = 0; r < model.getRowCount(); r++) {
-            Object[] row = new Object[model.getColumnCount()];
-            for (int c = 0; c < model.getColumnCount(); c++) {
-                row[c] = model.getValueAt(r, c);
+        for (int r = 0; r < m.getRowCount(); r++) {
+            Object[] row = new Object[m.getColumnCount()];
+            for (int c = 0; c < m.getColumnCount(); c++) {
+                row[c] = m.getValueAt(r, c);
             }
             rows.add(row);
         }
         return rows;
     }
-
 }

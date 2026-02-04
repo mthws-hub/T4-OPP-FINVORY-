@@ -212,11 +212,6 @@ public class FrmProductReturns extends JDialog {
         return product;
     }
     
-    
-    /**
-     * @param args the command line arguments
-     */
-    
     private void onConfirmReturn() {
         String id = getProductIdInput();
         String quantityStr = getQuantityInput();

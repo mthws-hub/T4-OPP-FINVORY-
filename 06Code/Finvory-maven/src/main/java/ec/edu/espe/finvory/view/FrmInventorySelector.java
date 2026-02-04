@@ -13,9 +13,6 @@ public class FrmInventorySelector extends javax.swing.JDialog {
     private ArrayList<Inventory> inventories;
     private Inventory selectedInventory = null;
 
-    /**
-     * Creates new form FrmInventorySelector
-     */
     public FrmInventorySelector(java.awt.Frame parent, boolean modal, ArrayList<Inventory> inventories) {
         super(parent, modal);
         this.inventories = inventories;
