@@ -1,6 +1,6 @@
 {
   "companyInfo": {
-    "name": "Frico Autopartes S.A.",
+    "name": "Prototipo Inventory S.A",
     "address": {
       "country": "Ecuador",
       "city": "Quito",
@@ -9,8 +9,11 @@
       "streetNumber": "",
       "region": ""
     },
+    "ruc": "1790011223001",
     "phone": "0983249630",
-    "email": "admin@frico.com"
+    "email": "admin@frico.com",
+    "username": "adminFrico",
+    "password": "234"
   },
   "customers": [
     {
@@ -205,6 +208,18 @@
         "region": ""
       },
       "productStock": {}
+    },
+    {
+      "name": "Ford",
+      "address": {
+        "country": "Colombia",
+        "city": "Bogota",
+        "street": "Buenaventura",
+        "zipCode": "",
+        "streetNumber": "",
+        "region": ""
+      },
+      "productStock": {}
     }
   ],
   "obsoleteInventory": {
@@ -226,8 +241,8 @@
   "invoices": [
     {
       "invoiceNumber": "F-1",
-      "date": "2025-12-02",
-      "paymentDueDate": "2025-12-02",
+      "date": "2025-11-30",
+      "paymentDueDate": "2025-11-30",
       "customer": {
         "name": "Rodrigo Delgado",
         "identification": "0012365478963",
@@ -254,8 +269,8 @@
     },
     {
       "invoiceNumber": "F-2",
-      "date": "2025-12-02",
-      "paymentDueDate": "2025-12-02",
+      "date": "2025-11-30",
+      "paymentDueDate": "2025-11-30",
       "customer": {
         "name": "Pedro Martin",
         "identification": "1245784512",
@@ -282,8 +297,8 @@
     },
     {
       "invoiceNumber": "FFRI-003",
-      "date": "2025-12-02",
-      "paymentDueDate": "2025-12-02",
+      "date": "2025-11-30",
+      "paymentDueDate": "2025-11-30",
       "customer": {
         "name": "Pedro Paz",
         "identification": "0014785236987",
@@ -310,8 +325,8 @@
     },
     {
       "invoiceNumber": "F-4",
-      "date": "2025-12-12",
-      "paymentDueDate": "2025-12-12",
+      "date": "2025-12-10",
+      "paymentDueDate": "2025-12-10",
       "customer": {
         "name": "Pedro Martin",
         "identification": "1245784512",
@@ -345,8 +360,8 @@
     },
     {
       "invoiceNumber": "F-5",
-      "date": "2025-12-12",
-      "paymentDueDate": "2025-12-12",
+      "date": "2025-12-10",
+      "paymentDueDate": "2025-12-10",
       "customer": {
         "name": "Pedro Paz",
         "identification": "0014785236987",
@@ -380,8 +395,8 @@
     },
     {
       "invoiceNumber": "FAC-1769869845381",
-      "date": "2026-01-28",
-      "paymentDueDate": "2026-01-28",
+      "date": "2026-01-26",
+      "paymentDueDate": "2026-01-26",
       "customer": {
         "name": "Pedro Paz",
         "identification": "0014785236987",
@@ -415,8 +430,8 @@
     },
     {
       "invoiceNumber": "FAC-1769870426948",
-      "date": "2026-01-29",
-      "paymentDueDate": "2026-01-29",
+      "date": "2026-01-27",
+      "paymentDueDate": "2026-01-27",
       "customer": {
         "name": "Henry Sanchez",
         "identification": "0201112661",
@@ -471,7 +486,7 @@
     }
   ],
   "taxRate": 0.15,
-  "profitPercentage": 1.0,
+  "profitPercentage": 1.2,
   "discountStandard": 0.1,
   "discountPremium": 0.2,
   "discountVip": 0.4
