@@ -13,9 +13,6 @@ public class FrmPopularProducts extends javax.swing.JFrame {
     private FinvoryController controller;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmPopularProducts.class.getName());
 
-    /**
-     * Creates new form FrmPopularProducts
-     */
     public FrmPopularProducts() {
         initComponents();
     }

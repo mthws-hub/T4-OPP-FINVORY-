@@ -17,9 +17,6 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
     private FinvoryController controller;
     private boolean isPasswordVisible = false;
 
-    /**
-     * Creates new form FrmProfilePersonal
-     */
     public FrmProfilePersonal(java.awt.Frame parent, boolean modal, FinvoryController controller) {
         super(parent, modal);
         this.controller = controller;

@@ -19,9 +19,6 @@ public class FrmSalesReport extends javax.swing.JFrame {
     private FinvoryController controller;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmSalesReport.class.getName());
 
-    /**
-     * Creates new form FrmSalesReport
-     */
     public FrmSalesReport(FinvoryController controller) {
         this.controller = controller;
         initComponents();
@@ -472,7 +469,6 @@ public class FrmSalesReport extends javax.swing.JFrame {
     }
 
     private void onExportReport() {
-        // 🔒 Regla: Reporte de Ventas SIEMPRE CSV (sin opciones al usuario)
         ec.edu.espe.finvory.controller.report.ReportFormat format
                 = ec.edu.espe.finvory.controller.report.ReportFormat.CSV;
 

@@ -1,0 +1,41 @@
+{
+  "companyInfo": {
+    "name": "EmpresaPrueba",
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Av Americas",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "ruc": "0012547845124",
+    "phone": "0987451254",
+    "email": "prueba@gmai.com",
+    "username": "Prueba",
+    "password": "qsvfcb",
+    "twoFactorKey": "RGWCR4VUIJ6HPW5CVFQOEQIA3WTI7QDF"
+  },
+  "customers": [],
+  "products": [],
+  "suppliers": [],
+  "inventories": [],
+  "obsoleteInventory": {
+    "address": {
+      "country": "Ecuador",
+      "city": "Quito",
+      "street": "Bodega Obsoletos",
+      "zipCode": "",
+      "streetNumber": "",
+      "region": ""
+    },
+    "productStock": {}
+  },
+  "invoices": [],
+  "returns": [],
+  "taxRate": 0.15,
+  "profitPercentage": 0,
+  "discountStandard": 0,
+  "discountPremium": 0,
+  "discountVip": 0
+}

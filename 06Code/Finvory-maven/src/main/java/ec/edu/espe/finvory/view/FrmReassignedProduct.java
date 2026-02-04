@@ -11,9 +11,7 @@ import javax.swing.JOptionPane;
 public class FrmReassignedProduct extends JDialog{
     
     FinvoryController controller;
-    /**
-     * Creates new form FrmReassignedProduct
-     */
+
     public FrmReassignedProduct(java.awt.Dialog parent, boolean modal, FinvoryController controller) {
         super(parent, modal);
         this.controller = controller;
@@ -213,10 +211,6 @@ public class FrmReassignedProduct extends JDialog{
         );
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReassing;
     private javax.swing.JButton btnReturn;

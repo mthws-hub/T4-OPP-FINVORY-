@@ -25,8 +25,8 @@ public class InventoryController {
                 return false;
             }
         }
-        Inventory newInv = new Inventory(name, address);
-        mainController.data.addInventory(newInv);
+        Inventory newInventory = new Inventory(name, address);
+        mainController.data.addInventory(newInventory);
 
         mainController.saveData();
         return true;
@@ -50,10 +50,10 @@ public class InventoryController {
             return matches;
         }
 
-        String q = partialName.trim().toLowerCase();
-        for (Inventory inv : mainController.data.getInventories()) {
-            if (inv.getName() != null && inv.getName().toLowerCase().contains(q)) {
-                matches.add(inv);
+        String quest = partialName.trim().toLowerCase();
+        for (Inventory inventory : mainController.data.getInventories()) {
+            if (inventory.getName() != null && inventory.getName().toLowerCase().contains(quest)) {
+                matches.add(inventory);
             }
         }
         return matches;

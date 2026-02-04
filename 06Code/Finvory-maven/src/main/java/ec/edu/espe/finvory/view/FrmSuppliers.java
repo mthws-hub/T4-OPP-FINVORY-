@@ -19,9 +19,6 @@ public class FrmSuppliers extends javax.swing.JFrame {
     private final ISupplierActions supplierActionProcessor;
     private final FinvoryController controller;
 
-    /**
-     * Creates new form FrmSuppliers
-     */
     public FrmSuppliers(ISupplierActions processor, FinvoryController mainController) {
         this.supplierActionProcessor = processor;
         this.controller = mainController;

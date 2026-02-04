@@ -21,9 +21,6 @@ public class FrmInventories extends javax.swing.JFrame {
     private FinvoryController controller;
     private Inventory currentInventory = null;
 
-    /**
-     * Creates new form FrmInventories
-     */
     public FrmInventories(FinvoryController controller) {
         initComponents();
         ButtonStyles.applyPrimaryStyle(btnHandle);

@@ -349,7 +349,6 @@ public class FrmAddNewInventory extends JDialog {
     }
 
     private void showValidationErrors(ValidationResult validation) {
-        // pinta labels en rojo según el campo
         for (Field f : validation.fieldsWithError) {
             switch (f) {
                 case NAME -> lblName.setForeground(Color.RED);
@@ -386,8 +385,6 @@ public class FrmAddNewInventory extends JDialog {
         txtStreetNumber.setText("");
         txtZipCode.setText("");
     }
-
-    /* ===== Helpers internos (OOP) ===== */
 
     private enum Field { NAME, COUNTRY, CITY, STREET, STREET_NUMBER, ZIP_CODE, REGION }
 

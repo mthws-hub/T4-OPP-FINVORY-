@@ -15,9 +15,6 @@ public class FrmChangePassword extends javax.swing.JDialog {
     private FinvoryController controller;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmChangePassword.class.getName());
 
-    /**
-     * Creates new form FrmChangePassword
-     */
     public FrmChangePassword(java.awt.Window parent, FinvoryController controller) {
         super(parent, java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         this.controller = controller;

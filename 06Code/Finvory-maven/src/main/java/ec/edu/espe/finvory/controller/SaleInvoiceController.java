@@ -68,10 +68,10 @@ public class SaleInvoiceController {
         Map<Inventory, Integer> inventoryMap = currentCart.get(product);
         inventoryMap.put(sourceInventory, inventoryMap.getOrDefault(sourceInventory, 0) + quantity);
 
-        InvoiceSim sim = app.saleController.calculatePotentialInvoice(selectedCustomer, currentCart);
+        InvoiceSim invoiceSim = app.saleController.calculatePotentialInvoice(selectedCustomer, currentCart);
 
-        view.refreshProductTable(product, quantity, sim);
-        view.updateTotals(sim);
+        view.refreshProductTable(product, quantity, invoiceSim);
+        view.updateTotals(invoiceSim);
     }
 
     public void onConfirmSale(boolean cash, boolean transfer, boolean cheque) {

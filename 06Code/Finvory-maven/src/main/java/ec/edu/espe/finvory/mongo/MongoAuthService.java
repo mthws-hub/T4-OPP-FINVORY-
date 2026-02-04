@@ -36,27 +36,27 @@ public class MongoAuthService {
             return null;
         }
 
-        CompanyAccount c = new CompanyAccount();
-        c.setUsername(doc.getString("companyUsername"));
-        c.setPassword(doc.getString("password"));
-        c.setTwoFactorKey(doc.getString("twoFactorKey"));
+        CompanyAccount company = new CompanyAccount();
+        company.setUsername(doc.getString("companyUsername"));
+        company.setPassword(doc.getString("password"));
+        company.setTwoFactorKey(doc.getString("twoFactorKey"));
 
-        c.setName(doc.getString("name"));
-        c.setRuc(doc.getString("ruc"));
-        c.setPhone(doc.getString("phone"));
-        c.setEmail(doc.getString("email"));
-        c.setLogoPath(doc.getString("logoPath"));
-        Document a = doc.get("address", Document.class);
-        if (a != null) {
+        company.setName(doc.getString("name"));
+        company.setRuc(doc.getString("ruc"));
+        company.setPhone(doc.getString("phone"));
+        company.setEmail(doc.getString("email"));
+        company.setLogoPath(doc.getString("logoPath"));
+        Document addressDoc = doc.get("address", Document.class);
+        if (addressDoc != null) {
             Address address = new Address(
-                    a.getString("country"),
-                    a.getString("city"),
-                    a.getString("street")
+                    addressDoc.getString("country"),
+                    addressDoc.getString("city"),
+                    addressDoc.getString("street")
             );
-            c.setAddress(address);
+            company.setAddress(address);
         }
 
-        return c;
+        return company;
     }
 
     public PersonalAccount findPersonalByUsername(String username) {
@@ -73,33 +73,33 @@ public class MongoAuthService {
             return null;
         }
 
-        PersonalAccount p = new PersonalAccount();
-        p.setUsername(doc.getString("username"));
-        p.setPassword(doc.getString("password"));
-        p.setTwoFactorKey(doc.getString("twoFactorKey"));
-        p.setFullName(doc.getString("fullName"));
+        PersonalAccount personal = new PersonalAccount();
+        personal.setUsername(doc.getString("username"));
+        personal.setPassword(doc.getString("password"));
+        personal.setTwoFactorKey(doc.getString("twoFactorKey"));
+        personal.setFullName(doc.getString("fullName"));
         String photo = doc.getString("profilePhotoPath");
         if (photo == null) {
             photo = doc.getString("photoPath");
         }
-        p.setProfilePhotoPath(photo);
+        personal.setProfilePhotoPath(photo);
 
-        return p;
+        return personal;
     }
 
     public boolean isUsernameTaken(String username) {
         if (username == null || username.isBlank()) {
             return false;
         }
-        String u = username.trim();
+        String user = username.trim();
 
         MongoCollection<Document> cCol = companies();
-        if (cCol != null && cCol.find(Filters.eq("companyUsername", u)).first() != null) {
+        if (cCol != null && cCol.find(Filters.eq("companyUsername", user)).first() != null) {
             return true;
         }
 
         MongoCollection<Document> pCol = personalAccounts();
-        return pCol != null && pCol.find(Filters.eq("username", u)).first() != null;
+        return pCol != null && pCol.find(Filters.eq("username", user)).first() != null;
     }
 
     public void upsertCompanyAccount(CompanyAccount company) {
@@ -163,12 +163,12 @@ public class MongoAuthService {
 
         if (col != null) {
             for (org.bson.Document doc : col.find()) {
-                ec.edu.espe.finvory.model.CompanyAccount c = new ec.edu.espe.finvory.model.CompanyAccount();
-                c.setUsername(doc.getString("companyUsername"));
-                c.setName(doc.getString("name"));
-                c.setPhone(doc.getString("phone"));
-                c.setEmail(doc.getString("email"));
-                companiesList.add(c);
+                ec.edu.espe.finvory.model.CompanyAccount company = new ec.edu.espe.finvory.model.CompanyAccount();
+                company.setUsername(doc.getString("companyUsername"));
+                company.setName(doc.getString("name"));
+                company.setPhone(doc.getString("phone"));
+                company.setEmail(doc.getString("email"));
+                companiesList.add(company);
             }
         }
         return companiesList;

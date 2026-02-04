@@ -20,9 +20,6 @@ public class FrmNewAccount extends javax.swing.JFrame {
     private final Color ERROR_COLOR = Color.RED;
     private final Color DEFAULT_COLOR = Color.BLACK;
 
-    /**
-     * Creates new form FrmNewAccount
-     */
     public FrmNewAccount(FinvoryController controller) {
         this.controller = controller;
         initComponents();

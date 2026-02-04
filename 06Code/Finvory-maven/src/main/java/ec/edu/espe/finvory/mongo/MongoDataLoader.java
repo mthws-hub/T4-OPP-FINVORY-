@@ -76,20 +76,6 @@ public class MongoDataLoader {
         }
     }
 
-    /*private void loadConfigurationsFromCloud(FinvoryData data, String username) {
-        MongoCollection<Document> collection = MongoDBConnection.getCollection("configurations");
-        if (collection == null) {
-            return;
-        }
-        Document doc = collection.find(Filters.eq("companyUsername", username)).first();
-        if (doc != null) {
-            data.setTaxRate(BigDecimal.valueOf(getDoubleSafe(doc, "taxRate", 0.0)));
-            data.setProfitPercentage(BigDecimal.valueOf(getDoubleSafe(doc, "profitPercentage", 0.0)));
-            data.setDiscountStandard(BigDecimal.valueOf(getDoubleSafe(doc, "discountStandard", 0.0)));
-            data.setDiscountPremium(BigDecimal.valueOf(getDoubleSafe(doc, "discountPremium", 0.0)));
-            data.setDiscountVip(BigDecimal.valueOf(getDoubleSafe(doc, "discountVip", 0.0)));
-        }
-    }*/
     private void loadConfigurationsFromCloud(FinvoryData data, String username) {
         MongoCollection<Document> collection = MongoDBConnection.getCollection("configurations");
         if (collection == null) {

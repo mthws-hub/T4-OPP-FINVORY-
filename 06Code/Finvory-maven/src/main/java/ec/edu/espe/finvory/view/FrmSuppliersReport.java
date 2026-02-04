@@ -13,9 +13,6 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
     private FinvoryController controller;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmSuppliersReport.class.getName());
 
-    /**
-     * Creates new form FrmSuppliersReport
-     */
     public FrmSuppliersReport() {
         initComponents();
         ButtonStyles.applyPrimaryStyle(btnExport);
@@ -230,9 +227,6 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         onExportReport();
     }//GEN-LAST:event_btnExportActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -271,10 +265,6 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         return Integer.parseInt(cmbYear.getSelectedItem().toString());
     }
 
-    /**
-     * Mes: 0 = "Todos los meses" 1..12 = Enero..Diciembre (porque el combo
-     * tiene "Todos" primero)
-     */
     private int getSelectedMonthIndex() {
         return cmbMonth.getSelectedIndex();
     }
@@ -350,7 +340,6 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
     }
 
     private void onExportReport() {
-        // 🔒 Regla: Reporte de Proveedores SIEMPRE CSV (sin opciones)
         ec.edu.espe.finvory.controller.report.ReportFormat format
                 = ec.edu.espe.finvory.controller.report.ReportFormat.CSV;
 

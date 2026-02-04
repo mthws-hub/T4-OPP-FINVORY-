@@ -22,10 +22,6 @@ public class FrmProducts extends javax.swing.JFrame {
     private final FinvoryController controller;
     private Inventory specificInventory;
 
-    /**
-     * Creates new form FrmProducts
-     *
-     */
     public FrmProducts(IProductActions productActionProcessor, FinvoryController mainController, Inventory inventory) {
         this.productActionProcessor = productActionProcessor;
         this.controller = mainController;

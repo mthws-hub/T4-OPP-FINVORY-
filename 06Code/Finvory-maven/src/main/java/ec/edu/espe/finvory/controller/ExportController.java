@@ -20,7 +20,6 @@ public class ExportController {
 
     public void exportTableToCSV(String fileName, String[] headers, List<Object[]> dataRows) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            // RESPETADO: Forzar separador por comas para Excel
             writer.println("sep=,");
             writer.println(String.join(",", headers));
 

@@ -12,9 +12,6 @@ public class FrmLogin extends javax.swing.JFrame {
 
     private FinvoryController controller;
 
-    /**
-     * Creates new form FrmLogin
-     */
     public FrmLogin(FinvoryController controller) {
         this.controller = controller;
         initComponents();
