@@ -28,8 +28,6 @@ public class FrmObsoleteInventories extends JDialog {
 
     }
 
-    private FrmProductReturns searchProductReturnsWindows;
-    private FrmReassignedProduct searchReassignedProductWindows;
 
     /**
      * This method is called from within the constructor to initialize the form.

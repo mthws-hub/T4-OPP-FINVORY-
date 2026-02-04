@@ -2,7 +2,6 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  *
@@ -288,55 +287,10 @@ public class FrmSuppliersReport extends javax.swing.JFrame {
         }
     }
 
-    private void onExportSuppliersReportCsv() {
-        String path = askCsvSavePath();
-        if (path == null) {
-            return;
-        }
-
-        String reportTitle = buildReportTitle();
-        String[] headers = {"Proveedor", "Productos Suministrados"};
-
-        java.util.List<Object[]> dataRows = extractTableRows(tblSuppliers);
-
-        controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
-        javax.swing.JOptionPane.showMessageDialog(this, "Reporte exportado con éxito.");
-    }
-
-    private String askCsvSavePath() {
-        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
-        if (fileChooser.showSaveDialog(this) != javax.swing.JFileChooser.APPROVE_OPTION) {
-            return null;
-        }
-
-        String path = fileChooser.getSelectedFile().getAbsolutePath();
-        if (!path.toLowerCase().endsWith(".csv")) {
-            path += ".csv";
-        }
-        return path;
-    }
-
     private String buildReportTitle() {
         String month = cmbMonth.getSelectedItem().toString();
         String year = cmbYear.getSelectedItem().toString();
         return "REPORTE DE DESEMPEÑO DE PROVEEDORES: " + month.toUpperCase() + " " + year;
-    }
-
-    private java.util.List<Object[]> extractTableRows(javax.swing.JTable table) {
-        javax.swing.table.DefaultTableModel model
-                = (javax.swing.table.DefaultTableModel) table.getModel();
-
-        java.util.List<Object[]> dataRows = new java.util.ArrayList<>();
-
-        for (int i = 0; i < model.getRowCount(); i++) {
-            Object[] row = new Object[model.getColumnCount()];
-            for (int j = 0; j < model.getColumnCount(); j++) {
-                row[j] = model.getValueAt(i, j);
-            }
-            dataRows.add(row);
-        }
-
-        return dataRows;
     }
 
     private void onExportReport() {

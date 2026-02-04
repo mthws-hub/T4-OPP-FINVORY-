@@ -1,6 +1,5 @@
 package ec.edu.espe.finvory.view;
 
-import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.Inventory;
 import ec.edu.espe.finvory.model.Product;

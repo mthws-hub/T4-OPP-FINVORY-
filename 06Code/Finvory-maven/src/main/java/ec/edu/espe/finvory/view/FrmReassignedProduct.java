@@ -10,11 +10,8 @@ import javax.swing.JOptionPane;
  */
 public class FrmReassignedProduct extends JDialog{
     
-    FinvoryController controller;
-
     public FrmReassignedProduct(java.awt.Dialog parent, boolean modal, FinvoryController controller) {
         super(parent, modal);
-        this.controller = controller;
         initComponents();
         ButtonStyles.applyPrimaryStyle(btnReturn);
         ButtonStyles.applyPrimaryStyle(btnReassing);

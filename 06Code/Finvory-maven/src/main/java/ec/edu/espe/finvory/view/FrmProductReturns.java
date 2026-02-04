@@ -187,30 +187,6 @@ public class FrmProductReturns extends JDialog {
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         onConfirmReturn();
     }//GEN-LAST:event_btnConfirmActionPerformed
-
-    private void emptyFields() {
-        txtId.setText("");
-        txtQuantity.setText("");
-        cmbReason.setSelectedIndex(0);
-    }
-
-    private ReturnedProduct readValues() {
-        String id;
-        String reason;
-        int quantity = 0;
-
-        id = txtId.getText();
-        try {
-            quantity = Integer.parseInt(txtQuantity.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Error: Debe ingresar un número entero.", "Dato Incorrecto", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        reason = cmbReason.getSelectedItem().toString();
-
-        product = new ReturnedProduct(null, quantity, reason);
-        return product;
-    }
     
     private void onConfirmReturn() {
         String id = getProductIdInput();

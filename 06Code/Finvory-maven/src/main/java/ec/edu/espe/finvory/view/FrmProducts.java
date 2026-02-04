@@ -4,7 +4,6 @@ import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.controller.IProductActions;
 import ec.edu.espe.finvory.model.Inventory;
-import ec.edu.espe.finvory.model.Product;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;

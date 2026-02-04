@@ -2,14 +2,10 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
-import ec.edu.espe.finvory.controller.*;
 import ec.edu.espe.finvory.model.Inventory;
-import ec.edu.espe.finvory.model.Product;
-import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -292,10 +288,6 @@ public class FrmInventories extends javax.swing.JFrame {
         onOpenProducts();
     }//GEN-LAST:event_btnProductActionPerformed
 
-    private void onReturnToMain() {
-        onClose();
-    }
-
     private void handleNoMatches() {
         JOptionPane.showMessageDialog(this, "No se encontraron coincidencias.");
         clearFields();
@@ -350,18 +342,6 @@ public class FrmInventories extends javax.swing.JFrame {
         model.setRowCount(0);
         this.currentInventory = null;
 
-    }
-
-    private void handleSearchResult(ArrayList<Inventory> matches) {
-        if (matches == null || matches.isEmpty()) {
-            handleNoMatches();
-            return;
-        }
-        if (matches.size() == 1) {
-            handleSingleMatch(matches.get(0));
-            return;
-        }
-        handleMultipleMatches(matches);
     }
 
     private void onOpenObsoleteProducts() {

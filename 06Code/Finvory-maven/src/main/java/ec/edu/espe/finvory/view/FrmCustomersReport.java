@@ -2,7 +2,6 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  *
@@ -244,16 +243,6 @@ public class FrmCustomersReport extends javax.swing.JFrame {
                     "No se encontraron registros para este periodo."
             );
         }
-    }
-
-    private void onExportCSV() {
-        controller.customerController.exportCustomerActivityReport(
-                this,
-                cmbYear.getSelectedItem().toString(),
-                cmbMonth.getSelectedItem().toString(),
-                tblInformation,
-                controller.exportController
-        );
     }
 
     private void onExportReport() {

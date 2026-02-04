@@ -25,45 +25,45 @@ public class PdfReportGenerator {
             PDPage page = new PDPage(PDRectangle.LETTER);
             doc.addPage(page);
 
-            PDPageContentStream cs = new PDPageContentStream(doc, page);
+            PDPageContentStream contentStream = new PDPageContentStream(doc, page);
 
             float margin = 50;
-            float y = page.getMediaBox().getHeight() - margin;
+            float yCoordenate = page.getMediaBox().getHeight() - margin;
 
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA_BOLD, 16);
-            cs.newLineAtOffset(margin, y);
-            cs.showText(title);
-            cs.endText();
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
+            contentStream.newLineAtOffset(margin, yCoordenate);
+            contentStream.showText(title);
+            contentStream.endText();
 
-            y -= 30;
+            yCoordenate -= 30;
 
-            cs.setFont(PDType1Font.HELVETICA_BOLD, 10);
-            y = writeRow(cs, margin, y, headers);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            yCoordenate = writeRow(contentStream, margin, yCoordenate, headers);
 
-            cs.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
             for (Object[] row : rows) {
                 String[] values = new String[row.length];
                 for (int i = 0; i < row.length; i++) {
                     values[i] = row[i] == null ? "" : row[i].toString();
                 }
-                y = writeRow(cs, margin, y, values);
-                if (y < margin) {
-                    cs.close();
+                yCoordenate = writeRow(contentStream, margin, yCoordenate, values);
+                if (yCoordenate < margin) {
+                    contentStream.close();
                     page = new PDPage(PDRectangle.LETTER);
                     doc.addPage(page);
-                    cs = new PDPageContentStream(doc, page);
-                    y = page.getMediaBox().getHeight() - margin;
+                    contentStream = new PDPageContentStream(doc, page);
+                    yCoordenate = page.getMediaBox().getHeight() - margin;
                 }
             }
 
-            cs.close();
+            contentStream.close();
             doc.save(new File(path));
         }
     }
 
     private static float writeRow(
-            PDPageContentStream cs,
+            PDPageContentStream content,
             float x,
             float y,
             String[] cells
@@ -72,10 +72,10 @@ public class PdfReportGenerator {
         float cursorX = x;
 
         for (String cell : cells) {
-            cs.beginText();
-            cs.newLineAtOffset(cursorX, y);
-            cs.showText(cell);
-            cs.endText();
+            content.beginText();
+            content.newLineAtOffset(cursorX, y);
+            content.showText(cell);
+            content.endText();
             cursorX += colWidth;
         }
         return y - 15;

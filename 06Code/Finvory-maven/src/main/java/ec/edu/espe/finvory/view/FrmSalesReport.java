@@ -2,11 +2,9 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.util.logging.Level;
 
 /**
  *
@@ -325,52 +323,7 @@ public class FrmSalesReport extends javax.swing.JFrame {
     private void onCloseReport() {
         this.dispose();
     }
-
-    private void onExportSalesCsv() {
-        String path = askCsvSavePath();
-        if (path == null) {
-            return;
-        }
-
-        String reportTitle = "REPORTE DETALLADO DE VENTAS";
-        String[] headers = {"ID Factura", "Fecha", "Cliente", "Subtotal", "Total"};
-
-        java.util.List<Object[]> dataRows = extractTableRows(tblSales);
-        controller.exportController.exportTableWithDateToCSV(path, reportTitle, headers, dataRows);
-
-        JOptionPane.showMessageDialog(this, "El reporte de ventas se ha exportado con éxito.");
-    }
-
-    private String askCsvSavePath() {
-        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
-        fileChooser.setDialogTitle("Guardar Reporte de Ventas");
-
-        if (fileChooser.showSaveDialog(this) != javax.swing.JFileChooser.APPROVE_OPTION) {
-            return null;
-        }
-
-        String path = fileChooser.getSelectedFile().getAbsolutePath();
-        if (!path.toLowerCase().endsWith(".csv")) {
-            path += ".csv";
-        }
-        return path;
-    }
-
-    private java.util.List<Object[]> extractTableRows(javax.swing.JTable table) {
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) table.getModel();
-        java.util.List<Object[]> dataRows = new java.util.ArrayList<>();
-
-        for (int i = 0; i < model.getRowCount(); i++) {
-            Object[] row = new Object[model.getColumnCount()];
-            for (int j = 0; j < model.getColumnCount(); j++) {
-                row[j] = model.getValueAt(i, j);
-            }
-            dataRows.add(row);
-        }
-
-        return dataRows;
-    }
-
+    
     private void onRefreshReport() {
         resetSalesTableHeaders();
         clearDateFilters();

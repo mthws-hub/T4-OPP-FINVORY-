@@ -3,9 +3,6 @@ package ec.edu.espe.finvory.view;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.PersonalAccount;
 import ec.edu.espe.finvory.utils.UiUtilis;
-import ec.edu.espe.finvory.utils.ValidationUtils;
-import java.awt.Color;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -229,19 +226,7 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
         controller.userController.handleUpdatePersonalName(name);
         onCloseDialog();
     }
-
-    private boolean validateFields(String name, String pass) {
-        if (isEmpty(name) || isEmpty(pass)) {
-            showWarning("Los campos no pueden estar vacíos.");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isEmpty(String text) {
-        return text == null || text.trim().isEmpty();
-    }
-
+    
     private void onCloseDialog() {
         this.dispose();
     }
@@ -285,16 +270,16 @@ public class FrmProfilePersonal extends javax.swing.JDialog {
         return null;
     }
 
-    private void showInfo(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Info", JOptionPane.INFORMATION_MESSAGE);
+    private void showInfo(String message) {
+        JOptionPane.showMessageDialog(this, message, "Info", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void showWarning(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Aviso", JOptionPane.WARNING_MESSAGE);
+    private void showWarning(String message) {
+        JOptionPane.showMessageDialog(this, message, "Aviso", JOptionPane.WARNING_MESSAGE);
     }
 
-    private void showError(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+    private void showError(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

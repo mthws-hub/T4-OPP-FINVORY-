@@ -18,16 +18,16 @@ public final class ReportUiHelper {
     }
 
     public static String askSavePath(java.awt.Component parent, String title, ReportFormat format) {
-        JFileChooser fc = new JFileChooser();
-        fc.setDialogTitle(title);
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle(title);
 
-        if (fc.showSaveDialog(parent) != JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showSaveDialog(parent) != JFileChooser.APPROVE_OPTION) {
             return null;
         }
 
-        File f = fc.getSelectedFile();
+        File file = fileChooser.getSelectedFile();
         String ext = format == ReportFormat.PDF ? ".pdf" : ".csv";
-        String path = f.getAbsolutePath();
+        String path = file.getAbsolutePath();
 
         if (!path.toLowerCase().endsWith(ext)) {
             path += ext;
@@ -36,21 +36,21 @@ public final class ReportUiHelper {
     }
 
     public static String[] extractHeaders(JTable table) {
-        TableModel m = table.getModel();
-        String[] headers = new String[m.getColumnCount()];
-        for (int i = 0; i < m.getColumnCount(); i++) {
-            headers[i] = m.getColumnName(i);
+        TableModel model = table.getModel();
+        String[] headers = new String[model.getColumnCount()];
+        for (int i = 0; i < model.getColumnCount(); i++) {
+            headers[i] = model.getColumnName(i);
         }
         return headers;
     }
 
     public static List<Object[]> extractRows(JTable table) {
-        TableModel m = table.getModel();
+        TableModel model = table.getModel();
         List<Object[]> rows = new ArrayList<>();
-        for (int r = 0; r < m.getRowCount(); r++) {
-            Object[] row = new Object[m.getColumnCount()];
-            for (int c = 0; c < m.getColumnCount(); c++) {
-                row[c] = m.getValueAt(r, c);
+        for (int rowwCount = 0; rowwCount < model.getRowCount(); rowwCount++) {
+            Object[] row = new Object[model.getColumnCount()];
+            for (int columnCount = 0; columnCount < model.getColumnCount(); columnCount++) {
+                row[columnCount] = model.getValueAt(rowwCount, columnCount);
             }
             rows.add(row);
         }

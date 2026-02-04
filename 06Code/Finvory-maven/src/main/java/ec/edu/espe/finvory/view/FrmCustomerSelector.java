@@ -1,6 +1,5 @@
 package ec.edu.espe.finvory.view;
 
-import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.model.Customer;
 import java.util.List;
 import javax.swing.JOptionPane;

@@ -2,10 +2,6 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.model.InvoiceSim;
-import java.awt.Color;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -19,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -35,6 +30,7 @@ public class FrmGrossReport extends javax.swing.JFrame {
 
     /**
      * Creates new form FrmGrossReport1
+     * @param controller
      */
     public FrmGrossReport(FinvoryController controller) {
         this.controller = controller;
@@ -62,40 +58,27 @@ public class FrmGrossReport extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         runReport();
     }
-
-    private void styleGreenButton(javax.swing.JButton btn) {
-        btn.setBackground(new Color(0, 123, 0));
-        btn.setForeground(Color.WHITE);
-
-        btn.setOpaque(true);
-        btn.setContentAreaFilled(true);
-
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-
-        btn.setMargin(new java.awt.Insets(6, 14, 6, 14));
-    }
-
+    
     private Date getFromDateStartOfDay() {
-        Date d = (Date) spnFromDate.getValue();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(d);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
+        Date date = (Date) spnFromDate.getValue();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 
     private Date getToDateEndOfDay() {
-        Date d = (Date) spnToDate.getValue();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(d);
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 999);
-        return cal.getTime();
+        Date date = (Date) spnToDate.getValue();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return calendar.getTime();
     }
 
     private boolean validateDates(Date from, Date to) {
@@ -111,16 +94,16 @@ public class FrmGrossReport extends javax.swing.JFrame {
         return true;
     }
 
-    private LocalDate toLocalDate(Date d) {
-        return d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    private LocalDate toLocalDate(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
-    private String money(BigDecimal val) {
-        if (val == null) {
-            val = BigDecimal.ZERO;
+    private String money(BigDecimal value) {
+        if (value == null) {
+            value = BigDecimal.ZERO;
         }
-        NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("es", "EC"));
-        return nf.format(val);
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("es", "EC"));
+        return numberFormat.format(value);
     }
 
     private void runReport() {
@@ -152,46 +135,46 @@ public class FrmGrossReport extends javax.swing.JFrame {
         List<InvoiceSim> invoices = controller.getData().getInvoices();
 
         List<InvoiceSim> filtered = new ArrayList<>();
-        for (InvoiceSim inv : invoices) {
-            if (inv == null || inv.getDate() == null) {
+        for (InvoiceSim invoice : invoices) {
+            if (invoice == null || invoice.getDate() == null) {
                 continue;
             }
 
-            LocalDate d = inv.getDate();
+            LocalDate d = invoice.getDate();
             boolean inRange = (!d.isBefore(from)) && (!d.isAfter(to));
             if (!inRange) {
                 continue;
             }
 
-            boolean isCompleted = "COMPLETED".equals(inv.getStatus());
+            boolean isCompleted = "COMPLETED".equals(invoice.getStatus());
             if (!includePending && !isCompleted) {
                 continue;
             }
 
-            filtered.add(inv);
+            filtered.add(invoice);
         }
 
         BigDecimal grossRange = BigDecimal.ZERO;
-        for (InvoiceSim inv : filtered) {
-            grossRange = grossRange.add(inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO);
+        for (InvoiceSim invoice : filtered) {
+            grossRange = grossRange.add(invoice.getSubtotal() != null ? invoice.getSubtotal() : BigDecimal.ZERO);
         }
 
         LocalDate today = LocalDate.now();
         BigDecimal grossToday = BigDecimal.ZERO;
-        for (InvoiceSim inv : invoices) {
-            if (inv == null || inv.getDate() == null) {
+        for (InvoiceSim invoice : invoices) {
+            if (invoice == null || invoice.getDate() == null) {
                 continue;
             }
-            if (!inv.getDate().equals(today)) {
+            if (!invoice.getDate().equals(today)) {
                 continue;
             }
 
-            boolean isCompleted = "COMPLETED".equals(inv.getStatus());
+            boolean isCompleted = "COMPLETED".equals(invoice.getStatus());
             if (!includePending && !isCompleted) {
                 continue;
             }
 
-            grossToday = grossToday.add(inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO);
+            grossToday = grossToday.add(invoice.getSubtotal() != null ? invoice.getSubtotal() : BigDecimal.ZERO);
         }
 
         lblGrossTodayValue1.setText(money(grossToday));
@@ -216,30 +199,30 @@ public class FrmGrossReport extends javax.swing.JFrame {
         Map<LocalDate, BigDecimal> netoSum = new HashMap<>();
         Map<LocalDate, BigDecimal> totalSum = new HashMap<>();
 
-        for (InvoiceSim inv : invoices) {
-            LocalDate d = inv.getDate();
-            count.put(d, count.getOrDefault(d, 0) + 1);
+        for (InvoiceSim invoice : invoices) {
+            LocalDate date = invoice.getDate();
+            count.put(date, count.getOrDefault(date, 0) + 1);
 
-            BigDecimal bruto = inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO;
-            BigDecimal descuento = inv.getDiscountAmount() != null ? inv.getDiscountAmount() : BigDecimal.ZERO;
+            BigDecimal bruto = invoice.getSubtotal() != null ? invoice.getSubtotal() : BigDecimal.ZERO;
+            BigDecimal descuento = invoice.getDiscountAmount() != null ? invoice.getDiscountAmount() : BigDecimal.ZERO;
             BigDecimal neto = bruto.subtract(descuento);
-            BigDecimal total = inv.getTotal() != null ? inv.getTotal() : BigDecimal.ZERO;
+            BigDecimal total = invoice.getTotal() != null ? invoice.getTotal() : BigDecimal.ZERO;
 
-            brutoSum.put(d, brutoSum.getOrDefault(d, BigDecimal.ZERO).add(bruto));
-            netoSum.put(d, netoSum.getOrDefault(d, BigDecimal.ZERO).add(neto));
-            totalSum.put(d, totalSum.getOrDefault(d, BigDecimal.ZERO).add(total));
+            brutoSum.put(date, brutoSum.getOrDefault(date, BigDecimal.ZERO).add(bruto));
+            netoSum.put(date, netoSum.getOrDefault(date, BigDecimal.ZERO).add(neto));
+            totalSum.put(date, totalSum.getOrDefault(date, BigDecimal.ZERO).add(total));
         }
 
         List<LocalDate> days = new ArrayList<>(count.keySet());
         days.sort(Comparator.naturalOrder());
 
-        for (LocalDate d : days) {
+        for (LocalDate date : days) {
             model.addRow(new Object[]{
-                d.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                count.get(d),
-                money(brutoSum.get(d)),
-                money(netoSum.get(d)),
-                money(totalSum.get(d))
+                date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                count.get(date),
+                money(brutoSum.get(date)),
+                money(netoSum.get(date)),
+                money(totalSum.get(date))
             });
         }
 
@@ -253,15 +236,15 @@ public class FrmGrossReport extends javax.swing.JFrame {
 
         invoices.sort(Comparator.comparing(InvoiceSim::getDate));
 
-        for (InvoiceSim inv : invoices) {
-            BigDecimal bruto = inv.getSubtotal() != null ? inv.getSubtotal() : BigDecimal.ZERO;
-            BigDecimal descuento = inv.getDiscountAmount() != null ? inv.getDiscountAmount() : BigDecimal.ZERO;
+        for (InvoiceSim invoice : invoices) {
+            BigDecimal bruto = invoice.getSubtotal() != null ? invoice.getSubtotal() : BigDecimal.ZERO;
+            BigDecimal descuento = invoice.getDiscountAmount() != null ? invoice.getDiscountAmount() : BigDecimal.ZERO;
             BigDecimal neto = bruto.subtract(descuento);
-            BigDecimal total = inv.getTotal() != null ? inv.getTotal() : BigDecimal.ZERO;
+            BigDecimal total = invoice.getTotal() != null ? invoice.getTotal() : BigDecimal.ZERO;
 
             model.addRow(new Object[]{
-                inv.getDate().format(DF),
-                inv.getId(),
+                invoice.getDate().format(DF),
+                invoice.getId(),
                 money(bruto),
                 money(neto),
                 money(total)
@@ -524,72 +507,6 @@ public class FrmGrossReport extends javax.swing.JFrame {
     private void radioButtonperInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonperInvoiceActionPerformed
         runReport();
     }//GEN-LAST:event_radioButtonperInvoiceActionPerformed
-
-    private void onExportCsv() {
-        File file = chooseCsvFile();
-        if (file == null) {
-            return;
-        }
-
-        try {
-            exportTableToCsv(file, (DefaultTableModel) scrGrossTable.getModel());
-            JOptionPane.showMessageDialog(this, "CSV exportado: " + file.getAbsolutePath());
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Error exportando CSV: " + ex.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-        }
-    }
-
-    private File chooseCsvFile() {
-        JFileChooser fc = new JFileChooser();
-        fc.setSelectedFile(new File("reporte_ventas_brutas.csv"));
-        int opt = fc.showSaveDialog(this);
-        if (opt != JFileChooser.APPROVE_OPTION) {
-            return null;
-        }
-        return fc.getSelectedFile();
-    }
-
-    private void exportTableToCsv(File file, DefaultTableModel model) throws Exception {
-        try (PrintWriter w = new PrintWriter(new FileWriter(file))) {
-            writeCsvHeader(w, model);
-            writeCsvRows(w, model);
-        }
-    }
-
-    private void writeCsvHeader(PrintWriter w, DefaultTableModel model) {
-        for (int c = 0; c < model.getColumnCount(); c++) {
-            w.print(model.getColumnName(c));
-            if (c < model.getColumnCount() - 1) {
-                w.print(",");
-            }
-        }
-        w.println();
-    }
-
-    private void writeCsvRows(PrintWriter w, DefaultTableModel model) {
-        for (int r = 0; r < model.getRowCount(); r++) {
-            for (int c = 0; c < model.getColumnCount(); c++) {
-                Object val = model.getValueAt(r, c);
-                w.print(sanitizeCsv(val));
-                if (c < model.getColumnCount() - 1) {
-                    w.print(",");
-                }
-            }
-            w.println();
-        }
-    }
-
-    private String sanitizeCsv(Object value) {
-        if (value == null) {
-            return "";
-        }
-        return value.toString().replace(",", ".");
-    }
 
     private void onExportReport() {
 

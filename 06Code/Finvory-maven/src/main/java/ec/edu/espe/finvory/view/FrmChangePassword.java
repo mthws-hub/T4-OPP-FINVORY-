@@ -3,7 +3,6 @@ package ec.edu.espe.finvory.view;
 import ec.edu.espe.finvory.controller.FinvoryController;
 import ec.edu.espe.finvory.utils.UiUtilis;
 import ec.edu.espe.finvory.utils.ValidationUtils;
-import java.awt.Dialog.ModalityType;
 import javax.swing.JOptionPane;
 
 /**

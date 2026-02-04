@@ -2,7 +2,6 @@ package ec.edu.espe.finvory.view;
 
 import ec.edu.espe.finvory.FinvoryApp;
 import ec.edu.espe.finvory.controller.FinvoryController;
-import ec.edu.espe.finvory.model.CompanyAccount;
 import ec.edu.espe.finvory.utils.ValidationUtils;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -254,9 +253,9 @@ public class FrmMainMenuPersonalAccount extends javax.swing.JFrame {
     private void onFindCompanyProducts() {
         String companyName = txtCompany.getText().trim();
 
-        String errorMsg = ValidationUtils.getSearchError(companyName);
-        if (errorMsg != null) {
-            JOptionPane.showMessageDialog(this, errorMsg, "Aviso", JOptionPane.WARNING_MESSAGE);
+        String errorMessage = ValidationUtils.getSearchError(companyName);
+        if (errorMessage != null) {
+            JOptionPane.showMessageDialog(this, errorMessage, "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
